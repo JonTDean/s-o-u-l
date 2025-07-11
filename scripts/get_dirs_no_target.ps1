@@ -1,0 +1,1 @@
+Get-ChildItem -Recurse -Directory | Where-Object { $_.FullName -notlike '*\target\*' -and $_.Name -ne 'target' } | Select-Object FullName
