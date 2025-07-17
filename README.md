@@ -1,4 +1,4 @@
-# Dean’s Cellular‑Automata Workbench
+# S.O.U.L - Swarm Orchestrator for aUtonomous Learners
 
 A **visual design tool**—not a game—for exploring and comparing multiple
 families of cellular automata (1‑D Elementary, 2‑D Surface, 3‑D Volume, …)
