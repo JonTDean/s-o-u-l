@@ -1,5 +1,5 @@
-use crate::state_engine::core::{AutomatonRule, CellCtx, CellOutcome, CellState, dim::Dim, Dim2};
-use crate::state_engine::grid::SparseGrid;
+use crate::intelligence_engine::core::{AutomatonRule, CellCtx, CellOutcome, CellState, dim::Dim, Dim2};
+use crate::intelligence_engine::grid::SparseGrid;
 
 pub fn step_sparse<R: AutomatonRule<D = Dim2>>(grid: &mut SparseGrid, rule: &R, params: &serde_json::Value) {
     let snapshot = grid.map.clone();

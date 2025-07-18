@@ -2,12 +2,14 @@
 
 use bevy::prelude::*;
 use super::{dim::Dim, Dim2, CellState};
-use crate::state_engine::grid::GridBackend;
+use crate::intelligence_engine::grid::GridBackend;
 
 #[derive(Resource)]
 pub struct World2D {
-    pub backend:  GridBackend,
+    pub backend: GridBackend,
     pub cell_size: f32,
+    /// Background colour for rendering the grid.
+    pub bg_color: Color,
 }
 
 impl World2D {

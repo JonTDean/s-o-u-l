@@ -1,7 +1,8 @@
 use bevy::math::{IVec2, UVec2};
-use crate::state_engine::core::Cell;
+use crate::intelligence_engine::core::Cell;
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct DenseGrid {
     pub cells: Vec<Cell>,
     pub size:  UVec2,

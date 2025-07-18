@@ -1,10 +1,11 @@
 //! Sparse hash‑map grid – for huge worlds with few live cells.
-
+#![allow(clippy::type_complexity)]
 use bevy::math::IVec2;
+use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
-use crate::state_engine::core::{Cell, CellState};
+use crate::intelligence_engine::core::{Cell, CellState};
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Serialize, Deserialize)]
 pub struct SparseGrid {
     pub map: HashMap<IVec2, Cell>,
 }

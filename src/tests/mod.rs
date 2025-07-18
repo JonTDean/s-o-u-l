@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::state_engine::state_machines::bounded::type_3::class::acceptors::rules::dfa::dfa;
+    use crate::intelligence_engine::state_machines::bounded::type_3::class::acceptors::rules::dfa::dfa;
 
     #[test]
     fn accepts_positive_number_of_a() {

@@ -1,6 +1,6 @@
 use bevy::math::IVec2;
-use crate::state_engine::core::{AutomatonRule, CellCtx, CellOutcome, CellState, dim::Dim,  Dim2};
-use crate::state_engine::grid::DenseGrid;
+use crate::intelligence_engine::core::{AutomatonRule, CellCtx, CellOutcome, CellState, dim::Dim,  Dim2};
+use crate::intelligence_engine::grid::DenseGrid;
 
 pub fn step_dense<R: AutomatonRule<D = Dim2>>(grid: &mut DenseGrid, rule: &R, params: &serde_json::Value) {
     let snapshot = grid.cells.clone();

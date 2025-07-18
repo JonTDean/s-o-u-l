@@ -7,7 +7,7 @@
 //!   (1,'a') → 1
 //!   otherwise → 0 (dead   state)
 
-use crate::state_engine::state_machines::bounded::{
+use crate::intelligence_engine::state_machines::bounded::{
     FiniteStateMachine, TransitionFn,
 };
 use std::collections::HashSet;
