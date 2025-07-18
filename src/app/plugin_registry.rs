@@ -11,7 +11,6 @@
 use bevy::prelude::*;
 
 use crate::{
-    app::schedule::MainSet,
     core::engine::plugin::EnginePlugin,
     input::plugin::InputPlugin,
     intelligence_engine::renderer::Renderer2DPlugin,
@@ -43,9 +42,9 @@ pub fn add_all_plugins(app: &mut App, flags: PluginFlags) {
 
     // ── 4. (Optional) Networking layer  ─────────────────────────────────
     match flags.networking {
-        "server" => app.add_plugins(crate::network::server::ServerPlugin),
-        "client" => app.add_plugins(crate::network::client::ClientPlugin),
-        _        => { /* networking disabled */ }
+        "server" => { app.add_plugins(crate::network::server::ServerPlugin); },
+        "client" => { app.add_plugins(crate::network::client::ClientPlugin); },
+        _ => {}
     }
 
     // ── 5. UI & Rendering (runs in `MainSet::Render`) ───────────────────
@@ -59,4 +58,7 @@ pub fn add_all_plugins(app: &mut App, flags: PluginFlags) {
     // Renderer2DPlugin already tags its draw system appropriately, but
     // custom plugins can enforce it like:
     //     .add_systems(Update, my_system.in_set(MainSet::Render));
+    
+    // NOTE: Systems inside UI / renderer plugins should tag themselves with
+    // `MainSet::Render` so they run after simulation logic.
 }

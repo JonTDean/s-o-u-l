@@ -26,7 +26,6 @@ use std::{env, fs, path::PathBuf};
 
 use bevy::{
     prelude::*,
-    tasks::{ComputeTaskPool, IoTaskPool, TaskPoolBuilder},
 };
 use serde::Deserialize;
 

@@ -1,4 +1,5 @@
 //! UI for the in-game side panel, providing simulation controls while in [`AppState::InGame`].
+#![allow(unused_imports)]
 
 use bevy::prelude::*;
 use bevy_egui::{egui::{self, Align2}, EguiPrimaryContextPass};
