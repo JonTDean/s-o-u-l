@@ -9,12 +9,15 @@ kanban
         global6[Plan for concurrent plugins (ensure architecture allows multiple rule plugins active and compare results side by side)]
         global7[Set up continuous integration (CI) pipelines and testing frameworks to support the new multi-crate project structure]
         global8[Coordinate removal of legacy code (systematically eliminate or update old design artifacts in favor of new architecture)]
+
     globalProg[In Progress]
         global9[Refactoring codebase into multi-crate structure – **in progress**]
         global10[Iterating on ECS trait designs (`AutomatonRule` and others) with prototypes – **in progress**]
+
     globalRev[Review]
         global11[Architectural design review meeting (validate the redesign aligns with project goals)]
         global12[Cross-crate integration testing in review (checking that all plugins communicate correctly)]
+        
     globalDone[Done]
         global13[Initial project scaffolding for new architecture completed (directories and crates created)]
         global14[Core concepts approved (ECS approach and plugin-based modular design green-lit)]

@@ -9,11 +9,14 @@ kanban
         net6[Implement state serialization/deserialization (efficiently serialize grid state and events for network transmission)]
         net7[Ensure simulation determinism or state reconciliation to handle network latency and desync]
         net8[Plan security measures (validate client input, prevent tampering or flooding)]
+        
     netProg[In Progress]
         net9[Researching suitable networking libraries (WebRTC vs TCP/UDP frameworks) – **in progress**]
+
     netRev[Review]
         net10[Review proposed network protocol for completeness and efficiency (team review)]
         net11[Evaluate network layer impact on simulation performance (profiling network overhead)]
+
     netDone[Done]
         net12[Networking crate scaffolding created (basic module files and placeholders)]
         net13[Preliminary decision on network approach documented (foundation for implementation)]
