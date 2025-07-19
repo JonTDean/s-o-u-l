@@ -11,9 +11,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    core::engine::plugin::EnginePlugin,
+    engine_core::{engine::plugin::EnginePlugin, renderer::Renderer2DPlugin},
     input::plugin::InputPlugin,
-    intelligence_engine::renderer::Renderer2DPlugin,
     state::StatePlugin,
     ui::components::{
         file_io::FileIoPlugin,

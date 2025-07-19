@@ -1,0 +1,9 @@
+[package]
+name = "automata"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+engine_core = { path = "../engine_core" }
+input       = { path = "../io/input" }
+output      = { path = "../io/output" }

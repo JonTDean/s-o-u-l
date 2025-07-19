@@ -4,7 +4,7 @@
 
 &#x20;**Figure 1:** **5-level nested file hierarchy** for the Swarm Orchestrator for aUtonomous Learners project, reorganized into semantic domains. Each top-level folder (e.g. `core`, `automata`, `input`, `output`, etc.) contains multiple layers of submodules, ensuring at least 5 levels of depth with meaningful names at every level. This structure reflects distinct runtime roles (state management, simulation logic, input handling, output presentation, developer tools) and fosters self-documentation by letting the module path describe its purpose (for example, `input::devices::keyboard` clearly denotes keyboard input handling). The deep nesting (with sibling modules at each layer) makes the architecture highly modular and extensible, as new features can be added by introducing new submodules in the appropriate domain without disrupting existing code.
 
-Below is the **renamed and restructured** directory tree, using snake\_case naming and grouping all existing crates/plugins (`ca_engine`, `automata`, `ui`, `network`, `dev_tools`, etc.) into hierarchical domains that mirror their ECS roles:
+Below is the **renamed and restructured** directory tree, using snake\_case naming and grouping all existing crates/plugins (`ca_engine`, `automata`, `ui`, `network`, `tooling`, etc.) into hierarchical domains that mirror their ECS roles:
 
 ```text
 src/
@@ -13,7 +13,8 @@ src/
 │   ├── mod.rs
 │   ├── startup.rs         (App initialization logic)
 │   └── plugin_registry.rs (Central registration of all plugins)
-├── core/                  # Core ECS state and engine domain
+├── engine_core/                  # Core ECS state and engine domain
+│   ├── cargo.toml
 │   ├── state/             # Global state management
 │   │   ├── mod.rs
 │   │   ├── app_state.rs   (AppState enum for game states)
@@ -37,7 +38,7 @@ src/
 │       ├── events.rs      (Engine events, e.g. GenerationTick, CellChanged)
 │       └── plugin.rs      (EnginePlugin – core systems for grid setup & stepping)
 ├── automata/              # Rule-set plugins for cellular automata
-│   ├── mod.rs
+│   ├── cargo.toml
 │   ├── type1_elementary/  # 1D elementary CA (Wolfram codes)
 │   │   ├── mod.rs
 │   │   ├── rules.rs       (Defines elementary rule functions)
@@ -58,7 +59,7 @@ src/
 │       ├── systems.rs     (Systems for 3D CA updates)
 │       └── plugin.rs      (Type3Plugin – volumetric automata logic)
 ├── input/                 # Input handling domain (user, network, scripted)
-│   ├── mod.rs
+│   ├── cargo.toml
 │   ├── devices/           # Direct hardware input (keyboard, mouse, etc.)
 │   │   ├── mod.rs
 │   │   ├── keyboard.rs    (Keyboard key input handling)
@@ -77,15 +78,18 @@ src/
 │   ├── events.rs          (Input event definitions, e.g. CellToggleEvent)
 │   └── plugin.rs          (InputPlugin – orchestrates all input sources/plugins)
 ├── output/                # Output and user interface domain
-│   ├── mod.rs
+│   ├── cargo.toml
 │   ├── rendering/         # Visual rendering systems (graphics)
-│   │   ├── mod.rs
-│   │   ├── camera.rs      (Camera setup for viewing the grid)
-│   │   ├── draw2d.rs      (Render cells as 2D sprites/tiles)
-│   │   ├── draw3d.rs      (Render cells as 3D voxels)
-│   │   └── plugin.rs      (RenderingPlugin – manages camera and draw systems)
+│   │   ├── cargo.toml
+│   │   ├── camera      (Camera setup for viewing the grid)
+│   │   │   └── mod.rs
+│   │   ├── draw2d      (Render cells as 2D sprites/tiles)
+│   │   │   └── mod.rs
+│   │   └── draw3d      (Render cells as 3D voxels)
+│   │       └── mod.rs
+│   ├── plugin.rs      (RenderingPlugin – manages camera and draw systems)
 │   ├── ui/                # GUI panels and overlays (using egui)
-│   │   ├── mod.rs
+│   │   ├── cargo.toml
 │   │   ├── panels/        (UI panels for various controls)
 │   │   │   ├── mod.rs
 │   │   │   ├── main_menu/     (Main menu UI MVC components)
@@ -108,8 +112,8 @@ src/
 │       ├── image.rs       (PNG/GIF export logic for simulation frames)
 │       ├── data.rs        (Export simulation data to files, e.g. .rle patterns)
 │       └── plugin.rs      (ExportPlugin – systems for saving screenshots/data)
-└── dev_tools/             # Developer and debugging utilities
-    ├── mod.rs
+└── tooling/             # Developer and debugging utilities
+│   ├── cargo.toml
     ├── logging/           # Logging and performance metrics
     │   ├── mod.rs
     │   ├── fps.rs         (FPS counter resource & system)
@@ -123,7 +127,7 @@ src/
     └── plugin.rs          (DevToolsPlugin – master plugin enabling all dev sub-tools)
 ```
 
-This hierarchy groups code by **runtime concerns**. For example, **`core/engine`** encapsulates dimension-agnostic simulation logic (grid management, stepping, rendering bridges) similar to the original `ca_engine` crate, while **`automata/`** contains pluggable rule sets (Conway’s Life, Dean’s Life, Lenia, etc.) analogous to the original rule-set plugins. The **`input/`** domain centralizes all input sources (hardware, network, scripted), **`output/`** covers rendering and UI, and **`dev_tools/`** wraps utility plugins (like quitting, logging) that were previously under `dev_utils`. Each nested folder name is **semantic** (e.g. `rendering/draw2d.rs` vs a generic name) to make the code self-explanatory.
+This hierarchy groups code by **runtime concerns**. For example, **`core/engine`** encapsulates dimension-agnostic simulation logic (grid management, stepping, rendering bridges) similar to the original `ca_engine` crate, while **`automata/`** contains pluggable rule sets (Conway’s Life, Dean’s Life, Lenia, etc.) analogous to the original rule-set plugins. The **`input/`** domain centralizes all input sources (hardware, network, scripted), **`output/`** covers rendering and UI, and **`tooling/`** wraps utility plugins (like quitting, logging) that were previously under `dev_utils`. Each nested folder name is **semantic** (e.g. `rendering/draw2d.rs` vs a generic name) to make the code self-explanatory.
 
 ## Plugin Registration and Execution Order
 

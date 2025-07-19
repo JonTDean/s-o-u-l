@@ -1,0 +1,48 @@
+%%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
+flowchart TB
+    %% DevTools crate structure (logging & debug modules)
+    subgraph DEVTOOLS["tooling/"]
+        direction TB
+        logging[logging/]
+        debug[debug/]
+        dev_plugin_rs[plugin.rs]
+
+        subgraph logging_sg["logging"]
+            direction TB
+            log_mod[mod.rs]
+            fps_rs[fps.rs]
+            profiler_rs[profiler.rs]
+            log_plugin_rs[plugin.rs]
+        end
+
+        subgraph debug_sg["debug"]
+            direction TB
+            dbg_mod[mod.rs]
+            cheats_rs[cheats.rs]
+            inspector_rs[inspector.rs]
+            dbg_plugin_rs[plugin.rs]
+        end
+    end
+
+    %% External crate reference
+    CORE["core/"]
+
+    %% Crate dependency arrow
+    DEVTOOLS --> CORE
+
+    %% Style definitions
+    classDef c_dev_root   fill:#666666,stroke:#333333,color:#ffffff
+    classDef c_dev_child  fill:#B3B3B3,stroke:#666666,color:#000000
+    classDef c_dev_leaf   fill:#E0E0E0,stroke:#B3B3B3,color:#000000
+    classDef c_core_root  fill:#CC6600,stroke:#663300,color:#ffffff
+
+    class DEVTOOLS c_dev_root
+    class logging,debug c_dev_child
+    class dev_plugin_rs c_dev_leaf
+    class log_mod,fps_rs,profiler_rs,log_plugin_rs c_dev_leaf
+    class dbg_mod,cheats_rs,inspector_rs,dbg_plugin_rs c_dev_leaf
+
+    class CORE c_core_root
+
+    %% Clickable link to Core crate diagram
+    click CORE "core.mmd" "View Core crate diagram"

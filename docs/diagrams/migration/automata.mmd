@@ -1,0 +1,59 @@
+%%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
+flowchart TB
+    %% Automata crate structure (Type1, Type2, Type3 automata)
+    subgraph AUTOMATA["automata/"]
+        direction TB
+        type1[type1/]
+        type2[type2/]
+        type3[type3/]
+
+        subgraph type1_sg["type1"]
+            direction TB
+            t1_mod[mod.rs]
+            rules_rs[rules.rs]
+            t1_components_rs[components.rs]
+            t1_systems_rs[systems.rs]
+            t1_plugin_rs[plugin.rs]
+        end
+
+        subgraph type2_sg["type2"]
+            direction TB
+            t2_mod[mod.rs]
+            conway_rs[conway.rs]
+            t2_components_rs[components.rs]
+            t2_systems_rs[systems.rs]
+            t2_plugin_rs[plugin.rs]
+        end
+
+        subgraph type3_sg["type3"]
+            direction TB
+            t3_mod[mod.rs]
+            lenia_rs[lenia.rs]
+            t3_components_rs[components.rs]
+            t3_systems_rs[systems.rs]
+            t3_plugin_rs[plugin.rs]
+        end
+    end
+
+    %% External crate reference
+    CORE["core/"]
+
+    %% Crate dependency arrow
+    AUTOMATA --> CORE
+
+    %% Style definitions
+    classDef c_aut_root   fill:#006600,stroke:#003300,color:#ffffff
+    classDef c_aut_child  fill:#66CC66,stroke:#006600,color:#000000
+    classDef c_aut_leaf   fill:#BFF0BF,stroke:#66CC66,color:#000000
+    classDef c_core_root  fill:#CC6600,stroke:#663300,color:#ffffff
+
+    class AUTOMATA c_aut_root
+    class type1,type2,type3 c_aut_child
+    class t1_mod,rules_rs,t1_components_rs,t1_systems_rs,t1_plugin_rs c_aut_leaf
+    class t2_mod,conway_rs,dean_life_rs,t2_components_rs,t2_systems_rs,t2_plugin_rs c_aut_leaf
+    class t3_mod,lenia_rs,t3_components_rs,t3_systems_rs,t3_plugin_rs c_aut_leaf
+
+    class CORE c_core_root
+
+    %% Clickable link to Core crate diagram
+    click CORE "core.mmd" "View Core crate diagram"

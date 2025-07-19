@@ -1,0 +1,119 @@
+%%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
+flowchart TB
+    %% Output crate structure (rendering, UI, export)
+    subgraph OUTPUT["output/"]
+        direction TB
+        rendering[rendering/]
+        ui[ui/]
+        export[export/]
+        rendering_plugin_rs[plugin.rs]
+
+        %% output/rendering/
+        subgraph rendering_sg["rendering"]
+            direction TB
+            rend_cargo["cargo.toml"]
+            camera["camera/"]
+            draw2d["draw2d/"]
+            draw3d["draw3d/"]
+
+            subgraph camera_sg[" "]
+                direction TB
+                cam_mod[mod.rs]
+            end
+
+            subgraph draw2d_sg[" "]
+                direction TB
+                d2_mod[mod.rs]
+            end
+
+            subgraph draw3d_sg[" "]
+                direction TB
+                d3_mod[mod.rs]
+            end
+        end
+
+        %% output/ui/
+        subgraph ui_sg["ui"]
+            direction TB
+            ui_cargo["cargo.toml"]
+            panels[panels/]
+            file_io_rs[file_io.rs]
+            ui_plugin_rs[plugin.rs]
+
+            subgraph panels_sg[" "]
+                direction TB
+                panels_mod[mod.rs]
+                main_menu[main_menu/]
+                sim_controls_rs[sim_controls.rs]
+                stats_panel_rs[stats_panel.rs]
+
+                subgraph main_menu_sg[" "]
+                    direction TB
+                    mm_mod[mod.rs]
+                    view_rs[view.rs]
+                    model_rs[model.rs]
+                    controller[controller/]
+
+                    subgraph controller_sg[" "]
+                        direction TB
+                        ctrl_mod[mod.rs]
+                        scenario[scenario/]
+                        options_rs[options.rs]
+
+                        subgraph scenario_sg[" "]
+                            direction TB
+                            scenario_mod[mod.rs]
+                            new_rs[new.rs]
+                            load_rs[load.rs]
+                        end
+                    end
+                end
+            end
+        end
+
+        %% output/export/
+        subgraph export_sg["export"]
+            direction TB
+            exp_mod[mod.rs]
+            image_rs[image.rs]
+            data_rs[data.rs]
+            exp_plugin_rs[plugin.rs]
+        end
+    end
+
+    %% External crate reference
+    CORE["core/"]
+
+    %% Crate interaction arrow
+    CORE --> OUTPUT
+
+    %% Style definitions
+    classDef c_out_root   fill:#990000,stroke:#4d0000,color:#ffffff
+    classDef c_out_child  fill:#FF9999,stroke:#990000,color:#000000
+    classDef c_out_leaf   fill:#FFCACA,stroke:#FF9999,color:#000000
+    classDef c_core_root  fill:#CC6600,stroke:#663300,color:#ffffff
+
+    class OUTPUT c_out_root
+    class rendering,ui,export c_out_child
+    class rendering_plugin_rs c_out_leaf
+
+    class camera,draw2d,draw3d c_out_child
+    class rend_cargo c_out_leaf
+    class cam_mod,d2_mod,d3_mod c_out_leaf
+
+    class ui_cargo,file_io_rs,ui_plugin_rs c_out_leaf
+    class panels c_out_child
+    class panels_mod,sim_controls_rs,stats_panel_rs c_out_leaf
+    class main_menu c_out_child
+    class mm_mod,view_rs,model_rs c_out_leaf
+    class controller c_out_child
+    class ctrl_mod,options_rs c_out_leaf
+    class scenario c_out_child
+    class scenario_mod,new_rs,load_rs c_out_leaf
+
+    class exp_mod,image_rs,data_rs,exp_plugin_rs c_out_leaf
+
+    class CORE c_core_root
+
+    %% Clickable link to Core crate diagram
+    click CORE "core.mmd" "View Core crate diagram"

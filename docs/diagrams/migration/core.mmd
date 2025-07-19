@@ -1,0 +1,92 @@
+%%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
+flowchart TB
+    %% Core crate structure (state & engine modules)
+    subgraph CORE["core/"]
+        direction TB
+        %% state/ module
+        core_state["state/"]
+        subgraph core_state_sg[" "]
+            direction TB
+            state_mod[mod.rs]
+            app_state_rs[app_state.rs]
+            resources_rs[resources.rs]
+            state_plugin_rs[plugin.rs]
+        end
+
+        %% engine/ module
+        core_engine["engine/"]
+        subgraph core_engine_sg[" "]
+            direction TB
+            engine_mod[mod.rs]
+            components_rs[components.rs]
+            events_rs[events.rs]
+            engine_plugin_rs[plugin.rs]
+
+            %% engine/grid/
+            grid["grid/"]
+            subgraph grid_sg[" "]
+                direction TB
+                grid_mod[mod.rs]
+                dense_rs[dense.rs]
+                sparse_rs[sparse.rs]
+            end
+
+            %% engine/stepper/
+            stepper["stepper/"]
+            subgraph stepper_sg[" "]
+                direction TB
+                stepper_mod[mod.rs]
+                parallel_rs[parallel.rs]
+                sequential_rs[sequential.rs]
+            end
+
+            %% engine/render_bridge/
+            render_bridge["render_bridge/"]
+            subgraph rb_sg[" "]
+                direction TB
+                rb_mod[mod.rs]
+                bridge2d_rs[bridge2d.rs]
+                bridge3d_rs[bridge3d.rs]
+            end
+        end
+    end
+
+    %% External crates that interact with Core
+    AUTOMATA["automata/"]
+    INPUT["input/"]
+    DEVTOOLS["tooling/"]
+    OUTPUT["output/"]
+
+    %% Cross-crate relationships
+    AUTOMATA --> CORE
+    INPUT --> CORE
+    DEVTOOLS --> CORE
+    CORE --> OUTPUT
+
+    %% Style definitions
+    classDef c_core_root   fill:#CC6600,stroke:#663300,color:#ffffff
+    classDef c_core_child  fill:#FFCC99,stroke:#CC6600,color:#000000
+    classDef c_core_leaf   fill:#FFE6CC,stroke:#FFCC99,color:#000000
+    classDef c_aut_root    fill:#006600,stroke:#003300,color:#ffffff
+    classDef c_inp_root    fill:#660066,stroke:#330033,color:#ffffff
+    classDef c_dev_root    fill:#666666,stroke:#333333,color:#ffffff
+    classDef c_out_root    fill:#990000,stroke:#4d0000,color:#ffffff
+
+    class CORE c_core_root
+    class core_state,core_engine,grid,stepper,render_bridge c_core_child
+    class state_mod,app_state_rs,resources_rs,state_plugin_rs c_core_leaf
+    class engine_mod,components_rs,events_rs,engine_plugin_rs c_core_leaf
+    class grid_mod,dense_rs,sparse_rs c_core_leaf
+    class stepper_mod,parallel_rs,sequential_rs c_core_leaf
+    class rb_mod,bridge2d_rs,bridge3d_rs c_core_leaf
+
+    class AUTOMATA c_aut_root
+    class INPUT c_inp_root
+    class DEVTOOLS c_dev_root
+    class OUTPUT c_out_root
+
+    %% Clickable links to other crate diagrams
+    click AUTOMATA "automata.mmd" "View Automata crate diagram"
+    click INPUT "input.mmd" "View Input crate diagram"
+    click DEVTOOLS "tooling.mmd" "View DevTools crate diagram"
+    click OUTPUT "output.mmd" "View Output crate diagram"

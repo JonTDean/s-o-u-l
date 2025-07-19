@@ -1,0 +1,62 @@
+%%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
+flowchart TB
+    %% Input crate structure (devices, network, scripting)
+    subgraph INPUT["input/"]
+        direction TB
+        devices[devices/]
+        network[network/]
+        scripting[scripting/]
+        events_rs_in[events.rs]
+        input_plugin_rs[plugin.rs]
+
+        %% input/devices/
+        subgraph devices_sg["devices"]
+            direction TB
+            devices_mod[mod.rs]
+            keyboard_rs[keyboard.rs]
+            mouse_rs[mouse.rs]
+            dev_plugin_rs[plugin.rs]
+        end
+
+        %% input/network/
+        subgraph network_sg["network"]
+            direction TB
+            net_mod[mod.rs]
+            protocol_rs[protocol.rs]
+            client_rs[client.rs]
+            server_rs[server.rs]
+            net_plugin_rs[plugin.rs]
+        end
+
+        %% input/scripting/
+        subgraph scripting_sg["scripting"]
+            direction TB
+            script_mod[mod.rs]
+            scenario_rs[scenario.rs]
+            script_plugin_rs[plugin.rs]
+        end
+    end
+
+    %% External crate reference
+    CORE["core/"]
+
+    %% Crate dependency arrow
+    INPUT --> CORE
+
+    %% Style definitions
+    classDef c_inp_root   fill:#660066,stroke:#330033,color:#ffffff
+    classDef c_inp_child  fill:#CC66CC,stroke:#660066,color:#000000
+    classDef c_inp_leaf   fill:#E8B3E8,stroke:#CC66CC,color:#000000
+    classDef c_core_root  fill:#CC6600,stroke:#663300,color:#ffffff
+
+    class INPUT c_inp_root
+    class devices,network,scripting c_inp_child
+    class events_rs_in,input_plugin_rs c_inp_leaf
+    class devices_mod,keyboard_rs,mouse_rs,dev_plugin_rs c_inp_leaf
+    class net_mod,protocol_rs,client_rs,server_rs,net_plugin_rs c_inp_leaf
+    class script_mod,scenario_rs,script_plugin_rs c_inp_leaf
+
+    class CORE c_core_root
+
+    %% Clickable link to Core crate diagram
+    click CORE "./core.mmd" "View Core crate diagram"

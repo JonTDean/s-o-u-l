@@ -1,12 +1,8 @@
 mod app;
-mod core;
+mod automata;
+mod engine_core;
 mod input;
-mod network;  
-mod intelligence_engine;
-mod state;
-mod ui;
-mod tests;
-mod dev_utils;
+mod output;
 
 fn main() {
     app::runner::run();
