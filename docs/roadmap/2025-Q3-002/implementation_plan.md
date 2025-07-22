@@ -125,7 +125,12 @@ if (mode == 0u) {
 
 ---
 
-### 5 · Final verdict
+### 5. Finished Progress
 
-*The three road‑maps are factually consistent once the small corrections above are applied.*
-Following the global order table will let you ship incremental, demo‑ready milestones, and each later phase builds strictly on completed earlier work.
+| Global step | Milestone                                                                                            | Status   | Evidence (selected commits / diffs)                                                                                   |
+| ----------- | ---------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| **G‑0**     | **Automata 0 – Decouple**<br>Legacy *spawner* removed, `RuleRegistry` + `register_with_seed()` added | **Done** | `engine_core::systems::spawner.rs` **deleted**; new `computational_intelligence::registry.rs` with seed‑aware entries |
+| **G‑1**     | **Render 0 – Boot‑strap**<br>white‑quad test via `ActiveAutomataRenderPlugin`                        | **Done** | `io/output/rendering/active/{material,plugin}.rs` create R8 texture + quad                                            |
+| **G‑2**     | **Render 1 – Dense Path**<br>full‑buffer upload each frame                                           | **Done** | `upload_dense()` writes every texel; demonstrated with 8 × 8 checkerboard                                             |
+| **G‑3**     | **Automata 1 – Regular V1**<br>`RegularAutomataPlugin` registers Rule 30/110 + default seeds         | **Done** | plugin registers seeds, hooks `StepperPlugin`, listens for `SeedPattern`                                              |
+| **G‑4**     | **Render 2 – Sparse Path**<br>HashSet diff → selective tex updates                                   | **Done** | `upload_sparse()` uses `PrevLive` set; syntax error fixed (`+` operator)                                              |

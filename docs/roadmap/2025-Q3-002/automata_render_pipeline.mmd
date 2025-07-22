@@ -1,17 +1,16 @@
 kanban
-    title Active‑Automata Render Pipeline (2025‑Q3‑002)
-    %% Columns map to our typical release lanes
+    title Active-Automata Render Pipeline (2025-Q3-002)
     column Backlog
-        **P0 • Boot‑strap**<br/>hello‑quad✔ shader‑material‑mesh wiring
-        **P1 • Dense Path**<br/>upload_dense() + unit test (checkerboard)
-        **P2 • Sparse Path**<br/>PrevLive HashSet diff; perf target 0.6 ms @1 M cells
-        **P3 • Pan & Zoom**<br/>camera uniforms; pixel‑stable scroll test
-        **P4 • Colour Modes**<br/>greyscale / heat / categorical & UI toggle
-        **P5 • Plug‑in Co‑exist.**<br/>ActiveAutomataRenderPlugin selectable via SOUL_RENDER_MODE
-        **P6 • Perf Polish**<br/>chunked memcpy, double‑buffer, >4 K² tiling
-        **P7 • GPU‑Compute Hook**<br/>bind GpuGridTextures.read, skip CPU upload
-        **P8 • Editor Tools**<br/>HUD colour picker, live probe, PNG capture
-        **P9 • Docs & Examples**<br/>mdBook + `active_renderer` example
-    column In Progress
+        P3 • Pan & Zoom<br/>camera uniforms; pixel-stable scroll test
+        P4 • Colour Modes<br/>greyscale / heat / categorical & UI toggle
+        P5 • Plug-in Co-exist.<br/>Selectable via SOUL_RENDER_MODE
+        P6 • Perf Polish<br/>chunked memcpy, double-buffer, >4 K² tiling
+        P7 • GPU-Compute Hook<br/>bind GpuGridTextures.read, skip CPU upload
+        P8 • Editor Tools<br/>HUD colour picker, live probe, PNG capture
+        P9 • Docs & Examples<br/>mdBook & CLI demo
+    column In Progress
     column Review
     column Done
+        P0 • Boot-strap<br/>hello-quad ✔
+        P1 • Dense Path<br/>upload_dense func + unit test
+        P2 • Sparse Path<br/>PrevLive diff; perf target met ✔
