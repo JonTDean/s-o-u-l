@@ -1,10 +1,3 @@
-Great. I’ll structure a roadmap and delivery-phase-oriented kanban board aligned with your GPU rendering engine directory layout.
-
-Each phase—MVP and POC—will include grouped logical tasks across subsystems like core abstractions, pipeline setup, rendering graph, and compute shaders, including documentation and test deliverables.
-
-I’ll get started and let you know once it's ready.
-
-
 # GPU Rendering Engine Roadmap and Kanban Outline
 
 ## Roadmap
