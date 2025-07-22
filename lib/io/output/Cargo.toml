@@ -7,7 +7,7 @@ edition = "2024"
 bytemuck = { version = "1.23.1", features = ["derive"] }
 bevy_reflect = { version = "0.16.1" }
 
-engine_core = { path = "../../engine_core" }
+engine_core = { path = "../../engine/engine_core" }
 computational_intelligence = { path = "../../computational_intelligence" }
 input = { path = "../input" }
 

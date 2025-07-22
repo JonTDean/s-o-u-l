@@ -4,6 +4,8 @@
 //! Put *logic* here – the plain structs live next door in `resources.rs`.
 
 use bevy::prelude::*;
+use crate::state::resources::RuntimeFlags;
+
 use super::resources::{Settings, Session};
 
 /// Adds [`Settings`] + [`Session`] and a tiny housekeeping system.
@@ -13,7 +15,8 @@ impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
         // --- one-time resource initialisation --------------------------------
         app.insert_resource(Settings::load())
-           .init_resource::<Session>()
+            .insert_resource(RuntimeFlags::default())
+            .init_resource::<Session>()
            // --- recurring systems -------------------------------------------
            .add_systems(Update, tick_frame);
     }

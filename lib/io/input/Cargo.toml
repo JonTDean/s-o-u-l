@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 bevy        = { workspace = true } 
-engine_core = { path = "../../engine_core" }
+engine_core = { path = "../../engine/engine_core" }

@@ -10,6 +10,34 @@ pub fn doc_dir() -> PathBuf {
     p
 }
 
+/// --------------------------------------------------------------------
+/// NEW ‑ RuntimeFlags
+/// --------------------------------------------------------------------
+#[derive(Resource, Debug, Clone, Copy)]
+pub struct RuntimeFlags {
+    /// Is the GPU compute back‑end *allowed* this session?
+    pub gpu_enabled: bool,
+}
+
+impl Default for RuntimeFlags {
+    fn default() -> Self {
+        // Environment variable `SOUL_FORCE_CPU=1` disables GPU explicitly.
+        let gpu_allowed = std::env::var_os("SOUL_FORCE_CPU").is_none();
+        Self {
+            gpu_enabled: gpu_allowed,
+        }
+    }
+}
+
+
+/// Runtime counters.
+#[derive(Resource, Debug, Default)]
+pub struct Session {
+    pub frame:      u64,
+    pub sim_paused: bool,
+}
+
+
 /// User / application preferences (saved as TOML).
 #[derive(Resource, Debug, Clone, Serialize, Deserialize)]
 pub struct Settings {
@@ -57,11 +85,4 @@ impl Settings {
     fn config_path() -> PathBuf {
         Self::config_dir().join(Self::FILE)
     }
-}
-
-/// Runtime counters.
-#[derive(Resource, Debug, Default)]
-pub struct Session {
-    pub frame:      u64,
-    pub sim_paused: bool,
 }
