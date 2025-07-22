@@ -1,0 +1,54 @@
+flowchart LR
+
+    %% ─────────── BOOT SEQUENCE ───────────
+    subgraph BOOT["App::new()"]
+        MainApp --> DevToolsPlugin
+        MainApp --> StatePlugin
+        MainApp --> InputPlugin
+        MainApp --> EnginePlugin
+        MainApp --> AutomataRootPlugin
+        MainApp --> OutputRootPlugin
+        MainApp --> GpuComputePlugin
+        MainApp --> NetworkPlugin
+    end
+
+    %% ─────────── STATE MACHINE ───────────
+    StatePlugin --> StateScheduler
+    StateScheduler -- "Enter InGame" --> InGameSetup
+    StateScheduler -- "Exit InGame"  --> InGameTeardown
+    %% (additional states such as MainMenu / Options omitted for brevity)
+
+    %% ─────────── FRAME SETS ───────────
+    InputStage["MainSet::Input"]
+    LogicStage["MainSet::Logic"]
+    RenderStage["MainSet::Render"]
+    InputStage --> LogicStage --> RenderStage --> PresentFrame[Present]
+
+    %% ── INPUT PRODUCERS ──
+    InputPlugin   --> InputStage
+    NetworkPlugin --> InputStage
+
+    %% ── LOGIC PRODUCERS ──
+    EnginePlugin     --> StepperSystems
+    StepperSystems   --> LogicStage
+    AutomataRootPlugin --> RuleRegistry
+    AutomataRootPlugin --> StepperSystems
+
+    %% GPU override (dotted = conditional)
+    GpuComputePlugin --> GpuUpdateNode
+    GpuUpdateNode    --> RenderStage
+    StepperSystems -. "disabled if GPU" .- GpuComputePlugin
+
+    %% ── RENDER PRODUCERS ──
+    OutputRootPlugin --> UiSystems
+    OutputRootPlugin --> ActiveAutomataRenderPlugin
+    OutputRootPlugin --> LegacyGrid2DRenderPlugin
+    UiSystems                  --> RenderStage
+    ActiveAutomataRenderPlugin --> RenderStage
+    LegacyGrid2DRenderPlugin   --> RenderStage
+
+    %% ── DEV TOOLS ──
+    DevToolsPlugin --> LoggingSystems
+    DevToolsPlugin --> DebugSystems
+    LoggingSystems --> PresentFrame
+    DebugSystems   --> PresentFrame

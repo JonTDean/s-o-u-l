@@ -1,45 +1,48 @@
 //! Build & run the Bevy `App`.
+//
+//! * Creates the core `App` skeleton (window / headless settings).
+//! * Inserts global resources & default [`AppState::MainMenu`].
+//! * Defines the canonical three-stage update schedule.
+//! * Registers **all** feature plugins in architecture-defined order.
 
 use bevy::{
     prelude::*,
     window::WindowPlugin,
-    prelude::{PluginGroup, AppExtStates},
+};
+use engine_core::schedule::MainSet;
+use tooling::tools::quit::quit_on_esc;           // tiny helper: exit on Esc
+
+use crate::app::{
+    builder::RuntimeConfig,
+    plugin_registry::{add_all_plugins, PluginFlags},
 };
 
-use crate::{
-    app::{
-        builder::RuntimeConfig,
-        plugin_registry::{add_all_plugins, PluginFlags},
-        schedule::MainSet,
-    },
-    dev_utils::tools::quit::quit_on_esc,
-};
+/// Public one-liner used by `main()`.
+pub fn run() { build(RuntimeConfig::load()).run(); }
 
-pub fn run() {
-    build(RuntimeConfig::load()).run();
-}
-
+/// Construct the fully-configured [`App`]; callers may `.run()` or add extras.
 pub fn build(cfg: RuntimeConfig) -> App {
-    /* 1 ── Core `App` skeleton */
+    /* ── 1. Core `App` skeleton ────────────────────────────────────────── */
     let mut app = App::new();
+
     if cfg.headless {
         app.add_plugins(DefaultPlugins.build().disable::<WindowPlugin>());
     } else {
         app.add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title: "S.O.U.L. – Swarm Orchestrator for Autonomous Learners".into(),
-                resolution: (1_280., 720.).into(),
+                title:       "S.O.U.L. – Swarm Orchestrator for Autonomous Learners".into(),
+                resolution:  (1_280., 720.).into(),
+                resizable:   true,
                 ..default()
             }),
             ..default()
         }));
     }
 
-    /* 2 ── Global systems & state */
-    app.add_systems(Update, quit_on_esc)
-        .init_state::<crate::state::AppState>();
+    /* ── 2. Global resources & always-on utility systems ───────────────── */
+    app.init_state::<engine_core::state::AppState>();  // ← default == MainMenu ✅
 
-    /* 3 ── Canonical schedule */
+    /* ── 3. Canonical 3-phase update schedule ──────────────────────────── */
     app.configure_sets(
         Update,
         (
@@ -49,12 +52,10 @@ pub fn build(cfg: RuntimeConfig) -> App {
         ),
     );
 
-    /* 4 ── Register *all* feature plugins in one call */
+    /* ── 4. Register every feature / renderer plugin in one place ─────── */
     add_all_plugins(
         &mut app,
-        PluginFlags {
-            networking: &cfg.networking,
-        },
+        PluginFlags { networking: &cfg.networking },
     );
 
     app

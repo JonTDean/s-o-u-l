@@ -1,13 +1,13 @@
 # S.O.U.L - Swarm Orchestrator for aUtonomous Learners
 
 A **visual design tool**—not a game—for exploring and comparing multiple
-families of cellular automata (1‑D Elementary, 2‑D Surface, 3‑D Volume, …)
+families of cellular computational_intelligence (1‑D Elementary, 2‑D Surface, 3‑D Volume, …)
 inside the Bevy engine.
 
 | Layer | Purpose | Examples |
 |-------|---------|----------|
 | **`ca_engine/`** | Dimension‑agnostic core (grid storage, stepper, render bridges) | dense ↔ sparse back‑ends, parallel stepping |
-| **`automata/`** | Rule‑set plug‑ins grouped by *type* | Conway / Dean (Type 2), Lenia (Type 3) |
+| **`computational_intelligence/`** | Rule‑set plug‑ins grouped by *type* | Conway / Dean (Type 2), Lenia (Type 3) |
 | **`ui/`** | Egui‑powered panels & file I/O | sliders, palette picker, load/save .rle |
 | **`dev_utils/`** | QoL helpers | quit‑on‑Esc, FPS logging |
 
@@ -47,7 +47,7 @@ src/
 ├── main.rs
 ├── app.rs
 ├── ca_engine/       # grid, stepper, render paths
-├── automata/        # type1_elementary / type2_surface / type3_volume
+├── computational_intelligence/        # type1_elementary / type2_surface / type3_volume
 ├── ui/              # egui panels + file IO
 └── dev_utils/       # quit.rs, logging, monitoring
 assets/              # textures, palettes, icons

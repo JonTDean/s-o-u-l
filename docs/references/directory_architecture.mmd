@@ -1,0 +1,199 @@
+flowchart TB
+    %% ============= APP CRATE =============
+    subgraph APP_CRATE["app/"]
+        app_mod["mod.rs"]
+        builder_rs["builder.rs"]
+        plugin_registry_rs["plugin_registry.rs"]
+        runner_rs["runner.rs"]
+        schedule_rs["schedule.rs"]
+    end
+
+    %% ============= ENGINE CORE =============
+    subgraph ENGINE_CORE["engine_core/"]
+        %% ---- core/ ----
+        subgraph ec_core["core/"]
+            core_mod["mod.rs"]
+            cell_rs["cell.rs"]
+            dim_rs["dim.rs"]
+            world_rs["world.rs"]
+        end
+        %% ---- engine/ ----
+        subgraph ec_engine["engine/"]
+            engine_mod["mod.rs"]
+            components_rs["components.rs"]
+            engine_plugin_rs["plugin.rs"]
+            %% grid/
+            subgraph ec_grid["grid/"]
+                grid_mod["mod.rs"]
+                dense_grid["dense.rs"]
+                sparse_grid["sparse.rs"]
+            end
+            %% stepper/
+            subgraph ec_stepper["stepper/"]
+                step_mod["mod.rs"]
+                step_dense["dense.rs"]
+                step_sparse["sparse.rs"]
+                step_plugin["plugin.rs"]
+            end
+            %% render_bridge/
+            subgraph ec_render_bridge["render_bridge/"]
+                rb_mod["mod.rs"]
+                bridge2d["render2d.rs"]
+            end
+        end
+        %% ---- schedule/ ----
+        subgraph ec_schedule["schedule/"]
+            schedule_mod["mod.rs"]
+        end
+        %% ---- state/ ----
+        subgraph ec_state["state/"]
+            state_mod["mod.rs"]
+            app_state_rs["app_state.rs"]
+            resources_rs["resources.rs"]
+            state_plugin_rs["plugin.rs"]
+        end
+        %% ---- systems/ ----
+        subgraph ec_systems["systems/"]
+            systems_mod["mod.rs"]
+            spawner_rs["spawner.rs"]
+        end
+        engine_events["events.rs"]
+        engine_lib["lib.rs"]
+    end
+
+    %% ============= ENGINE GPU (road‑map) =============
+    subgraph ENGINE_GPU["engine_gpu/"]
+        gpu_lib["lib.rs"]
+        gpu_pipeline["pipeline.rs"]
+        gpu_node["node.rs"]
+        gpu_bind["bind.rs"]
+        gpu_systems["systems.rs"]
+        shaders_dir["assets/shaders/*.wgsl"]
+    end
+
+    %% ============= COMPUTATIONAL INTELLIGENCE =============
+    subgraph CI_CRATE["computational_intelligence/"]
+        ci_lib["lib.rs"]
+        ci_plugin["plugin.rs"]
+        ci_registry["registry.rs"]
+        ci_prelude["prelude.rs"]
+
+        %% analytics/
+        subgraph ci_analytics["analytics/"]
+            analytics_mod["mod.rs"]
+            iit_phi_rs["iit_phi.rs"]
+            iti_indiv_rs["iti_individuality.rs"]
+            swarm_metrics_rs["swarm_metrics.rs"]
+        end
+
+        %% bridges/
+        ci_bridges["bridges/*"]
+
+        %% automata/
+        subgraph ci_automata["automata/"]
+            automata_mod["mod.rs"]
+            automata_plugin["plugin.rs"]
+
+            %% classical/
+            subgraph ci_classical["classical/"]
+                classical_plugin["plugin.rs"]
+                %% regular/
+                regular_dir["regular/*"]
+                %% context‑free/
+                ctxt_free_dir["contextless/*"]
+                %% context‑sensitive/
+                ctxt_sens_dir["contextful/*"]
+                %% turing/
+                turing_dir["turing/*"]
+            end
+
+            %% dynamical/
+            subgraph ci_dynamical["dynamical/"]
+                dynamical_plugin["plugin.rs"]
+                life_dir["life/*"]
+                lenia_dir["lenia/*"]
+                swarm_dir["swarm/*"]
+                reservior_dir["reservior/*"]
+            end
+        end
+    end
+
+    %% ============= INPUT CRATE =============
+    subgraph INPUT_CRATE["io/input/"]
+        input_lib["lib.rs"]
+        input_plugin["plugin.rs"]
+        %% network/
+        subgraph input_network["network/"]
+            network_mod["mod.rs"]
+            client_dir["client/*"]
+            server_dir["server/*"]
+        end
+        %% (devices/ and scripting/ future stubs)
+    end
+
+    %% ============= OUTPUT CRATE =============
+    subgraph OUTPUT_CRATE["io/output/"]
+        output_lib["lib.rs"]
+        output_plugin["plugin.rs"]
+
+        %% rendering/
+        subgraph out_render["rendering/"]
+            automata_material["automata_material.rs"]
+            legacy_grid["grid2d.rs"]
+            render_mod["mod.rs"]
+            %% active renderer (road‑map)
+            subgraph active_render["active/"]
+                active_mod["mod.rs"]
+                active_plugin["plugin.rs"]
+                upload_rs["upload.rs"]
+                camera_uniforms_rs["camera_uniforms.rs"]
+                material_rs["material.rs"]
+            end
+        end
+
+        %% ui/
+        subgraph out_ui["ui/"]
+            ui_mod["mod.rs"]
+            %% panels/
+            subgraph ui_panels["panels/"]
+                panels_mod["mod.rs"]
+                %% main_menu/
+                main_menu_dir["main_menu/*"]
+                %% world/
+                subgraph world_panels["world/"]
+                    world_mod["mod.rs"]
+                    world_plugin["plugin.rs"]
+                    %% world/automata/
+                    automata_panels["automata/*"]
+                end
+                %% file_io/
+                file_io_dir["file_io/*"]
+            end
+            styles_dir["styles/*"]
+        end
+
+        %% export/
+        export_mod["export/mod.rs"]
+    end
+
+    %% ============= DEVTOOLS CRATE =============
+    subgraph DEVTOOLS_CRATE["tooling/"]
+        tooling_lib["lib.rs"]
+        logging_dir["logging/*"]
+        monitoring_dir["monitoring/*"]
+        tools_dir["tools/*"]
+    end
+
+    %% ------------- CROSS‑CRATE LINKS -------------
+    APP_CRATE --> ENGINE_CORE
+    APP_CRATE --> CI_CRATE
+    APP_CRATE --> INPUT_CRATE
+    APP_CRATE --> OUTPUT_CRATE
+    APP_CRATE --> DEVTOOLS_CRATE
+
+    ENGINE_CORE --> ENGINE_GPU
+    ENGINE_CORE --> CI_CRATE
+    ENGINE_CORE --> OUTPUT_CRATE
+
+    ENGINE_GPU --> OUTPUT_CRATE
+    CI_CRATE --> OUTPUT_CRATE

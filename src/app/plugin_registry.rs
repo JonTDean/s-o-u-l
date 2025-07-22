@@ -7,17 +7,19 @@
 //!
 //! Down-stream code calls [`add_all_plugins()`] once; the order here
 //! **must** match the architecture docs & Kanban cards.
-
 use bevy::prelude::*;
-
-use crate::{
-    engine_core::{engine::plugin::EnginePlugin, renderer::Renderer2DPlugin},
-    input::plugin::InputPlugin,
-    state::StatePlugin,
-    ui::components::{
-        file_io::FileIoPlugin,
-        menus::main_menu::MainMenuPlugin,
+use computational_intelligence::plugin::ComputationalIntelligencePlugin;
+use engine_core::{
+    engine::{
+        plugin::EnginePlugin, 
+        render_bridge::render2d::Renderer2DPlugin
     },
+    state::StatePlugin
+};
+use input::plugin::InputPlugin;
+
+use output::{
+    plugin::OutputPlugin, 
 };
 
 /// Runtime flags that influence which plugins are added.
@@ -35,24 +37,29 @@ pub fn add_all_plugins(app: &mut App, flags: PluginFlags) {
 
     // ── 2. Input (player / network / scripted) ──────────────────────────
     app.add_plugins(InputPlugin);
-
+    
     // ── 3. Core simulation engine (adds rule-set sub-plugins later) ─────
     app.add_plugins(EnginePlugin);
+    
+    // ── 4  C.I. layer  ─────────────────────────────────────────────── */
+    app.add_plugins(ComputationalIntelligencePlugin);
 
-    // ── 4. (Optional) Networking layer  ─────────────────────────────────
+    // ── 5. Networking layer  ─────────────────────────────────
     match flags.networking {
-        "server" => { app.add_plugins(crate::network::server::ServerPlugin); },
-        "client" => { app.add_plugins(crate::network::client::ClientPlugin); },
-        _ => {}
+        "server" => { app.add_plugins(input::network::server::ServerPlugin); }
+        "client" => { app.add_plugins(input::network::client::ClientPlugin); }
+        _ => { /* networking disabled */ }
     }
 
-    // ── 5. UI & Rendering (runs in `MainSet::Render`) ───────────────────
+    // ── 6. UI & Rendering (runs in `MainSet::Render`) ───────────────────
     app.add_plugins((
-        MainMenuPlugin,
         Renderer2DPlugin,
-        FileIoPlugin,
+        OutputPlugin,
     ));
 
+    app.add_plugins((
+
+    ));
     // Systems inside UI/renderer should live in `MainSet::Render`;
     // Renderer2DPlugin already tags its draw system appropriately, but
     // custom plugins can enforce it like:

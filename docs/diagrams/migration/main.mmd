@@ -12,16 +12,16 @@ flowchart LR
 
     %% Other crates (as external references)
     CORE["core/"]
-    AUTOMATA["automata/"]
+    computational_intelligence["computational_intelligence/"]
     INPUT["input/"]
     OUTPUT["output/"]
     DEVTOOLS["tooling/"]
 
     %% Crate interaction edges
     main --> APP
-    APP --> CORE & AUTOMATA & INPUT & OUTPUT & DEVTOOLS
+    APP --> CORE & computational_intelligence & INPUT & OUTPUT & DEVTOOLS
 
-    AUTOMATA --> CORE
+    computational_intelligence --> CORE
     INPUT --> CORE
     DEVTOOLS --> CORE
     CORE --> OUTPUT
@@ -52,14 +52,14 @@ flowchart LR
     class app_mod,startup,plugin_registry c_app_child
 
     class CORE c_core_root
-    class AUTOMATA c_aut_root
+    class computational_intelligence c_aut_root
     class INPUT c_inp_root
     class OUTPUT c_out_root
     class DEVTOOLS c_dev_root
 
     %% Clickable links to other crate diagrams (relative paths)
     click CORE "core.mmd" "View Core crate diagram"
-    click AUTOMATA "automata.mmd" "View Automata crate diagram"
+    click computational_intelligence "computational_intelligence.mmd" "View computational_intelligence crate diagram"
     click INPUT "input.mmd" "View Input crate diagram"
     click OUTPUT "output.mmd" "View Output crate diagram"
     click DEVTOOLS "tooling.mmd" "View DevTools crate diagram"

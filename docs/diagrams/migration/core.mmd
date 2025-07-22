@@ -5,7 +5,7 @@ flowchart TB
         direction TB
         %% state/ module
         core_state["state/"]
-        subgraph core_state_sg[" "]
+        subgraph core_state_sg["core_state/"]
             direction TB
             state_mod[mod.rs]
             app_state_rs[app_state.rs]
@@ -15,7 +15,7 @@ flowchart TB
 
         %% engine/ module
         core_engine["engine/"]
-        subgraph core_engine_sg[" "]
+        subgraph core_engine_sg["core_engine/"]
             direction TB
             engine_mod[mod.rs]
             components_rs[components.rs]
@@ -24,7 +24,7 @@ flowchart TB
 
             %% engine/grid/
             grid["grid/"]
-            subgraph grid_sg[" "]
+            subgraph grid_sg["core_grid/"]
                 direction TB
                 grid_mod[mod.rs]
                 dense_rs[dense.rs]
@@ -33,7 +33,7 @@ flowchart TB
 
             %% engine/stepper/
             stepper["stepper/"]
-            subgraph stepper_sg[" "]
+            subgraph stepper_sg["core_stepper/"]
                 direction TB
                 stepper_mod[mod.rs]
                 parallel_rs[parallel.rs]
@@ -42,7 +42,7 @@ flowchart TB
 
             %% engine/render_bridge/
             render_bridge["render_bridge/"]
-            subgraph rb_sg[" "]
+            subgraph rb_sg["core_render_bridge/"]
                 direction TB
                 rb_mod[mod.rs]
                 bridge2d_rs[bridge2d.rs]
@@ -52,13 +52,13 @@ flowchart TB
     end
 
     %% External crates that interact with Core
-    AUTOMATA["automata/"]
+    computational_intelligence["computational_intelligence/"]
     INPUT["input/"]
     DEVTOOLS["tooling/"]
     OUTPUT["output/"]
 
     %% Cross-crate relationships
-    AUTOMATA --> CORE
+    computational_intelligence --> CORE
     INPUT --> CORE
     DEVTOOLS --> CORE
     CORE --> OUTPUT
@@ -80,13 +80,13 @@ flowchart TB
     class stepper_mod,parallel_rs,sequential_rs c_core_leaf
     class rb_mod,bridge2d_rs,bridge3d_rs c_core_leaf
 
-    class AUTOMATA c_aut_root
+    class computational_intelligence c_aut_root
     class INPUT c_inp_root
     class DEVTOOLS c_dev_root
     class OUTPUT c_out_root
 
     %% Clickable links to other crate diagrams
-    click AUTOMATA "automata.mmd" "View Automata crate diagram"
+    click computational_intelligence "computational_intelligence.mmd" "View computational_intelligence crate diagram"
     click INPUT "input.mmd" "View Input crate diagram"
     click DEVTOOLS "tooling.mmd" "View DevTools crate diagram"
     click OUTPUT "output.mmd" "View Output crate diagram"

@@ -1,7 +1,7 @@
 %%{init: {"theme":"base", "flowchart": { "htmlLabels": false }}}%%
 flowchart TB
-    %% Automata crate structure (Type1, Type2, Type3 automata)
-    subgraph AUTOMATA["automata/"]
+    %% computational_intelligence crate structure (Type1, Type2, Type3 computational_intelligence)
+    subgraph computational_intelligence["computational_intelligence/"]
         direction TB
         type1[type1/]
         type2[type2/]
@@ -39,7 +39,7 @@ flowchart TB
     CORE["core/"]
 
     %% Crate dependency arrow
-    AUTOMATA --> CORE
+    computational_intelligence --> CORE
 
     %% Style definitions
     classDef c_aut_root   fill:#006600,stroke:#003300,color:#ffffff
@@ -47,7 +47,7 @@ flowchart TB
     classDef c_aut_leaf   fill:#BFF0BF,stroke:#66CC66,color:#000000
     classDef c_core_root  fill:#CC6600,stroke:#663300,color:#ffffff
 
-    class AUTOMATA c_aut_root
+    class computational_intelligence c_aut_root
     class type1,type2,type3 c_aut_child
     class t1_mod,rules_rs,t1_components_rs,t1_systems_rs,t1_plugin_rs c_aut_leaf
     class t2_mod,conway_rs,dean_life_rs,t2_components_rs,t2_systems_rs,t2_plugin_rs c_aut_leaf

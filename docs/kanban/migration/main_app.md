@@ -1,7 +1,7 @@
 ```mermaid
 kanban
     appTodo[To Do]
-        app1[Refactor main application to utilize modular plugins (load DevUtils -> SimulationCore -> Automata Plugins -> UI -> Networking in order)]
+        app1[Refactor main application to utilize modular plugins (load DevUtils -> SimulationCore -> computational_intelligence Plugins -> UI -> Networking in order)]
         app2[Extract app setup into main_application::app::builder (clean up `main.rs` by moving builder helpers to `app.rs`)]
         app3[Implement config file parsing (e.g. select automaton type, set grid size, headless mode)]
         app4[Ensure proper system orchestration (set up Bevy run schedule so simulation update runs after inputs, before rendering)]
