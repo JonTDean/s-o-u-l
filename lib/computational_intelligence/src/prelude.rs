@@ -8,5 +8,5 @@ pub use super::{
     plugin::ComputationalIntelligencePlugin,
     automata::classical::plugin::ClassicalAutomataPlugin,
     automata::dynamical::plugin::DynamicalAutomataPlugin,
-    registry::RuleRegistry,
+    registry::{RuleRegistry, AutomataRegistry, AutomatonInfo},
 };

@@ -1,28 +1,20 @@
-//! src/ui/components/menus/main_menu/controller/scenario/load.rs
 //! Lists every *.json* in Documents/SOUL/saves and loads on click.
-
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
 use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf};
 use engine_core::{
-    core::World2D, 
-    engine::grid::GridBackend, 
-    state::{AppState, resources::doc_dir}
+    core::World2D,
+    engine::grid::GridBackend,
+    state::{AppState, resources::doc_dir},
 };
 
-
-use crate::{
-    ui::{
-        styles, 
-        panels::{
-            MenuScreen, 
-            main_menu::controller::scenario::new::ScenarioMeta
-        }
-    },
+use crate::ui::{
+    styles,
+    panels::{MenuScreen, main_menu::controller::scenario::new::ScenarioMeta},
 };
 
-/* ---------- on‑disk format (must match saver) ---------------------------- */
+/* ---------- on‑disk format (must match saver) -------------------------- */
 
 #[derive(Serialize, Deserialize)]
 struct SavedScenario {
@@ -32,7 +24,7 @@ struct SavedScenario {
     params:    ScenarioMeta,
 }
 
-/* ---------- screen resource --------------------------------------------- */
+/* ---------- screen resource ------------------------------------------- */
 
 #[derive(Resource, Default)]
 pub struct LoadScenario {
@@ -46,19 +38,19 @@ impl LoadScenario {
         self.files = fs::read_dir(&dir)
             .map(|it| {
                 it.filter_map(Result::ok)
-                  .map(|e| e.path())
-                  .filter(|p| p.extension().map_or(false, |e| e == "json"))
-                  .collect()
+                    .map(|e| e.path())
+                    .filter(|p| p.extension().map_or(false, |e| e == "json"))
+                    .collect()
             })
             .unwrap_or_default();
     }
 }
 
-/* ---------- UI ----------------------------------------------------------- */
+/* ---------- UI --------------------------------------------------------- */
 
 impl MenuScreen for LoadScenario {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
-        self.refresh();   // <<< refresh every frame: inexpensive
+        self.refresh(); // inexpensive – call every frame
 
         egui::CentralPanel::default()
             .frame(styles::fullscreen_bg())
@@ -72,7 +64,8 @@ impl MenuScreen for LoadScenario {
                             ui.label("No save files found.");
                         } else {
                             for path in &self.files {
-                                let label = path.file_stem()
+                                let label = path
+                                    .file_stem()
                                     .and_then(|s| s.to_str())
                                     .unwrap_or("Unnamed");
                                 if ui.button(label).clicked() {
@@ -81,13 +74,15 @@ impl MenuScreen for LoadScenario {
                             }
                         }
                         ui.separator();
-                        if ui.button("Back").clicked() { next.set(AppState::MainMenu); }
+                        if ui.button("Back").clicked() {
+                            next.set(AppState::MainMenu);
+                        }
                     });
             });
     }
 }
 
-/* ---------- loader system ----------------------------------------------- */
+/* ---------- loader system --------------------------------------------- */
 
 pub fn load_selected_save(
     mut commands: Commands,
@@ -96,8 +91,14 @@ pub fn load_selected_save(
 ) {
     let Some(path) = load.selected.take() else { return };
 
-    let Ok(bytes)     = fs::read(&path) else { eprintln!("Read error: {}", path.display()); return; };
-    let Ok(snapshot)  = serde_json::from_slice::<SavedScenario>(&bytes) else { eprintln!("Parse error"); return; };
+    let Ok(bytes)    = fs::read(&path) else {
+        eprintln!("Read error: {}", path.display());
+        return;
+    };
+    let Ok(snapshot) = serde_json::from_slice::<SavedScenario>(&bytes) else {
+        eprintln!("Parse error");
+        return;
+    };
 
     let bg = Color::srgba(
         snapshot.bg_color[0],

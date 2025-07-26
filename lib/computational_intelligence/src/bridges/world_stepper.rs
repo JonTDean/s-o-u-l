@@ -1,88 +1,128 @@
-//! Naïve single‑threaded world stepper.
-//! • Picks the first rule in [`RuleRegistry`].
-//! • Calculates all updates in a read‑only pass.
-//! • Applies updates in a second mutable pass.
-
-use std::marker::PhantomData;
+//! Single‑threaded stepper that advances **all** registered automata.
 
 use bevy::prelude::*;
-use engine_core::{
-    core::{CellCtx, CellOutcome, dim::Dim2},
-    core::world::World2D,
-    engine::grid::GridBackend,
-};
 use serde_json::Value;
-use crate::registry::RuleRegistry;
+use engine_core::{
+    core::{
+        CellCtx, 
+        CellOutcome,
+        cell::CellState,
+        dim::Dim2, Dim,
+    },
+    engine::grid::{DenseGrid, GridBackend, SparseGrid},
+};
 
-/// Parameters sent to every rule call (empty for now).
-const EMPTY_PARAMS: Value = Value::Null;
+use crate::registry::AutomataRegistry;
 
-/* ──────────────────────────────────────────────────────────────────────── */
+/* --------------------------------------------------------------------- */
+
+const EMPTY: Value = Value::Null;            // default rule parameters
 
 pub struct WorldStepperPlugin;
 impl Plugin for WorldStepperPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<RuleRegistry>()
-            .add_systems(
-                Update,
-                step_world
-                    .in_set(engine_core::schedule::MainSet::Logic)
-                    // run only while the game is actually running…
-                    .run_if(in_state(engine_core::state::AppState::InGame))
-                    // …and only once World2D has been created
-                    .run_if(resource_exists::<World2D>),
-            );
+        app.add_systems(
+            Update,
+            step_every_automaton
+                .in_set(engine_core::schedule::MainSet::Logic)
+                .run_if(in_state(engine_core::state::AppState::InGame)),
+        );
     }
 }
-/* ──────────────────────────────────────────────────────────────────────── */
 
-fn step_world(
-    mut world: ResMut<World2D>,
-    rules:     Res<RuleRegistry>,
-) {
-    /* 1 ── pick *any* active rule (first entry for now) */
-    let Some(rule) = rules.ids().next().and_then(|id| rules.get(id)) else { return };
+/* --------------------------------------------------------------------- */
 
-    /* 2 ── READ‑ONLY pass: clone cells & gather updates */
-    let (updates, size) = {
-        let GridBackend::Dense(grid) = &world.backend else { return };
-        let size = grid.size;
-        let prev_cells = grid.cells.clone();
-
-        let mut ups = Vec::new();
-
-        for (idx, cell) in prev_cells.iter().enumerate() {
-            let coord = IVec2::new(
-                (idx as u32 % size.x) as i32,
-                (idx as u32 / size.x) as i32,
-            );
-
-            let neighbourhood = world.neighbourhood(coord);
-
-            let ctx = CellCtx::<Dim2> {
-                self_coord: coord,
-                self_state: cell.state,            
-                neighbourhood: &neighbourhood,
-                memory: &cell.memory,
-                _marker: PhantomData::<Dim2>,              //  (or `PhantomData::<Dim2>`)
-            };
-
-            if let CellOutcome::Next { state, memory } =
-                rule.next_state(ctx, &EMPTY_PARAMS)
-            {
-                ups.push((idx, state, memory));
-            }
-        }
-
-        (ups, size)
-    };
-
-    /* 3 ── WRITE pass: apply queued updates mutably */
-    if let GridBackend::Dense(grid) = &mut world.backend {
-        for (idx, state, memory) in updates {
-            let tgt = grid.cells.get_mut(idx).expect("index in‑bounds");
-            tgt.state  = state;
-            tgt.memory = memory;
+fn step_every_automaton(mut reg: ResMut<AutomataRegistry>) {
+    for auto in reg.iter_mut() {
+        match &mut auto.grid {
+            GridBackend::Dense(g)  => step_dense_dyn(g, &*auto.rule, &EMPTY),
+            GridBackend::Sparse(s) => step_sparse_dyn(s, &*auto.rule, &EMPTY),
         }
     }
+}
+
+/* --------------------------------------------------------------------- */
+/* Dynamic helpers (trait‑object friendly)                               */
+/* --------------------------------------------------------------------- */
+
+#[inline]
+fn step_dense_dyn(
+    grid:   &mut DenseGrid,
+    rule:   &dyn engine_core::core::AutomatonRule<D = Dim2>,
+    params: &Value,
+) {
+    use bevy::math::IVec2;
+
+    let snapshot = grid.cells.clone();              // read‑only copy
+    let mut next = snapshot.clone();                // writable copy
+
+    for y in 0..grid.size.y as i32 {
+        for x in 0..grid.size.x as i32 {
+            let p   = IVec2::new(x, y);
+            let idx = grid.idx(p);
+
+            /* build Moore‑8 neighbourhood */
+            let mut nbhd = [CellState::Dead; 8];
+            for (i, off) in Dim2::NEIGHBOUR_OFFSETS.iter().enumerate() {
+                let q = p + *off;
+                if (0..grid.size.x as i32).contains(&q.x)
+                    && (0..grid.size.y as i32).contains(&q.y)
+                {
+                    nbhd[i] = snapshot[grid.idx(q)].state;
+                }
+            }
+
+            let ctx = CellCtx::<Dim2> {
+                self_coord:    p,
+                self_state:    snapshot[idx].state,
+                neighbourhood: &nbhd,
+                memory:        &snapshot[idx].memory,
+                _marker:       std::marker::PhantomData,
+            };
+
+            if let CellOutcome::Next { state, memory } = rule.next_state(ctx, params) {
+                next[idx].state  = state;
+                next[idx].memory = memory;
+            }
+        }
+    }
+
+    grid.cells = next;
+}
+
+#[inline]
+fn step_sparse_dyn(
+    grid:   &mut SparseGrid,
+    rule:   &dyn engine_core::core::AutomatonRule<D = Dim2>,
+    params: &Value,
+) {
+    use bevy::math::IVec2;
+    use std::collections::HashMap;
+    use engine_core::core::cell::Cell;
+
+    let snapshot: HashMap<IVec2, Cell> = grid.map.clone();
+    let mut next = snapshot.clone();
+
+    for (&p, cell) in &snapshot {
+        let mut nbhd = [CellState::Dead; 8];
+
+        for (i, off) in Dim2::NEIGHBOUR_OFFSETS.iter().enumerate() {
+            nbhd[i] = snapshot.get(&(p + *off)).map_or(CellState::Dead, |c| c.state);
+        }
+
+        let ctx = CellCtx::<Dim2> {
+            self_coord:    p,
+            self_state:    cell.state,
+            neighbourhood: &nbhd,
+            memory:        &cell.memory,
+            _marker:       std::marker::PhantomData,
+        };
+
+        if let CellOutcome::Next { state, memory } = rule.next_state(ctx, params) {
+            next.entry(p).or_default().state  = state;
+            next.entry(p).or_default().memory = memory;
+        }
+    }
+
+    grid.map = next;
 }

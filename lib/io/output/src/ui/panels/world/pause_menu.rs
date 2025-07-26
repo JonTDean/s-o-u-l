@@ -1,6 +1,6 @@
 //! Pause-menu overlay (Esc ⇄ Resume / Main Menu).
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts};
+use bevy_egui::egui;
 
 use engine_core::state::AppState;
 use crate::ui::{panels::MenuScreen, styles};

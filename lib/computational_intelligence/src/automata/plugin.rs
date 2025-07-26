@@ -1,21 +1,18 @@
-//! All automata families (symbolic + dynamical).
+//! Thin umbrella plugin that simply wires together the sub‑families
+//! (classical, dynamical, …).  All heavy lifting happens inside those
+//! specialised sub‑plugins.
 
 use bevy::prelude::*;
 
-use crate::automata::{
-    classical::plugin::ClassicalAutomataPlugin, 
-    dynamical::plugin::DynamicalAutomataPlugin
-};
-
-
-/// One umbrella plugin so the CI root can simply do
-/// `app.add_plugins(AutomataPlugin)`.
 pub struct AutomataPlugin;
+
 impl Plugin for AutomataPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            ClassicalAutomataPlugin,
-            DynamicalAutomataPlugin,
+            super::classical::plugin::ClassicalAutomataPlugin,
+            super::dynamical::plugin::DynamicalAutomataPlugin,
+            crate::bridges::world_stepper::WorldStepperPlugin,
+            crate::bridges::command_executor::CommandExecutorPlugin,
         ));
     }
 }

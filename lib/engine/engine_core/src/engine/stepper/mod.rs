@@ -1,6 +1,7 @@
 pub mod dense;
 pub mod sparse;
 pub mod plugin;
+pub mod dense_parallel;
 
 use bevy::prelude::Resource;
 

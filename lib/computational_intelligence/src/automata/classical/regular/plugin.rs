@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use engine_core::state::AppState;
 use serde_json::Value;
 use engine_core::{engine::stepper::plugin::StepperPlugin, events::AutomataCommand};
 use engine_core::core::World2D;

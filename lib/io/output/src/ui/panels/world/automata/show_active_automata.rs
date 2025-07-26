@@ -1,66 +1,54 @@
-//! HUD overlay that lists every automaton selected for the current scenario
-//! and shows basic analytics in real time.
-//
-//! • Drawn in the top‑left corner while `AppState::InGame` is active.
-//! • Each classical rule line shows the current agent count.
-//! • Each dynamical rule line shows the instantaneous Φ (integration) value.
+//! Tiny HUD panel (upper‑left) that lists every running automaton plus a
+//! very simple activity metric (live‑cell count).
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
+use computational_intelligence::registry::AutomataRegistry;
+use engine_core::core::cell::CellState;
 
-use crate::ui::panels::main_menu::controller::scenario::new::ScenarioMeta;
-use computational_intelligence::analytics::{
-    iit_phi::compute_phi,
-    swarm_metrics::swarm_summary,
-};
-use engine_core::core::world::World2D;
+/* --------------------------------------------------------------------- */
 
-/// Translate registry IDs to human‑readable names.
 fn friendly_name(id: &str) -> &str {
     match id {
         "wolfram:rule30"  => "Wolfram Rule 30",
         "wolfram:rule110" => "Wolfram Rule 110",
-        "life:conway"     => "Conway’s Game of Life",
+        "life:conway"     => "Conway’s Life",
         "life:dean"       => "Dean’s Life",
-        "lenia"           => "Lenia",
+        "lenia"           => "Lenia (blob)",
+        "lenia:orbium"    => "Lenia – Orbium",
+        "particle:hpp"    => "Lattice‑gas HPP",
         _                 => id,
     }
 }
 
-/// Bevy system – registered by `AutomataPanelPlugin`.
-pub fn show_active_automata(
-    selected: Res<ScenarioMeta>,
-    world:    Res<World2D>,
-    mut egui_ctx: EguiContexts,
-) {
-    let ctx = egui_ctx
-        .ctx_mut()
-        .expect("Egui primary window context not found");
+/* --------------------------------------------------------------------- */
 
-    /* ── analytics for this frame ─────────────────────────────────────── */
-    let summary = swarm_summary(&world);
-    let phi     = compute_phi(&world);
+pub fn show_active_automata(
+    automata:  Res<AutomataRegistry>,
+    mut egui_ctx: EguiContexts<'_, '_>,
+) {
+    let Ok(ctx) = egui_ctx.ctx_mut() else { return };
 
     egui::Area::new("active_automata_panel".into())
         .anchor(egui::Align2::LEFT_TOP, [10.0, 10.0])
-        .show(ctx, |ui| {
-            ui.style_mut().spacing.item_spacing.y = 4.0;
-            ui.label("Active Automata:");
-
-            // Classical rules ------------------------------------------------
-            for id in &selected.0.selected_classical {
-                ui.label(format!("• {} – agents {}", friendly_name(id), summary.total_agents));
-            }
-
-            // Dynamical rules ------------------------------------------------
-            for id in &selected.0.selected_dynamical {
-                ui.label(format!("• {} – Φ {:.2}", friendly_name(id), phi));
-            }
-
-            if selected.0.selected_classical.is_empty()
-                && selected.0.selected_dynamical.is_empty()
-            {
+        .show(&ctx, |ui| {
+            ui.heading("Active automata:");
+            if automata.list().is_empty() {
                 ui.label("(none)");
+            }
+
+            for info in automata.list() {
+                let live = match &info.grid {
+                    engine_core::engine::grid::GridBackend::Dense(g)  => {
+                        g.cells.iter().filter(|c| !matches!(c.state, CellState::Dead)).count()
+                    }
+                    engine_core::engine::grid::GridBackend::Sparse(s) => {
+                        s.iter().filter(|(_, c)| !matches!(c.state, CellState::Dead)).count()
+                    }
+                };
+                ui.horizontal(|ui| {
+                    ui.label(format!("• {} – {live} live", friendly_name(&info.name)));
+                });
             }
         });
 }

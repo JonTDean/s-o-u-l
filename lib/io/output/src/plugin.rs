@@ -3,10 +3,11 @@
 use bevy::prelude::*;
 
 use crate::{
-    rendering::{active::plugin::ActiveAutomataRenderPlugin, grid2d::Grid2DRenderPlugin}, ui::panels::{
-        main_menu::MainMenuPlugin,
-        world::WorldMenusPlugin,          // ← new world‑HUD plugin
-    }
+    rendering::{
+        active::plugin::ActiveAutomataRenderPlugin,
+        world_camera::WorldCameraPlugin,
+    },
+    ui::panels::{main_menu::MainMenuPlugin, world::WorldMenusPlugin},
 };
 
 /// Adds every “output” feature: menus, HUD, file‑export, renderers…
@@ -19,9 +20,9 @@ impl Plugin for OutputPlugin {
             MainMenuPlugin,
             // in‑scene HUD overlays (Active Automata, …)
             WorldMenusPlugin,
-            // 2‑D cell‑grid renderer (wgpu)
-            // Grid2DRenderPlugin,
-            // GPU renderer for active automata
+            // Shared world camera – **must come before** renderers
+            WorldCameraPlugin,
+            // Active‑cell mask renderer
             ActiveAutomataRenderPlugin,
         ));
     }

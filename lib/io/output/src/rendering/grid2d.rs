@@ -132,13 +132,6 @@ fn setup(
     /* centred orthographic camera (unchanged) */
     let cam_x = w as f32 * world.cell_size * 0.5;
     let cam_y = h as f32 * world.cell_size * 0.5;
-    cmd.spawn((
-        Camera2d,
-        Camera { order: 1, ..default() },
-        Transform::from_translation(Vec3::new(cam_x, cam_y, 999.0)),
-        WorldCamera,
-    ));
-    cmd.insert_resource(ZoomInfo { base: 1.0, current: 1.0 });
 
     /* low‑contrast quad *behind* the active renderer (z = −1) */
     let mat = mats.add(GridMaterial {

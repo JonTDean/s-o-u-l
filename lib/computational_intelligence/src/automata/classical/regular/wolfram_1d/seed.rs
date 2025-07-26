@@ -1,37 +1,65 @@
+//! Seeding helpers for the 1‑D Wolfram elementary CA rules.
+//
+//  We now support *both* the high‑level `World2D` wrapper (used by
+//  CPU‑steppers) **and** the bare‐metal `GridBackend` enum that the
+//  scenario spawner uses.  The shared logic lives in the `_backend`
+//  helpers; thin wrappers forward the call for convenience.
+
 use bevy::math::IVec2;
-use engine_core::core::{World2D, cell::CellState};
-use engine_core::engine::grid::GridBackend;
+use engine_core::{
+    core::world::World2D,
+    engine::grid::{GridBackend, DenseGrid},
+    core::cell::CellState,
+};
 
-/// Fill the middle row with live cells (works for any 1‑D Wolfram rule).
-pub fn seed_middle_band(world: &mut World2D) {
-    if let GridBackend::Dense(grid) = &mut world.backend {
-        let y = grid.size.y / 2;
-        for x in 0..grid.size.x {
-            let idx = (y * grid.size.x + x) as usize;
-            grid.cells[idx].state = CellState::Alive(255);
+/// ───────────────────────────────────────────────────────────────────────
+/// Internal helpers (work on a `GridBackend` directly)
+/// ───────────────────────────────────────────────────────────────────────
+
+fn seed_middle_band_backend(grid: &mut GridBackend) {
+    match grid {
+        GridBackend::Dense(g) => {
+            // horizontal line at the vertical midpoint
+            let y = g.size.y / 2;
+            for x in 0..g.size.x {
+                let idx = (y * g.size.x + x) as usize;
+                g.cells[idx].state = CellState::Alive(255);
+            }
+        }
+        GridBackend::Sparse(s) => {
+            // place ~64 cells centred on the origin
+            for x in -32..=32 {
+                s.set_state(IVec2::new(x, 0), CellState::Alive(255));
+            }
         }
     }
 }
 
-
-/// Put **one live cell in the logical centre** of the world.
-/// – Dense  → arithmetic centre of the allocated grid  
-/// – Sparse → origin `(0, 0)` is “good enough” (sparse worlds are unbounded)
-pub fn seed_center_cell(world: &mut World2D) {
-    match &mut world.backend {
-        GridBackend::Dense(grid) => {
-            let cx  = (grid.size.x / 2) as usize;
-            let cy  = (grid.size.y / 2) as usize;
-            let idx = cy * grid.size.x as usize + cx;
-            grid.cells[idx].state = CellState::Alive(255);
+fn seed_center_cell_backend(grid: &mut GridBackend) {
+    match grid {
+        GridBackend::Dense(g) => {
+            let cx  = (g.size.x / 2) as usize;
+            let cy  = (g.size.y / 2) as usize;
+            let idx = cy * g.size.x as usize + cx;
+            g.cells[idx].state = CellState::Alive(255);
         }
-        GridBackend::Sparse(sparse) => {
-            sparse.set_state(IVec2::ZERO, CellState::Alive(255));
+        GridBackend::Sparse(s) => {
+            s.set_state(IVec2::ZERO, CellState::Alive(255));
         }
     }
 }
 
-/* ─── exported wrappers ─────────────────────────────────────────────── */
+/// ───────────────────────────────────────────────────────────────────────
+/// Public API – **backend** variants (used by the Scenario spawner)
+/// ───────────────────────────────────────────────────────────────────────
+/// These are the functions registered inside `RuleRegistry`.
 
-pub fn seed_rule30 (w: &mut World2D) { seed_middle_band(w); }
-pub fn seed_rule110(w: &mut World2D) { seed_middle_band(w); }
+pub fn seed_rule30(grid: &mut GridBackend)  { seed_middle_band_backend(grid); }
+pub fn seed_rule110(grid: &mut GridBackend) { seed_middle_band_backend(grid); }
+
+/// ───────────────────────────────────────────────────────────────────────
+/// Public API – **world** variants (used by the CPU stepper plugin)
+/// ───────────────────────────────────────────────────────────────────────
+
+pub fn seed_rule30_world(world: &mut World2D)  { seed_rule30(&mut world.backend); }
+pub fn seed_rule110_world(world: &mut World2D) { seed_rule110(&mut world.backend); }
