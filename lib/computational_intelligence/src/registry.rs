@@ -3,11 +3,9 @@ use std::sync::Arc;
 
 use bevy::prelude::*;                    // Color, Resource, etc.
 use engine_core::{
-    core::{AutomatonRule, dim::Dim2},
-    core::world::World2D,
-    engine::grid::GridBackend,
+    core::{dim::Dim2, world::World2D, AutomatonRule},
+    engine::grid::GridBackend, events::AutomatonId,
 };
-use serde::Serialize;
 use serde_json::Value;
 
 /* ──────────────────────────────────────────────────────────────────── */
@@ -72,10 +70,6 @@ impl RuleRegistry {
 /* ──────────────────────────────────────────────────────────────────── */
 /* Automata registry                                                   */
 /* ──────────────────────────────────────────────────────────────────── */
-
-#[derive(Copy, Clone, Debug, Hash, Eq, PartialEq, Serialize)]
-pub struct AutomatonId(pub u32);
-
 pub struct AutomatonInfo {
     pub id: AutomatonId,
     pub name: String,
@@ -138,10 +132,3 @@ impl AutomataRegistry {
         self.automata.iter_mut()
     }
 }
-
-/* ──────────────────────────────────────────────────────────────────── */
-/* Events                                                              */
-/* ──────────────────────────────────────────────────────────────────── */
-
-#[derive(Event)] pub struct AutomatonAdded   { pub id: AutomatonId }
-#[derive(Event)] pub struct AutomatonRemoved { pub id: AutomatonId }

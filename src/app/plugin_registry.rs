@@ -56,10 +56,6 @@ pub fn add_all_plugins(app: &mut App, flags: PluginFlags) {
         Renderer2DPlugin,
         OutputPlugin,
     ));
-
-    app.add_plugins((
-
-    ));
     // Systems inside UI/renderer should live in `MainSet::Render`;
     // Renderer2DPlugin already tags its draw system appropriately, but
     // custom plugins can enforce it like:

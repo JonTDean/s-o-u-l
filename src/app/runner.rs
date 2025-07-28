@@ -10,7 +10,6 @@ use bevy::{
     window::WindowPlugin,
 };
 use engine_core::schedule::MainSet;
-use tooling::tools::quit::quit_on_esc;           // tiny helper: exit on Esc
 
 use crate::app::{
     builder::RuntimeConfig,

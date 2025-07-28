@@ -8,7 +8,7 @@
 use bevy::math::IVec2;
 use engine_core::{
     core::world::World2D,
-    engine::grid::{GridBackend, DenseGrid},
+    engine::grid::GridBackend,
     core::cell::CellState,
 };
 
@@ -31,20 +31,6 @@ fn seed_middle_band_backend(grid: &mut GridBackend) {
             for x in -32..=32 {
                 s.set_state(IVec2::new(x, 0), CellState::Alive(255));
             }
-        }
-    }
-}
-
-fn seed_center_cell_backend(grid: &mut GridBackend) {
-    match grid {
-        GridBackend::Dense(g) => {
-            let cx  = (g.size.x / 2) as usize;
-            let cy  = (g.size.y / 2) as usize;
-            let idx = cy * g.size.x as usize + cx;
-            g.cells[idx].state = CellState::Alive(255);
-        }
-        GridBackend::Sparse(s) => {
-            s.set_state(IVec2::ZERO, CellState::Alive(255));
         }
     }
 }

@@ -32,14 +32,13 @@
 //! below — **no other changes** are required by the host application.
 
 use bevy::prelude::*;
+use engine_core::events::{AutomatonAdded, AutomatonRemoved};
 
 use crate::{
     automata::plugin::AutomataPlugin,
     registry::{
         RuleRegistry,            // Global rule catalogue
         AutomataRegistry,        // Runtime list of running automata
-        AutomatonAdded,          // Event ⇢ an automaton was created
-        AutomatonRemoved,        // Event ⇢ an automaton is about to be destroyed
     },
 };
 
