@@ -5,7 +5,6 @@ use bevy_egui::{EguiPlugin, EguiPrimaryContextPass};
 
 use engine_core::state::AppState;
 use super::{
-    setup_ui_camera, 
     ui_runner, 
     main_menu::controller::scenario::new::ScenarioMeta
 };
@@ -29,8 +28,6 @@ impl Plugin for MainMenuPlugin {
         app
             // Enable egui
             .add_plugins(EguiPlugin::default())
-            // Spawn the UI camera once at startup
-            .add_systems(Startup, setup_ui_camera)
 
             // ── MAIN MENU ────────────────────────────────────────────────
             .add_systems(OnEnter(AppState::MainMenu), |mut commands: Commands| {

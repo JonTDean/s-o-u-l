@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use input::controls::camera_control::ZoomInfo;
+use engine_core::engine::components::ZoomInfo;
 
 pub fn zoom_overlay(mut egui_ctx: EguiContexts, zoom: Res<ZoomInfo>) {
     let ctx = egui_ctx.ctx_mut().unwrap();

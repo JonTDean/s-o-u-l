@@ -13,7 +13,7 @@ use engine_core::schedule::MainSet;
 
 use crate::app::{
     builder::RuntimeConfig,
-    plugin_registry::{add_all_plugins, PluginFlags},
+    plugin_registry::add_all_plugins,
 };
 
 /// Public one-liner used by `main()`.
@@ -54,7 +54,6 @@ pub fn build(cfg: RuntimeConfig) -> App {
     /* ── 4. Register every feature / renderer plugin in one place ─────── */
     add_all_plugins(
         &mut app,
-        PluginFlags { networking: &cfg.networking },
     );
 
     app

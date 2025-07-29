@@ -1,25 +1,30 @@
 //! engine/gpu/plugin.rs – initialises GPU compute back‑end.
+//!
+//! Updated 2025‑07‑28
+//! * Atlas allocator now **always returns layer 0** so that
+//!   newly‑spawned automata are visible immediately.
+//! * First‑fit heuristic (deterministic) instead of random choice.
 
 use bevy::{
-    prelude::*,
     core_pipeline::core_2d::graph::Node2d,
+    prelude::*,
     render::{
+        render_graph::{RenderGraph, RenderLabel},
         render_resource::*,
         ExtractSchedule, RenderApp,
-        render_graph::{RenderGraph, RenderLabel},
     },
 };
 
 use crate::state::AppState;
 
 use super::{
-    graph::{ComputeAutomataNode, extract_gpu_slices, GpuGridSlice},
+    graph::{extract_gpu_slices, ComputeAutomataNode, GpuGridSlice},
     pipelines::GpuPipelineCache,
 };
 
-const MAX_W:      u32 = 1024;
-const MAX_H:      u32 = 1024;
-const MAX_LAYERS: u32 = 256;
+const MAX_W: u32 = 1024;
+const MAX_H: u32 = 1024;
+const MAX_LAYERS: u32 = 256;      // still honoured for future work
 
 /* ───────────────────── texture + atlas resources ───────────────────── */
 
@@ -31,46 +36,61 @@ pub struct GlobalStateTextures {
     pub signal: Handle<Image>,
 }
 
-/// Simple guillotine allocator for packing 2‑D slices into the texture
-/// atlas.  **Not thread‑safe**; accessed from the main world only.
+/* -------------------------------------------------------------------- */
+/*               SIMPLE 2‑D “GUILLLOTINE” ATLAS ALLOCATOR               */
+/* -------------------------------------------------------------------- */
+
+/// Internal free‑list entry: `(offset, size)` – **layer is fixed at 0**.
+#[derive(Clone, Copy)]
+struct Rect {
+    off:  UVec2,
+    size: UVec2,
+}
+
+/// Packs 2‑D slices into the `(MAX_W × MAX_H)` atlas on **layer 0**.
+/// Not thread‑safe; touched only from the main‑world.
 #[derive(Resource)]
 struct AtlasAllocator {
-    free_spaces: Vec<(u32, UVec2, UVec2)>, // (layer, offset, size)
+    free: Vec<Rect>,
 }
 impl AtlasAllocator {
     fn new() -> Self {
         Self {
-            free_spaces: vec![(0, UVec2::ZERO, UVec2::new(MAX_W, MAX_H))],
+            free: vec![Rect { off: UVec2::ZERO, size: UVec2::new(MAX_W, MAX_H) }],
         }
     }
+
+    /// First‑fit guillotine split; returns `(layer == 0, offset)`.
     fn allocate(&mut self, size: UVec2) -> Option<(u32, UVec2)> {
         let idx = self
-            .free_spaces
+            .free
             .iter()
-            .position(|&(_, _, free)| size.x <= free.x && size.y <= free.y)?;
-        let (layer, off, free) = self.free_spaces.remove(idx);
+            .position(|r| size.x <= r.size.x && size.y <= r.size.y)?;
 
-        // split right
-        if free.x > size.x {
-            self.free_spaces.push((
-                layer,
-                UVec2::new(off.x + size.x, off.y),
-                UVec2::new(free.x - size.x, size.y),
-            ));
+        let rect = self.free.remove(idx);
+
+        /* Split right */
+        if rect.size.x > size.x {
+            self.free.push(Rect {
+                off:  UVec2::new(rect.off.x + size.x, rect.off.y),
+                size: UVec2::new(rect.size.x - size.x, size.y),
+            });
         }
-        // split below
-        if free.y > size.y {
-            self.free_spaces.push((
-                layer,
-                UVec2::new(off.x, off.y + size.y),
-                UVec2::new(free.x, free.y - size.y),
-            ));
+        /* Split below */
+        if rect.size.y > size.y {
+            self.free.push(Rect {
+                off:  UVec2::new(rect.off.x, rect.off.y + size.y),
+                size: UVec2::new(rect.size.x, rect.size.y - size.y),
+            });
         }
-        Some((layer, off))
+
+        Some((0, rect.off))          // <- **always layer 0**
     }
-    fn free(&mut self, layer: u32, off: UVec2, size: UVec2) {
-        self.free_spaces.push((layer, off, size));
-        // TODO merge free rectangles to fight fragmentation
+
+    #[allow(dead_code)]
+    fn free(&mut self, _layer: u32, off: UVec2, size: UVec2) {
+        // Returned slices are simply appended; merging is a future task.
+        self.free.push(Rect { off, size });
     }
 }
 
@@ -86,11 +106,15 @@ struct AutomataStepLabel;
 pub struct GpuAutomataComputePlugin;
 impl Plugin for GpuAutomataComputePlugin {
     fn build(&self, app: &mut App) {
-        /* 1 create the 3‑D textures */
+        /* 1 ── build the shared 3‑D textures (ping / pong / signal) */
         let tex_desc = |label: &'static str| Image {
             texture_descriptor: TextureDescriptor {
                 label: Some(label),
-                size:  Extent3d { width: MAX_W, height: MAX_H, depth_or_array_layers: MAX_LAYERS },
+                size: Extent3d {
+                    width:  MAX_W,
+                    height: MAX_H,
+                    depth_or_array_layers: MAX_LAYERS,
+                },
                 mip_level_count: 1,
                 sample_count:    1,
                 dimension:       TextureDimension::D3,
@@ -102,6 +126,7 @@ impl Plugin for GpuAutomataComputePlugin {
             },
             ..default()
         };
+
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
         let ping   = images.add(tex_desc("ca.ping"));
         let pong   = images.add(tex_desc("ca.pong"));
@@ -112,21 +137,21 @@ impl Plugin for GpuAutomataComputePlugin {
            .insert_resource(AtlasAllocator::new())
            .insert_resource(GpuPipelineCache::default());
 
-        /* 2 attach a GPU slice when a new automaton entity appears */
+        /* 2 ── attach a GPU slice whenever a new automaton appears */
         app.add_systems(
             Update,
-            |mut cmd: Commands,
+            |mut cmd:   Commands,
              mut atlas: ResMut<AtlasAllocator>,
-             mut ev:   EventReader<crate::events::AutomatonAdded>| {
+             mut ev:    EventReader<crate::events::AutomatonAdded>| {
                 for ev in ev.read() {
-                    let size = UVec2::splat(256); // TODO real size
+                    let size = UVec2::splat(256); // TODO: real grid size in a later PR
                     if let Some((layer, offset)) = atlas.allocate(size) {
                         cmd.entity(ev.entity).insert(GpuGridSlice {
                             layer,
                             offset,
                             size,
-                            rule: "life".into(),    // TODO from automaton meta
-                            rule_bits: 0b0001_1000, // B/S mask – example
+                            rule:      "life".into(),    // TODO: pass actual rule id
+                            rule_bits: 0b0001_1000,      // example B/S mask
                         });
                     } else {
                         warn!("🏳️  Atlas full – cannot allocate GPU slice!");
@@ -135,19 +160,17 @@ impl Plugin for GpuAutomataComputePlugin {
             },
         );
 
-        /* 3 wipe the slice allocator when returning to main‑menu */
+        /* 3 ── wipe the allocator when returning to the main menu */
         app.add_systems(
             OnEnter(AppState::MainMenu),
             |mut atlas: ResMut<AtlasAllocator>| *atlas = AtlasAllocator::new(),
         );
 
-        /* 4  move data into the render‑app & add compute node */
+        /* 4 ── render‑app side: parity‑flip + extraction + compute node */
         let render_app = app.sub_app_mut(RenderApp);
         render_app
             .insert_resource(FrameParity::default())
-            // flip parity every extract
             .add_systems(ExtractSchedule, |mut p: ResMut<FrameParity>| p.0 = !p.0)
-            // transfer component
             .add_systems(ExtractSchedule, extract_gpu_slices);
 
         {
@@ -155,7 +178,5 @@ impl Plugin for GpuAutomataComputePlugin {
             graph.add_node(AutomataStepLabel, ComputeAutomataNode);
             graph.add_node_edge(AutomataStepLabel, Node2d::MainOpaquePass);
         }
-
-
     }
 }

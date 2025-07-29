@@ -28,18 +28,30 @@ impl WorldGrid {
         Self { backend: GridBackend::Sparse(SparseGrid::default()), free: vec![] }
     }
 
-    /// Allocate a rectangular slice; returns None if it would overlap or exceed.
+    /// Allocate a rectangular slice; now chooses **any** suitable rectangle
+    /// at random instead of always the first one (reduces clustering).
     pub fn allocate(&mut self, size: UVec2) -> Option<GridSlice> {
-        let idx = self.free.iter().position(|&(_, free_sz)| {
-            size.x <= free_sz.x && size.y <= free_sz.y
-        })?;
+        // ── ❶ collect every free slot that fits ──────────────────────────
+        let mut rng   = rand::rng();
+        let idx_opt   = rand::seq::IteratorRandom::choose(self.free
+            .iter()
+            .enumerate()
+            .filter(|(_, entry)| {
+                let free_sz = &entry.1; // entry = (&IVec2, &UVec2)
+                size.x <= free_sz.x && size.y <= free_sz.y
+            })
+            .map(|(i, _)| i), &mut rng);          // <- 1 random index, if any
+
+        let idx = idx_opt?;             // none ⇒ allocation fails
         let (off, free_sz) = self.free.remove(idx);
-        // … split free rectangle (same idea as atlas allocator) …
+        // ── ❷ classic “guillotine” split of the remaining free area ──────
         if free_sz.x > size.x {
-            self.free.push(( IVec2::new(off.x + size.x as i32, off.y), UVec2::new(free_sz.x - size.x, size.y)));
+            self.free.push(( IVec2::new(off.x + size.x as i32, off.y),
+                             UVec2::new(free_sz.x - size.x, size.y)));
         }
         if free_sz.y > size.y {
-            self.free.push(( IVec2::new(off.x, off.y + size.y as i32), UVec2::new(free_sz.x, free_sz.y - size.y)));
+            self.free.push(( IVec2::new(off.x, off.y + size.y as i32),
+                             UVec2::new(free_sz.x,       free_sz.y - size.y)));
         }
         Some(GridSlice { offset: off, size })
     }

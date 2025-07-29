@@ -94,10 +94,10 @@ fn handle_commands(
 
                 /* request a 256 × 256 slice from the tiled atlas */
                 let size  = UVec2::splat(SLICE_SIDE);
-                if world_grid.allocate(size).is_none() {
+                let Some(slice) = world_grid.allocate(size) else {
                     warn!("World grid is full – cannot place new automaton");
                     continue;
-                }
+                };
 
                 /* build an *isolated* scratch grid and run the seeder */
                 let mut slice_backend = GridBackend::Dense(DenseGrid::blank(size));
@@ -112,11 +112,12 @@ fn handle_commands(
                     rule:             Arc::clone(rule),
                     params:           Value::Null,
                     seed_fn:          None,
-                    grid:             slice_backend,  // ← own private grid
+                    grid:             slice_backend,
                     dimension:        2,
                     cell_size:        DEFAULT_CELL,
                     background_color: BG,
                     palette:          None,
+                    world_offset:     slice.offset,     // NEW  ←──────────────
                 };
                 let new_id = registry.register(info);
                 let entity = commands.spawn_empty().id();

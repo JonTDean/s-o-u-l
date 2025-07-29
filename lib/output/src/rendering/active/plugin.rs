@@ -20,16 +20,15 @@ use bevy::{
     image::ImageSampler,
     math::primitives::Rectangle,
     prelude::*,
-    render::render_resource::{Extent3d, TextureDimension, TextureFormat},
+    render::{render_resource::{Extent3d, TextureDimension, TextureFormat}, view::RenderLayers},
     sprite::{Material2dPlugin, MeshMaterial2d},
 };
 
 use computational_intelligence::registry::AutomataRegistry;
 use engine_core::{
-    engine::grid::GridBackend,
+    engine::{camera_manager::WORLD_LAYER, components::WorldCamera, grid::GridBackend},
     events::{AutomatonAdded, AutomatonId, AutomatonRemoved}, state::AppState,
 };
-use input::controls::camera_control::WorldCamera;
 
 use crate::rendering::material::{AutomataMaterial, AutomataParams};
 
@@ -139,6 +138,8 @@ fn handle_automata_added(
         /* 4 ── quad layout --------------------------------------------- */
         let w_world = grid_w as f32 * info.cell_size;
         let h_world = grid_h as f32 * info.cell_size;
+        // convert the IVec2 world offset (cells) to world‑space units
+        let world_off = info.world_offset.as_vec2() * info.cell_size;
 
         let entity = commands
             .spawn((
@@ -146,14 +147,15 @@ fn handle_automata_added(
                 Mesh2d(meshes.add(Mesh::from(Rectangle::from_size(Vec2::ONE))).into()),
                 Transform {
                     translation: Vec3::new(
-                        w_world * 0.5, // centre the quad on X
-                        h_world * 0.5,          // bottom‑left origin
-                        1.0,                    // all active quads share z = +1
+                        world_off.x + w_world * 0.5,   // centred inside its slice
+                        world_off.y + h_world * 0.5,
+                        1.0,
                     ),
                     scale: Vec3::new(w_world, h_world, 1.0),
                     ..Default::default()
                 },
                 GlobalTransform::default(),
+                RenderLayers::layer(WORLD_LAYER.into()),
             ))
             .id();
 
@@ -239,7 +241,7 @@ fn sync_all_materials(
         if let Some(m) = mats.get_mut(mat) {
             m.params.camera_pos = xf.translation().truncate();
             if let Projection::Orthographic(o) = proj {
-                m.params.zoom = o.scale;
+                m.params.zoom = o.scale;  // ← keeps materials crisp while zooming
             }
         }
     }

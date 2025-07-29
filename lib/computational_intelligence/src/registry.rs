@@ -81,6 +81,7 @@ pub struct AutomatonInfo {
     pub cell_size: f32,
     pub background_color: Color,
     pub palette: Option<Vec<Color>>,
+    pub world_offset: IVec2,
 }
 
 /// Manual `Debug` impl (the rule & grid are not `Debug` themselves).

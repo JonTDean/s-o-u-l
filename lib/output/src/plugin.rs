@@ -5,7 +5,6 @@ use bevy::prelude::*;
 use crate::{
     rendering::{
         active::plugin::ActiveAutomataRenderPlugin,
-        world_camera::WorldCameraPlugin,
     },
     ui::panels::{main_menu::MainMenuPlugin, world::WorldMenusPlugin},
 };
@@ -20,8 +19,6 @@ impl Plugin for OutputPlugin {
             MainMenuPlugin,
             // in‑scene HUD overlays (Active Automata, …)
             WorldMenusPlugin,
-            // Shared world camera – **must come before** renderers
-            WorldCameraPlugin,
             // Active‑cell mask renderer
             ActiveAutomataRenderPlugin,
         ));

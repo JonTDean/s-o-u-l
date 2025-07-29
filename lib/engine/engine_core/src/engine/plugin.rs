@@ -1,7 +1,12 @@
-//! Root **engine** plug‑in – registers events and sub‑systems.
+//! engine/plugin.rs – root **engine** plug‑in.
+
 use bevy::prelude::*;
 
-use crate::events::AutomataCommand;
+use crate::{
+    engine::camera_manager::CameraManagerPlugin,
+    events::AutomataCommand, 
+    state::resources::RuntimeFlags
+};
 
 #[cfg(feature = "gpu-compute")]
 use crate::gpu::GpuAutomataComputePlugin;
@@ -9,9 +14,13 @@ use crate::gpu::GpuAutomataComputePlugin;
 pub struct EnginePlugin;
 impl Plugin for EnginePlugin {
     fn build(&self, app: &mut App) {
+        // global events ----------------------------------------------------
         app.add_event::<AutomataCommand>();
 
-        // Conditionally enable GPU compute
+        // world‑camera / zoom‑pan stack ------------------------------------
+        app.add_plugins(CameraManagerPlugin); 
+
+        // Optional GPU compute --------------------------------------------
         #[cfg(feature = "gpu-compute")]
         {
             let allow_gpu = app
