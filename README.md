@@ -46,12 +46,13 @@ cargo run --release
 src/
 ├── main.rs
 ├── app.rs
-├── ca_engine/       # grid, stepper, render paths
-├── computational_intelligence/        # type1_elementary / type2_surface / type3_volume
-├── ui/              # egui panels + file IO
-└── dev_utils/       # quit.rs, logging, monitoring
-assets/              # textures, palettes, icons
-docs/                # demo recordings, architecture sketches
+└──── lib/      
+    ├── engine/                             # grid, stepper, render paths
+    ├── computational_intelligence/         # type1_elementary / type2_surface / type3_volume
+    ├── output/                             # egui panels + file IO
+    └── tooling/                            # quit.rs, logging, monitoring
+assets/                                     # textures, palettes, icons
+docs/                                       # demo recordings, architecture sketches
 ```
 
 ## Configuration
