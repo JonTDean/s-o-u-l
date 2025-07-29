@@ -43,8 +43,14 @@ members = [
 ]
 resolver = "2"
 
+[profile.dev]
+opt-level = 1                # a little optimisation for your own crate
+
+[profile.dev.package."*"]
+opt-level = 3                # full optimisation for every dependency
+
 [workspace.dependencies]
-bevy        = { version = "0.16.1", features = ["bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "png"] }
+bevy        = { version = "0.16.1", features = ["bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking"] }
 bevy_egui   = { version = "0.35.1" }
 serde       = { version = "1.0.219", features = ["derive"] }
 serde_json  = { version = "1.0.141" }

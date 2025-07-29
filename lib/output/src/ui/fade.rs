@@ -1,17 +1,28 @@
-// lib/output/src/ui/fade.rs
-//! Simple fade‑in / fade‑out transition layer.
+//! Full‑screen fade‑in / fade‑out transition for Bevy 0.16.
+//!
+//! Two `Update`‑phase systems are registered:
+//!   1. [`spawn_overlay`] — creates the black overlay and seeds [`FadeData`].
+//!   2. [`animate_overlay`] — drives the alpha, swaps `AppState` mid‑fade
+//!      and cleans everything up afterwards.
+//!
+//! The systems are data‑parallel and need no external synchronisation.
 
-use bevy::prelude::*;            // ←  **everything we need is here**
+use bevy::prelude::*;
+use bevy::ui::{BackgroundColor, GlobalZIndex, Node, Val};
+use bevy::color::Alpha;            // brings `set_alpha` into scope
 use engine_core::state::AppState;
 
-/* ───────────── Events ───────────── */
+/* ─────────────────────────── Events ──────────────────────────── */
 
-#[derive(Event)]
-pub struct FadeTo { pub target: AppState }
+/// Request a transition to the given [`AppState`].
+#[derive(Event, Debug, Clone, Copy)]
+pub struct FadeTo {
+    pub target: AppState,
+}
 
-/* ──────────── Internals ─────────── */
+/* ───────────────────────── Internals ─────────────────────────── */
 
-#[derive(Component)]     struct FadeOverlay;
+#[derive(Component)] struct FadeOverlay;
 
 #[derive(Resource)]
 struct FadeData {
@@ -20,39 +31,38 @@ struct FadeData {
     target: Option<AppState>,
 }
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 enum Phase { Out, In }
 
-/* ─────────── Plugin ─────────────── */
+/* ───────────────────────── Plugin ────────────────────────────── */
 
 pub struct FadePlugin;
 impl Plugin for FadePlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<FadeTo>()
-           .add_systems(Update, (begin_fade, animate_fade));
+           .add_systems(Update, (spawn_overlay, animate_overlay));
     }
 }
 
-/* ───── phase 0 – spawn & set‑up ───── */
+/* ───────────── phase 0 – overlay creation ───────────────────── */
 
-fn begin_fade(
-    mut cmd:      Commands,
-    mut ev:       EventReader<FadeTo>,
-    overlay_q:    Query<Entity, With<FadeOverlay>>,
+fn spawn_overlay(
+    mut cmd:        Commands,
+    mut requests:   EventReader<FadeTo>,
+    overlay_q:      Query<Entity, With<FadeOverlay>>,
 ) {
-    for FadeTo { target } in ev.read() {
+    for FadeTo { target } in requests.read() {
         if overlay_q.is_empty() {
+            // `Node` now holds all layout fields that used to sit in `Style`
             cmd.spawn((
                 FadeOverlay,
-                NodeBundle {
-                    style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-                        ..default()
-                    },
-                    background_color: BackgroundColor(Color::BLACK.with_alpha(0.0)),
-                    z_index: ZIndex(10_000),
+                Node {
+                    width:  Val::Percent(100.0),
+                    height: Val::Percent(100.0),
                     ..default()
                 },
+                BackgroundColor(Color::BLACK.with_alpha(0.0)),
+                GlobalZIndex(10_000),
             ));
         }
 
@@ -64,43 +74,40 @@ fn begin_fade(
     }
 }
 
-/* ───── phase 1 / 2 – animate ───── */
+/* ───────────── phase 1 & 2 – animate & cleanup ──────────────── */
 
-fn animate_fade(
-    mut cmd:     Commands,
-    time:        Res<Time>,
-    mut fade:    Option<ResMut<FadeData>>,
-    mut overlay: Query<(Entity, &mut BackgroundColor), With<FadeOverlay>>,
-    mut next:    ResMut<NextState<AppState>>,
+fn animate_overlay(
+    mut cmd:       Commands,
+    time:          Res<Time>,
+    mut fade:      Option<ResMut<FadeData>>,
+    mut overlay_q: Query<(Entity, &mut BackgroundColor), With<FadeOverlay>>,
+    mut next:      ResMut<NextState<AppState>>,
 ) {
     let Some(mut fade) = fade else { return };
 
     fade.timer.tick(time.delta());
     let t = fade.timer.elapsed_secs() / fade.timer.duration().as_secs_f32();
 
-    /* update alpha --------------------------------------------------- */
-    for (_, mut bg) in &mut overlay {
+    for (_, mut bg) in &mut overlay_q {
         let alpha = match fade.phase {
             Phase::Out =>  t,
             Phase::In  => 1.0 - t,
         };
-        bg.0 = Color::BLACK.with_alpha(alpha);
+        bg.0.set_alpha(alpha);      // new helper name
     }
 
-    /* phase transitions ---------------------------------------------- */
     if fade.timer.finished() {
         fade.timer.reset();
-
         match fade.phase {
             Phase::Out => {
                 if let Some(target) = fade.target.take() {
-                    next.set(target);              // state swap at mid‑fade
+                    next.set(target);          // swap state while black
                 }
                 fade.phase = Phase::In;
             }
             Phase::In => {
-                for (e, _) in &overlay {
-                    cmd.entity(e).despawn();        // recursive by default
+                for (e, _) in &overlay_q {     // `despawn()` is recursive now
+                    cmd.entity(e).despawn();
                 }
                 cmd.remove_resource::<FadeData>();
             }
