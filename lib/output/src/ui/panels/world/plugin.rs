@@ -1,4 +1,4 @@
-//! Root plugin for *in‑game* (world) HUD overlays.
+//! Root plugin for all *in-game* (world) HUD overlays.
 
 use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
@@ -10,16 +10,20 @@ use super::{
     automata::AutomataPanelPlugin,
     pause_menu::PauseMenuPlugin,
     zoom_overlay::zoom_overlay,
-    minimap_overlay::minimap_overlay, 
+    minimap_overlay::minimap_overlay,
 };
 
 pub struct WorldMenusPlugin;
 
 impl Plugin for WorldMenusPlugin {
     fn build(&self, app: &mut App) {
+        // one tiny helper resource shared by several panels
         app.init_resource::<MinimapSelection>();
+
+        // sub-plugins
         app.add_plugins((AutomataPanelPlugin, PauseMenuPlugin))
-            // HUD widgets run in the egui pass only while playing.
+
+            // free-floating HUD widgets – run only while playing
             .add_systems(
                 EguiPrimaryContextPass,
                 (zoom_overlay, minimap_overlay)

@@ -49,8 +49,8 @@ pub fn add_all_plugins(app: &mut App) {
 
     // ── 5. UI & Rendering (runs in `MainSet::Render`) ───────────────────
     app.add_plugins((
-        Renderer2DPlugin,
-        OutputPlugin,
+        Renderer2DPlugin,   // stub 2-D fallback
+        OutputPlugin,       // menus, HUD, active-grid renderer
     ));
 
     // Systems inside UI/renderer should live in `MainSet::Render`;

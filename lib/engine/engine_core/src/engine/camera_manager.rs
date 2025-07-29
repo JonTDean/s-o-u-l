@@ -1,7 +1,5 @@
-//! engine/engine_core/src/engine/camera_manager.rs
-//! -----------------------------------------------
-//! Two‑camera (UI + world) stack with RenderLayers and RTS‑style
-//! zoom / pan controls.  Compatible with Bevy ≥0.16.
+//! Two‑camera (UI + world) stack with proper clear‑colour switching and
+//! RTS‑style zoom / pan controls.  Compatible with Bevy ≥ 0.16.
 
 use bevy::{
     input::mouse::MouseWheel,
@@ -22,8 +20,10 @@ use crate::{
 pub const UI_LAYER:    u8 = 0;
 pub const WORLD_LAYER: u8 = 1;
 
-#[inline]                fn layers_ui()    -> RenderLayers { RenderLayers::layer(UI_LAYER.into()) }
-#[inline]                fn layers_world() -> RenderLayers { RenderLayers::layer(WORLD_LAYER.into()) }
+#[inline]
+fn layers_ui()    -> RenderLayers { RenderLayers::layer(UI_LAYER.into()) }
+#[inline]
+fn layers_world() -> RenderLayers { RenderLayers::layer(WORLD_LAYER.into()) }
 
 /* ── Tuning constants ──────────────────────────────────────────────── */
 
@@ -37,7 +37,8 @@ const KEY_PAN_SPEED: f32 = 400.0;
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
 enum CameraKind { Ui, World }
 
-#[derive(Resource, Default)] struct DragState(Option<Vec2>);
+#[derive(Resource, Default)]
+struct DragState(Option<Vec2>);
 
 /* ── Plugin ────────────────────────────────────────────────────────── */
 
@@ -47,14 +48,15 @@ impl Plugin for CameraManagerPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ZoomInfo>()
             .init_resource::<DragState>()
-            // 1. spawn once
+            /* 1 ─ spawn the two cameras once */
             .add_systems(Startup, spawn_cameras)
-            // 2. routers on state change
-            .add_systems(OnEnter(AppState::InGame), activate_world_camera)
-            .add_systems(OnExit (AppState::InGame), activate_ui_camera)
-            // 3. centre once the WorldGrid exists
+            /* 2 ─ camera (de)activation & clear‑colour management */
+            .add_systems(OnEnter(AppState::InGame),   activate_world_camera)
+            .add_systems(OnEnter(AppState::MainMenu), ui_camera_enable_clear)
+            .add_systems(OnExit (AppState::MainMenu), ui_camera_disable_clear)
+            /* 3 ─ recentre once the WorldGrid exists */
             .add_systems(OnEnter(AppState::InGame), centre_on_world)
-            // 4. controls while playing
+            /* 4 ─ in‑game controls */
             .add_systems(
                 Update,
                 (
@@ -75,12 +77,12 @@ impl Plugin for CameraManagerPlugin {
 /* ── 1. Spawn cameras ──────────────────────────────────────────────── */
 
 fn spawn_cameras(mut cmd: Commands) {
-    /* UI camera – draws last, does *not* clear the frame */
+    /* UI camera – draws last, normally *does not* clear */
     cmd.spawn((
         Camera2d,
         Camera {
             order:       100,
-            clear_color: ClearColorConfig::None,   // ⚠️ keep world render!
+            clear_color: ClearColorConfig::None,
             is_active:   true,
             ..default()
         },
@@ -88,11 +90,15 @@ fn spawn_cameras(mut cmd: Commands) {
         layers_ui(),
     ));
 
-    /* World camera – enabled once we enter `InGame` */
+    /* World camera – enabled during gameplay */
     cmd.spawn((
         Camera2d,
-        Transform::from_translation(Vec3::new(0.0, 0.0, 1000.0)),
-        Camera { order: 2, is_active: false, ..default() },
+        Transform::from_translation(Vec3::new(0.0, 0.0, 1_000.0)),
+        Camera {
+            order:     2,
+            is_active: false,
+            ..default()
+        },
         CameraKind::World,
         WorldCamera,
         Visibility::Hidden,
@@ -100,28 +106,55 @@ fn spawn_cameras(mut cmd: Commands) {
     ));
 }
 
-/* ── 2. Routers ────────────────────────────────────────────────────── */
+/* ── 2‑a. Activate world camera on game entry (keep UI camera on) ──── */
 
 fn activate_world_camera(mut q: Query<(&CameraKind, &mut Visibility, &mut Camera)>) {
     for (kind, mut vis, mut cam) in &mut q {
-        let active = matches!(kind, CameraKind::World);
-        cam.is_active = active;
-        *vis = if active { Visibility::Inherited } else { Visibility::Hidden };
+        if matches!(kind, CameraKind::World) {
+            cam.is_active = true;
+            *vis = Visibility::Inherited;
+        }
+        // UI camera stays untouched (remains active)
     }
 }
 
-fn activate_ui_camera(mut q: Query<(&CameraKind, &mut Visibility, &mut Camera)>) {
-    for (kind, mut vis, mut cam) in &mut q {
-        let active = matches!(kind, CameraKind::Ui);
-        cam.is_active = active;
-        *vis = if active { Visibility::Inherited } else { Visibility::Hidden };
+/* ── 2‑b. Menu background handling – toggle clear‑colour  ──────────── */
+
+/// Entering the main menu: make UI cam clear to the default clear colour
+/// and shut the world camera off to avoid wasted draws.
+fn ui_camera_enable_clear(
+    mut q: Query<(&CameraKind, &mut Camera, &mut Visibility)>,
+) {
+    for (kind, mut cam, mut vis) in &mut q {
+        match kind {
+            CameraKind::Ui => {
+                cam.is_active  = true;
+                cam.clear_color = ClearColorConfig::Default; // solid background
+                *vis = Visibility::Inherited;
+            }
+            CameraKind::World => {
+                cam.is_active = false;
+                *vis = Visibility::Hidden;
+            }
+        }
     }
 }
 
-/* ── 3. Centre on the grid ─────────────────────────────────────────── */
+/// Leaving the main menu: restore “transparent overlay” mode.
+fn ui_camera_disable_clear(
+    mut q: Query<(&CameraKind, &mut Camera)>,
+) {
+    for (kind, mut cam) in &mut q {
+        if matches!(kind, CameraKind::Ui) {
+            cam.clear_color = ClearColorConfig::None;
+        }
+    }
+}
+
+/* ── 3. Centre world camera on the active grid ─────────────────────── */
 
 fn centre_on_world(
-    grid:   Option<Res<WorldGrid>>,
+    grid: Option<Res<WorldGrid>>,
     mut tf: Query<&mut Transform, With<WorldCamera>>,
 ) {
     let Ok(mut tf) = tf.single_mut() else { return };
@@ -129,7 +162,7 @@ fn centre_on_world(
 
     let (w, h) = match &grid.backend {
         crate::engine::grid::GridBackend::Dense(g)  => (g.size.x, g.size.y),
-        crate::engine::grid::GridBackend::Sparse(_) => (1024, 1024),
+        crate::engine::grid::GridBackend::Sparse(_) => (1_024, 1_024),
     };
     tf.translation.x = w as f32 * 0.5;
     tf.translation.y = h as f32 * 0.5;

@@ -1,6 +1,6 @@
 # S.O.U.L - Swarm Orchestrator for aUtonomous Learners
 
-A **visual design tool**—not a game—for exploring and comparing multiple
+A visual design tool for exploring and comparing multiple
 families of cellular computational_intelligence (1‑D Elementary, 2‑D Surface, 3‑D Volume, …)
 inside the Bevy engine.
 
