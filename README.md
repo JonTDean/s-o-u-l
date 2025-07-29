@@ -6,10 +6,10 @@ inside the Bevy engine.
 
 | Layer | Purpose | Examples |
 |-------|---------|----------|
-| **`ca_engine/`** | Dimension‑agnostic core (grid storage, stepper, render bridges) | dense ↔ sparse back‑ends, parallel stepping |
+| **`engine/`** | Dimension‑agnostic core (grid storage, stepper, render bridges) | dense ↔ sparse back‑ends, parallel stepping |
 | **`computational_intelligence/`** | Rule‑set plug‑ins grouped by *type* | Conway / Dean (Type 2), Lenia (Type 3) |
-| **`ui/`** | Egui‑powered panels & file I/O | sliders, palette picker, load/save .rle |
-| **`dev_utils/`** | QoL helpers | quit‑on‑Esc, FPS logging |
+| **`output/`** | Egui‑powered panels & file I/O | sliders, palette picker, load/save .rle |
+| **`tooling/`** | QoL helpers | quit‑on‑Esc, FPS logging |
 
 <img src="docs/demo.gif" width="640" alt="Dean's Game of Life demo">
 
