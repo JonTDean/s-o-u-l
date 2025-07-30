@@ -13,37 +13,52 @@ pub struct GridSlice {
 /// First-fit guillotine allocator for a fixed-size 2-D atlas.
 #[derive(Debug, Clone)]
 pub struct AtlasAllocator {
+    /// Total atlas dimensions – needed when re-centring the slice.
+    size: UVec2,
+    /// List of *free* rectangles in atlas-space coordinates.
     free: Vec<(IVec2, UVec2)>,
 }
 
 impl AtlasAllocator {
     /// Start with one big free rectangle (`size.x × size.y`).
     pub fn new(size: UVec2) -> Self {
-        Self { free: vec![(IVec2::ZERO, size)] }
+        Self { size, free: vec![(IVec2::ZERO, size)] }
     }
 
     /// Deterministic first-fit allocation.
     pub fn allocate(&mut self, want: UVec2) -> Option<GridSlice> {
-        let idx = self.free.iter().position(|(_, sz)| {
-            want.x <= sz.x && want.y <= sz.y
-        })?;
+        // Find the first free rect that fits `want`.
+        let idx = self
+            .free
+            .iter()
+            .position(|&(_, sz)| want.x <= sz.x && want.y <= sz.y)?;
 
         let (off, free_sz) = self.free.remove(idx);
 
-        /* guillotine split – right + below */
+        /* ── guillotine split – right & below ────────────────────────── */
         if free_sz.x > want.x {
-            self.free.push((IVec2::new(off.x + want.x as i32, off.y),
-                            UVec2::new(free_sz.x - want.x, want.y)));
+            self.free.push((
+                IVec2::new(off.x + want.x as i32, off.y),
+                UVec2::new(free_sz.x - want.x, want.y),
+            ));
         }
         if free_sz.y > want.y {
-            self.free.push((IVec2::new(off.x, off.y + want.y as i32),
-                            UVec2::new(free_sz.x, free_sz.y - want.y)));
+            self.free.push((
+                IVec2::new(off.x, off.y + want.y as i32),
+                UVec2::new(free_sz.x, free_sz.y - want.y),
+            ));
         }
 
-        Some(GridSlice { offset: off, size: want })
+        /* ── convert from atlas-origin (top-left) to centre-origin ───── */
+        let centred = IVec2::new(
+            off.x - self.size.x as i32 / 2,
+            off.y - self.size.y as i32 / 2,
+        );
+
+        Some(GridSlice { offset: centred, size: want })
     }
 
-    /// Return a previously allocated slice (optional – not used yet).
+    /// Return a previously allocated slice (not used yet).
     pub fn free(&mut self, slice: GridSlice) {
         self.free.push((slice.offset, slice.size));
         // NOTE: merging of adjacent rects is a future enhancement.

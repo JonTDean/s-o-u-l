@@ -40,3 +40,8 @@ pub enum CellOutcome {
     Unchanged,
     Next { state: CellState, memory: CellMemory },
 }
+
+#[inline]
+pub fn is_alive(c: &Cell) -> bool {
+    !matches!(c.state, CellState::Dead)
+}

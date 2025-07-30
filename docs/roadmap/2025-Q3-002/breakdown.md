@@ -23,11 +23,11 @@ In your scheduling table, these systems belong to the `MainSet::Render` set and 
 
 ### Extensible Automata plug‑in layer (9 phases)
 
-This road‑map refactors automaton rules into modular plug‑ins under `computational_intelligence::automata`, decoupling them from `engine_core`.  The phases and modules are summarised below:
+This road‑map refactors automaton rules into modular plug‑ins under `models::automata`, decoupling them from `engine_core`.  The phases and modules are summarised below:
 
 | Phase | Code‑name            | Key architecture modules                                                                                                                                                         |
 | ----- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **0** | Decouple             | Deletes `engine_core::systems::spawner`; introduces `AutomataPattern` trait and expands `computational_intelligence::registry` for rule metadata.                                |
+| **0** | Decouple             | Deletes `engine_core::systems::spawner`; introduces `AutomataPattern` trait and expands `models::registry` for rule metadata.                                |
 | **1** | Regular V1           | Adds `RegularAutomataPlugin` and a `StepperPlugin` for Wolfram rules 30 & 110 in `automata/classical/regular/plugin.rs`; seeds are registered via `register_with_seed`.          |
 | **2** | Context‑Free         | Creates `ContextFreeAutomataPlugin` in `automata/classical/contextless`; registers push‑down and L‑system rules; optional `StringTape` component for HUD display.                |
 | **3** | Context‑Sensitive    | Introduces `ContextSensitiveAutomataPlugin` and seeds linear‑bounded automata in `automata/classical/contextful`.                                                                |
@@ -48,7 +48,7 @@ This road‑map introduces `engine_gpu` (or `engine_core::gpu`) to move cellular
 | **0** | Groundwork           | Creates the `engine_gpu` crate; defines a `GpuAutomataComputePlugin`; adds compile‑time feature flag `gpu-compute` and stub WGSL file in `assets/shaders`.                  |
 | **1** | Proof‑of‑Concept     | Allocates ping‑pong textures (resource `GpuGridTextures`) and implements an `AutomataUpdateNode` in the render graph; Conway Life evolves on the GPU.                       |
 | **2** | Multi‑Rule Support   | Extends `RuleRegistry` to record whether a rule has a GPU kernel; adds discrete Wolfram rule kernels; uses a pipeline cache to specialise compute pipelines.                |
-| **3** | Continuous Automata  | Adds support for 32‑bit float textures and Gaussian convolution for Lenia; kernels live in `computational_intelligence::automata::dynamical::lenia`.                        |
+| **3** | Continuous Automata  | Adds support for 32‑bit float textures and Gaussian convolution for Lenia; kernels live in `models::automata::dynamical::lenia`.                        |
 | **4** | Interactivity & Sync | Implements GPU seeding via `RenderQueue::write_texture`; adds a tiny reduction pass to count alive cells for HUD; supports save/load by copying textures to/from CPU grids. |
 | **5** | Scaling & Polish     | Introduces tiled dispatch for huge boards, sparse fallback to CPU when density is low, profiler overlay and WASM fallback for browsers.                                     |
 

@@ -6,7 +6,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, Frame};
-use engine::systems::state::AppState;
+use engine_core::prelude::AppState;
 
 use crate::{panels::MenuScreen, styles};
 

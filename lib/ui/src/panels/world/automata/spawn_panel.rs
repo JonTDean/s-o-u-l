@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine::events::AutomataCommand;
+use engine_core::events::AutomataCommand;
 
 use crate::panels::main_menu::controller::scenario::new::ScenarioMeta;
 

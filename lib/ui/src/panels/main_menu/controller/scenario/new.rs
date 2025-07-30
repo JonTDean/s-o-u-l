@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
-use engine::{core::world::World2D, systems::state::AppState};
+use engine_core::{prelude::AppState, world::World2D};
 use serde::{Deserialize, Serialize};
 use simulation_kernel::grid::{DenseGrid, GridBackend, SparseGrid};
 

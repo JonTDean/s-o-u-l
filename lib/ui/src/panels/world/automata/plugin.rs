@@ -3,7 +3,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
-use engine::systems::state::AppState;
+use engine_core::prelude::AppState;
 
 use crate::panels::world::automata::{show_active_automata::show_active_automata, spawn_panel::spawn_panel};
 

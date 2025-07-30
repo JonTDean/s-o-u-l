@@ -4,8 +4,8 @@
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
+use engine_core::prelude::AutomataRegistry;
 use simulation_kernel::{core::cell::CellState, grid::GridBackend};
-use engine::systems::registry::AutomataRegistry;
 
 use crate::panels::world::minimap_overlay::MinimapSelection;
 

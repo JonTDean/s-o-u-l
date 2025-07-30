@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, CentralPanel};
-use engine::systems::state::{resources::Settings, AppState};
+use engine_core::{prelude::AppState, systems::state::resources::Settings};
 
 use crate::{panels::MenuScreen, styles};
 

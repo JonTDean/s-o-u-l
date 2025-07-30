@@ -1,0 +1,25 @@
+[package]
+name    = "engine-render"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+# Re-export so downstream crates can do `features = ["gpu-compute"]`
+gpu-compute = ["engine-gpu"]
+
+[dependencies]
+
+glam                = { workspace = true }
+bevy                = { workspace = true }                          # full Bevy with renderer & UI
+bevy_ecs            = { workspace = true }
+bevy_reflect        = { version = "0.16.1" }
+engine-core         = { path = "../engine-core" }
+engine-gpu          = { path = "../engine-gpu", optional = true }   # only compiled when feature flag is on
+simulation_kernel   = { path = "../../simulation_kernel" }
+tooling             = { path = "../../tooling" }
+
+serde              = { workspace = true }
+serde_json         = { workspace = true }
+rand               = { workspace = true }
+rayon              = { workspace = true }
+

@@ -8,8 +8,10 @@
 //! Down-stream code calls [`add_all_plugins()`] once; the order here
 //! **must** match the architecture docs & Kanban cards.
 use bevy::prelude::*;
-use computational_intelligence::plugin::ComputationalIntelligencePlugin;
-use engine::{renderer::{plugin::EnginePlugin, render_bridge::render2d::Renderer2DPlugin}, systems::state::StatePlugin};
+use bevy_egui::EguiPlugin;
+use models::plugin::ComputationalIntelligencePlugin;
+use engine_core::{plugin::EngineCorePlugin, systems::state::StatePlugin};
+use engine_render::plugin::EngineRendererPlugin;
 use ui::plugin::OutputPlugin;
 
 // /// Runtime flags that influence which plugins are added.
@@ -22,13 +24,20 @@ use ui::plugin::OutputPlugin;
 
 /// Add **every** core & feature plugin in the correct order.
 pub fn add_all_plugins(app: &mut App) {
-    // ── 1. Dev / global utilities ───────────────────────────────────────
+    /* 0 egui framework */ 
+    app.add_plugins(EguiPlugin::default());     //  enables egui + registers the
+                                                //      EguiPrimaryContextPass schedule
+                                     
+    /* 1 dev utilities    */
     app.add_plugins(StatePlugin);
 
-    // ── 2. Core simulation engine (adds rule-set sub-plugins later) ─────
-    app.add_plugins(EnginePlugin);
-    
-    // ── 3  C.I. layer  ─────────────────────────────────────────────── */
+    /* 2 core engine      */
+    app.add_plugins(EngineCorePlugin);
+
+    /* 3 *render* layer   */
+    app.add_plugins(EngineRendererPlugin);
+
+    /* 4 C.I. layer       */
     app.add_plugins(ComputationalIntelligencePlugin);
 
     // // ── 4. Networking layer  ─────────────────────────────────
@@ -38,9 +47,8 @@ pub fn add_all_plugins(app: &mut App) {
     //     _ => { /* networking disabled */ }
     // }
 
-    // ── 5. UI & Rendering (runs in `MainSet::Render`) ───────────────────
+    /* 5 UI / HUD         */
     app.add_plugins((
-        Renderer2DPlugin,   // stub 2-D fallback
         OutputPlugin,       // menus, HUD, active-grid renderer
     ));
 

@@ -11,7 +11,7 @@
 | 0     | *Groundwork*           | Compile‑time feature flags, decide crate boundaries, scaffolding for GPU assets. | `engine_core`, `io/output`                                                   |
 | 1     | *Proof‑of‑Concept*     | Conway Life evolves **entirely on GPU** for dense grids.                         | `engine_core::gpu` (new), `io/output::rendering`                             |
 | 2     | *Multi‑Rule Support*   | Rule registry knows which rules have a GPU kernel; add Wolfram Rule 30 + 110.    | `computational_intelligence`, `engine_core::gpu`                             |
-| 3     | *Continuous CAs*       | Float 32 textures, Gaussian convolution → Lenia on GPU.                          | `computational_intelligence::automata::dynamical::lenia`, `engine_core::gpu` |
+| 3     | *Continuous CAs*       | Float 32 textures, Gaussian convolution → Lenia on GPU.                          | `models::automata::dynamical::lenia`, `engine_core::gpu` |
 | 4     | *Interactivity & Sync* | Real‑time spawning, save/load, HUD analytics with minimal CPU↔GPU stalls.        | `engine_core::gpu`, `input`, `io/output`                                     |
 | 5     | *Scaling & Polish*     | 4 K boards, sparse fallback, performance counters, WASM graceful‑degrade.        | all render/engine crates                                                     |
 

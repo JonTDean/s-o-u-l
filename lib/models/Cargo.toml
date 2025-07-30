@@ -1,0 +1,21 @@
+[package]
+name = "models"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+gpu-compute = []
+
+[dependencies]
+glam        = { workspace = true }
+bevy        = { workspace = true } 
+serde       = { workspace = true } 
+rand        = { workspace = true }
+serde_json  = { workspace = true }
+num-traits  = { workspace = true }
+rayon       = { workspace = true }
+
+simulation_kernel   = { path = "../simulation_kernel" }
+engine-core         = { path = "../engine/engine-core" }
+engine-render         = { path = "../engine/engine-render" }
+

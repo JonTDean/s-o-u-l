@@ -1,0 +1,11 @@
+[package]
+name    = "engine-gpu"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bevy                = { workspace = true, features = ["bevy_render"] }
+bevy_egui           = { workspace = true }
+bytemuck            = { workspace = true }
+engine-core         = { path = "../engine-core" }
+simulation_kernel   = { path = "../../simulation_kernel" }

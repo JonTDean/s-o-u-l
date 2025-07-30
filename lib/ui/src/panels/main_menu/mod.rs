@@ -1,8 +1,8 @@
 //! Plugin and module for the Main Menu UI stack (MVC pattern for menus).
 
 use bevy::prelude::*;
-use bevy_egui::{EguiPlugin, EguiPrimaryContextPass};
-use engine::systems::state::AppState;
+use bevy_egui::EguiPrimaryContextPass;
+use engine_core::prelude::AppState;
 
 use super::{
     ui_runner, 
@@ -26,21 +26,19 @@ pub struct MainMenuPlugin;
 impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            // Enable egui
-            .add_plugins(EguiPlugin::default())
-
-            // ── MAIN MENU ────────────────────────────────────────────────
-            .add_systems(OnEnter(AppState::MainMenu), |mut commands: Commands| {
-                commands.insert_resource(MainMenu::default());
+            /* Main-menu state ------------------------------------------------ */
+            .add_systems(OnEnter(AppState::MainMenu), |mut cmd: Commands| {
+                cmd.insert_resource(MainMenu::default());
             })
+            // ⬇️  put the runner in the *egui* schedule, like every other screen
             .add_systems(
-                EguiPrimaryContextPass,
+                bevy_egui::EguiPrimaryContextPass,
                 ui_runner::<MainMenu>.run_if(in_state(AppState::MainMenu)),
             )
-            .add_systems(OnExit(AppState::MainMenu), |mut commands: Commands| {
-                commands.remove_resource::<MainMenu>();
+            .add_systems(OnExit(AppState::MainMenu), |mut cmd: Commands| {
+                cmd.remove_resource::<MainMenu>();
             })
-
+            
             // ── NEW SCENARIO ─────────────────────────────────────────────
             .add_systems(OnEnter(AppState::NewScenario), |mut commands: Commands| {
                 commands.insert_resource(NewScenario::default());

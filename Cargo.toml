@@ -21,15 +21,17 @@ rand        = { workspace = true }
 dirs-next   = { workspace = true }
 toml        = { workspace = true }
 num-traits  = { workspace = true }
+rayon       = { workspace = true }
 
 # local crates – **all path‑based**, no published versions
-tooling                     = { path = "lib/tooling" }
-engine                      = { path = "lib/engine" }
-ui                          = { path = "lib/ui" }
-computational_intelligence  = { path = "lib/computational_intelligence" }
-simulation_kernel           = { path = "lib/simulation_kernel"}
-rayon = "1.10.0"
-lazy_static = "1.5.0"
+tooling                             = { path = "lib/tooling" }
+engine-core                         = { path = "lib/engine/engine-core" }
+engine-gpu                          = { path = "lib/engine/engine-gpu" }
+engine-render                       = { path = "lib/engine/engine-render" }
+ui                                  = { path = "lib/ui" }
+models                              = { path = "lib/models" }
+simulation_kernel                   = { path = "lib/simulation_kernel"}
+lazy_static                         = "1.5.0"
 
 # ────────────────────────────────────────────────────────────────────────────
 # Workspace definition
@@ -37,8 +39,10 @@ lazy_static = "1.5.0"
 [workspace]
 members = [
     ".",
-    "lib/computational_intelligence",
-    "lib/engine",
+    "lib/models",
+    "lib/engine/engine-core",
+    "lib/engine/engine-gpu",
+    "lib/engine/engine-render",
     "lib/ui",
     "lib/tooling", 
     "lib/simulation_kernel",
@@ -53,8 +57,11 @@ opt-level = 3                # full optimisation for every dependency
 
 [workspace.dependencies]
 glam = { version = "0.29.3", features = ["serde"] }
-bevy        = { version = "0.16.1", features = ["bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking"] }
+bevy        = { version = "0.16.1", features = ["bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking", "bevy_gizmos"] }
+bevy_app    = { version = "0.16.1" }
+bevy_ecs    = { version = "0.16.1" }
 bevy_egui   = { version = "0.35.1" }
+bytemuck    = { version = "1.23.1" }
 serde       = { version = "1.0.219", features = ["derive"] }
 serde_json  = { version = "1.0.141" }
 rand        = { version = "0.9.2" }
@@ -62,3 +69,4 @@ dirs-next   = { version = "2.0" }
 toml        = { version = "0.9.2" }
 num-traits  = { version = "0.2" }
 rayon       = { version = "1.10.0" }
+bitflags    = { version = "2.9.1" }

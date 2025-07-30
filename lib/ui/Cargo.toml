@@ -4,15 +4,18 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bytemuck = { version = "1.23.1", features = ["derive"] }
+bytemuck            = { version = "1.23.1", features = ["derive"] }
 
-bevy        = { workspace = true }
-bevy_egui   = { workspace = true }
-serde       = { workspace = true }
-serde_json  = { workspace = true }
-rand        = { workspace = true }
+bevy                = { workspace = true }
+bevy_egui           = { workspace = true }
+serde               = { workspace = true }
+serde_json          = { workspace = true }
+rand                = { workspace = true }
+bitflags            = { workspace = true }
 
 # Local
-engine = { path = "../engine" }
-computational_intelligence = { path = "../computational_intelligence" }
-simulation_kernel = { path = "../simulation_kernel" }
+models              = { path = "../models" }
+simulation_kernel   = { path = "../simulation_kernel" }
+tooling             = { path = "../tooling" }
+engine-core         = { path = "../engine/engine-core" }
+engine-render         = { path = "../engine/engine-render" }

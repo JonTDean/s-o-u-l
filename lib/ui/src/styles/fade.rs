@@ -12,7 +12,7 @@ use bevy::{
     ui::{BackgroundColor, GlobalZIndex, Node, Val},
     color::Alpha
 };
-use engine::systems::state::AppState;            // brings `set_alpha` into scope
+use engine_core::prelude::AppState;
 
 /* ─────────────────────────── Events ──────────────────────────── */
 
@@ -81,7 +81,7 @@ fn spawn_overlay(
 fn animate_overlay(
     mut cmd:       Commands,
     time:          Res<Time>,
-    mut fade:      Option<ResMut<FadeData>>,
+    fade:      Option<ResMut<FadeData>>,
     mut overlay_q: Query<(Entity, &mut BackgroundColor), With<FadeOverlay>>,
     mut next:      ResMut<NextState<AppState>>,
 ) {

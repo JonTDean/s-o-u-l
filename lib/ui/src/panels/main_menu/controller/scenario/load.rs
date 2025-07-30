@@ -1,7 +1,7 @@
 //! Lists every *.json* in Documents/SOUL/saves and loads on click.
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
-use engine::{core::world::World2D, systems::state::{resources::doc_dir, AppState}};
+use engine_core::{prelude::AppState, systems::state::resources::doc_dir, world::World2D};
 use serde::{Deserialize, Serialize};
 use simulation_kernel::grid::GridBackend;
 use std::{fs, path::PathBuf};
