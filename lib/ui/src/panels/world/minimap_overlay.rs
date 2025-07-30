@@ -149,7 +149,7 @@ pub fn minimap_overlay(
                                 GridBackend::Dense(g)  => (g.size.x as f32, g.size.y as f32),
                                 GridBackend::Sparse(_) => (512.0, 512.0),
                             };
-                            let off  = info.world_offset.as_vec2() * info.cell_size;
+                            let off  = info.world_offset;
                             let size = Vec2::new(w, h) * info.cell_size;
 
                             /* normalise to [0, 1] and clamp */

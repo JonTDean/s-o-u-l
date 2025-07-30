@@ -4,8 +4,10 @@
 use std::sync::Arc;
 
 use bevy::prelude::*;
-use engine_core::{events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved}, prelude::{AppState, AutomataRegistry, AutomatonInfo, RuleRegistry}};
-
+use engine_core::{
+    events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved},
+    prelude::{AppState, AutomataRegistry, AutomatonInfo, RuleRegistry},
+};
 use serde_json::Value;
 use simulation_kernel::grid::{DenseGrid, GridBackend};
 
@@ -29,10 +31,7 @@ impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
         // Provide one blank dense world-grid up-front (room for many slices).
         app.insert_resource(WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE)))
-            .add_systems(
-                Update,
-                handle_commands.run_if(in_state(AppState::InGame)),
-            )
+            .add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
             // Main-menu reset – one-shot, runs *after* we quit InGame.
             .add_systems(OnEnter(AppState::MainMenu), purge_on_main_menu);
     }
@@ -85,6 +84,9 @@ fn handle_commands(
                     seed(&mut slice_backend);
                 }
 
+                /* convert slice offset (cells) → world-space units (Vec2) */
+                let world_offset = slice.offset.as_vec2() * DEFAULT_CELL;
+
                 /* register automaton and spawn its ECS entity */
                 let info = AutomatonInfo {
                     id:               AutomatonId(0), // overwritten below
@@ -97,7 +99,7 @@ fn handle_commands(
                     cell_size:        DEFAULT_CELL,
                     background_color: BG,
                     palette:          None,
-                    world_offset:     slice.offset,
+                    world_offset,                       // ← fixed
                 };
                 let new_id = registry.register(info);
                 let entity = commands.spawn_empty().id();
@@ -140,7 +142,7 @@ pub fn focus_camera_on_new_auto(
     let grid_sz = grid_texel_size(&info.grid);
 
     // world_offset already includes cell_size scaling
-    let slice_centre = info.world_offset.as_vec2()
+    let slice_centre = info.world_offset
         + grid_sz.as_vec2() * 0.5 * info.cell_size;
 
     tf.translation.x = slice_centre.x;

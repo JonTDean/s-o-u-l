@@ -20,12 +20,12 @@ pub struct RuntimeFlags {
     pub gpu_enabled: bool,
 }
 
-impl Default for RuntimeFlags {
-    fn default() -> Self {
-        // Environment variable `SOUL_FORCE_CPU=1` disables GPU explicitly.
-        let gpu_allowed = std::env::var_os("SOUL_FORCE_CPU").is_none();
+impl FromWorld for RuntimeFlags {
+    fn from_world(world: &mut World) -> Self {
+        let settings      = world.get_resource::<Settings>();
+        let force_cpu_env = std::env::var_os("SOUL_CPU").is_some();
         Self {
-            gpu_enabled: gpu_allowed,
+            gpu_enabled: settings.map_or(true, |s| s.gpu_compute) && !force_cpu_env,
         }
     }
 }
@@ -51,11 +51,14 @@ pub struct Settings {
     pub autosave: bool,
     /// Autosave interval in **seconds**.
     pub autosave_interval: u64,
+
+    // Enable GPU settings
+    pub gpu_compute: bool,
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        Self { master_volume: 1.0, ui_font_size: 16.0, autosave: true, autosave_interval: 30 }
+        Self { master_volume: 1.0, ui_font_size: 16.0, autosave: true, autosave_interval: 30, gpu_compute: true, }
     }
 }
 

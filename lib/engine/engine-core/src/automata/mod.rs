@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use glam::IVec2;
+use glam::Vec2;
 use bevy::color::Color;
 use serde_json::Value;
 use simulation_kernel::{core::dim::Dim2, grid::GridBackend, AutomatonRule};
@@ -21,7 +21,7 @@ pub struct AutomatonInfo {
     pub cell_size: f32,
     pub background_color: Color,
     pub palette: Option<Vec<Color>>,
-    pub world_offset: IVec2,
+    pub world_offset: Vec2,
 }
 
 /// Manual `Debug` impl (the rule & grid are not `Debug` themselves).

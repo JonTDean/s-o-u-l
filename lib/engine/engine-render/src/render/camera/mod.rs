@@ -12,7 +12,7 @@ use systems::{spawn_cameras, DragState};
 use self::floating_origin::WorldOffset;   // local module path
 
 /* ─────────────────── Public re-exports ──────────────────────────── */
-pub use systems::{WorldCamera, ZoomInfo, UI_LAYER, WORLD_LAYER}; 
+pub use systems::{WorldCamera, ZoomInfo}; 
 
 pub struct CameraPlugin;
 impl Plugin for CameraPlugin {

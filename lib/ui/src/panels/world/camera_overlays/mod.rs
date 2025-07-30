@@ -23,7 +23,9 @@ pub fn camera_overlay(
     let Some(cam_tf)   = cam_q.iter().next()       else { return };
 
     let pos  = cam_tf.translation.truncate();
-    let pct  = (zoom.current / zoom.base - 1.0) * 100.0;
+    let pct = if zoom.base > 0.0 {
+        (zoom.current / zoom.base - 1.0) * 100.0
+    } else { 0.0 };
 
     egui::Area::new("camera_overlay".into())
         .anchor(egui::Align2::RIGHT_BOTTOM, egui::vec2(-10.0, -10.0))

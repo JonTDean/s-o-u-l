@@ -24,7 +24,7 @@ impl GpuPipelineCache {
 
         // 1  make the source *owned*  →  `'static`  (fixes lifetime error)
         let shader_handle = shaders.add(Shader::from_wgsl(
-            shader_source.to_owned(),              // <- to_owned()
+            shader_source.to_owned(),            // <- to_owned()
             format!("compute::{rule_id}"),         // virtual “path” for nice error msgs
         ));
 

@@ -26,16 +26,8 @@
 //! it on any available thread.
 
 use bevy::prelude::*;
-
 use crate::render::camera::systems::WorldCamera;
-
-/* --------------------------------------------------------------------- */
-/*                               Constants                               */
-/* --------------------------------------------------------------------- */
-
-/// Size of one snap “chunk” in world units  
-/// (e.g. 256 cells if `cell_size == 1.0`).
-const SNAP: i32 = 256;
+use tooling::debugging::camera::CameraDebug;
 
 /* --------------------------------------------------------------------- */
 /*                                Resources                              */
@@ -46,10 +38,19 @@ const SNAP: i32 = 256;
 #[derive(Resource, Default, Clone, Copy, Debug)]
 pub struct WorldOffset(pub IVec2);
 
+/* ───────────────────── Helpers ─────────────────────── */
+
+/// Next power-of-two of the *current* half-viewport so snaps never occur
+/// on-screen.
+#[inline]
+fn dynamic_snap(win: &Window, scale: f32) -> f32 {
+    let half = (win.width().max(win.height()) * 0.5 * scale) as u32;
+    half.next_power_of_two() as f32
+}
+
 /* --------------------------------------------------------------------- */
 /*                                 System                                */
 /* --------------------------------------------------------------------- */
-
 /// Re-centres the camera when it drifts beyond ±`SNAP` in either axis.
 ///
 /// ### Scheduling
@@ -65,44 +66,43 @@ pub struct WorldOffset(pub IVec2);
 ///            `WorldCamera` (most of the world)
 /// * `WorldOffset` – mutable resource accumulating the total shift.
 pub fn apply_floating_origin(
+    windows: Query<&Window>,
     mut q: ParamSet<(
-        Query<&mut Transform, With<WorldCamera>>,
-        Query<&mut Transform, (Without<Camera>, Without<WorldCamera>)>,
+        Query<&mut Transform, With<WorldCamera>>,                       // 0 – camera
+        Query<&mut Transform, (Without<Camera>, Without<WorldCamera>)>, // 1 – every other entity
     )>,
     mut offset: ResMut<WorldOffset>,
+    debug: Res<CameraDebug>,
 ) {
-    /* ── 0. Early-out when no world camera is active ─────────────────── */
-    let mut binding = q.p0();
-    let mut cam_tf = match binding.single_mut() {
-        Ok(t) => t,
-        Err(_) => return, // WorldCamera not spawned yet
-    };
+    /* 0 fetch window + camera safely -------------------------------- */
+    let win                                 = match  windows.single()          { Ok(w) => w,  Err(_) => return };
+    let mut cam_q0 = q.p0();                          // <-- bind first
+    let mut cam_tf               = match  cam_q0.single_mut()       { Ok(t) => t, Err(_) => return };
 
-    /* ── 1. Has the camera strayed beyond the snap distance? ─────────── */
-    if cam_tf.translation.x.abs() < SNAP as f32
-        && cam_tf.translation.y.abs() < SNAP as f32
-    {
-        return; // Still close to origin – nothing to do.
+    /* 1 early-out when still in the safe zone ----------------------- */
+    let snap = dynamic_snap(win, 1.0);                                      // proj-scale already baked into translation
+    if cam_tf.translation.x.abs() < snap && cam_tf.translation.y.abs() < snap {
+        return;
     }
 
-    /* ── 2. Compute whole-chunk displacement (integer, signed) ───────── */
-    let dx = (cam_tf.translation.x / SNAP as f32).round() as i32;
-    let dy = (cam_tf.translation.y / SNAP as f32).round() as i32;
+    /* 2 integer displacement in snap units -------------------------- */
+    let dx = (cam_tf.translation.x / snap).round() as i32;
+    let dy = (cam_tf.translation.y / snap).round() as i32;
+    let delta = Vec3::new(-(dx as f32) * snap, -(dy as f32) * snap, 0.0);
 
-    let delta = Vec3::new(
-        -(dx as f32) * SNAP as f32,
-        -(dy as f32) * SNAP as f32,
-        0.0,
-    );
-
-    /* ── 3. Re-centre the camera ─────────────────────────────────────── */
+    /* 3 shift camera ------------------------------------------------ */
     cam_tf.translation += delta;
 
-    /* ── 4. Shift every non-camera entity in the opposite direction ──── */
+    /* 4 shift the rest of the world --------------------------------- */
     for mut tf in q.p1().iter_mut() {
         tf.translation -= delta;
     }
 
-    /* ── 5. Record the accumulated offset for render logic ───────────── */
-    offset.0 += IVec2::new(dx * SNAP, dy * SNAP);
+    /* 5 accumulate world offset ------------------------------------- */
+    offset.0 += IVec2::new((snap as i32) * dx, (snap as i32) * dy);
+
+    /* 6 optional debug logging -------------------------------------- */
+    if debug.contains(CameraDebug::LOG_SNAP) {
+        info!("Floating-origin snap Δ=({dx},{dy})  →  offset = {:?}", offset.0);
+    }
 }

@@ -1,5 +1,11 @@
 use bevy::app::{App, Plugin};
 
-pub struct EngineCorePlugin; impl Plugin for EngineCorePlugin {
-    fn build(&self, _app:&mut App) {}
+use crate::{prelude::AutomataRegistry, world::world_stepper::WorldStepperPlugin};
+
+pub struct EngineCorePlugin;
+impl Plugin for EngineCorePlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<AutomataRegistry>()
+           .add_plugins(WorldStepperPlugin); 
+    }
 }

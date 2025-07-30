@@ -75,7 +75,7 @@ All other cross‑references (module names, feature flags, env‑vars) are inter
 
 * **Feature‑flag story** – `active-render`, `gpu-compute`, and optional grammar crates are non‑overlapping and can be combined freely.  Docs call this out consistently.
 
-* **Runtime flags** – `SOUL_RENDER_MODE` and `SOUL_FORCE_CPU` have unique, non‑conflicting semantics.
+* **Runtime flags** – `SOUL_RENDER_MODE` and `SOUL_CPU` have unique, non‑conflicting semantics.
 
 * **File layout** – After Phase 3 the tree under `io/output/rendering/active` matches the skeleton; later phases only add files, never rename (except the `world_update/upload` note fixed above).
 

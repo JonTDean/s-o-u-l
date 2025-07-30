@@ -5,7 +5,6 @@
 use bevy::prelude::*;
 use super::classical::plugin::ClassicalAutomataPlugin;
 use super::dynamical::plugin::DynamicalAutomataPlugin;
-use engine_core::world::world_stepper::WorldStepperPlugin;
 use engine_render::command_executor::CommandExecutorPlugin;
 
 pub struct AutomataPlugin;
@@ -14,9 +13,6 @@ impl Plugin for AutomataPlugin {
         // Always register rule sets (classical + dynamical)
         app.add_plugins((ClassicalAutomataPlugin, DynamicalAutomataPlugin));
         // Only add CPU world-stepper if GPU compute is not active
-        
-        #[cfg(not(feature = "gpu-compute"))]
-        app.add_plugins(WorldStepperPlugin);
         
         // Always add the command executor for spawning/clearing automata
         app.add_plugins(CommandExecutorPlugin);

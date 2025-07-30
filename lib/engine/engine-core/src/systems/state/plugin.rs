@@ -14,7 +14,7 @@ impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
         // --- one-time resource initialisation --------------------------------
         app.insert_resource(Settings::load())
-            .insert_resource(RuntimeFlags::default())
+            .init_resource::<RuntimeFlags>()
             .init_resource::<Session>()
            // --- recurring systems -------------------------------------------
            .add_systems(Update, tick_frame);

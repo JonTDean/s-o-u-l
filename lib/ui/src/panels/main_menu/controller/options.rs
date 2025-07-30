@@ -2,18 +2,19 @@
 
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, CentralPanel};
-use engine_core::{prelude::AppState, systems::state::resources::Settings};
+use engine_core::{prelude::AppState, systems::state::resources::{RuntimeFlags, Settings}};
 
 use crate::{panels::MenuScreen, styles};
 
 /// Local work-buffer for the Options panel.
 /// We copy the persistent [`Settings`] into this struct, let the user
 /// tweak the values, and only write them back when they hit “Apply”.
-#[derive(Clone)]
+#[derive(Clone, Default)]
 struct Draft {
     font_size:         f32,
     autosave:          bool,
     autosave_interval: u64,
+    gpu_compute: bool,
 }
 
 #[derive(Resource)]
@@ -29,6 +30,7 @@ impl FromWorld for OptionsScreen {
                 font_size:         settings.ui_font_size,
                 autosave:          settings.autosave,
                 autosave_interval: settings.autosave_interval,
+                gpu_compute:       settings.gpu_compute,
             },
         }
     }
@@ -61,6 +63,10 @@ impl MenuScreen for OptionsScreen {
                         );
 
                         ui.separator();
+                        ui.checkbox(&mut self.draft.gpu_compute, "Enable GPU compute (restart required)");
+
+
+                        ui.separator();
                         if ui.button("Apply & Back").clicked() {
                             next.set(AppState::MainMenu);
                         }
@@ -72,9 +78,13 @@ impl MenuScreen for OptionsScreen {
 pub fn apply_settings_on_exit(
     screen: Res<OptionsScreen>,
     mut settings: ResMut<Settings>,
+    mut flags:   ResMut<RuntimeFlags>, 
 ) {
     settings.ui_font_size      = screen.draft.font_size;
     settings.autosave          = screen.draft.autosave;
     settings.autosave_interval = screen.draft.autosave_interval;
+    settings.gpu_compute       = screen.draft.gpu_compute;
     settings.save();
+
+    flags.gpu_enabled = settings.gpu_compute; 
 }

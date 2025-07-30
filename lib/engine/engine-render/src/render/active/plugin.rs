@@ -121,7 +121,7 @@ fn handle_automata_added(
         /* 4 ── quad ----------------------------------------------------- */
         let w_world = grid_w as f32 * info.cell_size;
         let h_world = grid_h as f32 * info.cell_size;
-        let world_off = info.world_offset.as_vec2() * info.cell_size;
+        let world_off = info.world_offset;
 
         let entity = commands
             .spawn((

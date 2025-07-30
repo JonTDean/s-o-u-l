@@ -1,26 +1,38 @@
-//! engine/plugin.rs – root **engine** plug‑in.
+//! engine/plugin.rs – root **engine** plug-in.
+
 use bevy::prelude::*;
 use engine_core::events::AutomataCommand;
-use crate::render::camera::systems::CameraManagerPlugin;  
+use crate::render::camera::systems::CameraManagerPlugin;
 
 #[cfg(feature = "gpu-compute")]
-use crate::gpu::GpuAutomataComputePlugin;
+use engine_gpu::GpuAutomataComputePlugin;              // ← crate name
+
+#[cfg(feature = "gpu-compute")]
+use engine_core::systems::state::resources::RuntimeFlags;
 
 pub struct EngineRendererPlugin;
 
 impl Plugin for EngineRendererPlugin {
     fn build(&self, app: &mut App) {
-        // global events ----------------------------------------------------
+        /* ------------------------------------------------------------ */
+        /* 1 ░ global events                                            */
+        /* ------------------------------------------------------------ */
         app.add_event::<AutomataCommand>();
 
-        // world‑camera / zoom‑pan stack ------------------------------------
-        app.add_plugins(CameraManagerPlugin); 
+        /* ------------------------------------------------------------ */
+        /* 2 ░ camera stack (UI + world + input)                        */
+        /* ------------------------------------------------------------ */
+        app.add_plugins(CameraManagerPlugin);
 
-        // Optional GPU compute --------------------------------------------
+        /* ------------------------------------------------------------ */
+        /* 3 ░ optional GPU compute back-end                            */
+        /* ------------------------------------------------------------ */
         #[cfg(feature = "gpu-compute")]
         {
+            // Can be disabled at run-time via `RuntimeFlags` or the SOUL_CPU
+            // environment variable.
             let allow_gpu = app
-                .world
+                .world()                                          // new – method
                 .get_resource::<RuntimeFlags>()
                 .map_or(true, |f| f.gpu_enabled);
 

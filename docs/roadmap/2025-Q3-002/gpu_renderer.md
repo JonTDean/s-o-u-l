@@ -22,7 +22,7 @@
 | Goal                     | Tasks                                                                                                                       | Notes                                                  |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | **0‑A. Crate structure** | 1. Create new crate **`engine_gpu`** (or module `engine_core::gpu`) <br>2. Re‑export a single `GpuAutomataComputePlugin`.   | Keeps compute‑only code isolated from pure CPU logic.  |
-| **0‑B. Feature flags**   | • Cargo feature `gpu-compute` (default **on**). <br>• Runtime env‑var `SOUL_FORCE_CPU=1` bypasses GPU plugin.               | Allows desktop ↔ web target differences.               |
+| **0‑B. Feature flags**   | • Cargo feature `gpu-compute` (default **on**). <br>• Runtime env‑var `SOUL_CPU=1` bypasses GPU plugin.               | Allows desktop ↔ web target differences.               |
 | **0‑C. Asset plumbing**  | • Add shader folder `assets/shaders/` to Bevy asset server. <br>• Stub `automata_compute.wgsl` with empty `@compute` entry. | Verified by unit test that shader loads without panic. |
 
 ✅ **Exit criterion:** empty compute pipeline compiles & submits (NO‑OP) without crashing any platform we support.
@@ -40,7 +40,7 @@
 | **1‑E. Render integration**  | Modify `io/output::rendering::grid2d` to sample **whatever texture is in `GpuGridTextures.read`** instead of the fixed `GridTexture.handle`.                                                     | `io/output`       |
 | **1‑F. Disable CPU stepper** | If `GpuAutomataComputePlugin` is active **and** rule supports GPU, disable `StepperPlugin` via `run_if(!UseGpu)`.                                                                                | `engine_core`     |
 
-✅ **Exit criterion:** 256×256 Conway board runs > 100 fps on a mid‑range GPU; toggling `SOUL_FORCE_CPU=1` falls back to original CPU code with identical visual results for 100 steps (deterministic hash).
+✅ **Exit criterion:** 256×256 Conway board runs > 100 fps on a mid‑range GPU; toggling `SOUL_CPU=1` falls back to original CPU code with identical visual results for 100 steps (deterministic hash).
 
 ---
 
