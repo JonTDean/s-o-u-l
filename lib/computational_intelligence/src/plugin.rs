@@ -32,15 +32,12 @@
 //! below — **no other changes** are required by the host application.
 
 use bevy::prelude::*;
-use engine_core::events::{AutomatonAdded, AutomatonRemoved};
-
-use crate::{
-    automata::plugin::AutomataPlugin,
-    registry::{
-        RuleRegistry,            // Global rule catalogue
-        AutomataRegistry,        // Runtime list of running automata
-    },
+use engine::{
+    events::{AutomatonAdded, AutomatonRemoved},
+    systems::registry::{RuleRegistry, AutomataRegistry},
 };
+
+use crate::automata::plugin::AutomataPlugin;
 
 /// **Single entry‑point** for everything CI‑related.
 ///

@@ -1,9 +1,7 @@
 use bevy::prelude::*;
 use serde_json::Value;
-use engine_core::{engine::stepper::plugin::StepperPlugin, events::AutomataCommand};
-use engine_core::core::World2D;
+use engine::{core::world::World2D, events::AutomataCommand, renderer::stepper::plugin::StepperPlugin, systems::registry::RuleRegistry};
  
-use crate::registry::RuleRegistry;
 use super::wolfram_1d::{
     seed_rule30, 
     seed_rule110, 

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
-use crate::registry::RuleRegistry;
 use super::hpp::{HPPRule, seed_hpp};
+use engine::systems::registry::RuleRegistry;
 
 /// Registers the HPP lattice-gas rule in the rule registry.
 ///

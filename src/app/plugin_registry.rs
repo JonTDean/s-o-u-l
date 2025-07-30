@@ -9,17 +9,8 @@
 //! **must** match the architecture docs & Kanban cards.
 use bevy::prelude::*;
 use computational_intelligence::plugin::ComputationalIntelligencePlugin;
-use engine_core::{
-    engine::{
-        plugin::EnginePlugin, 
-        render_bridge::render2d::Renderer2DPlugin
-    },
-    state::StatePlugin
-};
-
-use output::{
-    plugin::OutputPlugin, 
-};
+use engine::{renderer::{plugin::EnginePlugin, render_bridge::render2d::Renderer2DPlugin}, systems::state::StatePlugin};
+use ui::plugin::OutputPlugin;
 
 // /// Runtime flags that influence which plugins are added.
 // ///

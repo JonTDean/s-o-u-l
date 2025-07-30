@@ -4,16 +4,15 @@
 use std::sync::Arc;
 
 use bevy::prelude::*;
-use engine_core::{
-    engine::{
-        grid::{DenseGrid, GridBackend},
-        worldgrid::WorldGrid,
-    },
-    events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved}, state::AppState,
+use engine::{
+    core::automata::AutomatonInfo, events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved}, renderer::worldgrid::WorldGrid, systems::{
+        registry::{AutomataRegistry, RuleRegistry},
+        state::AppState
+    }
 };
 use serde_json::Value;
+use simulation_kernel::grid::{DenseGrid, GridBackend};
 
-use crate::registry::{AutomataRegistry, AutomatonInfo, RuleRegistry};
 
 /* ───────────────────────── Constants ─────────────────────────────── */
 
@@ -36,7 +35,7 @@ impl Plugin for CommandExecutorPlugin {
             .add_systems(
                 Update,
                 handle_commands
-                    .run_if(in_state(engine_core::state::AppState::InGame)),
+                    .run_if(in_state(AppState::InGame)),
             );
             
      // Main‑menu reset – one‑shot, runs *after* we quit InGame.

@@ -5,12 +5,10 @@
 //  scenario spawner uses.  The shared logic lives in the `_backend`
 //  helpers; thin wrappers forward the call for convenience.
 
-use bevy::math::IVec2;
-use engine_core::{
-    core::world::World2D,
-    engine::grid::GridBackend,
-    core::cell::CellState,
-};
+use glam::IVec2;
+use engine::core::world::World2D;
+use simulation_kernel::{core::cell::CellState, grid::GridBackend};
+
 
 /// ───────────────────────────────────────────────────────────────────────
 /// Internal helpers (work on a `GridBackend` directly)

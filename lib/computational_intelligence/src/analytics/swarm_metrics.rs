@@ -2,9 +2,8 @@
 //! Provides metrics like cluster count, average cluster size, etc., and identifies cluster structure.
 
 use bevy::math::IVec2;
-use engine_core::core::Dim;
-use engine_core::core::{world::World2D, cell::CellState};
-use engine_core::core::dim::Dim2;
+use engine::core::world::World2D;
+use simulation_kernel::{core::{cell::CellState, dim::{Dim, Dim2}}, grid::GridBackend};
 
 #[derive(Debug)]
 pub struct ClusterStats {
@@ -23,7 +22,7 @@ pub fn find_clusters(world: &World2D) -> Vec<ClusterStats> {
     let mut current_id: isize = 0;
     // Determine grid type
     match &world.backend {
-        engine_core::engine::grid::GridBackend::Dense(grid) => {
+        GridBackend::Dense(grid) => {
             let width = grid.size.x as i32;
             let height = grid.size.y as i32;
             let mut cluster_id = vec![-1isize; (width * height) as usize];
@@ -69,7 +68,7 @@ pub fn find_clusters(world: &World2D) -> Vec<ClusterStats> {
             }
             cluster_id_map_dense = Some(cluster_id);
         }
-        engine_core::engine::grid::GridBackend::Sparse(grid) => {
+        GridBackend::Sparse(grid) => {
             let mut cluster_map: std::collections::HashMap<IVec2, isize> = std::collections::HashMap::new();
             let mut unvisited: std::collections::HashSet<IVec2> = grid.map.iter().filter_map(|(coord, cell)| {
                 if !matches!(cell.state, CellState::Dead) { Some(*coord) } else { None }
@@ -111,7 +110,7 @@ pub fn find_clusters(world: &World2D) -> Vec<ClusterStats> {
         let mut internal_sum = 0;
         let mut external_sum = 0;
         match &world.backend {
-            engine_core::engine::grid::GridBackend::Dense(grid) => {
+            GridBackend::Dense(grid) => {
                 let width = grid.size.x as i32;
                 let height = grid.size.y as i32;
                 let cluster_id = cluster_id_map_dense.as_ref().unwrap();
@@ -140,7 +139,7 @@ pub fn find_clusters(world: &World2D) -> Vec<ClusterStats> {
                     }
                 }
             }
-            engine_core::engine::grid::GridBackend::Sparse(grid) => {
+            GridBackend::Sparse(grid) => {
                 let cluster_map = cluster_id_map_sparse.as_ref().unwrap();
                 for (&pos, &c) in cluster_map.iter() {
                     if c == cid {

@@ -1,7 +1,7 @@
 //! Information Theory of Individuality (ITI) – identify distinct individuals (clusters) 
 //! and measure their autonomy (internal vs external interactions).
 
-use engine_core::core::world::World2D;
+use engine::core::world::World2D;
 use crate::analytics::swarm_metrics::{find_clusters, ClusterStats};
 
 /// Identifies clusters of alive cells and returns their autonomy metrics.

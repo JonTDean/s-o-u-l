@@ -1,7 +1,7 @@
 //! Continuous Lenia rule (quantized 0–255 levels, 3×3 Gaussian kernel).
 
 use bevy::prelude::IVec2;
-use engine_core::core::{cell::CellState, dim::Dim2, AutomatonRule, CellCtx, CellOutcome, Dim};
+use simulation_kernel::{core::{cell::{CellCtx, CellOutcome, CellState}, dim::{Dim, Dim2}}, grid::GridBackend, AutomatonRule};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -84,12 +84,10 @@ impl AutomatonRule for LeniaRule {
 
 /* ─────────────────── seed functions for Lenia ─────────────────── */
 
-use engine_core::engine::grid::GridBackend::{Dense, Sparse};
-
 /// Default seed pattern for Lenia: a solid circular blob of moderate density at the center.
-pub fn seed_lenia(grid: &mut engine_core::engine::grid::GridBackend) {
+pub fn seed_lenia(grid: &mut GridBackend) {
     match grid {
-        Dense(g) => {
+        GridBackend::Dense(g) => {
             let cx = g.size.x as i32 / 2;
             let cy = g.size.y as i32 / 2;
             // populate a 7-cell radius filled disk
@@ -102,7 +100,7 @@ pub fn seed_lenia(grid: &mut engine_core::engine::grid::GridBackend) {
                 }
             }
         }
-        Sparse(s) => {
+        GridBackend::Sparse(s) => {
             // in sparse case, just set a single cell at origin with a medium-high level
             s.set_state(IVec2::ZERO, CellState::Alive(180));
         }
@@ -112,8 +110,8 @@ pub fn seed_lenia(grid: &mut engine_core::engine::grid::GridBackend) {
 /// Alternate seed: the classic “Orbium” life-form from Lenia literature.
 ///
 /// Orbium is a hollow ring with a slightly thicker rim. It spawns a self-sustaining rotating blob.
-pub fn seed_orbium(grid: &mut engine_core::engine::grid::GridBackend) {
-    if let Dense(g) = grid {
+pub fn seed_orbium(grid: &mut GridBackend) {
+    if let GridBackend::Dense(g) = grid {
         let cx = g.size.x as i32 / 2;
         let cy = g.size.y as i32 / 2;
         for y in -12..=12 {

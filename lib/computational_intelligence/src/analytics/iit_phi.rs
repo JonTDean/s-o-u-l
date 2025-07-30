@@ -3,7 +3,7 @@
 //! integration index as the fraction of live cells in the largest cluster. A highly integrated 
 //! state (one big cluster) yields Φ ≈ 1, while many separate small clusters yield a lower Φ.
 
-use engine_core::core::world::World2D;
+use engine::core::world::World2D;
 use crate::analytics::swarm_metrics::find_clusters;
 
 /// Computes a simple integrated information metric Φ for the given world state.

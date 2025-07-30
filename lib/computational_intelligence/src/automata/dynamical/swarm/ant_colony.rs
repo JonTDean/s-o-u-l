@@ -1,7 +1,7 @@
 //! Simplified ant colony simulation with pheromones (foraging behavior).
 
 use bevy::math::IVec2;
-use engine_core::core::{dim::Dim2, Dim};
+use simulation_kernel::core::dim::{Dim, Dim2};
 use rand::Rng;
 
 pub struct Ant {

@@ -9,7 +9,7 @@ use bevy::{
     prelude::*,
     window::WindowPlugin,
 };
-use engine_core::schedule::MainSet;
+use engine::systems::{schedule::MainSet, state::AppState};
 
 use crate::app::{
     builder::RuntimeConfig,
@@ -39,7 +39,7 @@ pub fn build(cfg: RuntimeConfig) -> App {
     }
 
     /* ── 2. Global resources & always-on utility systems ───────────────── */
-    app.init_state::<engine_core::state::AppState>();  // ← default == MainMenu ✅
+    app.init_state::<AppState>();  // ← default == MainMenu ✅
 
     /* ── 3. Canonical 3-phase update schedule ──────────────────────────── */
     app.configure_sets(

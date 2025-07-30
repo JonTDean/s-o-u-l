@@ -1,6 +1,6 @@
 use bevy::prelude::*;
-use crate::registry::RuleRegistry;
 use super::{LeniaRule, seed_lenia, seed_orbium};
+use engine::systems::registry::RuleRegistry;
 
 /// Registers the Lenia rule and its seed patterns into the rule registry.
 ///

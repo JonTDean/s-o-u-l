@@ -23,10 +23,11 @@ toml        = { workspace = true }
 num-traits  = { workspace = true }
 
 # local crates – **all path‑based**, no published versions
-tooling                    = { path = "lib/tooling" }
-engine_core                = { path = "lib/engine//engine_core" }
-output                     = { path = "lib/output" }
-computational_intelligence = { path = "lib/computational_intelligence" }
+tooling                     = { path = "lib/tooling" }
+engine                      = { path = "lib/engine" }
+ui                          = { path = "lib/ui" }
+computational_intelligence  = { path = "lib/computational_intelligence" }
+simulation_kernel           = { path = "lib/simulation_kernel"}
 rayon = "1.10.0"
 lazy_static = "1.5.0"
 
@@ -37,9 +38,10 @@ lazy_static = "1.5.0"
 members = [
     ".",
     "lib/computational_intelligence",
-    "lib/engine/engine_core",
-    "lib/output",
-    "lib/tooling",
+    "lib/engine",
+    "lib/ui",
+    "lib/tooling", 
+    "lib/simulation_kernel",
 ]
 resolver = "2"
 
@@ -50,6 +52,7 @@ opt-level = 1                # a little optimisation for your own crate
 opt-level = 3                # full optimisation for every dependency
 
 [workspace.dependencies]
+glam = { version = "0.29.3", features = ["serde"] }
 bevy        = { version = "0.16.1", features = ["bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking"] }
 bevy_egui   = { version = "0.35.1" }
 serde       = { version = "1.0.219", features = ["derive"] }

@@ -1,8 +1,7 @@
 use bevy::prelude::Resource;
-use engine_core::core::{
-    AutomatonRule, CellCtx, CellOutcome,
-    cell::CellState, dim::Dim2,
-};
+use simulation_kernel::{core::{
+    cell::{CellCtx, CellOutcome, CellState}, dim::Dim2,
+}, AutomatonRule};
 use serde_json::Value;
 
 /// Hard‑coded rule table for Wolfram 30.

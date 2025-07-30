@@ -3,7 +3,8 @@
 //
 //! Everything here is a placeholder; extend as needed.
 
-use engine_core::core::cell::{Cell, CellState};
+use simulation_kernel::core::cell::{Cell, CellState};
+
 
 #[inline]
 pub fn is_alive(c: &Cell) -> bool {

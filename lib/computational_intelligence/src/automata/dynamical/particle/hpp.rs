@@ -7,7 +7,8 @@
 //! • Hardy–Pomeau–de Pazzis model overview【1】  
 //! • Implementation patterns in lattice-gas codes【2】
 
-use engine_core::core::{cell::CellState, dim::Dim2, AutomatonRule, CellCtx, CellOutcome};
+use glam::IVec2;
+use simulation_kernel::{core::{cell::{CellCtx, CellOutcome, CellState}, dim::Dim2}, grid::GridBackend, AutomatonRule};
 use serde_json::Value;
 
 /// Four orthogonal velocity directions encoded as bit masks (N, E, S, W).
@@ -81,20 +82,17 @@ impl AutomatonRule for HPPRule {
 
 /* ───────────────────────────── seeding function ───────────────────────────── */
 
-use bevy::math::IVec2;
-use engine_core::engine::grid::GridBackend::{Dense, Sparse};
-
 /// Seed pattern for HPP: a cross of streams at the center to demonstrate collisions.
 ///
 /// This seeds one cell at the center with particles moving in all four directions (N, E, S, W).
-pub fn seed_hpp(grid: &mut engine_core::engine::grid::GridBackend) {
+pub fn seed_hpp(grid: &mut GridBackend) {
     match grid {
-        Dense(g) => {
+        GridBackend::Dense(g) => {
             let centre = IVec2::new(g.size.x as i32 / 2, g.size.y as i32 / 2);
             let idx = g.idx(centre);
             g.cells[idx].state = CellState::Alive(HPPRule::N | HPPRule::E | HPPRule::S | HPPRule::W);
         }
-        Sparse(s) => {
+        GridBackend::Sparse(s) => {
             s.set_state(IVec2::ZERO, CellState::Alive(HPPRule::N | HPPRule::E | HPPRule::S | HPPRule::W));
         }
     }

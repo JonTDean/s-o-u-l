@@ -11,6 +11,5 @@
 pub mod automata;
 pub mod analytics;
 pub mod bridges;
-pub mod registry;
 pub mod prelude;
 pub mod plugin;
