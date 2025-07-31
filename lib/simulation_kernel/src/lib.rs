@@ -1,3 +1,9 @@
+//! Core simulation primitives shared by all automata types.
+//!
+//! `simulation_kernel` defines the grid storage back-ends and stepping
+//! algorithms used by both the CPU and GPU implementations.  It also exposes
+//! the [`AutomatonRule`] trait which all rule implementations must fulfil.
+
 use crate::core::{cell::{CellCtx, CellOutcome}, dim::Dim};
 
 pub mod core;
