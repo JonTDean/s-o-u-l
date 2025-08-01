@@ -5,7 +5,6 @@ pub use bevy::prelude::*;
 pub use crate::render::{
     CameraPlugin,
     ZoomInfo,
-    AutomataRenderMap,
     WorldCamera,
     WorldGrid,
     AutomataMaterial,

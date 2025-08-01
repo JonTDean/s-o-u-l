@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use engine_core::events::AutomataCommand;
-use crate::render::{camera::systems::CameraManagerPlugin, active::plugin::ActiveAutomataRenderPlugin};
+use crate::render::camera::systems::CameraManagerPlugin;
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::GpuAutomataComputePlugin;
@@ -17,9 +17,8 @@ impl Plugin for EngineRendererPlugin {
         /* 1 ░ global events */
         app.add_event::<AutomataCommand>();
 
-        /* 2 ░ camera stack + active renderer */
+        /* 2 ░ camera stack */
         app.add_plugins(CameraManagerPlugin);
-        app.add_plugins(ActiveAutomataRenderPlugin);
 
         /* 3 ░ optional GPU compute back-end */
         #[cfg(feature = "gpu-compute")]

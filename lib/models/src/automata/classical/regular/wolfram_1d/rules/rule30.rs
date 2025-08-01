@@ -1,6 +1,6 @@
 use bevy::prelude::Resource;
 use simulation_kernel::{core::{
-    cell::{CellCtx, CellOutcome, CellState}, dim::Dim2,
+    cell::{CellCtx, CellOutcome, CellState}, dim::Dim,
 }, AutomatonRule};
 use serde_json::Value;
 
@@ -12,13 +12,13 @@ pub struct Rule30;
 
 
 impl Rule30 {
-    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim2> + Send + Sync> {
+    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim> + Send + Sync> {
         std::sync::Arc::new(Self)
     }
 }
 
 impl AutomatonRule for Rule30 {
-    type D = Dim2;
+    type D = Dim;
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
         // Interpret 3 neighbors in a horizontal line: left (W), center (self), right (E).
         let l = matches!(ctx.neighbourhood[3], CellState::Alive(_)) as u8;

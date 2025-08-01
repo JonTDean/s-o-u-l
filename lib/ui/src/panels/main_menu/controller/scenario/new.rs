@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
-use engine_core::{prelude::AppState, world::World2D};
+use engine_core::{prelude::AppState, world::voxel_world::VoxelWorld};
 use serde::{Deserialize, Serialize};
 use simulation_kernel::grid::{DenseGrid, GridBackend, SparseGrid};
 
@@ -66,7 +66,7 @@ impl MenuScreen for NewScenario {
                         /* ── Cell size ───────────────────────────────── */
                         ui.label("Cell size (pixels)");
                         ui.add(
-                            egui::DragValue::new(&mut self.model.cell_size)
+                            egui::DragValue::new(&mut self.model.voxel_size)
                                 .speed(1.0)
                                 .range(1.0..=64.0),
                         );
@@ -153,9 +153,10 @@ pub fn init_new_world(mut commands: Commands, draft: Res<ScenarioMeta>) {
 
     /* 1 ─ backend ------------------------------------------------------- */
     let backend = match m.grid_type {
-        GridType::Dense => GridBackend::Dense(DenseGrid::blank(UVec2::new(
+        GridType::Dense => GridBackend::Dense(DenseGrid::blank(UVec3::new(
             m.width,
             m.height,
+            m.depth
         ))),
         GridType::Sparse => GridBackend::Sparse(SparseGrid::default()),
     };
@@ -164,9 +165,9 @@ pub fn init_new_world(mut commands: Commands, draft: Res<ScenarioMeta>) {
     let bg = Color::srgba_u8(m.bg_color.r, m.bg_color.g, m.bg_color.b, m.bg_color.a);
 
     /* 3 ─ world resource ------------------------------------------------ */
-    commands.insert_resource(World2D {
+    commands.insert_resource(VoxelWorld {
         backend,
-        cell_size: m.cell_size,
+        voxel_size: m.voxel_size,
         bg_color: bg,
     });
 }

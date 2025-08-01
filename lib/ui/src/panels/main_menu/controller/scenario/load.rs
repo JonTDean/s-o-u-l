@@ -1,7 +1,7 @@
 //! Lists every *.json* in Documents/SOUL/saves and loads on click.
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
-use engine_core::{prelude::AppState, systems::state::resources::doc_dir, world::World2D};
+use engine_core::{prelude::AppState, systems::state::resources::doc_dir, world::voxel_world::VoxelWorld};
 use serde::{Deserialize, Serialize};
 use simulation_kernel::grid::GridBackend;
 use std::{fs, path::PathBuf};
@@ -14,7 +14,7 @@ use crate::{panels::{main_menu::controller::scenario::new::ScenarioMeta, MenuScr
 #[derive(Serialize, Deserialize)]
 struct SavedScenario {
     backend:   GridBackend,
-    cell_size: f32,
+    voxel_size: f32,
     bg_color:  [f32; 4],
     params:    ScenarioMeta,
 }
@@ -102,9 +102,9 @@ pub fn load_selected_save(
         snapshot.bg_color[3],
     );
 
-    commands.insert_resource(World2D {
+    commands.insert_resource(VoxelWorld {
         backend:   snapshot.backend,
-        cell_size: snapshot.cell_size,
+        voxel_size: snapshot.voxel_size,
         bg_color:  bg,
     });
     commands.insert_resource(snapshot.params);

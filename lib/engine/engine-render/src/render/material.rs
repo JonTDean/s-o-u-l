@@ -49,8 +49,8 @@ pub struct AutomataParams {
     pub camera_pos:   Vec2,
     /// Zoom multiplier (world units per screen unit).
     pub zoom:         f32,
-    /// Width/height of one automata cell in world units.
-    pub cell_size:    f32,
+    /// Width/height of one automata voxel in world units.
+    pub voxel_size:    f32,
     /// Size of the grid texture in texels.
     pub texture_size: Vec2,
     /// RGBA colour for a dead cell.

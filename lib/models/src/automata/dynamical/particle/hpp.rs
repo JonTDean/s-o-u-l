@@ -1,99 +1,72 @@
-//! HPP lattice-gas automaton (2D square grid, 4 velocity directions).
-//!
-//! Each live cell packs four velocity bits as **0b0000 N E S W** (bit = 1 indicates a particle moving in that direction).
-//! The rule performs local *collision* and *streaming* in one step (no neighbor writes, making it trivially parallel).
-//!
-//! References: 
-//! • Hardy–Pomeau–de Pazzis model overview【1】  
-//! • Implementation patterns in lattice-gas codes【2】
+//! HPP lattice-gas automaton on a 3-D grid (motion constrained to z = 0).
 
-use glam::IVec2;
-use simulation_kernel::{core::{cell::{CellCtx, CellOutcome, CellState}, dim::Dim2}, grid::GridBackend, AutomatonRule};
+use glam::IVec3;
+use simulation_kernel::{
+    core::{cell::{CellCtx, CellOutcome, CellState}, dim::{Dim, Dimensionality}},
+    grid::GridBackend,
+    AutomatonRule,
+};
 use serde_json::Value;
 
-/// Four orthogonal velocity directions encoded as bit masks (N, E, S, W).
-impl HPPRule {
-    pub const N: u8 = 0b1000;
-    pub const E: u8 = 0b0100;
-    pub const S: u8 = 0b0010;
-    pub const W: u8 = 0b0001;
-}
+/* ───────── velocity bit-masks ───────── */
+pub const N: u8 = 0b1000;
+pub const E: u8 = 0b0100;
+pub const S: u8 = 0b0010;
+pub const W: u8 = 0b0001;
 
-/// Zero-sized struct implementing the HPP rule.
+/* ───────── rule type ───────── */
 #[derive(Clone)]
 pub struct HPPRule;
 impl HPPRule {
-    /// Boxed trait object for registration.
-    #[inline]
-    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim2> + Send + Sync> {
+    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim> + Send + Sync> {
         std::sync::Arc::new(Self)
     }
-
-    /// Extract velocity bits from a cell state (dead = 0).
-    #[inline(always)]
-    fn bits(cs: CellState) -> u8 {
-        if let CellState::Alive(b) = cs { b } else { 0 }
-    }
-
-    /// Pack velocity bits into a CellState (0 = dead).
-    #[inline(always)]
-    fn to_state(bits: u8) -> CellState {
-        if bits == 0 { CellState::Dead } else { CellState::Alive(bits) }
-    }
+    #[inline] fn bits(cs: CellState) -> u8 { if let CellState::Alive(b) = cs { b } else { 0 } }
+    #[inline] fn to_state(bits: u8) -> CellState { if bits == 0 { CellState::Dead } else { CellState::Alive(bits) } }
 }
 
 impl AutomatonRule for HPPRule {
-    type D = Dim2;
+    type D = Dim;
 
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
-        // 1. Determine incoming bits from neighbors
+        /* 1 — gather incoming (XY plane only) */
         let mut incoming = 0;
-        if Self::bits(ctx.neighbourhood[1]) & HPPRule::S != 0 { incoming |= HPPRule::N; }
-        if Self::bits(ctx.neighbourhood[7]) & HPPRule::N != 0 { incoming |= HPPRule::S; }
-        if Self::bits(ctx.neighbourhood[3]) & HPPRule::E != 0 { incoming |= HPPRule::W; }
-        if Self::bits(ctx.neighbourhood[5]) & HPPRule::W != 0 { incoming |= HPPRule::E; }
+        if Self::bits(ctx.neighbourhood.iter().find(|&&o| o == CellState::Dead).copied().unwrap_or(CellState::Dead)) & S != 0 { incoming |= N; }
+        // Use explicit offsets for clarity
+        let nb = ctx.neighbourhood;
+        if Self::bits(nb[ Dim::NEIGHBOUR_OFFSETS.iter().position(|o| *o == IVec3::new( 0,  1, 0)).unwrap() ]) & S != 0 { incoming |= N; }
+        if Self::bits(nb[ Dim::NEIGHBOUR_OFFSETS.iter().position(|o| *o == IVec3::new( 0, -1, 0)).unwrap() ]) & N != 0 { incoming |= S; }
+        if Self::bits(nb[ Dim::NEIGHBOUR_OFFSETS.iter().position(|o| *o == IVec3::new( 1,  0, 0)).unwrap() ]) & W != 0 { incoming |= E; }
+        if Self::bits(nb[ Dim::NEIGHBOUR_OFFSETS.iter().position(|o| *o == IVec3::new(-1,  0, 0)).unwrap() ]) & E != 0 { incoming |= W; }
 
-        // 2. Collision: if two particles head-on, they collide and swap directions
+        /* 2 — collisions */
         let mut post = incoming;
-        // Vertical head-on (N+S -> become E+W)
-        if incoming & (HPPRule::N | HPPRule::S) == (HPPRule::N | HPPRule::S)
-            && incoming & (HPPRule::E | HPPRule::W) == 0
-        {
-            post &= !(HPPRule::N | HPPRule::S);
-            post |=  HPPRule::E | HPPRule::W;
+        if incoming & (N | S) == (N | S) && incoming & (E | W) == 0 {
+            post &= !(N | S); post |= E | W;
         }
-        // Horizontal head-on (E+W -> become N+S)
-        if incoming & (HPPRule::E | HPPRule::W) == (HPPRule::E | HPPRule::W)
-            && incoming & (HPPRule::N | HPPRule::S) == 0
-        {
-            post &= !(HPPRule::E | HPPRule::W);
-            post |=  HPPRule::N | HPPRule::S;
+        if incoming & (E | W) == (E | W) && incoming & (N | S) == 0 {
+            post &= !(E | W); post |= N | S;
         }
 
-        // 3. The result `post` bits represent the new state at this cell after collision and streaming.
-        let new_bits = post;
-        if new_bits == Self::bits(ctx.self_state) {
+        let new_state = Self::to_state(post);
+        if new_state == ctx.self_state {
             CellOutcome::Unchanged
         } else {
-            CellOutcome::Next { state: Self::to_state(new_bits), memory: ctx.memory.clone() }
+            CellOutcome::Next { state: new_state, memory: ctx.memory.clone() }
         }
     }
 }
 
-/* ───────────────────────────── seeding function ───────────────────────────── */
-
-/// Seed pattern for HPP: a cross of streams at the center to demonstrate collisions.
-///
-/// This seeds one cell at the center with particles moving in all four directions (N, E, S, W).
+/* ───────────── seeding ───────────── */
 pub fn seed_hpp(grid: &mut GridBackend) {
     match grid {
         GridBackend::Dense(g) => {
-            let centre = IVec2::new(g.size.x as i32 / 2, g.size.y as i32 / 2);
+            let centre = IVec3::new(g.size.x as i32 / 2, g.size.y as i32 / 2, 0);
             let idx = g.idx(centre);
-            g.cells[idx].state = CellState::Alive(HPPRule::N | HPPRule::E | HPPRule::S | HPPRule::W);
+            g.voxels[idx].state = CellState::Alive(N | E | S | W);
         }
         GridBackend::Sparse(s) => {
-            s.set_state(IVec2::ZERO, CellState::Alive(HPPRule::N | HPPRule::E | HPPRule::S | HPPRule::W));
+            s.set_state(IVec3::ZERO, CellState::Alive(N | E | S | W));
         }
     }
 }

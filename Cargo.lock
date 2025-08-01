@@ -4528,6 +4528,7 @@ name = "simulation_kernel"
 version = "0.1.0"
 dependencies = [
  "glam",
+ "rayon",
  "serde",
  "serde_json",
 ]

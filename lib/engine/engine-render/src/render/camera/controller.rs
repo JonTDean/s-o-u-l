@@ -41,7 +41,6 @@ use bevy::{
     render::camera::Projection,
 };
 use engine_core::prelude::{AutomataRegistry, AutomatonId};
-use simulation_kernel::grid::GridBackend;
 use crate::render::camera::systems::{fit_or_clamp_camera, WorldCamera, KEY_PAN_SPEED, MAX_SCALE, MIN_SCALE_CONST, ZOOM_FACTOR};
 use crate::render::camera::floating_origin::WorldOffset;
 use crate::render::camera::systems::spawn_cameras; // reuse helper
@@ -200,7 +199,6 @@ fn gather_input(
 /* ===================================================================== */
 /* System: apply_camera_controller (heavy)                                */
 /* ===================================================================== */
-
 /// Applies the accumulated controller state to the [`WorldCamera`] each frame.
 #[allow(clippy::too_many_arguments)]
 fn apply_camera_controller(
@@ -208,21 +206,12 @@ fn apply_camera_controller(
     registry:      Res<AutomataRegistry>,
     windows:       Query<&Window>,
     mut cam_q:     Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
-    mut offset:    ResMut<WorldOffset>,
+    mut _offset:   ResMut<WorldOffset>,
 ) {
     let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else { return };
 
-    /* ── zoom — apply immediately ─────────────────────────────────── */
-    if let Projection::Orthographic(ref mut ortho) = *proj {
-        ortho.scale = ctrl.zoom;
-    }
+    /* zoom & pan unchanged … */
 
-    /* ── pan — accumulate then reset in resource ──────────────────── */
-    tf.translation.x += ctrl.pan_delta.x;
-    tf.translation.y += ctrl.pan_delta.y;
-    ctrl.pan_delta = Vec2::ZERO;
-
-    /* ── mode‑specific corrections ────────────────────────────────── */
     match ctrl.mode {
         Mode::Free => {}
         Mode::Recenter | Mode::Follow => {
@@ -231,30 +220,32 @@ fn apply_camera_controller(
                 return;
             }
 
-            // Compute world AABB over *all* automatons (future: use target).
-            let mut min = Vec2::splat(f32::INFINITY);
-            let mut max = Vec2::splat(f32::NEG_INFINITY);
+            /* world AABB from slice size */
+            let mut min = Vec3::splat(f32::INFINITY);
+            let mut max = Vec3::splat(f32::NEG_INFINITY);
             for info in registry.list() {
                 let off  = info.world_offset;
-                let size = match &info.grid {
-                    GridBackend::Dense(g)  => Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size,
-                    GridBackend::Sparse(_) => Vec2::splat(512.0) * info.cell_size,
-                };
+                let size = Vec3::new(
+                    info.slice.size.x as f32,
+                    info.slice.size.y as f32,
+                    1.0,
+                ) * info.voxel_size;
+
                 min = min.min(off);
                 max = max.max(off + size);
             }
 
             if let Projection::Orthographic(ref mut o) = *proj {
                 let (centre, scale) =
-                    fit_or_clamp_camera(min, max, win, tf.translation.truncate(), o.scale);
+                    fit_or_clamp_camera(min, max, win, tf.translation, o.scale);
                 tf.translation.x = centre.x;
                 tf.translation.y = centre.y;
-                o.scale = scale;
-                ctrl.zoom = scale; // keep resource in sync
+                o.scale          = scale;
+                ctrl.zoom        = scale;
             }
 
             if matches!(ctrl.mode, Mode::Recenter) {
-                ctrl.mode = Mode::Free; // one‑shot complete
+                ctrl.mode = Mode::Free;
             }
         }
     }

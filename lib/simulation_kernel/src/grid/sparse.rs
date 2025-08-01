@@ -1,23 +1,27 @@
-//! Sparse hash‑map grid – for huge worlds with few live cells.
-#![allow(clippy::type_complexity)]
-use glam::IVec2;
-use serde::{Serialize, Deserialize};
+//! **Sparse 3-D voxel grid** (`HashMap` backend).
+
+use glam::IVec3;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::core::cell::{Cell, CellState};
 
-
 #[derive(Clone, Default, Serialize, Deserialize)]
 pub struct SparseGrid {
-    pub map: HashMap<IVec2, Cell>,
+    pub map: HashMap<IVec3, Cell>,
 }
 
 impl SparseGrid {
-    pub fn get(&self, p: IVec2) -> Option<&Cell>       { self.map.get(&p) }
-    pub fn get_mut(&mut self, p: IVec2) -> Option<&mut Cell> { self.map.get_mut(&p) }
-    pub fn iter(&self) -> impl Iterator<Item = (IVec2, &Cell)> + '_ { self.map.iter().map(|(k,v)| (*k,v)) }
+    #[inline] pub fn get    (&self, p: IVec3) -> Option<&Cell>         { self.map.get(&p) }
+    #[inline] pub fn get_mut(&mut self, p: IVec3) -> Option<&mut Cell> { self.map.get_mut(&p) }
 
-    pub fn set_state(&mut self, p: IVec2, s: CellState) {
+    #[inline]
+    pub fn set_state(&mut self, p: IVec3, s: CellState) {
         self.map.entry(p).or_default().state = s;
+    }
+
+    #[inline]
+    pub fn iter(&self) -> impl Iterator<Item = (IVec3, &Cell)> + '_ {
+        self.map.iter().map(|(k, v)| (*k, v))
     }
 }

@@ -14,5 +14,6 @@ mod pipelines;
 mod graph;
 mod plugin;
 mod compute;
+mod seed;
 #[cfg(feature = "mesh_shaders")]
 pub mod ash;

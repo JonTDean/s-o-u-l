@@ -35,7 +35,8 @@ pub struct ScenarioDraft {
     pub name:               String,
     pub width:              u32,
     pub height:             u32,
-    pub cell_size:          f32,
+    pub depth:              u32,
+    pub voxel_size:          f32,
     pub grid_type:          GridType,
     pub bg_color:           Rgba,
     pub selected_classical: Vec<String>,
@@ -47,9 +48,10 @@ impl Default for ScenarioDraft {
     fn default() -> Self {
         Self {
             name: "MyScenario".into(),
-            width: 64,
+            width:  64,
             height: 64,
-            cell_size: 16.0,
+            depth:  64,
+            voxel_size: 16.0,
             grid_type: GridType::Dense,
             bg_color: Rgba::default(),
             selected_classical: Vec::new(),

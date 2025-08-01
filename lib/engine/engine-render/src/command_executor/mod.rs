@@ -1,38 +1,40 @@
-//! Converts UI-level `AutomataCommand`s into concrete `AutomatonInfo`s
-//! and notifies both the CPU renderer *and* the GPU slice allocator.
+//! engine-render / command_executor / **mod.rs**
+//! Spawns automata and converts UI commands → AutomatonInfo.
 
 use std::sync::Arc;
 
 use bevy::prelude::*;
 use engine_core::{
+    automata::{AutomatonInfo, GpuGridSlice},
     events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved},
-    prelude::{AppState, AutomataRegistry, AutomatonInfo, RuleRegistry},
+    prelude::{AppState, AutomataRegistry, RuleRegistry},
 };
 use serde_json::Value;
-use simulation_kernel::grid::{DenseGrid, GridBackend};
 
-use crate::{render::camera::systems::WorldCamera, WorldGrid};
+use crate::render::camera::systems::WorldCamera;
+use crate::WorldGrid;
 
-/* ───────────────────────── Constants ─────────────────────────────── */
+/* ------------------------------ constants ------------------------- */
 
-const SLICE_SIDE:      u32  = 256;   // side length of one automaton slice
-const WORLD_GRID_SIDE: u32  = 1_024; // global atlas side length
-const DEFAULT_CELL:    f32  = 4.0;   // default cell size in world units
+const SLICE_SIDE:      u32  = 256;
+const WORLD_GRID_SIDE: u32  = 1_024;
+const DEFAULT_VOXEL:   f32  = 4.0;
 const BG:              Color = Color::srgb(0.07, 0.07, 0.07);
 
-/* ────────────────────────── Plugin ───────────────────────────────── */
+/* ------------------------------ plugin ---------------------------- */
 
 pub struct CommandExecutorPlugin;
 impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE)))
+        // we only need logical bounds (and maybe a few debug look-ups) –
+        // keep it sparse to avoid 40 GiB allocation balloon.
+        app.insert_resource(WorldGrid::new_sparse())
             .add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
-            // one-shot cleanup when leaving the game
             .add_systems(OnEnter(AppState::MainMenu), purge_on_main_menu);
     }
 }
 
-/* ───────── one-shot cleanup when returning to the main menu ─────── */
+/* ------------------ cleanup when returning to menu ---------------- */
 
 fn purge_on_main_menu(
     mut registry:   ResMut<AutomataRegistry>,
@@ -43,10 +45,10 @@ fn purge_on_main_menu(
         registry.remove(id);
         removed.write(AutomatonRemoved { id });
     }
-    *world_grid = WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE));
+    *world_grid = WorldGrid::new_dense(UVec3::splat(WORLD_GRID_SIDE));
 }
 
-/* ───────────────────────── System ───────────────────────────────── */
+/* ------------------------ main system ----------------------------- */
 
 #[allow(clippy::too_many_arguments)]
 fn handle_commands(
@@ -60,70 +62,63 @@ fn handle_commands(
 ) {
     for event in cmd_reader.read() {
         match *event {
-            /* ---------- spawn one automaton ------------------------ */
+            /* ---------- spawn ------------------------------------- */
             AutomataCommand::SeedPattern { ref id } => {
-                let Some((rule, seed_fn_opt)) = rules.get(id.as_str()) else {
+                let Some((rule, _seed_fn_opt)) = rules.get(id.as_str()) else {
                     warn!("Unknown automaton pattern “{id}” – ignored");
                     continue;
                 };
 
-                let size = UVec2::splat(SLICE_SIDE);
-                let Some(slice) = world_grid.allocate(size) else {
+                /* atlas alloc (2-D inside one layer for now) */
+                let Some(slice) = world_grid.allocate(UVec2::splat(SLICE_SIDE)) else {
                     warn!("World grid is full – cannot place new automaton");
                     continue;
                 };
 
-                // build an isolated scratch grid and run the seeder
-                let mut slice_backend = GridBackend::Dense(DenseGrid::blank(size));
-                if let Some(seed) = seed_fn_opt {
-                    seed(&mut slice_backend);
-                }
+                /* GPU-side slice meta */
+                let gpu_slice = GpuGridSlice {
+                    layer:      0,
+                    offset:     UVec2::new(slice.offset.x as u32, slice.offset.y as u32),
+                    size:       slice.size.truncate(),
+                    rule:       id.clone(),
+                    rule_bits:  0b0001_1000, // Conway B3/S23 for now
+                };
 
-                // convert slice offset (cells) → world-space units
-                let world_offset = slice.offset.as_vec2() * DEFAULT_CELL;
+                /* world-space placement */
+                let world_offset = slice.offset.as_vec3() * DEFAULT_VOXEL;
 
-                // register automaton and spawn its ECS entity
+                /* register + ECS entity */
                 let info = AutomatonInfo {
-                    id:               AutomatonId(0), // overwritten below
+                    id:               AutomatonId(0), // overwritten
                     name:             id.clone(),
                     rule:             Arc::clone(rule),
                     params:           Value::Null,
                     seed_fn:          None,
-                    grid:             slice_backend,
-                    dimension:        2,
-                    cell_size:        DEFAULT_CELL,
+                    slice:            gpu_slice,
+                    dimension:        3,
+                    voxel_size:       DEFAULT_VOXEL,
+                    world_offset,
                     background_color: BG,
                     palette:          None,
-                    world_offset,
                 };
                 let new_id = registry.register(info);
                 let entity = commands.spawn_empty().id();
                 added_writer.write(AutomatonAdded { id: new_id, entity });
             }
 
-            /* ---------- clear all ---------------------------------- */
+            /* ---------- clear ------------------------------------- */
             AutomataCommand::Clear => {
                 for id in registry.list().iter().map(|a| a.id).collect::<Vec<_>>() {
                     registry.remove(id);
                     removed_writer.write(AutomatonRemoved { id });
                 }
-                *world_grid = WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE));
+                *world_grid = WorldGrid::new_dense(UVec3::splat(WORLD_GRID_SIDE));
             }
         }
     }
 }
 
-/* ────────────────────── helper: get grid size ───────────────────── */
-
-#[inline]
-fn grid_texel_size(grid: &GridBackend) -> UVec2 {
-    match grid {
-        GridBackend::Dense(g)  => g.size,
-        GridBackend::Sparse(_) => UVec2::new(512, 512),
-    }
-}
-
-/* ─────────────────────── camera-focus helper ────────────────────── */
+/* ---------------- camera-focus helper ----------------------------- */
 
 pub fn focus_camera_on_new_auto(
     mut added: EventReader<AutomatonAdded>,
@@ -134,11 +129,9 @@ pub fn focus_camera_on_new_auto(
     let Some(info) = registry.get(ev.id)  else { return };
     let Ok(mut tf) = cam_q.single_mut()   else { return };
 
-    let grid_sz = grid_texel_size(&info.grid);
+    let grid_sz = info.slice.size.as_vec2();
 
-    // world_offset already includes cell_size scaling
-    let slice_centre = info.world_offset + grid_sz.as_vec2() * 0.5 * info.cell_size;
-
-    tf.translation.x = slice_centre.x;
-    tf.translation.y = slice_centre.y;
+    let centre = info.world_offset + grid_sz.extend(0.0) * 0.5 * info.voxel_size;
+    tf.translation.x = centre.x;
+    tf.translation.y = centre.y;
 }

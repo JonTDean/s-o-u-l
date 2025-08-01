@@ -1,39 +1,38 @@
 //! Cell state and serialisable payload.
+
 use std::marker::PhantomData;
 
-use glam::IVec2;
 use serde::{Deserialize, Serialize};
 
-use crate::core::dim::Dim;
-
+use crate::core::dim::Dimensionality;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum CellState {
     Dead,
-    /// Positive energy value (1 ..= complexity_level).
-    Alive(u8),
+    Alive(u8),           // energy in 1..=complexity
 }
 
 impl Default for CellState {
     fn default() -> Self { CellState::Dead }
 }
 
-/// Optional, typed‑erased per‑cell storage.
+/// Typed-erased per-cell storage.
 pub type CellMemory = serde_json::Value;
 
+/// Simulation cell (state + optional JSON memory).
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Cell {
     pub state:  CellState,
     pub memory: CellMemory,
 }
 
-/// Context provided to every rule invocation.
-pub struct CellCtx<'a, D: Dim> {
-    pub self_coord:   IVec2,
-    pub self_state:   CellState,
-    pub neighbourhood: &'a [CellState; 8],
-    pub memory:       &'a CellMemory,        // <- align with `cell.rs`
-    pub _marker:          PhantomData<D>,        // <- silences the lint ✔
+/// Execution context passed to every rule invocation.
+pub struct CellCtx<'a, D: Dimensionality> {
+    pub self_coord:    D::Coord,
+    pub self_state:    CellState,
+    pub neighbourhood: &'a [CellState],
+    pub memory:        &'a CellMemory,
+    pub _marker:       PhantomData<D>,
 }
 
 pub enum CellOutcome {

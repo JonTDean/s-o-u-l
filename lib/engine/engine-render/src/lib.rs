@@ -1,6 +1,6 @@
 //! top-level of **engine-render** – nothing here should leak internals.
 
-mod render;
+pub mod render;
 
 use bevy_ecs::resource::Resource;
 

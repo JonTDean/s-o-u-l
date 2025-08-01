@@ -1,20 +1,25 @@
-//! GPU back-end bootstrap for the voxel-automata renderer.
+//! engine-gpu ▸ **plugin**
 //!
-//! The plug-in wires a small render-graph around Bevy’s `Core2d` graph,
-//! allocates the global ping-/pong-atlas, and schedules the compute & draw
-//! nodes for **every** frame.  This revised version **delays** creation of
-//! [`MeshletBuffers`] until a dedicated **startup system** runs – fixing the
-//! panic caused by an early `RenderDevice` lookup before the render back-end
-//! finished initialising.
+//! Boot-straps the GPU back-end for voxel automata:
+//! * creates the global ping/pong/signalling textures,
+//! * manages the 3-D atlas allocator,
+//! * wires the compute & draw nodes into `Core3d`,
+//! * owns the transient meshlet buffers used by Dual Contour.
 //!
-//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
+//! The file is large but follows a strict **top-to-bottom** structure:
+//! globals → helpers → startup systems → main `Plugin` impl.
 
 use bevy::{
-    core_pipeline::core_2d::graph::{Core2d, Node2d},
+    core_pipeline::core_3d::graph::{Core3d, Node3d},
     prelude::*,
-    render::{render_graph::RenderGraph, render_resource::*, ExtractSchedule, RenderApp},
+    render::{render_graph::{RenderGraph, RenderGraphContext}, render_resource::*, ExtractSchedule, RenderApp},
 };
-use engine_core::{events::AutomatonAdded, prelude::AppState};
+
+use engine_core::{
+    events::AutomatonAdded,
+    prelude::{AppState, AutomataRegistry},
+    automata::GpuGridSlice,          // ← canonical slice type
+};
 
 pub mod atlas;
 pub mod labels;
@@ -28,23 +33,27 @@ use textures::make_image;
 
 use crate::{
     compute::dual_contour::{MeshletBuffers, MAX_VOXELS},
-    graph::{extract_gpu_slices, ComputeAutomataNode, ExtractedGpuSlices, GpuGridSlice},
+    graph::{extract_gpu_slices, ComputeAutomataNode, ExtractedGpuSlices},
     pipelines::GpuPipelineCache,
 };
 
-/* ──────────────────────────────────────────────────────────────────── */
-/* Shared textures & global flags                                      */
-/* ──────────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------- */
+/* Globals & misc-helpers                                              */
+/* ------------------------------------------------------------------- */
+
+/// Ping/pong/signal textures shared by every compute shader.
 #[derive(Resource, Clone)]
 pub struct GlobalStateTextures {
-    pub ping: Handle<Image>,
-    pub pong: Handle<Image>,
+    pub ping:   Handle<Image>,
+    pub pong:   Handle<Image>,
     pub signal: Handle<Image>,
 }
 
+/// Flips every frame → parity-based buffer indexing on the GPU.
 #[derive(Resource, Default)]
 pub struct FrameParity(pub bool);
 
+/* tiny helper that initialises the compact voxel mesh pipeline */
 fn init_voxel_pipeline(
     mut cmds     : Commands,
     mut shaders  : ResMut<Assets<Shader>>,
@@ -54,9 +63,10 @@ fn init_voxel_pipeline(
     cmds.insert_resource(vp);
 }
 
-/* ──────────────────────────────────────────────────────────────────── */
-/* Compact voxel mesh pipeline                                         */
-/* ──────────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------- */
+/* Compact voxel mesh pipeline (draw pass)                             */
+/* ------------------------------------------------------------------- */
+
 #[derive(Resource)]
 pub struct VoxelPipeline {
     pub id: CachedRenderPipelineId,
@@ -67,13 +77,13 @@ impl VoxelPipeline {
         shaders:   &mut Assets<Shader>,
         pipelines: &mut PipelineCache,
     ) -> Self {
-        /* 1 ░ WGSL shader */
+        /* 1 ─ WGSL shader */
         let shader = shaders.add(Shader::from_wgsl(
             include_str!("../../../../../assets/shaders/automatoxel/voxel_mesh.wgsl"),
             "voxel_mesh",
         ));
 
-        /* 2 ░ Pipeline descriptor */
+        /* 2 ─ Pipeline descriptor */
         let desc = RenderPipelineDescriptor {
             label: Some("voxel_mesh".into()),
             layout: vec![],
@@ -85,16 +95,8 @@ impl VoxelPipeline {
                     array_stride: 3 * 4 + 3 * 4 + 4, // pos + nrm + mat
                     step_mode: VertexStepMode::Vertex,
                     attributes: vec![
-                        VertexAttribute {
-                            format: VertexFormat::Float32x3,
-                            offset: 0,
-                            shader_location: 0,
-                        },
-                        VertexAttribute {
-                            format: VertexFormat::Float32x3,
-                            offset: 12,
-                            shader_location: 1,
-                        },
+                        VertexAttribute { format: VertexFormat::Float32x3, offset: 0,  shader_location: 0 },
+                        VertexAttribute { format: VertexFormat::Float32x3, offset: 12, shader_location: 1 },
                     ],
                 }],
             },
@@ -120,38 +122,36 @@ impl VoxelPipeline {
     }
 }
 
-/* ──────────────────────────────────────────────────────────────────── */
-/* Draw node – consumes the vertex & indirect buffers                  */
-/* ──────────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------- */
+/* Voxel draw node – consumes Dual-Contour meshlets                    */
+/* ------------------------------------------------------------------- */
+
 struct VoxelDrawNode;
 
 impl bevy::render::render_graph::Node for VoxelDrawNode {
     fn run(
         &self,
-        _g: &mut bevy::render::render_graph::RenderGraphContext,
+        _g: &mut RenderGraphContext,
         ctx: &mut bevy::render::renderer::RenderContext,
-        w: &World,
+        w:   &World,
     ) -> Result<(), bevy::render::render_graph::NodeRunError> {
-        /* 0 ░ Quick-out if nothing to draw */
+        /* quick-out when nothing to draw */
         let slices = w.resource::<ExtractedGpuSlices>();
-        if slices.0.is_empty() {
-            return Ok(());
-        }
+        if slices.0.is_empty() { return Ok(()); }
 
-        /* 1 ░ Pipeline ready? */
-        let pipelines = w.resource::<PipelineCache>();
-        let vox = w.resource::<VoxelPipeline>();
-        let Some(pipeline) = pipelines.get_render_pipeline(vox.id) else { return Ok(()); };
+        /* pipeline ready? */
+        let pipes = w.resource::<PipelineCache>();
+        let vox   = w.resource::<VoxelPipeline>();
+        let Some(pipe) = pipes.get_render_pipeline(vox.id) else { return Ok(()); };
 
-        /* 2 ░ Active 2-D camera (order == 2) */
-        let target = w
-            .iter_entities()
-            .filter_map(|ent| Some((ent.get::<Camera>()?, ent.get::<bevy::render::view::ViewTarget>()?)))
+        /* active Core3d camera (order == 2) */
+        let target = w.iter_entities()
+            .filter_map(|e| Some((e.get::<Camera>()?, e.get::<bevy::render::view::ViewTarget>()?)))
             .find(|(cam, _)| cam.is_active && cam.order == 2)
             .map(|(_, tgt)| tgt);
         let Some(target) = target else { return Ok(()); };
 
-        /* 3 ░ Render-pass */
+        /* render pass */
         let mut pass = ctx.command_encoder().begin_render_pass(&RenderPassDescriptor {
             label: Some("voxel_draw_pass"),
             color_attachments: &[Some(target.get_color_attachment())],
@@ -159,9 +159,9 @@ impl bevy::render::render_graph::Node for VoxelDrawNode {
             occlusion_query_set: None,
             timestamp_writes: None,
         });
-        pass.set_pipeline(pipeline);
+        pass.set_pipeline(pipe);
 
-        /* 4 ░ Buffers */
+        /* buffers */
         let mesh = w.resource::<MeshletBuffers>();
         pass.set_vertex_buffer(0, *mesh.vertices.slice(..));
         pass.draw_indirect(&mesh.indirect, 0);
@@ -170,92 +170,117 @@ impl bevy::render::render_graph::Node for VoxelDrawNode {
     }
 }
 
-/* ──────────────────────────────────────────────────────────────────── */
-/*  STARTUP SYSTEM: create MeshletBuffers                               */
-/* ──────────────────────────────────────────────────────────────────── */
-/// Allocates the per-frame scratch buffers **after** `RenderDevice` is
-/// available.  Runs exactly once during the render-app’s startup stage.
-fn init_meshlet_buffers(mut commands: Commands, device: Res<bevy::render::renderer::RenderDevice>) {
-    commands.insert_resource(MeshletBuffers::new(&*device, MAX_VOXELS));
+/* ------------------------------------------------------------------- */
+/* STARTUP system: allocate MeshletBuffers                             */
+/* ------------------------------------------------------------------- */
+
+fn init_meshlet_buffers(
+    mut cmds  : Commands,
+    device: Res<bevy::render::renderer::RenderDevice>,
+) {
+    cmds.insert_resource(MeshletBuffers::new(&*device, MAX_VOXELS));
 }
 
-/* ──────────────────────────────────────────────────────────────────── */
-/* Main plug-in                                                         */
-/* ──────────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------- */
+/* Main **Plugin** implementation                                      */
+/* ------------------------------------------------------------------- */
+
 pub struct GpuAutomataComputePlugin;
 
 impl Plugin for GpuAutomataComputePlugin {
     fn build(&self, app: &mut App) {
-        /* 1 ░ Atlas textures (main world) */
+        /* 1 ─ global textures + atlas */
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
-        let ping = images.add(make_image("ca.ping"));
-        let pong = images.add(make_image("ca.pong"));
+        let ping   = images.add(make_image("ca.ping"));
+        let pong   = images.add(make_image("ca.pong"));
         let signal = images.add(make_image("ca.signal"));
         drop(images);
 
-        let global = GlobalStateTextures { ping, pong, signal };
-        app.insert_resource(global.clone())
-            .insert_resource(AtlasAllocator::default());
+        app.insert_resource(GlobalStateTextures { ping, pong, signal })
+           .insert_resource(AtlasAllocator::default());
 
-        /* 2 ░ Allocate slice on automaton spawn */
+        /* 2 ─ allocate an atlas slice when a new automaton spawns */
         app.add_systems(
             Update,
-            |mut cmd: Commands, mut atlas: ResMut<AtlasAllocator>, mut ev: EventReader<AutomatonAdded>| {
+            |mut cmd:   Commands,
+             mut atlas: ResMut<AtlasAllocator>,
+             mut ev:    EventReader<AutomatonAdded>,
+             mut reg:   ResMut<AutomataRegistry>,
+             slice_q:   Query<&GpuGridSlice>| {
+
                 for ev in ev.read() {
-                    let size = UVec2::splat(256);
-                    if let Some((layer, off)) = atlas.allocate(size) {
-                        cmd.entity(ev.entity).insert(GpuGridSlice {
-                            layer,
-                            offset: off,
-                            size,
-                            rule: "life".into(),
-                            rule_bits: 0b0001_1000,
-                        });
-                    } else {
-                        warn!("🏳️  atlas full — cannot allocate GPU slice");
-                    }
+                    /* entity already owns a slice? → skip */
+                    if slice_q.get(ev.entity).is_ok() { continue; }
+
+                    /* registry lookup */
+                    let Some(info) = reg.get_mut(ev.id) else { continue };
+                    let want = info.slice.size.max(UVec2::splat(256));
+
+                    /* atlas allocation */
+                    let Some((layer, off)) = atlas.allocate(want) else {
+                        warn!("atlas full – cannot allocate {}", info.name);
+                        continue;
+                    };
+
+                    /* final slice */
+                    let slice = GpuGridSlice {
+                        layer,
+                        offset: off,
+                        size:   want,
+                        rule:   info.name.clone(),
+                        rule_bits: 0, // TODO: encode rule flags
+                    };
+
+                    /* write-back */
+                    cmd.entity(ev.entity).insert(slice.clone());
+                    info.slice        = slice.clone();
+                    info.world_offset = Vec3::new(off.x as f32, off.y as f32, 0.0) * info.voxel_size;
                 }
             },
         );
 
-        /* 3 ░ Reset atlas when entering main-menu */
-        app.add_systems(OnEnter(AppState::MainMenu), |mut atlas: ResMut<AtlasAllocator>| *atlas = AtlasAllocator::default());
+        /* 3 ─ reset atlas when returning to main menu */
+        app.add_systems(
+            OnEnter(AppState::MainMenu),
+            |mut atlas: ResMut<AtlasAllocator>| *atlas = AtlasAllocator::default(),
+        );
 
-        /* 4 ░ Render-app setup */
+        /* 4 ─ render-app setup */
         let render_app = app.sub_app_mut(RenderApp);
         render_app
-            .insert_resource(global)
+            /* resources */
             .init_resource::<ExtractedGpuSlices>()
             .init_resource::<GpuPipelineCache>()
             .insert_resource(FrameParity::default())
-            // toggle parity each frame (cheap RNG replacement)
+            /* flip parity every extract */
             .add_systems(ExtractSchedule, |mut p: ResMut<FrameParity>| p.0 = !p.0)
-            .add_systems(ExtractSchedule, extract_gpu_slices)
-            // *** NEW: allocate MeshletBuffers once RenderDevice exists ***
-            .add_systems(Startup, init_meshlet_buffers)
-            .add_systems(Startup, init_voxel_pipeline);
+            /* extract slices */
+            .add_systems(ExtractSchedule, (extract_gpu_slices,))
+            /* allocate buffers & pipeline once the renderer is ready */
+            .add_systems(Startup, (init_meshlet_buffers, init_voxel_pipeline));
 
-        /* 5 ░ Wire nodes into Core2d */
-        let mut graph = render_app.world_mut().resource_mut::<RenderGraph>();
-        let core2d_sub = graph.get_sub_graph_mut(Core2d).unwrap();
-        core2d_sub.add_node(AutomataStepLabel, ComputeAutomataNode);
+        /* 5 ─ wire graph nodes into Core3d */
+        let mut graph   = render_app.world_mut().resource_mut::<RenderGraph>();
+        let core3d_sub  = graph.get_sub_graph_mut(Core3d).unwrap();
+
+        core3d_sub.add_node(AutomataStepLabel, ComputeAutomataNode);
 
         #[cfg(feature = "mesh_shaders")]
         {
-            core2d_sub.add_node(MeshPathLabel, crate::compute::mesh_path::MeshPathNode);
-            core2d_sub.add_node_edge(Node2d::StartMainPass, AutomataStepLabel);
-            core2d_sub.add_node_edge(AutomataStepLabel, MeshPathLabel);
-            core2d_sub.add_node_edge(MeshPathLabel, Node2d::EndMainPass);
+            core3d_sub.add_node(MeshPathLabel, crate::compute::mesh_path::MeshPathNode);
+            core3d_sub.add_node_edge(Node3d::StartMainPass, AutomataStepLabel);
+            core3d_sub.add_node_edge(AutomataStepLabel, MeshPathLabel);
+            core3d_sub.add_node_edge(MeshPathLabel, Node3d::EndMainPass);
         }
 
         #[cfg(not(feature = "mesh_shaders"))]
         {
-            core2d_sub.add_node(DualContourLabel, crate::compute::dual_contour::DualContourNode);
-            core2d_sub.add_node(DrawVoxelLabel, VoxelDrawNode);
-            core2d_sub.add_node_edge(Node2d::StartMainPass, AutomataStepLabel);
-            core2d_sub.add_node_edge(AutomataStepLabel, DualContourLabel);
-            core2d_sub.add_node_edge(DualContourLabel, DrawVoxelLabel);
-            core2d_sub.add_node_edge(DrawVoxelLabel, Node2d::EndMainPass);
+            core3d_sub.add_node(DualContourLabel, crate::compute::dual_contour::DualContourNode);
+            core3d_sub.add_node(DrawVoxelLabel, VoxelDrawNode);
+            core3d_sub.add_node_edge(Node3d::StartMainPass, AutomataStepLabel);
+            core3d_sub.add_node_edge(AutomataStepLabel, DualContourLabel);
+            core3d_sub.add_node_edge(DualContourLabel, DrawVoxelLabel);
+            core3d_sub.add_node_edge(DrawVoxelLabel, Node3d::EndMainPass);
         }
     }
 }

@@ -1,46 +1,59 @@
-use glam::{IVec2, UVec2};
-use serde::{Serialize, Deserialize};
+//! **Dense 3-D voxel grid** (Z-major layout).
+
+use glam::{IVec3, UVec3};
+use serde::{Deserialize, Serialize};
 
 use crate::core::cell::Cell;
 
-
 #[derive(Clone, Serialize, Deserialize)]
 pub struct DenseGrid {
-    pub cells: Vec<Cell>,
-    pub size:  UVec2,
+    pub voxels: Vec<Cell>,
+    pub size:   UVec3,          // (x, y, z)
 }
 
 impl DenseGrid {
     #[inline]
-    pub fn idx(&self, p: IVec2) -> usize {
-        (p.y as u32 * self.size.x + p.x as u32) as usize
+    pub fn idx(&self, p: IVec3) -> usize {
+        ((p.z as u32 * self.size.y + p.y as u32) * self.size.x + p.x as u32) as usize
     }
 
-    pub fn get(&self, p: IVec2) -> Option<&Cell> {
-        if (0..self.size.x as i32).contains(&p.x) && (0..self.size.y as i32).contains(&p.y) {
-            self.cells.get(self.idx(p))
+    #[inline]
+    pub fn get(&self, p: IVec3) -> Option<&Cell> {
+        if (0..self.size.x as i32).contains(&p.x)
+            && (0..self.size.y as i32).contains(&p.y)
+            && (0..self.size.z as i32).contains(&p.z)
+        {
+            self.voxels.get(self.idx(p))
         } else { None }
     }
 
-    pub fn get_mut(&mut self, p: IVec2) -> Option<&mut Cell> {
-        if (0..self.size.x as i32).contains(&p.x) && (0..self.size.y as i32).contains(&p.y) {
-            // compute the index directly (no extra immutable borrow)
-            let idx = (p.y as u32 * self.size.x + p.x as u32) as usize;
-            self.cells.get_mut(idx)
+    #[inline]
+    pub fn get_mut(&mut self, p: IVec3) -> Option<&mut Cell> {
+        if (0..self.size.x as i32).contains(&p.x)
+            && (0..self.size.y as i32).contains(&p.y)
+            && (0..self.size.z as i32).contains(&p.z)
+        {
+            let idx = self.idx(p);
+            self.voxels.get_mut(idx)
         } else { None }
     }
 
-
-    pub fn iter(&self) -> impl Iterator<Item = (IVec2, &Cell)> + '_ {
+    #[inline]
+    pub fn iter(&self) -> impl Iterator<Item = (IVec3, &Cell)> + '_ {
         let size = self.size;
-        self.cells.iter().enumerate().map(move |(i, c)| {
-            let x = (i as u32 % size.x) as i32;
-            let y = (i as u32 / size.x) as i32;
-            (IVec2::new(x, y), c)
+        self.voxels.iter().enumerate().map(move |(i, c)| {
+            let x =  i as u32              % size.x;
+            let y = (i as u32 / size.x)    % size.y;
+            let z =  i as u32 / (size.x * size.y);
+            (IVec3::new(x as i32, y as i32, z as i32), c)
         })
     }
 
-    pub fn blank(size: UVec2) -> Self {
-        Self { cells: vec![Cell::default(); (size.x * size.y) as usize], size }
+    #[inline]
+    pub fn blank(size: UVec3) -> Self {
+        Self {
+            voxels: vec![Cell::default(); (size.x * size.y * size.z) as usize],
+            size,
+        }
     }
 }

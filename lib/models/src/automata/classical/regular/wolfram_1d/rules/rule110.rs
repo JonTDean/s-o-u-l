@@ -1,6 +1,6 @@
 use bevy::prelude::Resource;
 use simulation_kernel::{core::{
-    cell::{CellCtx, CellOutcome, CellState}, dim::Dim2,
+    cell::{CellCtx, CellOutcome, CellState}, dim::Dim,
 }, AutomatonRule};
 use serde_json::Value;
 
@@ -11,13 +11,13 @@ const RULE_110: [u8; 8] = [0,1,1,0,1,1,1,0];
 pub struct Rule110;
 
 impl Rule110 {
-    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim2> + Send + Sync> {
+    pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim> + Send + Sync> {
         std::sync::Arc::new(Self)
     }
 }
 
 impl AutomatonRule for Rule110 {
-    type D = Dim2;
+    type D = Dim;
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
         // Similar neighborhood interpretation as Rule30.
         let l = matches!(ctx.neighbourhood[3], CellState::Alive(_)) as u8;

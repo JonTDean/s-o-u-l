@@ -3,6 +3,7 @@
 use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
+use engine_render::render::worldgrid::minimap::MinimapTextures;
 
 use crate::panels::world::camera_overlays::camera_debug::debug_camera_menu;
 
@@ -17,7 +18,9 @@ pub struct WorldMenusPlugin;
 
 impl Plugin for WorldMenusPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<MinimapSelection>()
+        app
+            .init_resource::<MinimapTextures>()
+            .init_resource::<MinimapSelection>()
             .add_plugins((AutomataPanelPlugin, PauseMenuPlugin))
             .add_systems(
                 EguiPrimaryContextPass,

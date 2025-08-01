@@ -8,8 +8,9 @@ publish = false                           # workspace only
 # Cargo *features*
 # ---------------------------------------------------------------------------
 [features]
-default      = []          # keep defaults lean
-gpu-compute  = ["engine-render/gpu-compute"]
+default         = []          # keep defaults lean
+gpu-compute     = ["engine-render/gpu-compute"]
+gpu-debug       = ["engine-gpu/gpu-debug"]
 
 [dependencies]
 bevy        = { workspace = true }
@@ -57,7 +58,7 @@ opt-level = 3                # full optimisation for every dependency
 
 [workspace.dependencies]
 glam = { version = "0.29.3", features = ["serde"] }
-bevy        = { version = "0.16.1", features = ["webgpu", "bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking", "bevy_gizmos"] }
+bevy        = { version = "0.16.1", features = [ "bevy_core_pipeline", "bevy_render", "bevy_sprite","bevy_winit", "bevy_ui", "png", "dynamic_linking", "bevy_gizmos"] }
 bevy_app    = { version = "0.16.1" }
 bevy_ecs    = { version = "0.16.1" }
 bevy_egui   = { version = "0.35.1" }

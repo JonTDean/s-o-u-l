@@ -48,18 +48,26 @@ impl Default for CameraTrackMode { fn default() -> Self { Self::Free } }
 
 /// Fit / clamp helper – returns updated `(centre, scale)`.
 pub fn fit_or_clamp_camera(
-    world_min: Vec2,
-    world_max: Vec2,
+    world_min: Vec3,
+    world_max: Vec3,
     win: &Window,
-    mut centre: Vec2,
+    mut centre: Vec3,
     mut scale: f32,
-) -> (Vec2, f32) {
+) -> (Vec3, f32) {
+    // ----------------------------------------------------------------
+    // safety guard – make sure we always have a legal AABB
+    // ----------------------------------------------------------------
+    let mut min = world_min;
+    let mut max = world_max;
+    if max.x < min.x { std::mem::swap(&mut min.x, &mut max.x); }
+    if max.y < min.y { std::mem::swap(&mut min.y, &mut max.y); }
+
     // 1 ░ ensure world fits at least once (C-key or initial recenter).
-    let needed = ((world_max - world_min) / Vec2::new(win.width(), win.height())).max_element();
+    let needed = ((max - min) / Vec3::new(win.width(), win.height(), 0.0)).max_element();
     scale = scale.max(needed).clamp(MIN_SCALE_CONST, MAX_SCALE);
 
     // 2 ░ slack when viewport bigger than world AABB.
-    let half_view = Vec2::new(win.width(), win.height()) * 0.5 * scale;
+    let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * scale;
     let slack     = (world_max - world_min) * 0.5 - half_view;
 
     // 3 ░ clamp each axis only if no slack left.
@@ -141,7 +149,12 @@ pub(crate) fn spawn_cameras(mut cmd: Commands, mut zoom: ResMut<ZoomInfo>) {
     // World camera (activated only in-game)
     cmd.spawn((Camera2d,
                Transform::from_translation(Vec3::new(0.0, 0.0, 1_000.0)),
-               Camera { order: 2, is_active: false, ..default() },
+                Camera {
+                    order: 2,
+                    is_active: false,
+                    clear_color: ClearColorConfig::Custom(Color::srgb(0.07, 0.07, 0.07)),
+                    ..default()
+                },
                CameraKind::World,
                WorldCamera,
                Visibility::Hidden,
@@ -207,23 +220,22 @@ fn recenter_on_event(
     }
 
     /* compute world AABB */
-    let mut min = Vec2::splat(f32::INFINITY);
-    let mut max = Vec2::splat(f32::NEG_INFINITY);
+    let mut min = Vec3::splat(f32::INFINITY);
+    let mut max = Vec3::splat(f32::NEG_INFINITY);
     for info in registry.list() {
         let off = info.world_offset;
-        let size = match &info.grid {
-            GridBackend::Dense(g) => {
-                Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size
-            }
-            GridBackend::Sparse(_) => Vec2::splat(512.0) * info.cell_size,
-        };
+        let size = Vec3::new(
+                info.slice.size.x as f32,
+                info.slice.size.y as f32,
+                1.0,
+            ) * info.voxel_size;
         min = min.min(off);
         max = max.max(off + size);
     }
 
     if let Projection::Orthographic(ref mut ortho) = *proj {
         let (centre, scale) =
-            fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
+            fit_or_clamp_camera(min, max, win, tf.translation, ortho.scale);
         tf.translation.x = centre.x;
         tf.translation.y = centre.y;
         ortho.scale = scale;
@@ -249,23 +261,22 @@ fn follow_automata(
         return;
     }
 
-    let mut min = Vec2::splat(f32::INFINITY);
-    let mut max = Vec2::splat(f32::NEG_INFINITY);
+    let mut min = Vec3::splat(f32::INFINITY);
+    let mut max = Vec3::splat(f32::NEG_INFINITY);
     for info in registry.list() {
         let off = info.world_offset;
-        let size = match &info.grid {
-            GridBackend::Dense(g) => {
-                Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size
-            }
-            GridBackend::Sparse(_) => Vec2::splat(512.0) * info.cell_size,
-        };
+        let size = Vec3::new(
+                info.slice.size.x as f32,
+                info.slice.size.y as f32,
+                1.0,
+            ) * info.voxel_size;
         min = min.min(off);
         max = max.max(off + size);
     }
 
     if let Projection::Orthographic(ref mut ortho) = *proj {
         let (centre, scale) =
-            fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
+            fit_or_clamp_camera(min, max, win, tf.translation, ortho.scale);
         tf.translation.x = centre.x;
         tf.translation.y = centre.y;
         ortho.scale = scale;
@@ -294,7 +305,7 @@ fn clamp_camera_to_world(
 
     // orthographic scale (world-units per screen-pixel)
     let scale      = match proj { Projection::Orthographic(o) => o.scale, _ => 1.0 };
-    let half_view  = Vec2::new(win.width(), win.height()) * 0.5 * scale;
+    let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * scale;
 
     // 1 ░ original world size in *cell* units
     let (mut w_cells, mut h_cells) = match &world.backend {
@@ -314,10 +325,11 @@ fn clamp_camera_to_world(
 }
 
 /// Returns a rectangle that is always at least as big as the viewport.
-pub(crate) fn dynamic_world_size(win: &Window, proj_scale: f32, grid: &DenseGrid) -> Vec2 {
-    let half_view = Vec2::new(win.width(), win.height()) * 0.5 * proj_scale;
-    Vec2::new(
+pub(crate) fn dynamic_world_size(win: &Window, proj_scale: f32, grid: &DenseGrid) -> Vec3 {
+    let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * proj_scale;
+    Vec3::new(
         (grid.size.x as f32).max(half_view.x * 2.0),
         (grid.size.y as f32).max(half_view.y * 2.0),
+        0.0,
     )
 }

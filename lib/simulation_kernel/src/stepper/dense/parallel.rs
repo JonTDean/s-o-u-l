@@ -1,99 +1,59 @@
-use glam::IVec2;
+//! Rayon parallel dense voxel stepper.
+
+use glam::IVec3;
+use rayon::prelude::*;
 use serde_json::Value;
 
-use crate::{core::{cell::{CellCtx, CellOutcome, CellState}, dim::{Dim, Dim2}}, grid::DenseGrid, AutomatonRule};
+use crate::{
+    core::{
+        cell::{CellCtx, CellOutcome, CellState},
+        dim::{Dim, Dimensionality},
+    },
+    grid::DenseGrid,
+    AutomatonRule,
+};
 
-
-pub fn step_dense_parallel<R: AutomatonRule<D = Dim2> + Sync>(
-    grid: &mut DenseGrid,
-    rule: &R,
-    params: &Value,
-) {
-    let snapshot = grid.cells.clone();
-    let size = grid.size;
-    let updates: Vec<(usize, CellState)> = (0..snapshot.len())
-        .into_iter()
-        .filter_map(|idx| {
-            let x = (idx as u32 % size.x) as i32;
-            let y = (idx as u32 / size.x) as i32;
-            let p = IVec2::new(x, y);
-
-            // Build Moore neighbourhood.
-            let mut nbhd = [CellState::Dead; 8];
-            for (i, off) in Dim2::NEIGHBOUR_OFFSETS.iter().enumerate() {
-                let q = p + *off;
-                if (0..size.x as i32).contains(&q.x) && (0..size.y as i32).contains(&q.y) {
-                    nbhd[i] = snapshot[grid.idx(q)].state;
-                }
-            }
-
-            let ctx = CellCtx {
-                self_coord: p,
-                self_state: snapshot[idx].state,
-                neighbourhood: &nbhd,
-                memory: &snapshot[idx].memory,
-                _marker: std::marker::PhantomData::<Dim2>,
-            };
-
-            match rule.next_state(ctx, params) {
-                CellOutcome::Next { state, .. } => Some((idx, state)),
-                _ => None,
-            }
-        })
-        .collect();
-
-    // Apply updates sequentially (unordered, data‑race‑free).
-    for (idx, state) in updates {
-        grid.cells[idx].state = state;
-    }
-}
-
-
-
-/* ------------------------------------------------- */
-/* Fine‑grain helpers (dynamic dispatch + Rayon)     */
-/* ------------------------------------------------- */
-
-#[inline]
 pub fn step_dense_dyn_parallel(
     grid:   &mut DenseGrid,
-    rule:   &(dyn AutomatonRule<D = Dim2> + Sync),
+    rule:   &(dyn AutomatonRule<D = Dim> + Sync),
     params: &Value,
 ) {
-    let snapshot = grid.cells.clone();          // read‑only copy
+    let snapshot = grid.voxels.clone();   // read-only
     let size     = grid.size;
 
-    // Iterate *mutably* in parallel; each item is an exclusive &mut Cell
-    grid.cells
-        .iter_mut()
+    grid.voxels
+        .par_iter_mut()
         .enumerate()
-        .for_each(|(idx, cell)| {
-            let x = (idx as u32 % size.x) as i32;
-            let y = (idx as u32 / size.x) as i32;
-            let p = IVec2::new(x, y);
+        .for_each(|(idx, voxel)| {
+            let x =  idx as u32              % size.x;
+            let y = (idx as u32 / size.x)    % size.y;
+            let z =  idx as u32 / (size.x * size.y);
+            let p = IVec3::new(x as i32, y as i32, z as i32);
 
-            /* build Moore‑8 neighbourhood from the read‑only snapshot */
-            let mut nbhd = [CellState::Dead; 8];
-            for (i, off) in Dim2::NEIGHBOUR_OFFSETS.iter().enumerate() {
+            /* gather Moore-26 neighbourhood */
+            let mut nbhd = [CellState::Dead; 26];
+            for (i, off) in Dim::NEIGHBOUR_OFFSETS.iter().enumerate() {
                 let q = p + *off;
-                if (0..size.x as i32).contains(&q.x) &&
-                   (0..size.y as i32).contains(&q.y)
+                if (0..size.x as i32).contains(&q.x)
+                    && (0..size.y as i32).contains(&q.y)
+                    && (0..size.z as i32).contains(&q.z)
                 {
-                    nbhd[i] = snapshot[(q.y as u32 * size.x + q.x as u32) as usize].state;
+                    let j = ((q.z as u32 * size.y + q.y as u32) * size.x + q.x as u32) as usize;
+                    nbhd[i] = snapshot[j].state;
                 }
             }
 
-            let ctx = CellCtx::<Dim2> {
+            let ctx = CellCtx::<Dim> {
                 self_coord:    p,
-                self_state:    cell.state,
+                self_state:    voxel.state,
                 neighbourhood: &nbhd,
-                memory:        &cell.memory,
+                memory:        &voxel.memory,
                 _marker:       std::marker::PhantomData,
             };
 
             if let CellOutcome::Next { state, memory } = rule.next_state(ctx, params) {
-                cell.state  = state;
-                cell.memory = memory;
+                voxel.state  = state;
+                voxel.memory = memory;
             }
         });
 }
