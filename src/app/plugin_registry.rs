@@ -19,7 +19,7 @@ use ui::plugin::OutputPlugin;
 
 /// Add **every** core & feature plugin in the required order.
 pub fn add_all_plugins(app: &mut App) {
-    /* 0 ░ egui framework (UI) */
+    // 0 ░ egui framework (UI)
     app.add_plugins(EguiPlugin::default());
 
     /* 1 ░ dev / runtime state */
@@ -28,9 +28,7 @@ pub fn add_all_plugins(app: &mut App) {
     /* 2 ░ core engine */
     app.add_plugins(EngineCorePlugin);
 
-    /* 3 ░ render stack
-     *     ─ EngineRenderer    – our custom 2-D renderer
-     */
+    /* 3 ░ render stack */
     app.add_plugins(EngineRendererPlugin);
 
     /* 4 ░ computational-intelligence layer */
@@ -39,3 +37,4 @@ pub fn add_all_plugins(app: &mut App) {
     /* 5 ░ UI / HUD */
     app.add_plugins(OutputPlugin);
 }
+

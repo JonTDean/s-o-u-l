@@ -15,6 +15,7 @@ use bevy::{
     window::WindowPlugin,
 };
 use engine_core::systems::{schedule::MainSet, state::AppState};
+use engine_render::debug_plugin::DebugPlugin;
 
 use crate::app::{
     builder::RuntimeConfig,
@@ -57,7 +58,8 @@ pub fn build(cfg: RuntimeConfig) -> App {
             MainSet::Render.after(MainSet::Logic),
         ),
     );
-
+    app.add_plugins(DebugPlugin);
+    
     /* 4 ░ register every feature / renderer plug-in ----------------- */
     add_all_plugins(&mut app);
 

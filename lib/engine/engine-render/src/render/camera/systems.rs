@@ -1,14 +1,17 @@
-//! World‑ & UI‑camera manager (2025‑07‑31 – compile‑clean).
+//! World- & UI-camera manager (2025-07-31 – compile-clean).
 
 use bevy::{
     prelude::*,
     render::{camera::Projection, view::RenderLayers},
 };
 use engine_core::prelude::{AppState, AutomataRegistry};
-use simulation_kernel::grid::GridBackend;
+use simulation_kernel::grid::{DenseGrid, GridBackend};
 use tooling::debugging::camera::CameraDebug;
 
-use crate::render::camera::{floating_origin::WorldOffset, gizmos::draw_camera_gizmos};
+use crate::render::{
+    camera::{floating_origin::WorldOffset, gizmos::draw_camera_gizmos},
+    worldgrid::WorldGrid,
+};
 
 use super::{
     floating_origin::apply_floating_origin,
@@ -44,14 +47,14 @@ impl Default for CameraTrackMode { fn default() -> Self { Self::Free } }
 #[derive(Event, Default)] pub struct RecenterCamera;
 
 /// Fit / clamp helper – returns updated `(centre, scale)`.
-fn fit_or_clamp_camera(
+pub fn fit_or_clamp_camera(
     world_min: Vec2,
     world_max: Vec2,
     win: &Window,
     mut centre: Vec2,
     mut scale: f32,
 ) -> (Vec2, f32) {
-    // 1 ░ ensure world fits at least once (C‑key or initial recenter).
+    // 1 ░ ensure world fits at least once (C-key or initial recenter).
     let needed = ((world_max - world_min) / Vec2::new(win.width(), win.height())).max_element();
     scale = scale.max(needed).clamp(MIN_SCALE_CONST, MAX_SCALE);
 
@@ -75,7 +78,7 @@ fn fit_or_clamp_camera(
 #[derive(Component)] enum CameraKind { Ui, World }
 #[derive(SystemSet, Hash, Debug, Eq, PartialEq, Clone)] enum CameraSet { Input, Heavy }
 
-/* ───────────── Top‑level plugin ───────────── */
+/* ───────────── Top-level plugin ───────────── */
 
 pub struct CameraManagerPlugin;
 impl Plugin for CameraManagerPlugin {
@@ -93,7 +96,7 @@ impl Plugin for CameraManagerPlugin {
            .add_systems(OnEnter(AppState::MainMenu), ui_camera_enable_clear)
            .add_systems(OnExit (AppState::MainMenu), ui_camera_disable_clear)
            .add_systems(OnEnter(AppState::InGame),   send_recenter_on_enter)
-           // light‑weight input set
+           // light-weight input set
            .add_systems(
                Update,
                (
@@ -105,7 +108,7 @@ impl Plugin for CameraManagerPlugin {
                    .in_set(CameraSet::Input)
                    .run_if(in_state(AppState::InGame)),
            )
-           // heavy set (AABB queries, floating‑origin, gizmos)
+           // heavy set (AABB queries, floating-origin, gizmos)
            .add_systems(
                Update,
                (
@@ -114,6 +117,7 @@ impl Plugin for CameraManagerPlugin {
                    apply_floating_origin,
                    refresh_zoom_info,
                    draw_camera_gizmos,
+                   clamp_camera_to_world,                  // ← adjusted
                )
                    .in_set(CameraSet::Heavy)
                    .run_if(in_state(AppState::InGame)),
@@ -134,7 +138,7 @@ pub(crate) fn spawn_cameras(mut cmd: Commands, mut zoom: ResMut<ZoomInfo>) {
                CameraKind::Ui,
                layers_ui()));
 
-    // World camera (activated only in‑game)
+    // World camera (activated only in-game)
     cmd.spawn((Camera2d,
                Transform::from_translation(Vec3::new(0.0, 0.0, 1_000.0)),
                Camera { order: 2, is_active: false, ..default() },
@@ -168,7 +172,7 @@ fn ui_camera_disable_clear(mut q: Query<(&CameraKind, &mut Camera)>) {
     }
 }
 
-/* ───────────── 3‑a. Input helpers ───────────── */
+/* ───────────── 3-a. Input helpers ───────────── */
 
 fn toggle_track_mode(keys: Res<ButtonInput<KeyCode>>, mut mode: ResMut<CameraTrackMode>) {
     if keys.just_pressed(KeyCode::KeyF) {
@@ -182,27 +186,35 @@ fn send_recenter_on_enter(mut ev: EventWriter<RecenterCamera>) {
     ev.write_default();
 }
 
-/* ───────────── 3‑b. One‑shot recenter ───────────── */
+/* ───────────── 3-b. One-shot recenter ───────────── */
 
 fn recenter_on_event(
     mut ev: EventReader<RecenterCamera>,
     windows: Query<&Window>,
     registry: Res<AutomataRegistry>,
-    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,)
-{
-    if ev.is_empty() { return; }
+    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
+) {
+    if ev.is_empty() {
+        return;
+    }
     ev.clear();
 
-    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else { return };
-    if registry.list().is_empty() { return; }
+    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else {
+        return;
+    };
+    if registry.list().is_empty() {
+        return;
+    }
 
-    // Compute world AABB over *all* automata
+    /* compute world AABB */
     let mut min = Vec2::splat(f32::INFINITY);
     let mut max = Vec2::splat(f32::NEG_INFINITY);
     for info in registry.list() {
-        let off  = info.world_offset; 
+        let off = info.world_offset;
         let size = match &info.grid {
-            GridBackend::Dense(g)  => Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size,
+            GridBackend::Dense(g) => {
+                Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size
+            }
             GridBackend::Sparse(_) => Vec2::splat(512.0) * info.cell_size,
         };
         min = min.min(off);
@@ -210,32 +222,41 @@ fn recenter_on_event(
     }
 
     if let Projection::Orthographic(ref mut ortho) = *proj {
-        let (centre, scale) = fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
+        let (centre, scale) =
+            fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
         tf.translation.x = centre.x;
         tf.translation.y = centre.y;
         ortho.scale = scale;
     }
 }
 
-/* ───────────── 3‑c. Follow mode ───────────── */
+/* ───────────── 3-c. Follow mode ───────────── */
 
 fn follow_automata(
     mode: Res<CameraTrackMode>,
     windows: Query<&Window>,
     registry: Res<AutomataRegistry>,
-    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,)
-{
-    if *mode != CameraTrackMode::Follow { return; }
+    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
+) {
+    if *mode != CameraTrackMode::Follow {
+        return;
+    }
 
-    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else { return };
-    if registry.list().is_empty() { return; }
+    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else {
+        return;
+    };
+    if registry.list().is_empty() {
+        return;
+    }
 
     let mut min = Vec2::splat(f32::INFINITY);
     let mut max = Vec2::splat(f32::NEG_INFINITY);
     for info in registry.list() {
-        let off  = info.world_offset;
+        let off = info.world_offset;
         let size = match &info.grid {
-            GridBackend::Dense(g)  => Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size,
+            GridBackend::Dense(g) => {
+                Vec2::new(g.size.x as f32, g.size.y as f32) * info.cell_size
+            }
             GridBackend::Sparse(_) => Vec2::splat(512.0) * info.cell_size,
         };
         min = min.min(off);
@@ -243,17 +264,60 @@ fn follow_automata(
     }
 
     if let Projection::Orthographic(ref mut ortho) = *proj {
-        let (centre, scale) = fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
+        let (centre, scale) =
+            fit_or_clamp_camera(min, max, win, tf.translation.truncate(), ortho.scale);
         tf.translation.x = centre.x;
         tf.translation.y = centre.y;
         ortho.scale = scale;
     }
 }
 
-/* ───────────── 3‑d. Zoom resource sync ───────────── */
+/* ───────────── 3-d. Zoom resource sync ───────────── */
 
-fn refresh_zoom_info(cam_q: Query<&Projection, With<WorldCamera>>, mut zoom: ResMut<ZoomInfo>) {
+fn refresh_zoom_info(
+    cam_q: Query<&Projection, With<WorldCamera>>,
+    mut zoom: ResMut<ZoomInfo>,
+) {
     if let Ok(Projection::Orthographic(o)) = cam_q.single() {
         zoom.current = o.scale;
     }
+}
+
+/* ───────────────── 3-e. helper: keep camera inside the world ─────────────── */
+fn clamp_camera_to_world(
+    windows: Query<&Window>,
+    world:   Option<Res<WorldGrid>>,
+    mut cam_q: Query<(&mut Transform, &Projection), With<WorldCamera>>,
+) {
+    let (Ok(win), Some(world)) = (windows.single(), world) else { return };
+    let Ok((mut tf, proj)) = cam_q.single_mut() else { return };
+
+    // orthographic scale (world-units per screen-pixel)
+    let scale      = match proj { Projection::Orthographic(o) => o.scale, _ => 1.0 };
+    let half_view  = Vec2::new(win.width(), win.height()) * 0.5 * scale;
+
+    // 1 ░ original world size in *cell* units
+    let (mut w_cells, mut h_cells) = match &world.backend {
+        GridBackend::Dense(g)  => (g.size.x as f32, g.size.y as f32),
+        GridBackend::Sparse(_) => (1024.0, 1024.0),
+    };
+
+    // 2 ░ ensure the logical bounds are always at least as large as the viewport
+    //     → avoids min > max panics and lets us treat the current window as
+    //       the definitive world when the grid is smaller.
+    w_cells = w_cells.max(half_view.x * 2.0);
+    h_cells = h_cells.max(half_view.y * 2.0);
+
+    // 3 ░ clamp the camera centre so its viewport never leaves those bounds
+    tf.translation.x = tf.translation.x.clamp(half_view.x, w_cells - half_view.x);
+    tf.translation.y = tf.translation.y.clamp(half_view.y, h_cells - half_view.y);
+}
+
+/// Returns a rectangle that is always at least as big as the viewport.
+pub(crate) fn dynamic_world_size(win: &Window, proj_scale: f32, grid: &DenseGrid) -> Vec2 {
+    let half_view = Vec2::new(win.width(), win.height()) * 0.5 * proj_scale;
+    Vec2::new(
+        (grid.size.x as f32).max(half_view.x * 2.0),
+        (grid.size.y as f32).max(half_view.y * 2.0),
+    )
 }

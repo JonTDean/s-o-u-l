@@ -15,13 +15,9 @@ use crate::{render::camera::systems::WorldCamera, WorldGrid};
 
 /* ───────────────────────── Constants ─────────────────────────────── */
 
-/// Side length of **one** automaton slice (kept at 256 px for now).
-const SLICE_SIDE:      u32  = 256;
-/// Side length of the global tiled atlas; plenty of room for > 10 slices.
-const WORLD_GRID_SIDE: u32  = 1_024;
-/// Default visual cell size in world-space units.
-const DEFAULT_CELL:    f32  = 4.0;
-/// Default background colour.
+const SLICE_SIDE:      u32  = 256;   // side length of one automaton slice
+const WORLD_GRID_SIDE: u32  = 1_024; // global atlas side length
+const DEFAULT_CELL:    f32  = 4.0;   // default cell size in world units
 const BG:              Color = Color::srgb(0.07, 0.07, 0.07);
 
 /* ────────────────────────── Plugin ───────────────────────────────── */
@@ -29,20 +25,19 @@ const BG:              Color = Color::srgb(0.07, 0.07, 0.07);
 pub struct CommandExecutorPlugin;
 impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
-        // Provide one blank dense world-grid up-front (room for many slices).
         app.insert_resource(WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE)))
             .add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
-            // Main-menu reset – one-shot, runs *after* we quit InGame.
+            // one-shot cleanup when leaving the game
             .add_systems(OnEnter(AppState::MainMenu), purge_on_main_menu);
     }
 }
 
-/* ───────── one-shot cleanup when returning to the main menu ──────── */
+/* ───────── one-shot cleanup when returning to the main menu ─────── */
 
 fn purge_on_main_menu(
-    mut registry: ResMut<AutomataRegistry>,
+    mut registry:   ResMut<AutomataRegistry>,
     mut world_grid: ResMut<WorldGrid>,
-    mut removed: EventWriter<AutomatonRemoved>,
+    mut removed:    EventWriter<AutomatonRemoved>,
 ) {
     for id in registry.list().iter().map(|a| a.id).collect::<Vec<_>>() {
         registry.remove(id);
@@ -51,7 +46,7 @@ fn purge_on_main_menu(
     *world_grid = WorldGrid::new_dense(UVec2::splat(WORLD_GRID_SIDE));
 }
 
-/* ───────────────────────── System ────────────────────────────────── */
+/* ───────────────────────── System ───────────────────────────────── */
 
 #[allow(clippy::too_many_arguments)]
 fn handle_commands(
@@ -78,16 +73,16 @@ fn handle_commands(
                     continue;
                 };
 
-                /* build an isolated scratch grid and run the seeder */
+                // build an isolated scratch grid and run the seeder
                 let mut slice_backend = GridBackend::Dense(DenseGrid::blank(size));
                 if let Some(seed) = seed_fn_opt {
                     seed(&mut slice_backend);
                 }
 
-                /* convert slice offset (cells) → world-space units (Vec2) */
+                // convert slice offset (cells) → world-space units
                 let world_offset = slice.offset.as_vec2() * DEFAULT_CELL;
 
-                /* register automaton and spawn its ECS entity */
+                // register automaton and spawn its ECS entity
                 let info = AutomatonInfo {
                     id:               AutomatonId(0), // overwritten below
                     name:             id.clone(),
@@ -99,7 +94,7 @@ fn handle_commands(
                     cell_size:        DEFAULT_CELL,
                     background_color: BG,
                     palette:          None,
-                    world_offset,                       // ← fixed
+                    world_offset,
                 };
                 let new_id = registry.register(info);
                 let entity = commands.spawn_empty().id();
@@ -118,7 +113,7 @@ fn handle_commands(
     }
 }
 
-/* ────────────────────── helper: get grid size ----------------------- */
+/* ────────────────────── helper: get grid size ───────────────────── */
 
 #[inline]
 fn grid_texel_size(grid: &GridBackend) -> UVec2 {
@@ -128,22 +123,21 @@ fn grid_texel_size(grid: &GridBackend) -> UVec2 {
     }
 }
 
-/* ─────────────────────── camera focus helper ──────────────────────── */
+/* ─────────────────────── camera-focus helper ────────────────────── */
 
 pub fn focus_camera_on_new_auto(
     mut added: EventReader<AutomatonAdded>,
-    registry: Res<AutomataRegistry>,
+    registry:  Res<AutomataRegistry>,
     mut cam_q: Query<&mut Transform, With<WorldCamera>>,
 ) {
-    let Some(ev)   = added.read().last()              else { return };
-    let Some(info) = registry.get(ev.id)              else { return };
-    let Ok(mut tf) = cam_q.single_mut()               else { return };
+    let Some(ev)   = added.read().last() else { return };
+    let Some(info) = registry.get(ev.id)  else { return };
+    let Ok(mut tf) = cam_q.single_mut()   else { return };
 
     let grid_sz = grid_texel_size(&info.grid);
 
     // world_offset already includes cell_size scaling
-    let slice_centre = info.world_offset
-        + grid_sz.as_vec2() * 0.5 * info.cell_size;
+    let slice_centre = info.world_offset + grid_sz.as_vec2() * 0.5 * info.cell_size;
 
     tf.translation.x = slice_centre.x;
     tf.translation.y = slice_centre.y;

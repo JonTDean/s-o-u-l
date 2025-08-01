@@ -5,7 +5,7 @@ use simulation_kernel::grid::GridBackend;
 use tooling::debugging::camera::CameraDebug;
 
 use crate::render::{
-    camera::systems::WorldCamera,
+    camera::systems::{dynamic_world_size, WorldCamera},
     worldgrid::WorldGrid,
 };
 
@@ -25,7 +25,12 @@ pub fn draw_camera_gizmos(
     if flags.contains(CameraDebug::DRAW_BOUNDS) {
         let Some(grid) = grid else { return };
         let (w, h) = match &grid.backend {
-            GridBackend::Dense(g)  => (g.size.x as f32, g.size.y as f32),
+            GridBackend::Dense(g)  => {
+                let (Ok(win), Ok((_xf, Projection::Orthographic(o)))) =
+                    (windows.single(), cam_q.single()) else { return };
+                let v = dynamic_world_size(win, o.scale, g);
+                (v.x, v.y)
+            },
             GridBackend::Sparse(_) => (1_024.0, 1_024.0),
         };
         let rect = [

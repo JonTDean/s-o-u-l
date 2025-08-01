@@ -12,8 +12,6 @@ pub use render::{
     AutomataMaterial,
     AutomataParams,
 };
-pub use render::camera::systems::ZoomInfo;
-pub use render::active::plugin::ActiveAutomataRenderPlugin;
 
 /* helper wrapper ---------------------------------------------------- */
 #[derive(Resource, Clone)]
@@ -23,3 +21,4 @@ pub struct RuleParams(pub serde_json::Value);
 pub mod prelude;
 pub mod command_executor;
 pub mod plugin;
+pub mod debug_plugin;

@@ -2,8 +2,9 @@
 
 mod gizmos;
 mod input;
-mod floating_origin;
+pub(crate) mod floating_origin;
 pub mod systems;
+pub mod controller;
 
 use bevy::prelude::*;
 use engine_core::prelude::*;

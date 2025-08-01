@@ -2,10 +2,10 @@
 
 use bevy::prelude::*;
 use engine_core::events::AutomataCommand;
-use crate::render::camera::systems::CameraManagerPlugin;
+use crate::render::{camera::systems::CameraManagerPlugin, active::plugin::ActiveAutomataRenderPlugin};
 
 #[cfg(feature = "gpu-compute")]
-use engine_gpu::GpuAutomataComputePlugin;              // ← crate name
+use engine_gpu::GpuAutomataComputePlugin;
 
 #[cfg(feature = "gpu-compute")]
 use engine_core::systems::state::resources::RuntimeFlags;
@@ -14,25 +14,18 @@ pub struct EngineRendererPlugin;
 
 impl Plugin for EngineRendererPlugin {
     fn build(&self, app: &mut App) {
-        /* ------------------------------------------------------------ */
-        /* 1 ░ global events                                            */
-        /* ------------------------------------------------------------ */
+        /* 1 ░ global events */
         app.add_event::<AutomataCommand>();
 
-        /* ------------------------------------------------------------ */
-        /* 2 ░ camera stack (UI + world + input)                        */
-        /* ------------------------------------------------------------ */
+        /* 2 ░ camera stack + active renderer */
         app.add_plugins(CameraManagerPlugin);
+        app.add_plugins(ActiveAutomataRenderPlugin);
 
-        /* ------------------------------------------------------------ */
-        /* 3 ░ optional GPU compute back-end                            */
-        /* ------------------------------------------------------------ */
+        /* 3 ░ optional GPU compute back-end */
         #[cfg(feature = "gpu-compute")]
         {
-            // Can be disabled at run-time via `RuntimeFlags` or the SOUL_CPU
-            // environment variable.
             let allow_gpu = app
-                .world()                                          // new – method
+                .world()
                 .get_resource::<RuntimeFlags>()
                 .map_or(true, |f| f.gpu_enabled);
 
