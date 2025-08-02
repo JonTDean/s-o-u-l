@@ -1,13 +1,12 @@
 //! Build & run the Bevy `App`.
-//
+//!
 //! * Creates the core `App` skeleton (window / headless settings).
 //! * Inserts global resources & default [`AppState::MainMenu`].
-//! * Defines the canonical three‑stage update schedule **plus** the fixed‑step
-//!   accumulator → [`SimulationStep`] event emitter.
-//! * Registers **all** feature plug-ins in architecture-defined order.
-//! 
-
-use std::time::Duration;
+//! * Wires the canonical **Input → Logic → Render** pipeline for both
+//!   variable‑rate *Update* and deterministic *FixedUpdate* schedules via
+//!   [`app::schedule::configure`].
+//! * Configures the fixed‑step loop that emits [`SimulationStep`] events.
+//! * Registers **all** core & feature plugins in architecture‑defined order.
 
 use bevy::{
     prelude::*,
@@ -15,13 +14,13 @@ use bevy::{
 };
 
 use engine_core::systems::{
-    schedule::MainSet,
     state::AppState,
     simulation::{FixedStepConfig, SimAccumulator, accumulate_and_step, SimulationStep},
 };
 use engine_render::debug_plugin::DebugPlugin;
 
 use crate::app::{
+    schedule,
     builder::RuntimeConfig,
     plugin_registry::add_all_plugins,
 };
@@ -59,17 +58,10 @@ pub fn build(cfg: RuntimeConfig) -> App {
         .init_resource::<SimAccumulator>()
         .add_event::<SimulationStep>()
         // Run once per *render* frame to translate real‑time into 0‑N steps.
-        .add_systems(Update, accumulate_and_step.before(MainSet::Logic));
+        .add_systems(Update, accumulate_and_step.before(engine_core::systems::schedule::MainSet::Logic));
 
-    /* 3 ░ canonical 3‑phase update schedule -------------------------- */
-    app.configure_sets(
-        Update,
-        (
-            MainSet::Input,
-            MainSet::Logic.after(MainSet::Input),
-            MainSet::Render.after(MainSet::Logic),
-        ),
-    );
+    /* 3 ░ canonical schedule wiring --------------------------------- */
+    schedule::configure(&mut app);
 
     app.add_plugins(DebugPlugin);
 
