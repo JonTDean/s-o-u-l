@@ -1,12 +1,14 @@
 //! Build & run the Bevy `App`.
 //!
-//! * Creates the core `App` skeleton (window / headless settings).
-//! * Inserts global resources & default [`AppState::MainMenu`].
-//! * Wires the canonical **Input → Logic → Render** pipeline for both
-//!   variable‑rate *Update* and deterministic *FixedUpdate* schedules via
-//!   [`app::schedule::configure`].
-//! * Configures the fixed‑step loop that emits [`SimulationStep`] events.
-//! * Registers **all** core & feature plugins in architecture‑defined order.
+//! * Creates the core application skeleton (window / headless settings).
+//! * Inserts global resources & the default [`AppState::MainMenu`].  
+//! * Wires the canonical **Input → Logic → Render** pipeline for *both*
+//!   variable-rate **`Update`** and deterministic **`FixedUpdate`**
+//!   schedules.  
+//! * Configures the fixed-step loop that emits [`SimulationStep`] events
+//!   using the jitter-free [`Time<Fixed>`] source (see *PERF-001*).  
+//! * Registers **all** core & feature plugins in the architecture-defined
+//!   order.
 
 use bevy::{
     prelude::*,
@@ -14,23 +16,24 @@ use bevy::{
 };
 
 use engine_core::systems::{
+    schedule::MainSet,
     state::AppState,
     simulation::{FixedStepConfig, SimAccumulator, accumulate_and_step, SimulationStep},
 };
 use engine_render::debug_plugin::DebugPlugin;
 
 use crate::app::{
-    schedule,
     builder::RuntimeConfig,
     plugin_registry::add_all_plugins,
+    schedule,
 };
 
-/// Public one‑liner used by `main()`.
+/// Public one-liner used by `main()`.
 pub fn run() {
     build(RuntimeConfig::load()).run();
 }
 
-/// Construct the fully‑configured [`App`]; callers may `.run()` or add extras.
+/// Construct the fully-configured [`App`]; callers may `.run()` or add extras.
 pub fn build(cfg: RuntimeConfig) -> App {
     /* 1 ░ core skeleton --------------------------------------------- */
     let mut app = App::new();
@@ -49,23 +52,28 @@ pub fn build(cfg: RuntimeConfig) -> App {
         }));
     }
 
-    /* 2 ░ global resources & always‑on systems ----------------------- */
+    /* 2 ░ global resources & always-on systems ----------------------- */
     app.init_state::<AppState>();           // default == MainMenu
 
-    // Fixed‑step loop configuration + accumulator + event type
+    // Fixed-step configuration + accumulator + event type
     let fixed_cfg = FixedStepConfig::from_hz(cfg.simulation_rate_hz, cfg.max_sim_steps_per_frame);
     app.insert_resource(fixed_cfg)
         .init_resource::<SimAccumulator>()
-        .add_event::<SimulationStep>()
-        // Run once per *render* frame to translate real‑time into 0‑N steps.
-        .add_systems(Update, accumulate_and_step.before(engine_core::systems::schedule::MainSet::Logic));
+        .add_event::<SimulationStep>();
 
     /* 3 ░ canonical schedule wiring --------------------------------- */
     schedule::configure(&mut app);
 
+    // Jitter-free accumulator now runs in the deterministic tier.
+    app.add_systems(
+        FixedUpdate,
+        accumulate_and_step
+            .in_set(MainSet::Input)   // run before game-logic
+    );
+
     app.add_plugins(DebugPlugin);
 
-    /* 4 ░ register every feature / renderer plug‑in ------------------ */
+    /* 4 ░ register every feature / renderer plug-in ------------------ */
     add_all_plugins(&mut app);
 
     app
