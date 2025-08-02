@@ -1,10 +1,8 @@
 struct Params {
-    size_x  : u32;
-    size_y  : u32;
-    layer   : u32;
-    rule    : u32;   // not used for Life
-    offset_x: u32;
-    offset_y: u32;
+    size_x : u32;
+    size_y : u32;
+    layer  : u32;
+    rule   : u32;
 };
 
 @group(0) @binding(0) var<storage, read>  src : texture_3d<u32>;

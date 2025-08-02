@@ -1,37 +1,23 @@
-//! Declarative builder for the main Bevy [`App`].
+//! Runtime configuration loader.
 //!
-//! **Configuration precedence**  
-//! `defaults  <  config-file  <  environment‒variables`
+//! This file was extracted from the original `builder.rs` so that **all**
+//! configuration concerns live in a single, test‑friendly unit (`config.rs`),
+//! while public access goes through `builder::RuntimeConfig`.
 //!
-//! * **Config file**:  
-//!   *Location* – first hit wins:  
-//!     1. `SOUL_CONFIG` env-var (explicit path)  
-//!     2. `$XDG_CONFIG_HOME/soul/config.toml`  
-//!     3. `./soul.toml` (current working directory)
-//!   *Format* –
-//! ```toml
-//! headless   = false              # bool
-//! grid_size  = 512                # u32
-//! automaton  = "volume"           # "elementary" | "surface" | "volume"
-//! networking = "server"           # "server" | "client" | "disabled"
-//! ```
-//!
-//! * **Environment variables** (override individual keys)  
-//!   `SOUL_HEADLESS`, `SOUL_GRID_SIZE`, `SOUL_AUTOMATON`, `SOUL_NETWORKING`
-//!
-//! Extend both the table and the [`RuntimeConfig`] struct whenever a Kanban
-//! ticket introduces a new user-visible option.
+//! See `builder/mod.rs` for a high‑level overview and directory layout.
 
 use std::{env, fs, path::PathBuf};
 
-use bevy::{
-    prelude::*,
-};
+use bevy::prelude::*;
 use serde::Deserialize;
+
+/* ====================================================================== */
+/* Public data‑structures                                                 */
+/* ====================================================================== */
 
 /// Complete set of runtime parameters.
 ///
-/// *Defaults* are hard-coded to ensure deterministic behaviour when no
+/// *Defaults* are hard‑coded to ensure deterministic behaviour when no
 /// external configuration is present.
 #[derive(Debug)]
 pub struct RuntimeConfig {
@@ -39,17 +25,23 @@ pub struct RuntimeConfig {
     pub grid_size: u32,
     pub automaton: String,
     pub networking: String,
+    /// Target fixed‑step frequency for the simulation loop (Hz).
+    pub simulation_rate_hz: u32,
+    /// Maximum number of fixed‑step iterations allowed in a **single** frame.
+    pub max_sim_steps_per_frame: u8,
 }
 
 /// **Optional** deserialisable layer used only for TOML parsing.
 ///
-/// Any field omitted in the config-file simply falls back to the default.
+/// Any field omitted in the config‑file simply falls back to the default.
 #[derive(Debug, Deserialize)]
 struct PartialConfig {
     headless: Option<bool>,
     grid_size: Option<u32>,
     automaton: Option<String>,
     networking: Option<String>,
+    simulation_rate: Option<u32>,
+    max_steps_per_frame: Option<u8>,
 }
 
 impl Default for RuntimeConfig {
@@ -59,31 +51,33 @@ impl Default for RuntimeConfig {
             grid_size: 256,
             automaton: "surface".into(),
             networking: "disabled".into(),
+            simulation_rate_hz: 60,
+            max_sim_steps_per_frame: 3,
         }
     }
 }
 
-impl RuntimeConfig {
-    /* --------------------------------------------------------------------- */
-    /* Public API                                                            */
-    /* --------------------------------------------------------------------- */
+/* ====================================================================== */
+/* Public API                                                             */
+/* ====================================================================== */
 
-    /// Build a configuration from *defaults*, *config-file* (if any),
-    /// and finally *environment variables* in ascending precedence order.
+impl RuntimeConfig {
+    /// Build a configuration from *defaults*, *config‑file* (if any), and
+    /// finally *environment variables* in ascending precedence order.
     pub fn load() -> Self {
         Self::default()
             .merge(Self::from_file())
             .merge(Self::from_env())
     }
 
-    /* --------------------------------------------------------------------- */
-    /* Internal helpers                                                      */
-    /* --------------------------------------------------------------------- */
+    /* ------------------------------------------------------------------ */
+    /* Private helpers                                                    */
+    /* ------------------------------------------------------------------ */
 
     /// Attempt to read and parse the first config file found in the search
     /// order. Returns **partial** configuration – any missing field is `None`.
     fn from_file() -> Self {
-        // 1. Explicit override via env-var
+        // 1. Explicit override via env‑var
         let candidates: [Option<PathBuf>; 3] = [
             env::var_os("SOUL_CONFIG").map(PathBuf::from),
             env::var_os("XDG_CONFIG_HOME")
@@ -96,7 +90,9 @@ impl RuntimeConfig {
                 Ok(toml) => match toml::from_str::<PartialConfig>(&toml) {
                     Ok(p) => return Self::default().merge_partial(p),
                     Err(e) => {
-                        warn!("Malformed config ({path:?}): {e}; falling back.");
+                        warn!(
+                            "Malformed config ({path:?}): {e}; falling back to defaults."
+                        );
                         break;
                     }
                 },
@@ -115,10 +111,12 @@ impl RuntimeConfig {
             cfg.headless = matches!(v.to_ascii_lowercase().as_str(), "1" | "true" | "yes");
         }
         if let Ok(v) = env::var("SOUL_GRID_SIZE") {
-            if let Ok(n) = v.parse() {
-                cfg.grid_size = n;
-            } else {
-                info!("SOUL_GRID_SIZE=\"{v}\" is not u32; keeping {}", cfg.grid_size);
+            match v.parse() {
+                Ok(n) => cfg.grid_size = n,
+                Err(_) => info!(
+                    "SOUL_GRID_SIZE=\"{v}\" is not u32; keeping {}",
+                    cfg.grid_size
+                ),
             }
         }
         if let Ok(v) = env::var("SOUL_AUTOMATON") {
@@ -126,6 +124,24 @@ impl RuntimeConfig {
         }
         if let Ok(v) = env::var("SOUL_NETWORKING") {
             cfg.networking = v;
+        }
+        if let Ok(v) = env::var("SOUL_SIM_RATE") {
+            match v.parse() {
+                Ok(n) if n > 0 => cfg.simulation_rate_hz = n,
+                _ => info!(
+                    "SOUL_SIM_RATE=\"{v}\" is not a positive integer; keeping {}",
+                    cfg.simulation_rate_hz
+                ),
+            }
+        }
+        if let Ok(v) = env::var("SOUL_MAX_STEPS") {
+            match v.parse() {
+                Ok(n) if n > 0 => cfg.max_sim_steps_per_frame = n,
+                _ => info!(
+                    "SOUL_MAX_STEPS=\"{v}\" is not a positive integer; keeping {}",
+                    cfg.max_sim_steps_per_frame
+                ),
+            }
         }
 
         cfg
@@ -138,6 +154,8 @@ impl RuntimeConfig {
         self.grid_size = other.grid_size;
         self.automaton = other.automaton;
         self.networking = other.networking;
+        self.simulation_rate_hz = other.simulation_rate_hz;
+        self.max_sim_steps_per_frame = other.max_sim_steps_per_frame;
         self
     }
 
@@ -155,6 +173,16 @@ impl RuntimeConfig {
         }
         if let Some(v) = other.networking {
             self.networking = v;
+        }
+        if let Some(v) = other.simulation_rate {
+            if v > 0 {
+                self.simulation_rate_hz = v;
+            }
+        }
+        if let Some(v) = other.max_steps_per_frame {
+            if v > 0 {
+                self.max_sim_steps_per_frame = v;
+            }
         }
         self
     }

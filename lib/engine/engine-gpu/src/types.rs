@@ -18,8 +18,4 @@ pub struct AutomatonParams {
     pub layer:  u32,
     /// Packed rule bits (e.g. Conway B/S or Lenia kernel index).
     pub rule:   u32,
-    /// X‑offset of the slice inside its texture layer.
-    pub offset_x: u32,
-    /// Y‑offset of the slice inside its texture layer.
-    pub offset_y: u32,
 }

@@ -9,7 +9,7 @@ kanban
         net6[Implement state serialization/deserialization (efficiently serialize grid state and events for network transmission)]
         net7[Ensure simulation determinism or state reconciliation to handle network latency and desync]
         net8[Plan security measures (validate client input, prevent tampering or flooding)]
-        
+      
     netProg[In Progress]
         net9[Researching suitable networking libraries (WebRTC vs TCP/UDP frameworks) – **in progress**]
 

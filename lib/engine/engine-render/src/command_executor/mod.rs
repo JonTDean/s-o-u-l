@@ -1,8 +1,6 @@
-//! engine-render / command_executor / **mod.rs**
-//! Spawns automata and converts UI commands → AutomatonInfo.
+//! Spawns automata & maps UI commands > AutomatonInfo.
 
 use std::sync::Arc;
-
 use bevy::prelude::*;
 use engine_core::{
     automata::{AutomatonInfo, GpuGridSlice},
@@ -11,8 +9,7 @@ use engine_core::{
 };
 use serde_json::Value;
 
-use crate::render::camera::systems::WorldCamera;
-
+use crate::WorldCamera;
 /* ───────────────────────────── constants ───────────────────────────── */
 
 const SLICE_SIDE:   u32  = 256;
@@ -21,18 +18,16 @@ const BG:           Color = Color::srgb(0.07, 0.07, 0.07);
 
 /* ───────────────────────────── plugin ─────────────────────────────── */
 
-pub struct CommandExecutorPlugin;
 
+
+pub struct CommandExecutorPlugin;
 impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
-        app
-            /* logical events only – no grid allocation required */
-            .add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
+        app.add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
             .add_systems(OnEnter(AppState::MainMenu), clear_on_main_menu);
     }
 }
 
-/* ───────────────── purge registry on Main-Menu ────────────────────── */
 fn clear_on_main_menu(
     mut registry: ResMut<AutomataRegistry>,
     mut removed:  EventWriter<AutomatonRemoved>,
@@ -43,7 +38,6 @@ fn clear_on_main_menu(
     }
 }
 
-/* ─────────────────────────── main handler ─────────────────────────── */
 #[allow(clippy::too_many_arguments)]
 fn handle_commands(
     mut cmd_reader:     EventReader<AutomataCommand>,
@@ -55,44 +49,43 @@ fn handle_commands(
 ) {
     for event in cmd_reader.read() {
         match *event {
-            /* ── spawn ───────────────────────────────────────────── */
+            /* ─── spawn default pattern ─────────────────────────── */
             AutomataCommand::SeedPattern { ref id } => {
                 let Some((rule, _)) = rules.get(id.as_str()) else {
                     warn!("Unknown automaton pattern “{id}” – ignored");
                     continue;
                 };
 
-                /* GPU slice: origin at (0,0) – layer assigned later by allocator */
+                /* logical slice – offset always (0,0); layer filled in later */
                 let gpu_slice = GpuGridSlice {
-                    layer:     0,
-                    offset:    UVec2::ZERO,
-                    size:      UVec2::splat(SLICE_SIDE),
-                    rule:      id.clone(),
-                    rule_bits: 0b0001_1000,          // Conway B3/S23 as placeholder
+                    layer: 0,                  // real Z picked by atlas allocator
+                    offset: UVec2::ZERO,
+                    size:   UVec2::splat(SLICE_SIDE),
+                    rule:   id.clone(),
+                    rule_bits: 0,
                 };
 
-                /* registry entry */
                 let info = AutomatonInfo {
-                    id:               AutomatonId(0),      // overwritten by register()
-                    name:             id.clone(),
-                    rule:             Arc::clone(rule),
-                    params:           Value::Null,
-                    seed_fn:          None,
-                    slice:            gpu_slice,
-                    dimension:        3,
-                    voxel_size:       DEFAULT_VOXEL,
-                    world_offset:     Vec3::ZERO,
+                    id: AutomatonId(0),        // overwritten by registry
+                    name: id.clone(),
+                    rule: Arc::clone(rule),
+                    params: Value::Null,
+                    seed_fn: None,
+                    slice: gpu_slice,
+                    dimension: 3,
+                    voxel_size: DEFAULT_VOXEL,
+                    world_offset: Vec3::ZERO,
                     background_color: BG,
-                    palette:          None,
+                    palette: None,
                 };
                 let new_id = registry.register(info);
 
-                /* spawn entity & emit AutomatonAdded (GPU plugin allocates layer) */
+                /* create empty entity – GPU plugin will patch slice & layer */
                 let entity = commands.spawn_empty().id();
                 added_writer.write(AutomatonAdded { id: new_id, entity });
             }
 
-            /* ── clear ───────────────────────────────────────────── */
+            /* ─── clear all ──────────────────────────────────────── */
             AutomataCommand::Clear => {
                 for id in registry.list().iter().map(|a| a.id).collect::<Vec<_>>() {
                     registry.remove(id);

@@ -9,7 +9,7 @@ use bevy::{
 use engine_core::prelude::AppState;
 use tooling::debugging::camera::CameraDebug;
 
-use crate::render::camera::{freecam::FreeCamPlugin, input::{end_orbit, orbit_camera}};
+use crate::render::camera::{freecam::FreeCamPlugin, input::{apply_orbit, gather_orbit_input, OrbitAngles}};
 
 use super::{
     floating_origin::{apply_floating_origin, WorldOffset},
@@ -57,12 +57,15 @@ pub(crate) enum CameraSet { Input, Heavy }
 pub struct CameraManagerPlugin;
 impl Plugin for CameraManagerPlugin {
     fn build(&self, app: &mut App) {
+        /* register *all* resources that systems read or write */
         app.init_resource::<CameraDebug>()
             .init_resource::<WorldOffset>()
             .init_resource::<ZoomInfo>()
             .init_resource::<DragState>()
             .init_resource::<CameraMetrics>()
+            .init_resource::<OrbitAngles>()
 
+            /* sets & spawners */
             .configure_sets(Update, (CameraSet::Input, CameraSet::Heavy.after(CameraSet::Input)))
             .add_systems(Startup, spawn_cameras)
 
@@ -77,7 +80,7 @@ impl Plugin for CameraManagerPlugin {
                     // Pan configs
                     key_pan,
                     // Orbital configs
-                    orbit_camera, end_orbit,
+                    gather_orbit_input,  
                 )
                     .in_set(CameraSet::Input)
                     .run_if(in_state(AppState::InGame)),
@@ -90,6 +93,7 @@ impl Plugin for CameraManagerPlugin {
                     apply_floating_origin,
                     refresh_zoom_info,
                     update_camera_metrics,
+                    apply_orbit,
                 )
                     .in_set(CameraSet::Heavy)
                     .run_if(in_state(AppState::InGame)),

@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 use std::f32::consts::FRAC_PI_2;
 
+#[derive(Component)]
+pub struct NoOriginShift;
+
 pub fn spawn_debug_floor(
     mut commands : Commands,
     mut meshes   : ResMut<Assets<Mesh>>,
@@ -15,6 +18,7 @@ pub fn spawn_debug_floor(
     commands.spawn((
         Mesh3d::from(floor_mesh),
         MeshMaterial3d::from(floor_mat),
+        NoOriginShift,
     ));
 
     // shared axis cylinder -------------------------------------------

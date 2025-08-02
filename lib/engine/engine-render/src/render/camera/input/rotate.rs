@@ -1,45 +1,43 @@
-use bevy::prelude::*;
+use bevy::{input::mouse::MouseMotion, prelude::*};
 use super::super::systems::{WorldCamera, DragState};
 
+/* ─────────────────────────────────────────────────────────────── */
+/* New resource that stores the current yaw / pitch (in radians)   */
+/* ─────────────────────────────────────────────────────────────── */
+#[derive(Resource, Default)]
+pub struct OrbitAngles {
+    pub yaw:   f32,   // rotation around +Z (world “up”)
+    pub pitch: f32,   // rotation around +X (local)
+}
 
-/// Alt + left-mouse → orbit around the scene-origin.
-pub fn orbit_camera(
-    buttons: Res<ButtonInput<MouseButton>>,
-    keys:    Res<ButtonInput<KeyCode>>,
-    mut drag: ResMut<DragState>,
-    windows: Query<&Window>,
-    mut cam_q: Query<&mut Transform, With<WorldCamera>>,
+/* ───────────────────────── input collection ──────────────────── */
+pub fn gather_orbit_input(
+    mut angles: ResMut<OrbitAngles>,
+    buttons:    Res<ButtonInput<MouseButton>>,
+    keys:       Res<ButtonInput<KeyCode>>,
+    mut motion: EventReader<MouseMotion>,
 ) {
-    // only when Alt is held and L-MB is pressed
+    // Only react while Alt + L-MB is held
     if !(buttons.pressed(MouseButton::Left) && keys.pressed(KeyCode::AltLeft)) {
         return;
     }
+    let delta: Vec2 = motion.read().map(|m| m.delta).sum();
+    if delta == Vec2::ZERO { return; }
 
-    let window = match windows.single() { Ok(w) => w, Err(_) => return };
-
-    /* ── start drag ───────────────────────────────────────── */
-    if drag.0.is_none() {
-        drag.0 = window.cursor_position();
-        return;
-    }
-
-    /* ── continue drag ────────────────────────────────────── */
-    let prev = drag.0.unwrap();
-    let Some(cur) = window.cursor_position() else { return };
-    let delta = cur - prev;
-    drag.0 = Some(cur);
-
-    let Ok(mut tf) = cam_q.single_mut() else { return };
-
-    // horizontal: yaw around global +Z   ––––––––––––––––––––––––
-    tf.rotate_around(Vec3::ZERO, Quat::from_rotation_z(-delta.x * 0.005));
-    // vertical:   pitch around local +X  ––––––––––––––––––––––––
-    tf.rotate_local_x(-delta.y * 0.005);
+    angles.yaw   -= delta.x * 0.005;
+    angles.pitch = (angles.pitch - delta.y * 0.005).clamp(-1.55, 1.55); // ±89°
 }
 
-/// Clear drag state on L-MB release.
-pub fn end_orbit(buttons: Res<ButtonInput<MouseButton>>, mut drag: ResMut<DragState>) {
-    if buttons.just_released(MouseButton::Left) {
-        drag.0 = None;
-    }
+/* ───────────────────────── application ───────────────────────── */
+pub fn apply_orbit(
+    angles: Res<OrbitAngles>,
+    mut cam_q: Query<&mut Transform, With<WorldCamera>>,
+) {
+    let Ok(mut tf) = cam_q.single_mut() else { return };
+
+    let radius = tf.translation.length(); // keep current distance
+    tf.translation = Quat::from_euler(EulerRot::YXZ, angles.yaw, angles.pitch, 0.0)
+        * Vec3::new(0.0, 0.0, radius);
+
+    tf.look_at(Vec3::ZERO, Vec3::Y);
 }

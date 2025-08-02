@@ -72,7 +72,11 @@ pub fn apply_floating_origin(
     windows: Query<&Window>,
     mut q: ParamSet<(
         Query<&mut Transform, With<WorldCamera>>,                       // 0 – camera
-        Query<&mut Transform, (Without<Camera>, Without<WorldCamera>)>, // 1 – every other entity
+        Query<&mut Transform, (
+            Without<Camera>, 
+            Without<WorldCamera>, 
+            Without<tooling::debugging::floor::NoOriginShift>
+        )>, // 1 – every other entity
     )>,
     mut offset: ResMut<WorldOffset>,
     debug: Res<CameraDebug>,
