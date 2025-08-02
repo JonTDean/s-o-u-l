@@ -32,6 +32,7 @@ pub use config::RuntimeConfig;
 
 /// Convenience wrapper around [`RuntimeConfig::load`].
 #[inline]
+#[allow(dead_code)] 
 pub fn load_runtime_config() -> RuntimeConfig {
     RuntimeConfig::load()
 }

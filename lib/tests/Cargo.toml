@@ -6,4 +6,15 @@ edition = "2024"
 [dependencies]
 bevy        = { workspace = true }
 bevy_ecs    = { workspace = true }
+
 engine-core = { path = "../engine/engine-core" }
+engine-gpu    = { path = "../engine/engine-gpu", optional = true }
+simulation_kernel = { path = "../simulation_kernel"}
+
+[features]
+# 1 declare the flag that cfg(...) is looking for
+# 2 make it pull in the optional dependency
+gpu-compute = ["engine-gpu"]
+
+# 3 keep it on by default so `cargo test` just works
+default = ["gpu-compute"]

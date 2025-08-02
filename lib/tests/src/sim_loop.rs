@@ -16,8 +16,7 @@ use engine_core::systems::simulation::{
 fn accumulator_emits_correct_steps() {
     let mut app = App::new();
 
-    app.add_plugins(MinimalPlugins.build().disable::<TimePlugin>()) // now resolves
-        .init_resource::<Time>()                       // canonical clock
+   app.add_plugins(MinimalPlugins)                        // canonical clock
         .insert_resource(FixedStepConfig::from_hz(60, 5))
         .insert_resource(SimAccumulator::default())
         .add_event::<SimulationStep>()
@@ -28,7 +27,7 @@ fn accumulator_emits_correct_steps() {
 
     for _ in 0..4 {
         app.world_mut()
-            .resource_mut::<Time>()
+            .resource_mut::<Time<bevy::time::Fixed>>()      // << Fixed schedule
             .advance_by(dt);                           // deterministic tick
         app.update();
 

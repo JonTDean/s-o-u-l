@@ -44,7 +44,7 @@ pub struct MeshletBuffers {
     pub vertices: Buffer,
     pub counter:  Buffer,
     pub indirect: Buffer,
-    pub capacity: u64,
+    #[allow(dead_code)] pub capacity: u64,
 }
 
 impl MeshletBuffers {
