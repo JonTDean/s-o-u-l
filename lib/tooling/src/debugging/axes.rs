@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use super::camera::CameraDebug;
-use engine_core::prelude::AutomataRegistry;
 
 ///  unit-length axis colours (matches Blender)
 pub const RED:   Color = Color::srgb(1.0, 0.0, 0.0);
@@ -20,10 +19,10 @@ pub fn draw_axes_and_floor(
         let step = 1.0;
         let half = 500.0;
         for x in (-half as i32..=half as i32).map(|n| n as f32 * step) {
-            giz.line(Vec3::new(x, -half, 0.0), Vec3::new(x,  half, 0.0), Color::srgb(0.3,0.3,0.3));
+            giz.line(Vec3::new(x, -half, 0.0), Vec3::new(x,  half, 0.0), GREY);
         }
         for y in (-half as i32..=half as i32).map(|n| n as f32 * step) {
-            giz.line(Vec3::new(-half, y, 0.0), Vec3::new( half, y, 0.0), Color::srgb(0.3,0.3,0.3));
+            giz.line(Vec3::new(-half, y, 0.0), Vec3::new( half, y, 0.0), GREY);
         }
     }
     

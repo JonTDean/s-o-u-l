@@ -276,7 +276,7 @@ impl Plugin for GpuAutomataComputePlugin {
     fn build(&self, app: &mut App) {
         /* 0 ░ register events in the main world */
         app.add_event::<DebugSeedSquare>()
-           .add_event::<SimulationStep>(); // ← NEW
+           .add_event::<SimulationStep>();
 
         /* 1 ░ create global textures & allocator */
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
@@ -284,8 +284,12 @@ impl Plugin for GpuAutomataComputePlugin {
         let signal = images.add(make_image("ca.signal"));
         drop(images);
 
-        app.insert_resource(GlobalVoxelAtlas { atlas, signal })
-           .insert_resource(AtlasAllocator::default());
+        app.insert_resource(
+            GlobalVoxelAtlas {
+                atlas: atlas.clone(),                                 
+                signal: signal.clone() 
+        })
+        .insert_resource(AtlasAllocator::default());
 
         /* 2 ░ allocate atlas slices for new automatons */
         app.add_systems(
@@ -327,25 +331,36 @@ impl Plugin for GpuAutomataComputePlugin {
 
         /* 4 ░ render-sub-app setup */
         let render_app = app.sub_app_mut(RenderApp);
+
+        render_app.insert_resource(
+            GlobalVoxelAtlas {
+                atlas: atlas.clone(),
+                signal: signal.clone() 
+        });
+
         render_app
             .add_event::<DebugSeedSquare>()
-            .add_event::<SimulationStep>()          // ← NEW
+            .add_event::<SimulationStep>()
             .init_resource::<ExtractedGpuSlices>()
             .init_resource::<GpuPipelineCache>()
-            .init_resource::<StepsThisFrame>()      // ← NEW
+            .init_resource::<StepsThisFrame>()
             .insert_resource(FrameParity::default())
+
             /* flip parity each extract */
             .add_systems(ExtractSchedule, |mut p: ResMut<FrameParity>| p.0 = !p.0)
+
             /* extraction helpers */
             .add_systems(ExtractSchedule, (
                 extract_gpu_slices,
-                count_sim_steps,                          // ← NEW
+                count_sim_steps,
             ))
+
             /* forward events */
             .add_systems(ExtractSchedule, (
                 extract_events::<DebugSeedSquare>,
                 extract_events::<SimulationStep>,
             ))
+
             /* graph/pipeline startup */
             .add_systems(
                 Startup,
@@ -355,6 +370,7 @@ impl Plugin for GpuAutomataComputePlugin {
                     init_compute_pipelines,
                 ),
             )
+
             /* be sure the Queue set exists */
             .configure_sets(Render, (RenderSet::Queue,));
 

@@ -1,5 +1,5 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
-use super::super::systems::{WorldCamera, DragState};
+use super::super::systems::WorldCamera;
 
 /* ─────────────────────────────────────────────────────────────── */
 /* New resource that stores the current yaw / pitch (in radians)   */

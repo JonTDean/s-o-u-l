@@ -1,10 +1,8 @@
 //! engine/plugin.rs – root **engine** plug-in.
 
 use bevy::prelude::*;
-use engine_core::events::AutomataCommand;
-use crate::render::camera::{
-    systems::CameraManagerPlugin,
-};
+use engine_core::{events::AutomataCommand, prelude::MainSet};
+use crate::render::{camera::systems::CameraManagerPlugin, interpolator::{update_alpha, RenderInterpolator}};
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::GpuAutomataComputePlugin;
@@ -24,6 +22,14 @@ impl Plugin for EngineRendererPlugin {
          */
         app.add_plugins(CameraManagerPlugin);
 
+        app.init_resource::<RenderInterpolator>()
+        .add_systems(
+            Update,
+            update_alpha
+                .in_set(MainSet::Render)
+                .after(MainSet::Logic),          // ← instead of .after(FixedUpdate)
+        );
+        
         /* 3 ░ optional GPU compute */
         #[cfg(feature = "gpu-compute")]
         {
