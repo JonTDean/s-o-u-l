@@ -21,7 +21,7 @@ use bevy::{
 };
 
 use engine_core::{
-    automata::GpuGridSlice, events::{AutomatonAdded, DebugSeedSquare}, prelude::{AppState, AutomataRegistry}          // ← canonical slice type
+    automata::GpuGridSlice, events::{AutomatonAdded, DebugSeedSquare}, prelude::{AppState, AutomataRegistry}, systems::simulation::SimulationStep          // ← canonical slice type
 };
 
 #[cfg(feature = "gpu-debug")]
@@ -86,10 +86,22 @@ pub struct GlobalVoxelAtlas {
 #[derive(Resource, Default)]
 pub struct FrameParity(pub bool);
 
+/* ── how many fixed-steps happened this frame? ───────────────── */
+#[derive(Resource, Default, Clone, Copy)]
+pub struct StepsThisFrame(pub u32);
+
+fn count_sim_steps(
+    mut cmd: Commands,
+    mut ev:  ResMut<Events<SimulationStep>>,
+) {
+    let n = ev.drain().count() as u32;
+    cmd.insert_resource(StepsThisFrame(n));
+}
+
 /* tiny helper that initialises the compact voxel mesh pipeline */
 fn init_voxel_pipeline(
-    mut cmds     : Commands,
-    mut shaders  : ResMut<Assets<Shader>>,
+    mut cmds:     Commands,
+    mut shaders:  ResMut<Assets<Shader>>,
     mut pipelines: ResMut<PipelineCache>,
 ) {
     let vp = VoxelPipeline::new(&mut *shaders, &mut *pipelines);
@@ -255,18 +267,18 @@ fn render_debug_squares(
     }
 }
 
-/* ------------------------------------------------------------------- */
-/* Main **Plugin** implementation                                      */
-/* ------------------------------------------------------------------- */
-
+//////////////////////////////////////////////////////////////////
+//                    Plugin implementation                     //
+//////////////////////////////////////////////////////////////////
 pub struct GpuAutomataComputePlugin;
 
 impl Plugin for GpuAutomataComputePlugin {
     fn build(&self, app: &mut App) {
-        /* 0 ░ NEW: event registration in the *main* world */
-        app.add_event::<DebugSeedSquare>();
+        /* 0 ░ register events in the main world */
+        app.add_event::<DebugSeedSquare>()
+           .add_event::<SimulationStep>(); // ← NEW
 
-        /* 1 ─ global textures + atlas */
+        /* 1 ░ create global textures & allocator */
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
         let atlas  = images.add(make_atlas("ca.atlas"));
         let signal = images.add(make_image("ca.signal"));
@@ -275,7 +287,7 @@ impl Plugin for GpuAutomataComputePlugin {
         app.insert_resource(GlobalVoxelAtlas { atlas, signal })
            .insert_resource(AtlasAllocator::default());
 
-        /* 2 ─ allocate an atlas slice when a new automaton spawns */
+        /* 2 ░ allocate atlas slices for new automatons */
         app.add_systems(
             Update,
             |mut cmd:   Commands,
@@ -283,59 +295,58 @@ impl Plugin for GpuAutomataComputePlugin {
              mut ev:    EventReader<AutomatonAdded>,
              mut reg:   ResMut<AutomataRegistry>,
              slice_q:   Query<&GpuGridSlice>| {
-
                 for ev in ev.read() {
-                    /* entity already owns a slice? → skip */
                     if slice_q.get(ev.entity).is_ok() { continue; }
-
-                    /* registry lookup */
                     let Some(info) = reg.get_mut(ev.id) else { continue };
                     let want = info.slice.size.max(UVec2::splat(256));
 
-                    /* atlas allocation */
-                    let Some((layer, off)) = atlas.allocate(want) else {
+                    if let Some((layer, off)) = atlas.allocate(want) {
+                        let slice = GpuGridSlice {
+                            layer,
+                            offset: off,
+                            size:   want,
+                            rule:   info.name.clone(),
+                            rule_bits: 0,
+                        };
+                        cmd.entity(ev.entity).insert(slice.clone());
+                        info.slice        = slice.clone();
+                        info.world_offset = Vec3::new(off.x as f32, off.y as f32, 0.0)
+                                            * info.voxel_size;
+                    } else {
                         warn!("atlas full – cannot allocate {}", info.name);
-                        continue;
-                    };
-
-                    /* final slice */
-                    let slice = GpuGridSlice {
-                        layer,
-                        offset: off,
-                        size:   want,
-                        rule:   info.name.clone(),
-                        rule_bits: 0, // TODO: encode rule flags
-                    };
-
-                    /* write-back */
-                    cmd.entity(ev.entity).insert(slice.clone());
-                    info.slice        = slice.clone();
-                    info.world_offset = Vec3::new(off.x as f32, off.y as f32, 0.0) * info.voxel_size;
+                    }
                 }
             },
         );
 
-        /* 3 ─ reset atlas when returning to main menu */
+        /* 3 ░ reset allocator when returning to menu */
         app.add_systems(
             OnEnter(AppState::MainMenu),
             |mut atlas: ResMut<AtlasAllocator>| *atlas = AtlasAllocator::default(),
         );
 
-        /* 4 ─ render-app setup */
+        /* 4 ░ render-sub-app setup */
         let render_app = app.sub_app_mut(RenderApp);
         render_app
-            .add_event::<DebugSeedSquare>()                        // same event in render world
+            .add_event::<DebugSeedSquare>()
+            .add_event::<SimulationStep>()          // ← NEW
             .init_resource::<ExtractedGpuSlices>()
             .init_resource::<GpuPipelineCache>()
+            .init_resource::<StepsThisFrame>()      // ← NEW
             .insert_resource(FrameParity::default())
+            /* flip parity each extract */
             .add_systems(ExtractSchedule, |mut p: ResMut<FrameParity>| p.0 = !p.0)
-            .add_systems(ExtractSchedule, (extract_gpu_slices,))
-            /* automatic event extraction main → render */
-            .add_systems(ExtractSchedule, extract_events::<DebugSeedSquare>)
-            /* make sure the Queue set exists before we use it        */
-            .configure_sets(Render, (RenderSet::Queue,))
-
-            /* startup */
+            /* extraction helpers */
+            .add_systems(ExtractSchedule, (
+                extract_gpu_slices,
+                count_sim_steps,                          // ← NEW
+            ))
+            /* forward events */
+            .add_systems(ExtractSchedule, (
+                extract_events::<DebugSeedSquare>,
+                extract_events::<SimulationStep>,
+            ))
+            /* graph/pipeline startup */
             .add_systems(
                 Startup,
                 (
@@ -343,11 +354,13 @@ impl Plugin for GpuAutomataComputePlugin {
                     init_voxel_pipeline,
                     init_compute_pipelines,
                 ),
-            );
+            )
+            /* be sure the Queue set exists */
+            .configure_sets(Render, (RenderSet::Queue,));
 
-        /* 5 ─ wire graph nodes into Core3d */
-        let mut graph   = render_app.world_mut().resource_mut::<RenderGraph>();
-        let core3d_sub  = graph.get_sub_graph_mut(Core3d).unwrap();
+        /* 5 ░ wire render-graph nodes */
+        let mut graph  = render_app.world_mut().resource_mut::<RenderGraph>();
+        let core3d_sub = graph.get_sub_graph_mut(Core3d).unwrap();
 
         core3d_sub.add_node(AutomataStepLabel, ComputeAutomataNode);
 
@@ -362,7 +375,6 @@ impl Plugin for GpuAutomataComputePlugin {
         #[cfg(not(feature = "mesh_shaders"))]
         {
             use bevy::core_pipeline::core_3d::graph::Node3d;
-
             use crate::plugin::labels::{DrawVoxelLabel, DualContourLabel};
 
             core3d_sub.add_node(DualContourLabel, crate::compute::dual_contour::DualContourNode);
@@ -372,5 +384,9 @@ impl Plugin for GpuAutomataComputePlugin {
             core3d_sub.add_node_edge(DualContourLabel, DrawVoxelLabel);
             core3d_sub.add_node_edge(DrawVoxelLabel, Node3d::EndMainPass);
         }
+
+        /* 6 ░ optional GPU-debug helper in render world */
+        #[cfg(feature = "gpu-debug")]
+        render_app.add_systems(Render, render_debug_squares.after(RenderSet::Queue));
     }
 }
