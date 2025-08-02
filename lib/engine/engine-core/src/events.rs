@@ -3,6 +3,20 @@
 use bevy_ecs::{entity::Entity, event::Event};
 use serde::{Deserialize, Serialize};
 
+use crate::automata::GpuGridSlice;
+
+/// Request to stamp a **3 × 3 marker** (one byte per texel) into the centre of
+/// an automaton slice.  
+/// Sent by the UI, consumed in the *render world* where we have access to the
+/// `RenderQueue`.
+#[derive(Event, Debug, Clone)]
+pub struct DebugSeedSquare {
+    /// Target slice inside the 3-D atlas.
+    pub slice: GpuGridSlice,
+    /// Byte value to write (0 = clear, 255 = solid, …).
+    pub value: u8,
+}
+
 /// Globally‑unique handle assigned by the **CPU registry** to every
 /// automaton that is alive during this run.
 ///

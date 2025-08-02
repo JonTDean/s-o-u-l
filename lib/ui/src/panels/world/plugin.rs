@@ -1,17 +1,14 @@
 //! Root plugin for *all* in-game HUD overlays.
 
 use bevy::prelude::*;
-use bevy_egui::EguiPrimaryContextPass;
-use engine_core::prelude::AppState;
-use engine_render::render::worldgrid::minimap::MinimapTextures;
+use engine_render::render::minimap::MinimapTextures;
 
-use crate::panels::world::camera_overlays::camera_debug::debug_camera_menu;
+
+use crate::overlays::{minimap::MinimapSelection, plugin::OverlaysPlugin};
 
 use super::{
     automata::AutomataPanelPlugin,
-    minimap_overlay::{minimap_overlay, MinimapSelection},
     pause_menu::PauseMenuPlugin,
-    camera_overlays::camera_overlay,
 };
 
 pub struct WorldMenusPlugin;
@@ -21,11 +18,10 @@ impl Plugin for WorldMenusPlugin {
         app
             .init_resource::<MinimapTextures>()
             .init_resource::<MinimapSelection>()
-            .add_plugins((AutomataPanelPlugin, PauseMenuPlugin))
-            .add_systems(
-                EguiPrimaryContextPass,
-                (camera_overlay, minimap_overlay, debug_camera_menu)
-                    .run_if(in_state(AppState::InGame)),
-            );
+            .add_plugins((
+                    AutomataPanelPlugin, 
+                    PauseMenuPlugin,
+                    OverlaysPlugin,   // ← all HUD & debug overlays now live here
+                ));
     }
 }

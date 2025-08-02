@@ -1,335 +1,193 @@
-//! World- & UI-camera manager (2025-07-31 – compile-clean).
-
+//! World- & UI-camera manager – **stripped of all 2-D clamps / follow code**.
 use bevy::{
     prelude::*,
-    render::{camera::Projection, view::RenderLayers},
+    render::{
+        camera::{Projection, OrthographicProjection, ScalingMode},
+        view::RenderLayers,
+    },
 };
-use engine_core::prelude::{AppState, AutomataRegistry};
-use simulation_kernel::grid::{DenseGrid, GridBackend};
+use engine_core::prelude::AppState;
 use tooling::debugging::camera::CameraDebug;
 
-use crate::render::{
-    camera::{floating_origin::WorldOffset, gizmos::draw_camera_gizmos},
-    worldgrid::WorldGrid,
-};
+use crate::render::camera::{freecam::FreeCamPlugin, input::{end_orbit, orbit_camera}};
 
 use super::{
-    floating_origin::apply_floating_origin,
+    floating_origin::{apply_floating_origin, WorldOffset},
     input::{begin_drag, drag_pan, end_drag, key_pan, zoom_keyboard, zoom_scroll},
 };
 
-/* ───────────── Public constants & helpers ───────────── */
+/* ───────────────────────────── public diagnostics ───────────────────────── */
 
-pub const UI_LAYER: u8 = 0;
+#[derive(Component, Debug, Clone, Copy, Default)]
+pub struct ViewportRect { pub min: Vec2, pub max: Vec2 }
+
+#[derive(Resource, Debug, Clone, Copy, Default)]
+pub struct CameraMetrics {
+    pub centre:    Vec2,
+    pub zoom:      f32,
+    pub half_view: Vec2,
+}
+
+/* ───────────────────────────── constants / helpers ───────────────────────── */
+
+pub const UI_LAYER:    u8 = 0;
 pub const WORLD_LAYER: u8 = 1;
 
 #[inline] pub fn layers_ui()    -> RenderLayers { RenderLayers::layer(UI_LAYER.into()) }
 #[inline] pub fn layers_world() -> RenderLayers { RenderLayers::layer(WORLD_LAYER.into()) }
 
-pub const ZOOM_FACTOR:     f32 = 1.1;
-pub const MIN_SCALE_CONST: f32 = 0.05;
-pub const MAX_SCALE:       f32 = 128.0;
-pub const KEY_PAN_SPEED:   f32 = 400.0;
+pub const KEY_PAN_SPEED:    f32 = 400.0;
+pub const MIN_SCALE_CONST:  f32 = 0.05;
+pub const MAX_SCALE:        f32 = 128.0;
+pub const ZOOM_FACTOR:      f32 = 1.1;
 
-#[derive(Component)] pub struct WorldCamera;
-#[derive(Resource, Default)] pub struct DragState(pub Option<Vec2>);
+#[derive(Component)]           pub struct WorldCamera;
+#[derive(Resource, Default)]   pub struct DragState(pub Option<Vec2>);
 #[derive(Resource, Clone, Copy)]
 pub struct ZoomInfo { pub base: f32, pub current: f32 }
+impl Default for ZoomInfo { fn default() -> Self { Self { base: 1.0, current: 1.0 } } }
 
-impl Default for ZoomInfo {
-    fn default() -> Self { Self { base: 1.0, current: 1.0 } }
-}
+/* ───────────────────────────── internal sets ────────────────────────────── */
 
-#[derive(Resource, Clone, Copy, PartialEq, Eq)]
-pub enum CameraTrackMode { Free, Follow }
-impl Default for CameraTrackMode { fn default() -> Self { Self::Free } }
+#[derive(SystemSet, Hash, Debug, Eq, PartialEq, Clone)]
+pub(crate) enum CameraSet { Input, Heavy }
 
-#[derive(Event, Default)] pub struct RecenterCamera;
-
-/// Fit / clamp helper – returns updated `(centre, scale)`.
-pub fn fit_or_clamp_camera(
-    world_min: Vec3,
-    world_max: Vec3,
-    win: &Window,
-    mut centre: Vec3,
-    mut scale: f32,
-) -> (Vec3, f32) {
-    // ----------------------------------------------------------------
-    // safety guard – make sure we always have a legal AABB
-    // ----------------------------------------------------------------
-    let mut min = world_min;
-    let mut max = world_max;
-    if max.x < min.x { std::mem::swap(&mut min.x, &mut max.x); }
-    if max.y < min.y { std::mem::swap(&mut min.y, &mut max.y); }
-
-    // 1 ░ ensure world fits at least once (C-key or initial recenter).
-    let needed = ((max - min) / Vec3::new(win.width(), win.height(), 0.0)).max_element();
-    scale = scale.max(needed).clamp(MIN_SCALE_CONST, MAX_SCALE);
-
-    // 2 ░ slack when viewport bigger than world AABB.
-    let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * scale;
-    let slack     = (world_max - world_min) * 0.5 - half_view;
-
-    // 3 ░ clamp each axis only if no slack left.
-    if slack.x <= 0.0 {
-        centre.x = centre.x.clamp(world_min.x + half_view.x, world_max.x - half_view.x);
-    }
-    if slack.y <= 0.0 {
-        centre.y = centre.y.clamp(world_min.y + half_view.y, world_max.y - half_view.y);
-    }
-
-    (centre, scale)
-}
-
-/* ───────────── Internal sets & markers ───────────── */
-
-#[derive(Component)] enum CameraKind { Ui, World }
-#[derive(SystemSet, Hash, Debug, Eq, PartialEq, Clone)] enum CameraSet { Input, Heavy }
-
-/* ───────────── Top-level plugin ───────────── */
+/* ───────────────────────────── top-level plugin ─────────────────────────── */
 
 pub struct CameraManagerPlugin;
 impl Plugin for CameraManagerPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<CameraDebug>()
-           .init_resource::<ZoomInfo>()
-           .init_resource::<DragState>()
-           .init_resource::<WorldOffset>()
-           .init_resource::<CameraTrackMode>()
-           .add_event::<RecenterCamera>()
-           .configure_sets(Update, (CameraSet::Input, CameraSet::Heavy.after(CameraSet::Input)))
-           .add_systems(Startup, spawn_cameras) // now pub(crate)
-           // state toggles
-           .add_systems(OnEnter(AppState::InGame),   activate_world_camera)
-           .add_systems(OnEnter(AppState::MainMenu), ui_camera_enable_clear)
-           .add_systems(OnExit (AppState::MainMenu), ui_camera_disable_clear)
-           .add_systems(OnEnter(AppState::InGame),   send_recenter_on_enter)
-           // light-weight input set
-           .add_systems(
-               Update,
-               (
-                   zoom_scroll, zoom_keyboard,
-                   begin_drag, drag_pan, end_drag,
-                   key_pan,
-                   toggle_track_mode, request_recenter_key,
-               )
-                   .in_set(CameraSet::Input)
-                   .run_if(in_state(AppState::InGame)),
-           )
-           // heavy set (AABB queries, floating-origin, gizmos)
-           .add_systems(
-               Update,
-               (
-                   recenter_on_event,
-                   follow_automata,
-                   apply_floating_origin,
-                   refresh_zoom_info,
-                   draw_camera_gizmos,
-                   clamp_camera_to_world,                  // ← adjusted
-               )
-                   .in_set(CameraSet::Heavy)
-                   .run_if(in_state(AppState::InGame)),
-           );
+            .init_resource::<WorldOffset>()
+            .init_resource::<ZoomInfo>()
+            .init_resource::<DragState>()
+            .init_resource::<CameraMetrics>()
+
+            .configure_sets(Update, (CameraSet::Input, CameraSet::Heavy.after(CameraSet::Input)))
+            .add_systems(Startup, spawn_cameras)
+
+            /* lightweight input (still useful for the orthographic editor cam) */
+            .add_systems(
+                Update,
+                (
+                    // Zoom configs
+                    zoom_scroll, zoom_keyboard,
+                    // Drag configs
+                    begin_drag, drag_pan, end_drag,
+                    // Pan configs
+                    key_pan,
+                    // Orbital configs
+                    orbit_camera, end_orbit,
+                )
+                    .in_set(CameraSet::Input)
+                    .run_if(in_state(AppState::InGame)),
+            )
+
+            /* heavy – floating origin & metrics only (no more clamps) */
+            .add_systems(
+                Update,
+                (
+                    apply_floating_origin,
+                    refresh_zoom_info,
+                    update_camera_metrics,
+                )
+                    .in_set(CameraSet::Heavy)
+                    .run_if(in_state(AppState::InGame)),
+            )
+            .add_plugins(FreeCamPlugin);
     }
 }
 
-/* ───────────── 1. Spawn cameras ───────────── */
+/* ───────────────────────────── helper systems ───────────────────────────── */
 
-pub(crate) fn spawn_cameras(mut cmd: Commands, mut zoom: ResMut<ZoomInfo>) {
-    let ortho_start = 1.0;                 // start scale
-    zoom.base = ortho_start;
-    zoom.current = ortho_start;
-
-    // UI camera (always active)
-    cmd.spawn((Camera2d,
-               Camera { order: 100, clear_color: ClearColorConfig::None, ..default() },
-               CameraKind::Ui,
-               layers_ui()));
-
-    // World camera (activated only in-game)
-    cmd.spawn((Camera2d,
-               Transform::from_translation(Vec3::new(0.0, 0.0, 1_000.0)),
-                Camera {
-                    order: 2,
-                    is_active: false,
-                    clear_color: ClearColorConfig::Custom(Color::srgb(0.07, 0.07, 0.07)),
-                    ..default()
-                },
-               CameraKind::World,
-               WorldCamera,
-               Visibility::Hidden,
-               layers_world()));
-}
-
-/* ───────────── 2. Menu ↔ game toggles ───────────── */
-
-fn activate_world_camera(mut q: Query<(&CameraKind, &mut Visibility, &mut Camera)>) {
-    for (kind, mut vis, mut cam) in &mut q {
-        if matches!(kind, CameraKind::World) {
-            cam.is_active = true;
-            *vis = Visibility::Inherited;
-        }
-    }
-}
-fn ui_camera_enable_clear(mut q: Query<(&CameraKind, &mut Camera, &mut Visibility)>) {
-    for (kind, mut cam, mut vis) in &mut q {
-        match kind {
-            CameraKind::Ui    => { cam.clear_color = ClearColorConfig::Default; *vis = Visibility::Inherited; },
-            CameraKind::World => { cam.is_active   = false;                    *vis = Visibility::Hidden; },
-        }
-    }
-}
-fn ui_camera_disable_clear(mut q: Query<(&CameraKind, &mut Camera)>) {
-    for (kind, mut cam) in &mut q {
-        if matches!(kind, CameraKind::Ui) { cam.clear_color = ClearColorConfig::None; }
-    }
-}
-
-/* ───────────── 3-a. Input helpers ───────────── */
-
-fn toggle_track_mode(keys: Res<ButtonInput<KeyCode>>, mut mode: ResMut<CameraTrackMode>) {
-    if keys.just_pressed(KeyCode::KeyF) {
-        *mode = match *mode { CameraTrackMode::Free => CameraTrackMode::Follow, CameraTrackMode::Follow => CameraTrackMode::Free };
-    }
-}
-fn request_recenter_key(keys: Res<ButtonInput<KeyCode>>, mut writer: EventWriter<RecenterCamera>) {
-    if keys.just_pressed(KeyCode::KeyC) { writer.write_default(); }
-}
-fn send_recenter_on_enter(mut ev: EventWriter<RecenterCamera>) {
-    ev.write_default();
-}
-
-/* ───────────── 3-b. One-shot recenter ───────────── */
-
-fn recenter_on_event(
-    mut ev: EventReader<RecenterCamera>,
-    windows: Query<&Window>,
-    registry: Res<AutomataRegistry>,
-    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
-) {
-    if ev.is_empty() {
-        return;
-    }
-    ev.clear();
-
-    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else {
-        return;
-    };
-    if registry.list().is_empty() {
-        return;
-    }
-
-    /* compute world AABB */
-    let mut min = Vec3::splat(f32::INFINITY);
-    let mut max = Vec3::splat(f32::NEG_INFINITY);
-    for info in registry.list() {
-        let off = info.world_offset;
-        let size = Vec3::new(
-                info.slice.size.x as f32,
-                info.slice.size.y as f32,
-                1.0,
-            ) * info.voxel_size;
-        min = min.min(off);
-        max = max.max(off + size);
-    }
-
-    if let Projection::Orthographic(ref mut ortho) = *proj {
-        let (centre, scale) =
-            fit_or_clamp_camera(min, max, win, tf.translation, ortho.scale);
-        tf.translation.x = centre.x;
-        tf.translation.y = centre.y;
-        ortho.scale = scale;
-    }
-}
-
-/* ───────────── 3-c. Follow mode ───────────── */
-
-fn follow_automata(
-    mode: Res<CameraTrackMode>,
-    windows: Query<&Window>,
-    registry: Res<AutomataRegistry>,
-    mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
-) {
-    if *mode != CameraTrackMode::Follow {
-        return;
-    }
-
-    let (Ok(win), Ok((mut tf, mut proj))) = (windows.single(), cam_q.single_mut()) else {
-        return;
-    };
-    if registry.list().is_empty() {
-        return;
-    }
-
-    let mut min = Vec3::splat(f32::INFINITY);
-    let mut max = Vec3::splat(f32::NEG_INFINITY);
-    for info in registry.list() {
-        let off = info.world_offset;
-        let size = Vec3::new(
-                info.slice.size.x as f32,
-                info.slice.size.y as f32,
-                1.0,
-            ) * info.voxel_size;
-        min = min.min(off);
-        max = max.max(off + size);
-    }
-
-    if let Projection::Orthographic(ref mut ortho) = *proj {
-        let (centre, scale) =
-            fit_or_clamp_camera(min, max, win, tf.translation, ortho.scale);
-        tf.translation.x = centre.x;
-        tf.translation.y = centre.y;
-        ortho.scale = scale;
-    }
-}
-
-/* ───────────── 3-d. Zoom resource sync ───────────── */
-
-fn refresh_zoom_info(
-    cam_q: Query<&Projection, With<WorldCamera>>,
-    mut zoom: ResMut<ZoomInfo>,
-) {
+fn refresh_zoom_info(cam_q: Query<&Projection, With<WorldCamera>>, mut z: ResMut<ZoomInfo>) {
     if let Ok(Projection::Orthographic(o)) = cam_q.single() {
-        zoom.current = o.scale;
+        z.current = o.scale;
     }
 }
 
-/* ───────────────── 3-e. helper: keep camera inside the world ─────────────── */
-fn clamp_camera_to_world(
+fn update_camera_metrics(
     windows: Query<&Window>,
-    world:   Option<Res<WorldGrid>>,
-    mut cam_q: Query<(&mut Transform, &Projection), With<WorldCamera>>,
+    mut cam_q: Query<(&Transform, &Projection, &mut ViewportRect), With<WorldCamera>>, // <-- &mut
+    mut metrics: ResMut<CameraMetrics>,
 ) {
-    let (Ok(win), Some(world)) = (windows.single(), world) else { return };
-    let Ok((mut tf, proj)) = cam_q.single_mut() else { return };
+    let (Ok(win), Ok((tf, proj, mut rect))) = (windows.single(), cam_q.single_mut()) else { return };
+    let ortho_scale = matches!(proj, Projection::Orthographic(o) if { metrics.zoom = o.scale; true })
+        .then_some(())
+        .map(|_| if let Projection::Orthographic(o) = proj { o.scale } else { 1.0 })
+        .unwrap_or(1.0);
 
-    // orthographic scale (world-units per screen-pixel)
-    let scale      = match proj { Projection::Orthographic(o) => o.scale, _ => 1.0 };
+    let half_view = Vec2::new(win.physical_width() as f32, win.physical_height() as f32)
+        * 0.5 * ortho_scale;
+
+    *metrics = CameraMetrics { centre: tf.translation.truncate(), zoom: ortho_scale, half_view };
+    rect.min = metrics.centre - half_view;
+    rect.max = metrics.centre + half_view;
+}
+
+/* ───────────────────────────── camera spawner ───────────────────────────── */
+
+pub(crate) fn spawn_cameras(mut cmd: Commands, mut z: ResMut<ZoomInfo>) {
+    z.base = 1.0; z.current = 1.0;
+
+    /* UI camera (unchanged) */
+    cmd.spawn((
+        Camera2d::default(),
+        Camera { order: 100, clear_color: ClearColorConfig::None, ..default() },
+        layers_ui(),
+    ));
+
+    /* World camera – still provide a 3-D ortho for any editor tools */
+    let mut ortho = OrthographicProjection::default_3d();
+    ortho.scaling_mode = ScalingMode::WindowSize;
+    cmd.spawn((
+        Camera3d::default(),
+        Projection::Orthographic(ortho),
+        Transform::from_xyz(0.0, 0.0, 1000.0).looking_at(Vec3::ZERO, Vec3::Y),
+        Camera { order: 2, is_active: false, clear_color: ClearColorConfig::None, ..default() },
+        WorldCamera,
+        Visibility::Hidden,
+        ViewportRect::default(),
+        layers_world(),
+    ));
+}
+
+/* ───────────────────────────────────────────────────────────────────── */
+/* CAMERA FIT / CLAMP HELPER                                            */
+/* ───────────────────────────────────────────────────────────────────── */
+/// Returns updated `(centre, scale)` that guarantees the AABB is visible.
+///
+///   We now seed the computation with the **exact centre of `world_min..max`**
+///   instead of the incoming transform position.  This means a single
+///   “recentre / C-key” will always land the camera perfectly in the middle
+///   and the yellow bounds will frame the view on *all* four sides.
+pub fn fit_or_clamp_camera(
+    world_min: Vec3,
+    world_max: Vec3,
+    win:       &Window,
+    _centre_in: Vec3,
+    mut scale: f32,
+) -> (Vec3, f32) {
+    let mut centre = (world_min + world_max) * 0.5;
+
+    // 1 ░ pick a scale that fits once
+    let needed = ((world_max - world_min)
+        / Vec3::new(win.width(), win.height(), 0.0))
+        .max_element();
+    scale = scale.max(needed).clamp(MIN_SCALE_CONST, MAX_SCALE);
+
+    // 2 ░ viewport extents in world units
     let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * scale;
 
-    // 1 ░ original world size in *cell* units
-    let (mut w_cells, mut h_cells) = match &world.backend {
-        GridBackend::Dense(g)  => (g.size.x as f32, g.size.y as f32),
-        GridBackend::Sparse(_) => (1024.0, 1024.0),
-    };
-
-    // 2 ░ ensure the logical bounds are always at least as large as the viewport
-    //     → avoids min > max panics and lets us treat the current window as
-    //       the definitive world when the grid is smaller.
-    w_cells = w_cells.max(half_view.x * 2.0);
-    h_cells = h_cells.max(half_view.y * 2.0);
-
-    // 3 ░ clamp the camera centre so its viewport never leaves those bounds
-    tf.translation.x = tf.translation.x.clamp(half_view.x, w_cells - half_view.x);
-    tf.translation.y = tf.translation.y.clamp(half_view.y, h_cells - half_view.y);
-}
-
-/// Returns a rectangle that is always at least as big as the viewport.
-pub(crate) fn dynamic_world_size(win: &Window, proj_scale: f32, grid: &DenseGrid) -> Vec3 {
-    let half_view = Vec3::new(win.width(), win.height(), 0.0) * 0.5 * proj_scale;
-    Vec3::new(
-        (grid.size.x as f32).max(half_view.x * 2.0),
-        (grid.size.y as f32).max(half_view.y * 2.0),
-        0.0,
-    )
+    // 3 ░ clamp **only if** the world is wider/higher than the viewport
+    let world_size = world_max - world_min;
+    if half_view.x * 2.0 <= world_size.x {
+        centre.x = centre.x.clamp(world_min.x + half_view.x,
+                                   world_max.x - half_view.x);
+    }
+    if half_view.y * 2.0 <= world_size.y {
+        centre.y = centre.y.clamp(world_min.y + half_view.y,
+                                   world_max.y - half_view.y);
+    }
+    (centre, scale)
 }

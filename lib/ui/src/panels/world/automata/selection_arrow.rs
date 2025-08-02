@@ -5,7 +5,7 @@ use bevy::prelude::*;
 use engine_core::prelude::{AppState, AutomataRegistry};
 use engine_render::WorldCamera;
 
-use crate::panels::world::minimap_overlay::MinimapSelection;
+use crate::overlays::minimap::MinimapSelection;
 
 /* --------------------------------------------------------------------- */
 /*                              Plugin                                   */

@@ -25,4 +25,4 @@ simulation_kernel = { path = "../../simulation_kernel" }
 default        = []                # lean build (GPU compute path)
 mesh_shaders   = ["ash", "naga_oil"]
 fallback_spirv = ["shaderc"]
-gpu-debug      = []  
+gpu-debug      = []

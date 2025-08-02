@@ -1,63 +1,78 @@
-//! Debug‑drawing helpers for camera frustum & world bounds.
+//! Debug-drawing helpers for camera frustum & automata bounds.
 
 use bevy::prelude::*;
-use simulation_kernel::grid::GridBackend;
+use engine_core::prelude::AutomataRegistry;
 use tooling::debugging::camera::CameraDebug;
 
-use crate::render::{
-    camera::systems::{dynamic_world_size, WorldCamera},
-    worldgrid::WorldGrid,
-};
+use crate::render::camera::systems::{ViewportRect, WorldCamera};
 
 pub fn draw_camera_gizmos(
-    windows: Query<&Window>,
-    flags:   Res<CameraDebug>,
-    grid:    Option<Res<WorldGrid>>,
-    cam_q:   Query<(&GlobalTransform, &Projection), With<WorldCamera>>,
+    windows:  Query<&Window>,
+    flags:    Res<CameraDebug>,
+    cam_q:    Query<(&GlobalTransform, &Projection, &ViewportRect), With<WorldCamera>>,
+    registry: Res<AutomataRegistry>,
     mut gizmos: Gizmos,
 ) {
-    // Clear when toggling off.
-    if flags.is_changed() && !flags.intersects(CameraDebug::DRAW_BOUNDS | CameraDebug::FRUSTUM) {
+    if flags.is_changed()
+        && !flags.intersects(CameraDebug::DRAW_BOUNDS | CameraDebug::FRUSTUM)
+    {
         gizmos.clear();
     }
 
-    /* world bounds */
-    if flags.contains(CameraDebug::DRAW_BOUNDS) {
-        let Some(grid) = grid else { return };
-        let (w, h) = match &grid.backend {
-            GridBackend::Dense(g)  => {
-                        let (Ok(win), Ok((_xf, Projection::Orthographic(o)))) =
-                            (windows.single(), cam_q.single()) else { return };
-                        let v = dynamic_world_size(win, o.scale, g);
-                        (v.x, v.y)
-                    },
-            GridBackend::Sparse(_) => (1_024.0, 1_024.0),
-        };
-        let rect = [
-            Vec3::ZERO,
-            Vec3::new(w, 0.0, 0.0),
-            Vec3::new(w, h, 0.0),
-            Vec3::new(0.0, h, 0.0),
+    let (Ok((xf, Projection::Orthographic(o), rect)), Ok(win)) =
+        (cam_q.single(), windows.single())
+    else { return };
+
+    let half_w = win.width()  * 0.5 * o.scale;
+    let half_h = win.height() * 0.5 * o.scale;
+    let c      = xf.translation();
+
+    /* ───────────────────── camera frustum ───────────────────── */
+    if flags.contains(CameraDebug::FRUSTUM) {
+        let r = [
+            Vec3::new(rect.min.x, rect.min.y, 0.0),
+            Vec3::new(rect.max.x, rect.min.y, 0.0),
+            Vec3::new(rect.max.x, rect.max.y, 0.0),
+            Vec3::new(rect.min.x, rect.max.y, 0.0),
         ];
         for i in 0..4 {
-            gizmos.line(rect[i], rect[(i + 1) % 4], Color::srgb(0.0, 1.0, 0.0));
+            gizmos.line(r[i], r[(i + 1) % 4], Color::hsla(240.0, 1.0, 0.5, 1.0));
         }
     }
 
-    /* camera frustum */
-    if flags.contains(CameraDebug::FRUSTUM) {
-        let (Ok((xf, Projection::Orthographic(o))), Ok(win)) = (cam_q.single(), windows.single()) else { return };
-        let hw = win.width() * 0.5 * o.scale;
-        let hh = win.height() * 0.5 * o.scale;
-        let c  = xf.translation();
-        let rect = [
-            Vec3::new(c.x - hw, c.y - hh, 0.0),
-            Vec3::new(c.x + hw, c.y - hh, 0.0),
-            Vec3::new(c.x + hw, c.y + hh, 0.0),
-            Vec3::new(c.x - hw, c.y + hh, 0.0),
+    /* ─────────────────── automata world bounds ───────────────── */
+    if flags.contains(CameraDebug::DRAW_BOUNDS) {
+        if registry.list().is_empty() {
+            return;
+        }
+
+        let mut min = Vec3::splat(f32::INFINITY);
+        let mut max = Vec3::splat(f32::NEG_INFINITY);
+        for info in registry.list() {
+            let off = info.world_offset;
+            let size = Vec3::new(
+                info.slice.size.x as f32,
+                info.slice.size.y as f32,
+                0.0,
+            ) * info.voxel_size;
+            min = min.min(off);
+            max = max.max(off + size);
+        }
+
+        /* ensure box at least one viewport in size so it never disappears */
+        min.x = min.x.min(c.x - half_w);
+        min.y = min.y.min(c.y - half_h);
+        max.x = max.x.max(c.x + half_w);
+        max.y = max.y.max(c.y + half_h);
+
+        let r = [
+            Vec3::new(min.x, min.y, 0.0),
+            Vec3::new(max.x, min.y, 0.0),
+            Vec3::new(max.x, max.y, 0.0),
+            Vec3::new(min.x, max.y, 0.0),
         ];
         for i in 0..4 {
-            gizmos.line(rect[i], rect[(i + 1) % 4], Color::srgb(1.0, 1.0, 0.0));
+            gizmos.line(r[i], r[(i + 1) % 4], Color::hsla(60.0, 1.0, 0.5, 1.0));
         }
     }
 }

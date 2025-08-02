@@ -19,11 +19,14 @@ pub fn debug_camera_menu(
         ui.separator();
 
         for (label, bit) in [
-            ("Clamp camera",  CameraDebug::CLAMP),
-            ("Draw bounds",   CameraDebug::DRAW_BOUNDS),
-            ("Draw frustum",  CameraDebug::FRUSTUM),
-            ("Freeze input",  CameraDebug::FREEZE),
-            ("Log snaps",     CameraDebug::LOG_SNAP),
+            ("3-D voxel grid", CameraDebug::GRID_3D),
+            ("Debug floor",    CameraDebug::FLOOR),
+            ("XYZ axes",       CameraDebug::AXES),
+            ("Clamp camera",   CameraDebug::CLAMP),
+            ("Draw bounds",    CameraDebug::DRAW_BOUNDS),
+            ("Draw frustum",   CameraDebug::FRUSTUM),
+            ("Freeze input",   CameraDebug::FREEZE),
+            ("Log snaps",      CameraDebug::LOG_SNAP),
         ] {
             let mut v = flags.contains(bit);
             if ui.checkbox(&mut v, label).clicked() {

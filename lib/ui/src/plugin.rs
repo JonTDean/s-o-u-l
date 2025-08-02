@@ -26,7 +26,7 @@ pub struct OutputPlugin;
         ┌─────────────────────────────────────────────────────────────▼────────────┐
         │           engine_render::EngineRenderPlugin                              │
         │   ├─ render::camera::CameraPlugin      (world + UI cameras)              │
-        │   └─ render::worldgrid::WorldGridPlugin  (CPU atlas helper)              │
+        │   └─ render::voxel_grid::VoxelGridPlugin  (GPU atlas helper)              │
         └──────────────────────────────────────────────────────────────────────────┘
 */
 impl Plugin for OutputPlugin {

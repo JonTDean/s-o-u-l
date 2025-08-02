@@ -42,6 +42,9 @@ pub struct WorldOffset(pub IVec2);
 
 /// Next power-of-two of the *current* half-viewport so snaps never occur
 /// on-screen.
+///
+/// *Patched*: use `Window::width/height` (logical) instead of
+/// `physical_width/height` so behaviour is consistent on Hi-DPI displays.
 #[inline]
 fn dynamic_snap(win: &Window, scale: f32) -> f32 {
     let half = (win.width().max(win.height()) * 0.5 * scale) as u32;

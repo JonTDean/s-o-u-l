@@ -2,14 +2,18 @@
 
 mod gizmos;
 mod input;
+
 pub(crate) mod floating_origin;
 pub mod systems;
 pub mod controller;
+pub mod freecam;
 
 use bevy::prelude::*;
 use engine_core::prelude::*;
 
 use systems::{spawn_cameras, DragState};
+use crate::render::camera::systems::CameraSet;
+
 use self::floating_origin::WorldOffset;   // local module path
 
 /* ─────────────────── Public re-exports ──────────────────────────── */
@@ -32,9 +36,15 @@ impl Plugin for CameraPlugin {
                    input::end_drag,
                    input::key_pan,
                    floating_origin::apply_floating_origin,
-                   gizmos::draw_camera_gizmos,
                )
                .run_if(in_state(AppState::InGame)),
            );
+
+        app.add_systems(
+        Update,
+        gizmos::draw_camera_gizmos
+            .run_if(in_state(AppState::InGame))
+            .in_set(CameraSet::Heavy),   // keep the original ordering
+        );
     }
 }

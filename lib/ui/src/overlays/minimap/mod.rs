@@ -16,7 +16,7 @@ use bevy_egui::{
 
 use engine_core::{events::AutomatonId, prelude::AutomataRegistry};
 use engine_render::{
-    render::worldgrid::minimap::MinimapTextures,
+    render::minimap::MinimapTextures,
     WorldCamera,
 };
 

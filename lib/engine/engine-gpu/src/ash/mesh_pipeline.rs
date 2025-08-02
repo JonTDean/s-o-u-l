@@ -1,9 +1,9 @@
 //! Builds one **graphics pipeline** that consumes TASK + MESH shaders.
 //!
-//! The WGSL kernels live in `assets/shaders/automatoxel/mesh_{task,mesh}.wgsl`.
-//! They are compiled to SPIR-V at run-time through *Naga-Oil* so hot-reload
-//! in Bevy’s asset-pipeline keeps working even though mesh-shader stages
-//! are still experimental in WGPU.
+//! WGSL kernels live in
+//! `assets/shaders/automatoxel/mesh_{task,mesh}.wgsl` and are compiled to
+//! SPIR-V at runtime through *Naga-Oil* so Bevy hot-reload continues to
+//! work even though mesh-shader stages are still experimental in WGPU.
 //!
 //! ────────────────────────────────────────────────────────────────
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
@@ -49,7 +49,7 @@ pub fn create_mesh_pipeline(
                 .name(cstr!("main")),
         ];
 
-        // Mesh-shader specific create-info (still ‘experimental’ in vk-headers)
+        // Mesh-shader specific create-info (still “experimental”)
         let create_info = vk::GraphicsPipelineCreateInfo::default()
             .stages(&stages)
             .layout(pipeline_layout)

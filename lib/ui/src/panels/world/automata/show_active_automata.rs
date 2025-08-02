@@ -1,11 +1,15 @@
-//! Tiny HUD panel (upper-left) showing every running automaton.
-//! (updated 2025-08-01 – drops live-cell metric; `grid` no longer exists)
+//! Tiny HUD panel (upper-left) showing every running automaton **plus one
+//! debug button** that writes a 3 × 3 square into the atlas slice that belongs
+//! to the *currently selected* automaton.
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine_core::prelude::AutomataRegistry;
+use engine_core::{
+    events::{DebugSeedSquare},
+    prelude::AutomataRegistry,
+};
 
-use crate::panels::world::minimap_overlay::MinimapSelection;
+use crate::overlays::minimap::MinimapSelection;
 
 /* --------------------------------------------------------------------- */
 
@@ -28,10 +32,11 @@ pub fn show_active_automata(
     automata:     Res<AutomataRegistry>,
     mut egui_ctx: EguiContexts<'_, '_>,
     mut sel:      ResMut<MinimapSelection>,
+    mut debug_tx: EventWriter<DebugSeedSquare>,
 ) {
     let Ok(ctx) = egui_ctx.ctx_mut() else { return };
 
-    /* auto-clear selection if the chosen automaton was removed */
+    /* auto-clear the selection if the chosen automaton was removed */
     if let Some(id) = sel.0 {
         if automata.get(id).is_none() {
             sel.0 = None;
@@ -48,12 +53,30 @@ pub fn show_active_automata(
                 return;
             }
 
+            /* ----------------------------------------------------------------- */
+            /* 1 ░ selection list                                                */
+            /* ----------------------------------------------------------------- */
             for info in automata.list() {
                 let is_selected = sel.0 == Some(info.id);
                 let label = format!("• {}", friendly_name(&info.name));
 
                 if ui.selectable_label(is_selected, label).clicked() {
                     sel.0 = if is_selected { None } else { Some(info.id) };
+                }
+            }
+
+            /* ----------------------------------------------------------------- */
+            /* 2 ░ debug helper – seed 3 × 3 square                              */
+            /* ----------------------------------------------------------------- */
+            ui.separator();
+            if ui.button("📐 Debug • mark centre").clicked() {
+                if let Some(id) = sel.0 {
+                    if let Some(info) = automata.get(id) {
+                        debug_tx.write(DebugSeedSquare {
+                            slice: info.slice.clone(),   // ✅ matches new event field names
+                            value: 255,
+                        });
+                    }
                 }
             }
         });

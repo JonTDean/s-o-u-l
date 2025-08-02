@@ -1,9 +1,8 @@
-//! Very small, single-layer 2-D guillotine atlas used to allocate
-//! rectangular slices inside the voxel state texture.
+//! Tiny, single-layer **2-D guillotine** atlas used to place rectangles
+//! inside each layer of the 3-D voxel atlas.
+//! (Extending to multiple layers would require a proper 3-D allocator.)
 //
-//! ────────────────────────────────────────────────────────────────
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-//
 
 use bevy::prelude::*;
 use super::textures::{MAX_H, MAX_W};
@@ -22,16 +21,13 @@ pub struct AtlasAllocator {
 impl Default for AtlasAllocator {
     fn default() -> Self {
         Self {
-            free: vec![Rect {
-                off: UVec2::ZERO,
-                size: UVec2::new(MAX_W, MAX_H),
-            }],
+            free: vec![Rect { off: UVec2::ZERO, size: UVec2::new(MAX_W, MAX_H) }],
         }
     }
 }
 
 impl AtlasAllocator {
-    /// Allocate space; returns `(layer, offset)` or `None` if exhausted.
+    /// Allocate space; returns `(layer, offset)` or `None` if full.
     pub fn allocate(&mut self, size: UVec2) -> Option<(u32, UVec2)> {
         let idx = self
             .free
@@ -39,14 +35,14 @@ impl AtlasAllocator {
             .position(|r| size.x <= r.size.x && size.y <= r.size.y)?;
         let rect = self.free.remove(idx);
 
-        // Right strip
+        // right strip
         if rect.size.x > size.x {
             self.free.push(Rect {
                 off:  UVec2::new(rect.off.x + size.x, rect.off.y),
                 size: UVec2::new(rect.size.x - size.x, size.y),
             });
         }
-        // Bottom strip
+        // bottom strip
         if rect.size.y > size.y {
             self.free.push(Rect {
                 off:  UVec2::new(rect.off.x, rect.off.y + size.y),

@@ -17,8 +17,8 @@ bevy_ecs            = { workspace = true }
 bevy_reflect        = { version = "0.16.1" }
 engine-core         = { path = "../engine-core" }
 engine-gpu          = { path = "../engine-gpu", optional = true }
-simulation_kernel   = { path = "../../simulation_kernel" }
 tooling             = { path = "../../tooling" }
+simulation_kernel   = { path = "../../simulation_kernel" }
 
 serde               = { workspace = true }
 serde_json          = { workspace = true }

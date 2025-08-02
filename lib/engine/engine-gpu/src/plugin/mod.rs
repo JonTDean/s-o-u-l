@@ -10,42 +10,75 @@
 //! globals → helpers → startup systems → main `Plugin` impl.
 
 use bevy::{
-    core_pipeline::core_3d::graph::{Core3d, Node3d},
-    prelude::*,
-    render::{render_graph::{RenderGraph, RenderGraphContext}, render_resource::*, ExtractSchedule, RenderApp},
+    core_pipeline::core_3d::graph::Core3d, prelude::*, 
+    render::{
+        render_graph::{RenderGraph, RenderGraphContext}, 
+        render_resource::*, 
+        /* ── bring the helper into scope ─────────────────────────── */
+        renderer::RenderDevice, 
+        ExtractSchedule, Render, RenderApp, RenderSet,
+     }
 };
 
 use engine_core::{
-    events::AutomatonAdded,
-    prelude::{AppState, AutomataRegistry},
-    automata::GpuGridSlice,          // ← canonical slice type
+    automata::GpuGridSlice, events::{AutomatonAdded, DebugSeedSquare}, prelude::{AppState, AutomataRegistry}          // ← canonical slice type
 };
+
+#[cfg(feature = "gpu-debug")]
+use crate::seed::debug::square::seed_debug_square;
 
 pub mod atlas;
 pub mod labels;
 pub mod textures;
 
 use atlas::AtlasAllocator;
-use labels::{AutomataStepLabel, DrawVoxelLabel, DualContourLabel};
 #[cfg(feature = "mesh_shaders")]
 use labels::MeshPathLabel;
-use textures::make_image;
+
 
 use crate::{
     compute::dual_contour::{MeshletBuffers, MAX_VOXELS},
     graph::{extract_gpu_slices, ComputeAutomataNode, ExtractedGpuSlices},
-    pipelines::GpuPipelineCache,
+    pipelines::GpuPipelineCache, plugin::{labels::AutomataStepLabel, textures::{make_atlas, make_image}},
 };
+
+/* =================================================================== */
+/* Generic “main → render world” event forwarder                       */
+/* =================================================================== */
+/// Very small stand-in for Bevy’s `extract_events`.
+///
+/// It *moves* every event of type `T` that was emitted in the main-world
+/// frame into a **fresh** `Events<T>` resource in the render-world.  
+/// (Exactly what the original helper does.)
+fn extract_events<T: Event + Clone>(
+    mut commands: bevy::prelude::Commands,
+    mut src:      bevy::prelude::ResMut<bevy::prelude::Events<T>>,
+) {
+    // Drain all events that were just written by the main world.
+    let drained: Vec<T> = src.drain().collect();
+
+    // Nothing to forward?
+    if drained.is_empty() {
+        return;
+    }
+
+    // Create a brand-new Events<T> resource for the render-world and
+    // re-send everything so typical `EventReader` logic works there.
+    let mut dst = bevy::prelude::Events::<T>::default();
+    for e in drained {
+        dst.send(e);
+    }
+    commands.insert_resource(dst);
+}
 
 /* ------------------------------------------------------------------- */
 /* Globals & misc-helpers                                              */
 /* ------------------------------------------------------------------- */
 
-/// Ping/pong/signal textures shared by every compute shader.
+/// Handles to the sparse 3-D atlas  signalling texture.
 #[derive(Resource, Clone)]
-pub struct GlobalStateTextures {
-    pub ping:   Handle<Image>,
-    pub pong:   Handle<Image>,
+pub struct GlobalVoxelAtlas {
+    pub atlas : Handle<Image>,
     pub signal: Handle<Image>,
 }
 
@@ -163,6 +196,9 @@ impl bevy::render::render_graph::Node for VoxelDrawNode {
 
         /* buffers */
         let mesh = w.resource::<MeshletBuffers>();
+
+        // `Buffer::slice(..)` already returns the type `RenderPass::set_vertex_buffer`
+        // needs – no dereference necessary.
         pass.set_vertex_buffer(0, *mesh.vertices.slice(..));
         pass.draw_indirect(&mesh.indirect, 0);
 
@@ -176,9 +212,47 @@ impl bevy::render::render_graph::Node for VoxelDrawNode {
 
 fn init_meshlet_buffers(
     mut cmds  : Commands,
-    device: Res<bevy::render::renderer::RenderDevice>,
+    device: Res<RenderDevice>,
 ) {
     cmds.insert_resource(MeshletBuffers::new(&*device, MAX_VOXELS));
+}
+
+/* ------------------------------------------------------------------- */
+/* compile & cache all internal compute pipelines                  */
+/* ------------------------------------------------------------------- */
+fn init_compute_pipelines(
+    device : Res<RenderDevice>,
+    mut cache   : ResMut<GpuPipelineCache>,
+    mut shaders : ResMut<Assets<Shader>>,
+    mut pipes   : ResMut<PipelineCache>,
+) {
+    /* Dual-Contouring (guaranteed path) */
+    let dc_src = include_str!("../../../../../assets/shaders/automatoxel/dual_contour.wgsl");
+    cache.get_or_create("dual_contour", dc_src, &mut pipes, &mut shaders, &*device);
+
+    /* Mesh-shader fast path (only compiled when the feature is on) */
+    #[cfg(feature = "mesh_shaders")]
+    {
+        let mp_src = include_str!("../../../../../assets/shaders/automatoxel/mesh_path.wgsl");
+        cache.get_or_create("mesh_path", mp_src, &mut pipes, &mut shaders, &*device);
+    }
+}
+
+/* ------------------------------------------------------------------- */
+/* new render-world system                                             */
+/* ------------------------------------------------------------------- */
+#[cfg(feature = "gpu-debug")]
+fn render_debug_squares(
+    mut ev:     EventReader<DebugSeedSquare>,
+    queue:      Res<bevy::render::renderer::RenderQueue>,
+    images:     Res<bevy::render::render_asset::RenderAssets<
+        bevy::render::texture::GpuImage,
+    >>,
+    atlas:      Res<crate::plugin::GlobalVoxelAtlas>,
+) {
+    for dbg in ev.read() {
+        seed_debug_square(&queue, &images, &atlas, &dbg.slice, dbg.value);
+    }
 }
 
 /* ------------------------------------------------------------------- */
@@ -189,14 +263,16 @@ pub struct GpuAutomataComputePlugin;
 
 impl Plugin for GpuAutomataComputePlugin {
     fn build(&self, app: &mut App) {
+        /* 0 ░ NEW: event registration in the *main* world */
+        app.add_event::<DebugSeedSquare>();
+
         /* 1 ─ global textures + atlas */
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
-        let ping   = images.add(make_image("ca.ping"));
-        let pong   = images.add(make_image("ca.pong"));
+        let atlas  = images.add(make_atlas("ca.atlas"));
         let signal = images.add(make_image("ca.signal"));
         drop(images);
 
-        app.insert_resource(GlobalStateTextures { ping, pong, signal })
+        app.insert_resource(GlobalVoxelAtlas { atlas, signal })
            .insert_resource(AtlasAllocator::default());
 
         /* 2 ─ allocate an atlas slice when a new automaton spawns */
@@ -248,16 +324,26 @@ impl Plugin for GpuAutomataComputePlugin {
         /* 4 ─ render-app setup */
         let render_app = app.sub_app_mut(RenderApp);
         render_app
-            /* resources */
+            .add_event::<DebugSeedSquare>()                        // same event in render world
             .init_resource::<ExtractedGpuSlices>()
             .init_resource::<GpuPipelineCache>()
             .insert_resource(FrameParity::default())
-            /* flip parity every extract */
             .add_systems(ExtractSchedule, |mut p: ResMut<FrameParity>| p.0 = !p.0)
-            /* extract slices */
             .add_systems(ExtractSchedule, (extract_gpu_slices,))
-            /* allocate buffers & pipeline once the renderer is ready */
-            .add_systems(Startup, (init_meshlet_buffers, init_voxel_pipeline));
+            /* automatic event extraction main → render */
+            .add_systems(ExtractSchedule, extract_events::<DebugSeedSquare>)
+            /* make sure the Queue set exists before we use it        */
+            .configure_sets(Render, (RenderSet::Queue,))
+
+            /* startup */
+            .add_systems(
+                Startup,
+                (
+                    init_meshlet_buffers,
+                    init_voxel_pipeline,
+                    init_compute_pipelines,
+                ),
+            );
 
         /* 5 ─ wire graph nodes into Core3d */
         let mut graph   = render_app.world_mut().resource_mut::<RenderGraph>();
@@ -275,6 +361,10 @@ impl Plugin for GpuAutomataComputePlugin {
 
         #[cfg(not(feature = "mesh_shaders"))]
         {
+            use bevy::core_pipeline::core_3d::graph::Node3d;
+
+            use crate::plugin::labels::{DrawVoxelLabel, DualContourLabel};
+
             core3d_sub.add_node(DualContourLabel, crate::compute::dual_contour::DualContourNode);
             core3d_sub.add_node(DrawVoxelLabel, VoxelDrawNode);
             core3d_sub.add_node_edge(Node3d::StartMainPass, AutomataStepLabel);

@@ -1,6 +1,6 @@
 //! Render-graph node that records a single `vkCmdDrawIndirect` using the
-//! mesh-shader pipeline.  We insert this node only when the extension
-//! is supported and the Cargo feature `mesh_shaders` is enabled.
+//! mesh-shader pipeline. Inserted only when VK_EXT_mesh_shader is
+//! present *and* the Cargo feature `mesh_shaders` is enabled.
 //!
 //! ────────────────────────────────────────────────────────────────
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
@@ -29,9 +29,9 @@ impl Node for MeshShaderNode {
         world: &World,
     ) -> Result<(), NodeRunError> {
         // Resources
-        let ash           = world.resource::<AshContext>();
-        let buffers       = world.resource::<MeshletBuffers>();
-        let mesh_pipelines= world.resource::<super::mesh_pipeline::MeshPipelines>();
+        let ash            = world.resource::<AshContext>();
+        let buffers        = world.resource::<MeshletBuffers>();
+        let mesh_pipelines = world.resource::<super::mesh_pipeline::MeshPipelines>();
 
         // Raw Vulkan command buffer supplied by Bevy
         let cmd = ctx.command_encoder().raw();

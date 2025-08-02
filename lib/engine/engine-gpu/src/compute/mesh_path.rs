@@ -1,15 +1,11 @@
-//! engine‑gpu / compute / **mesh_path.rs**
+//! engine-gpu / compute / **mesh_path.rs**
 //! ======================================
-//! Mesh‑shader **fast‑path** for Dual‑Contouring (optional).
+//! Mesh-shader **fast-path** for Dual-Contouring (optional).
 //!
-//! The node does *nothing* unless the GPU advertises
-//! `Features::MESH_SHADER` **and** the Cargo feature `mesh_shaders` is
-//! enabled.  This keeps regular builds light‑weight while exposing a
-//! gated playground for bleeding‑edge drivers.
+//! Does *nothing* unless the GPU advertises `Features::MESH_SHADER`
+//! **and** the Cargo feature `mesh_shaders` is enabled.
 //!
-//! ----------------------------------------------------
-//! © 2025 Obaven Inc. — Apache‑2.0 OR MIT
-//! engine-gpu / compute / **mesh_path.rs** – optional mesh-shader fast-path.
+//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
 
 #![allow(clippy::too_many_lines)]
 
@@ -28,11 +24,8 @@ use bevy::{
 use crate::{
     graph::ExtractedGpuSlices,
     pipelines::GpuPipelineCache,
-    plugin::GlobalStateTextures,
+    plugin::GlobalVoxelAtlas,
 };
-
-const WGSL_SRC: &str =
-    include_str!("../../../../../assets/shaders/automatoxel/mesh_path.wgsl");
 
 #[derive(Debug)]
 pub struct MeshPathNode;
@@ -44,38 +37,30 @@ impl Node for MeshPathNode {
         ctx: &mut RenderContext,
         world: &World,
     ) -> Result<(), NodeRunError> {
-        /* ───────────── EARLY-OUT GUARD ───────────── */
+        /* ── Early-out guards ───────────────────────── */
         let Some(device) = world.get_resource::<RenderDevice>() else { return Ok(()); };
-        /* ─────────────────────────────────────────── */
 
         #[cfg(not(feature = "mesh_shaders"))]
-        {
-            // feature disabled at compile-time ⇒ no-op
-            return Ok(());
-        }
+        { return Ok(()); }
 
         if !device.features().contains(Features::MESH_SHADER) {
             static ONCE: std::sync::Once = std::sync::Once::new();
-            ONCE.call_once(|| warn!("Mesh-shader fast-path disabled (GPU feature missing)"));
+            ONCE.call_once(|| warn!("Mesh-shader path disabled – GPU feature missing"));
             return Ok(());
         }
+        /* ──────────────────────────────────────────── */
 
         let slices = world.resource::<ExtractedGpuSlices>();
-        if slices.0.is_empty() {
-            return Ok(());
-        }
+        if slices.0.is_empty() { return Ok(()); }
 
-        let tex       = world.resource::<GlobalStateTextures>();
+        let tex       = world.resource::<GlobalVoxelAtlas>();
         let images    = world.resource::<RenderAssets<GpuImage>>();
-        let ping_view = &images.get(&tex.ping).unwrap().texture_view;
+        let atlas_view= &images.get(&tex.atlas).unwrap().texture_view;
 
-        // Pipeline compile / cache
-        let mut pipes   = world.resource_mut::<PipelineCache>();
-        let mut shaders = world.resource_mut::<Assets<Shader>>();
-        let mut cache   = world.resource_mut::<GpuPipelineCache>();
-
-        let pid = cache.get_or_create("mesh_path", WGSL_SRC, &mut pipes, &mut shaders, device);
-        let Some(pipe) = pipes.get_compute_pipeline(pid) else { return Ok(()) };
+        let cache = world.resource::<GpuPipelineCache>();
+        let pipes = world.resource::<PipelineCache>();
+        let Some(&pid) = cache.map.get("mesh_path")      else { return Ok(()); };
+        let Some(pipe) = pipes.get_compute_pipeline(pid) else { return Ok(()); };
 
         // Bind-group
         let bind = device.create_bind_group(
@@ -83,11 +68,11 @@ impl Node for MeshPathNode {
             &pipe.get_bind_group_layout(0),
             &[BindGroupEntry {
                 binding: 0,
-                resource: BindingResource::TextureView(ping_view),
+                resource: BindingResource::TextureView(atlas_view),
             }],
         );
 
-        // Work-group count (placeholder heuristic)
+        // Groups: placeholder heuristic (64 voxels / group)
         let vox: u32 = slices.0.iter().map(|s| s.0.size.x * s.0.size.y).sum();
         let groups   = (vox + 63) / 64;
 
@@ -104,6 +89,7 @@ impl Node for MeshPathNode {
         Ok(())
     }
 }
+
 
 
 /* ===================================================================== */

@@ -7,8 +7,7 @@
 use std::borrow::Cow;
 
 use bevy::prelude::*;
-use bevy::render::render_resource::*;
-use bevy::render::renderer::RenderDevice;
+use bevy::render::{render_resource::*, renderer::RenderDevice};
 
 #[derive(Resource, Default, Clone)]
 pub struct GpuPipelineCache {
@@ -18,11 +17,11 @@ pub struct GpuPipelineCache {
 impl GpuPipelineCache {
     pub fn get_or_create(
         &mut self,
-        id:            &str,
+        id: &str,
         shader_source: &str,
-        pipelines:     &mut PipelineCache,
-        shaders:       &mut Assets<Shader>,
-        _device:       &RenderDevice,
+        pipelines: &mut PipelineCache,
+        shaders: &mut Assets<Shader>,
+        _device: &RenderDevice,
     ) -> CachedComputePipelineId {
         if let Some(&pid) = self.map.get(id) {
             return pid;

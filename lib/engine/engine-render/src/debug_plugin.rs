@@ -1,40 +1,40 @@
-//! Debug logging – no CPU grid, so we just dump slice info.
+//! render/debug_plugin.rs – minimal logging-only variant.
+//!
+//! You can re-enable them later with a proper 3-D gizmo implementation.
 
 use bevy::prelude::*;
 use engine_core::prelude::*;
-
 use crate::WorldCamera;
 
-
+#[derive(Default)]
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (dump_registry, dump_render_map.after(dump_registry), dump_camera.after(dump_render_map)),
+            (
+                dump_registry,
+                dump_camera.after(dump_registry),
+            ),
         );
     }
 }
 
+/* ───── tiny diagnostics ───── */
 fn dump_registry(reg: Res<AutomataRegistry>) {
     for a in reg.list() {
-        info!(target: "soul::auto",
-              id = ?a.id,
-              name = %a.name,
-              size = ?a.slice.size,
-              voxel = %a.voxel_size,
-              "registry (slice-only)");
+        info!(target: "soul::auto", id=?a.id, name=%a.name, "registry entry");
     }
 }
-
-fn dump_render_map() {}
-
-
 fn dump_camera(cam_q: Query<(&Transform, &Projection), With<WorldCamera>>) {
-    if let Ok((tf, Projection::Orthographic(o))) = cam_q.single() {
-        info!(target: "soul::cam",
-              pos = ?tf.translation.truncate(),
-              scale = %o.scale,
-              "world-camera");
+    if let Ok((tf, proj)) = cam_q.single() {
+        match proj {
+            Projection::Orthographic(o) =>
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), scale=%o.scale),
+            Projection::Perspective(_) =>
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(perspective)"),
+            Projection::Custom(_) =>
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(custom)"),
+        }
     }
 }
