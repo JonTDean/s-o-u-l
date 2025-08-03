@@ -3,8 +3,7 @@
 use bevy::prelude::*;
 use engine_render::render::minimap::MinimapTextures;
 
-
-use crate::overlays::{minimap::MinimapSelection, plugin::OverlaysPlugin};
+use crate::overlays::minimap::MinimapSelection;
 
 use super::{
     automata::AutomataPanelPlugin,
@@ -15,13 +14,9 @@ pub struct WorldMenusPlugin;
 
 impl Plugin for WorldMenusPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .init_resource::<MinimapTextures>()
-            .init_resource::<MinimapSelection>()
-            .add_plugins((
+        app.add_plugins((
                     AutomataPanelPlugin, 
                     PauseMenuPlugin,
-                    OverlaysPlugin,   // ← all HUD & debug overlays now live here
                 ));
     }
 }

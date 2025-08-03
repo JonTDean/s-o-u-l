@@ -3,7 +3,7 @@
 use glam::{IVec3, UVec3};
 use serde::{Deserialize, Serialize};
 
-use crate::core::cell::Cell;
+use crate::core::cell::{Cell, CellState};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct DenseGrid {
@@ -55,5 +55,10 @@ impl DenseGrid {
             voxels: vec![Cell::default(); (size.x * size.y * size.z) as usize],
             size,
         }
+    }
+
+    #[inline]
+    pub fn set_state(&mut self, p: IVec3, s: CellState) {
+        if let Some(c) = self.get_mut(p) { c.state = s; }
     }
 }

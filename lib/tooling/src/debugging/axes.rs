@@ -11,11 +11,12 @@ pub fn draw_axes_and_floor(
     flags:  Res<CameraDebug>,
     mut giz: Gizmos,
 ) {
-    if flags.is_changed() && !flags.intersects(CameraDebug::AXES | CameraDebug::FLOOR) {
+    if flags.is_changed() && !flags.intersects(CameraDebug::AXES | CameraDebug::FLOOR_GRID) {
         giz.clear();
     }
+    
     /* floor grid – grey 1 m spacing, 1 km extent */
-    if flags.contains(CameraDebug::FLOOR) {
+    if flags.contains(CameraDebug::FLOOR_GRID) {
         let step = 1.0;
         let half = 500.0;
         for x in (-half as i32..=half as i32).map(|n| n as f32 * step) {

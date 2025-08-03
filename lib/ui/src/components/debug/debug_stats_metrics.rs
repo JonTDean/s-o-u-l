@@ -1,6 +1,6 @@
 //! overlays/debug_stats.rs
 //!
-//! Collapsible “Debug Stats” panel shown in-game (F4).
+//! Collapsible “Debug Stats” metrics shown in-game (F4).
 //!
 //! Displays:
 //! • Instant FPS + frame time
@@ -10,13 +10,12 @@
 use bevy::diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin};
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine_core::prelude::AppState;
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::plugin::StepsThisFrame;
 
 /// Toggleable overlay; press **F4** to open / close.
-pub fn debug_stats_panel(
+pub fn debug_stats_metrics(
     mut egui_ctx:   EguiContexts<'_, '_>,
     keys:           Res<ButtonInput<KeyCode>>,
     diagnostics:    Res<DiagnosticsStore>,

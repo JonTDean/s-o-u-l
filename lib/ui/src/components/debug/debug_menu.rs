@@ -2,7 +2,7 @@ use bevy::{ecs::system::{Local, Res, ResMut}, input::{keyboard::KeyCode, ButtonI
 use bevy_egui::{egui, EguiContexts};
 use tooling::debugging::camera::CameraDebug;
 
-pub fn debug_camera_menu(
+pub fn debug_menu(
     mut egui_ctx: EguiContexts,
     keys: Res<ButtonInput<KeyCode>>,
     mut flags: ResMut<CameraDebug>,
@@ -20,8 +20,8 @@ pub fn debug_camera_menu(
 
         for (label, bit) in [
             ("3-D voxel grid", CameraDebug::GRID_3D),
-            ("Debug floor",    CameraDebug::FLOOR),
-            ("XYZ axes",       CameraDebug::AXES),
+            ("Debug floor"   , CameraDebug::FLOOR_GRID),
+            ("XYZ axes"      , CameraDebug::AXES),
             ("Clamp camera",   CameraDebug::CLAMP),
             ("Draw bounds",    CameraDebug::DRAW_BOUNDS),
             ("Draw frustum",   CameraDebug::FRUSTUM),

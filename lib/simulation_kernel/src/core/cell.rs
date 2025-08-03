@@ -16,6 +16,13 @@ impl Default for CellState {
     fn default() -> Self { CellState::Dead }
 }
 
+impl From<u8> for CellState {
+    #[inline]
+    fn from(v: u8) -> Self {
+        if v == 0 { Self::Dead } else { Self::Alive(v) }
+    }
+}
+
 /// Typed-erased per-cell storage.
 pub type CellMemory = serde_json::Value;
 

@@ -3,6 +3,7 @@
 use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
+use engine_render::render::minimap::MinimapTextures;
 use tooling::debugging::{
     axes::draw_axes_and_floor,
     camera::CameraDebugPlugin,
@@ -10,10 +11,11 @@ use tooling::debugging::{
 };
 use bevy::transform::TransformSystem;
 
+use crate::overlays::minimap::MinimapSelection;
+
 use super::{
-    camera::{camera_overlay, camera_debug::debug_camera_menu},
+    camera::camera_overlay,
     minimap::minimap_overlay,
-    debug_stats::debug_stats_panel,
 };
 
 /// Master overlay plugin (in-game HUD, gizmos, debug menus).
@@ -25,13 +27,14 @@ impl Plugin for OverlaysPlugin {
         app.add_plugins(CameraDebugPlugin);
 
         /* egui widgets – run only in-game */
-        app.add_systems(
+        app
+        .init_resource::<MinimapTextures>()
+        .init_resource::<MinimapSelection>()
+        .add_systems(
             EguiPrimaryContextPass,
             (
                 camera_overlay,
                 minimap_overlay,
-                debug_camera_menu,   // F3
-                debug_stats_panel,   // F4
             )
             .run_if(in_state(AppState::InGame)),
         );

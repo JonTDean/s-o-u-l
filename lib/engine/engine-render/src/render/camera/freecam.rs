@@ -112,12 +112,12 @@ fn gather_keyboard_input(
     let up           = Vec3::Y;
 
     let mut dir = Vec3::ZERO;
-    if keys.pressed(KeyCode::KeyW) { dir += fwd; }
-    if keys.pressed(KeyCode::KeyS) { dir -= fwd; }
+    if keys.pressed(KeyCode::KeyW) { dir += fwd;   }
+    if keys.pressed(KeyCode::KeyS) { dir -= fwd;   }
     if keys.pressed(KeyCode::KeyD) { dir += right; }
     if keys.pressed(KeyCode::KeyA) { dir -= right; }
-    if keys.pressed(KeyCode::Space) { dir += up; }
-    if keys.pressed(KeyCode::ShiftLeft) || keys.pressed(KeyCode::ShiftRight) { dir -= up; }
+    if keys.pressed(KeyCode::Space) { dir += up;   }
+    if keys.pressed(KeyCode::KeyQ)  { dir -= up;   }
 
     vel.0 = if dir != Vec3::ZERO {
         dir.normalize() * settings.move_speed * time.delta_secs()

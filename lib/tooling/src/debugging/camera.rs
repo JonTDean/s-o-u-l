@@ -10,9 +10,9 @@ bitflags! {
         const FREEZE      = 0b0000_1000;   // ignore user input
         const LOG_SNAP    = 0b0001_0000;   // log floating-origin snaps
         const METRICS     = 0b0010_0000;   // print per-frame CameraMetrics
-        const GRID_3D     = 0b0100_0000;   //  coloured axis grid
-        const AXES        = 0b1000_0000;   // draw XYZ axes
-        const FLOOR       = 0b1_0000_0000; // draw XY floor grid
+        const GRID_3D     = 0b0100_0000;   // axis-coloured voxel grids
+        const AXES        = 0b1000_0000;   // XYZ axes
+        const FLOOR_GRID  = 0b1_0000_0000; // grey XY gizmo grid 
     }
 }
  

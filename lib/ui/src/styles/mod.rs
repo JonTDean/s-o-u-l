@@ -1,5 +1,6 @@
 //! This module defines shared UI style constants and helper functions for styling UI elements.
 pub mod fade;
+pub mod plugin;
 
 use bevy_egui::egui;
 

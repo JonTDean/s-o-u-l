@@ -14,6 +14,7 @@ use engine_core::prelude::AppState;
 
 pub mod main_menu;
 pub mod world;
+pub mod plugin;
 
 /// Trait implemented by every concrete *menu screen* type.
 pub trait MenuScreen: Send + Sync + 'static {

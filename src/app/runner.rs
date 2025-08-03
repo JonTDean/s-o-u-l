@@ -71,10 +71,10 @@ pub fn build(cfg: RuntimeConfig) -> App {
             .in_set(MainSet::Input)   // run before game-logic
     );
 
-    app.add_plugins(DebugPlugin);
 
     /* 4 ░ register every feature / renderer plug-in ------------------ */
     add_all_plugins(&mut app);
+    app.add_plugins(DebugPlugin);
 
     app
 }

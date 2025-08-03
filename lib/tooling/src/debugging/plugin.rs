@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use engine_core::prelude::*;
 
+use crate::debugging::floor::DebugFloorPlugin;
+
 /// Seconds between two consecutive log lines.
 const LOG_INTERVAL: f64 = 30.0;
 
@@ -15,6 +17,7 @@ impl Plugin for DebugPlugin {
                 dump_camera.after(dump_registry),
             ),
         );
+        app.add_plugins(DebugFloorPlugin);
     }
 }
 

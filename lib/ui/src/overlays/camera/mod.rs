@@ -10,7 +10,6 @@ use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
 use engine_render::{prelude::ZoomInfo, WorldCamera};
 
-pub mod camera_debug;
 pub mod zoom_overlay;
 
 /// Renders the overlay every frame (when in-game).
