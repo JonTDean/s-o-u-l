@@ -20,7 +20,7 @@ use engine_core::systems::{
     state::AppState,
     simulation::{FixedStepConfig, SimAccumulator, accumulate_and_step, SimulationStep},
 };
-use engine_render::debug_plugin::DebugPlugin;
+use tooling::debugging::plugin::DebugPlugin;
 
 use crate::app::{
     builder::RuntimeConfig,

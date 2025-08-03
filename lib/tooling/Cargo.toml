@@ -6,4 +6,5 @@ edition = "2024"
 [dependencies]
 bevy = { workspace = true, features = ["bevy_render", "bevy_pbr"] }
 bitflags    = { workspace = true }
+
 engine-core = { path = "../engine/engine-core" }

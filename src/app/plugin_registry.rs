@@ -9,7 +9,7 @@
 //! **must** match the architecture docs & Kanban cards.
 //! One-stop shop for registering every Bevy `Plugin`.
 
-use bevy::prelude::*;
+use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 use bevy_egui::EguiPlugin;
 
 use engine_core::{plugin::EngineCorePlugin, systems::state::StatePlugin};
@@ -19,22 +19,25 @@ use ui::plugin::OutputPlugin;
 
 /// Add **every** core & feature plugin in the required order.
 pub fn add_all_plugins(app: &mut App) {
-    // 0 ░ egui framework (UI)
+    // 0  egui framework (UI)
     app.add_plugins(EguiPlugin::default());
 
-    /* 1 ░ dev / runtime state */
+    /* 1 frame-time diagnostics */
+    app.add_plugins(FrameTimeDiagnosticsPlugin::default()); 
+
+    /* 2  dev / runtime state */
     app.add_plugins(StatePlugin);
 
-    /* 2 ░ core engine */
+    /* 3  core engine */
     app.add_plugins(EngineCorePlugin);
 
-    /* 3 ░ render stack */
+    /* 4  render stack */
     app.add_plugins(EngineRendererPlugin);
 
-    /* 4 ░ computational-intelligence layer */
+    /* 5  computational-intelligence layer */
     app.add_plugins(ComputationalIntelligencePlugin);
 
-    /* 5 ░ UI / HUD */
+    /* 6  UI / HUD */
     app.add_plugins(OutputPlugin);
 }
 

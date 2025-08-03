@@ -20,4 +20,3 @@ pub struct RuleParams(pub serde_json::Value);
 pub mod prelude;
 pub mod command_executor;
 pub mod plugin;
-pub mod debug_plugin;
