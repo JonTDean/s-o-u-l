@@ -67,7 +67,7 @@ use serde_json::Value;
 
 pub const DEBUG_FLOOR_ID: &str = "__debug_floor__";
 const SLICE_SIDE:         u32  = 256;
-const VOXEL_WORLD_SIZE:   f32  = 4.0;
+const VOXEL_WORLD_SIZE:   f32  = 1.0;
 /// completely transparent background → invisible “dead” cells
 const BG_COLOUR:          Color = Color::srgba(0.0, 0.0, 0.0, 0.0);
 /// colour for the grid lines (will use the slice’s **alive** colour)
@@ -188,8 +188,11 @@ fn toggle_floor_keyboard(
         dimension:     3,
         voxel_size:    VOXEL_WORLD_SIZE,
         world_offset:  Vec3::ZERO,
-        background_color: BG_COLOUR,
-        palette:       None,
+        background_color: Color::srgba(0.0, 0.0, 0.0, 0.0),  // transparent
+        palette: Some(vec![
+            Color::srgba(0.0, 0.0, 0.0, 0.0),  // dead cell = transparent
+            Color::srgba(0.8, 0.8, 0.8, 0.2),  // alive cell = faint light grey
+        ]),
     };
 
     let new_id = registry.register(info);

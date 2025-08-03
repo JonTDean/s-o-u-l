@@ -8,8 +8,6 @@ use bevy_ecs::resource::Resource;
 pub use render::{
     CameraPlugin,
     WorldCamera,
-    AutomataMaterial,
-    AutomataParams,
 };
 
 /* helper wrapper ---------------------------------------------------- */

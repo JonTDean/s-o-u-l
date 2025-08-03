@@ -6,8 +6,6 @@ pub use crate::render::{
     CameraPlugin,
     ZoomInfo,
     WorldCamera,
-    AutomataMaterial,
-    AutomataParams,
 };
 
 pub use crate::plugin;

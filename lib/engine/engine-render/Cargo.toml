@@ -12,7 +12,7 @@ gpu-compute  = ["engine-gpu"]
 
 [dependencies]
 glam                = { workspace = true }
-bevy                = { workspace = true }          # full Bevy with renderer & UI
+bevy                = { workspace = true,  features = [ "bevy_render", "bevy_sprite" ] }          # full Bevy with renderer & UI
 bevy_ecs            = { workspace = true }
 bevy_reflect        = { version = "0.16.1" }
 engine-core         = { path = "../engine-core" }

@@ -5,7 +5,7 @@ use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
 use engine_render::render::minimap::MinimapTextures;
 use tooling::debugging::{
-    axes::draw_axes_and_floor,
+    axes::draw_axes,
     camera::CameraDebugPlugin,
     grid::draw_3d_grid,
 };
@@ -44,7 +44,7 @@ impl Plugin for OverlaysPlugin {
             Update,
             (
                 draw_3d_grid,
-                draw_axes_and_floor,
+                draw_axes,
             )
             .run_if(in_state(AppState::InGame))
             .after(TransformSystem::TransformPropagate),

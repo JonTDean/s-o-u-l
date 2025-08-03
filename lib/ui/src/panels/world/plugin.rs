@@ -1,9 +1,6 @@
 //! Root plugin for *all* in-game HUD overlays.
 
 use bevy::prelude::*;
-use engine_render::render::minimap::MinimapTextures;
-
-use crate::overlays::minimap::MinimapSelection;
 
 use super::{
     automata::AutomataPanelPlugin,

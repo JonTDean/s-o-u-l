@@ -1,3 +1,4 @@
+
 //! Automata grid–rendering material (Bevy 0.16.1).
 //!
 //! This `Material2d` implementation draws a huge cellular‑automata grid on a
@@ -20,6 +21,8 @@ use bevy::render::{
     render_resource::{AsBindGroup, ShaderRef, ShaderType, SpecializedMeshPipelineError},
 };
 use bevy::sprite::{Material2d, Material2dKey};
+
+
 
 /* ───────────────────────────── Material asset ───────────────────────────── */
 

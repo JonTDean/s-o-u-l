@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::MainSet};
-use crate::render::{camera::systems::CameraManagerPlugin, interpolator::{update_alpha, RenderInterpolator}};
+use crate::render::{camera::systems::CameraManagerPlugin, interpolator::{update_alpha, RenderInterpolator}, materials::plugin::MaterialsPlugin};
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::GpuAutomataComputePlugin;
@@ -44,5 +44,7 @@ impl Plugin for EngineRendererPlugin {
                 warn!("GPU compute suppressed by RuntimeFlags ⇒ CPU stepper remains active");
             }
         }
+
+        app.add_plugins(MaterialsPlugin);
     }
 }
