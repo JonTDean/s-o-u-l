@@ -60,9 +60,9 @@ impl Node for ComputeAutomataNode {
         /* 0-b ░ how many simulation ticks happened this frame? */
         let steps = world
             .get_resource::<StepsThisFrame>()
-            .map_or(0, |s| s.0);
+            .map_or(0, |s| s.steps);
         if steps == 0 {
-            return Ok(()); // nothing to do this frame
+            return Ok(());
         }
 
         /* 1 ░ batch slices by rule-id */

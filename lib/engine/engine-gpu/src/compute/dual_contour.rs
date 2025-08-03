@@ -1,19 +1,22 @@
-//! Dual-Contouring GPU pass (guaranteed fallback path).
+//! GPU **Dual-Contouring** fallback path – always available.
 //!
-//! Owns **all** CPU-side resources (buffers, bind-groups, pipelines)
-//! required by the fallback Dual-Contouring path that runs on *every*
-//! GPU.  Buffers live in the render-world; access is safe once
-//! `RenderDevice` exists.
+//! Converts active voxels into a compact vertex stream that a single
+//! indirect draw can consume.  Scratch buffers are reused every frame
+//! and sized once during start-up.
 //!
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
 
-use bevy::prelude::*;
-use bevy::render::{
-    render_asset::RenderAssets,
-    render_graph::{Node, NodeRunError, RenderGraphContext},
-    renderer::{RenderContext, RenderDevice, RenderQueue},
-    render_resource::*,
-    texture::GpuImage,
+use std::time::Instant;
+
+use bevy::{
+    prelude::*,
+    render::{
+        render_asset::RenderAssets,
+        render_graph::{Node, NodeRunError, RenderGraphContext},
+        renderer::{RenderContext, RenderDevice, RenderQueue},
+        render_resource::*,
+        texture::GpuImage,
+    },
 };
 use bytemuck::{Pod, Zeroable};
 
@@ -23,57 +26,51 @@ use crate::{
     plugin::GlobalVoxelAtlas,
 };
 
-/* ───────────── Vertex format ───────────── */
+/* ───────────── Vertex POD ───────────── */
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable, Debug)]
 pub struct Vertex {
-    pub pos: Vec3,   // world-space position
-    pub nrm: Vec3,   // world-space normal
-    pub mat: u32,    // future material id
+    pub pos: Vec3,
+    pub nrm: Vec3,
 }
 
 /* ───────────── Constants ───────────── */
 pub const WG_SIZE: (u32, u32, u32) = (8, 8, 8);
-pub const MAX_QUADS:  u32 = 5;                       // conservative per-voxel
+pub const MAX_QUADS:  u32 = 5;
 pub const BYTES_PER_VERT: u64 = std::mem::size_of::<Vertex>() as u64;
 pub const MAX_VOXELS: u32 = 1024 * 1024;
 
-/* ───────────── Per-frame GPU scratch buffers ───────────── */
+/* ───────────── Transient buffers ───── */
 #[derive(Resource)]
 pub struct MeshletBuffers {
     pub vertices: Buffer,
     pub counter:  Buffer,
     pub indirect: Buffer,
-    #[allow(dead_code)] pub capacity: u64,
+    pub capacity: u64,
 }
 
 impl MeshletBuffers {
+    /// Allocate enough scratch space for `voxel_cap` active voxels.
     pub fn new(device: &RenderDevice, voxel_cap: u32) -> Self {
         let max_vertices = voxel_cap as u64 * MAX_QUADS as u64 * 6;
         let size_bytes   = max_vertices * BYTES_PER_VERT;
 
         let vertices = device.create_buffer(&BufferDescriptor {
             label: Some("dc.vertices"),
-            size: size_bytes,
-            usage: BufferUsages::STORAGE
-                | BufferUsages::VERTEX
-                | BufferUsages::COPY_SRC,
+            size:  size_bytes,
+            usage: BufferUsages::STORAGE | BufferUsages::VERTEX | BufferUsages::COPY_SRC,
             mapped_at_creation: false,
         });
         let counter = device.create_buffer(&BufferDescriptor {
             label: Some("dc.counter"),
             size: 4,
-            usage: BufferUsages::STORAGE
-                | BufferUsages::COPY_DST
-                | BufferUsages::COPY_SRC,
+            usage: BufferUsages::STORAGE | BufferUsages::COPY_DST | BufferUsages::COPY_SRC,
             mapped_at_creation: false,
         });
         let indirect = device.create_buffer(&BufferDescriptor {
             label: Some("dc.indirect"),
             size: std::mem::size_of::<DrawIndirect>() as u64,
-            usage: BufferUsages::INDIRECT
-                | BufferUsages::COPY_DST
-                | BufferUsages::COPY_SRC,
+            usage: BufferUsages::INDIRECT | BufferUsages::COPY_DST | BufferUsages::COPY_SRC,
             mapped_at_creation: false,
         });
 
@@ -81,17 +78,17 @@ impl MeshletBuffers {
     }
 }
 
-/* ───────────── Draw-indirect struct ───────────── */
+/* ───────────── DrawIndirect POD ────── */
 #[repr(C)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Pod, Zeroable, Default)]
 struct DrawIndirect {
-    vertex_count:  u32,
+    vertex_count:   u32,
     instance_count: u32,
-    first_vertex:  u32,
+    first_vertex:   u32,
     first_instance: u32,
 }
 
-/* ───────────── Render-graph node ───────────── */
+/* ───────────── Render-graph node ───── */
 #[derive(Debug)]
 pub struct DualContourNode;
 
@@ -99,57 +96,61 @@ impl Node for DualContourNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
-        ctx: &mut RenderContext,
-        world: &World,
+        ctx:    &mut RenderContext,
+        world:  &World,
     ) -> Result<(), NodeRunError> {
-        // 0 ░ Resources … bail early if not yet ready
+        let begin = Instant::now();
+
+        /* 0 ░ Bail out if the render-world isn’t ready yet. */
         let (Some(device), Some(queue)) = (
             world.get_resource::<RenderDevice>(),
             world.get_resource::<RenderQueue>(),
         ) else { return Ok(()); };
 
+        /* 1 ░ Skip frames with no active slices. */
         let slices = world.resource::<ExtractedGpuSlices>();
         if slices.0.is_empty() { return Ok(()); }
 
+        /* 2 ░ Fetch GPU resources. */
         let images = world.resource::<RenderAssets<GpuImage>>();
-        let tex    = world.resource::<GlobalVoxelAtlas>();
+        let atlas  = world.resource::<GlobalVoxelAtlas>();
         let cache  = world.resource::<GpuPipelineCache>();
         let pipes  = world.resource::<PipelineCache>();
         let mesh   = world.resource::<MeshletBuffers>();
 
-        // 1 ░ Pipeline ready?
+        /* 3 ░ Resolve the compute pipeline. */
         let Some(&pid) = cache.map.get("dual_contour") else { return Ok(()); };
         let Some(pipe) = pipes.get_compute_pipeline(pid) else { return Ok(()); };
 
-        // 2 ░ Bind-group
-        let layout  = BindGroupLayout::from(pipe.get_bind_group_layout(0));
-        let entries = [
-            // storage-3D atlas ─ binding 0
-            BindGroupEntry {
-                binding: 0,
-                resource: BindingResource::TextureView(
-                    &images.get(&tex.atlas).unwrap().texture_view),
-            },
-            // append vertex buffer ─ binding 1
-            BindGroupEntry { binding: 1, resource: mesh.vertices.as_entire_binding() },
-            // atomic counter ─ binding 2
-            BindGroupEntry { binding: 2, resource: mesh.counter.as_entire_binding() },
-        ];
-        let bind = device.create_bind_group(Some("dc.bind0"), &layout, &entries);
+        /* 4 ░ Create the bind-group for this frame. */
+        let wgpu_layout = pipe.get_bind_group_layout(0);
+        let layout      = BindGroupLayout::from(wgpu_layout.clone());
+        let bind = device.create_bind_group(
+            Some("dc.bind0"),
+            &layout,
+            &[
+                BindGroupEntry {
+                    binding: 0,
+                    resource: BindingResource::TextureView(
+                        &images.get(&atlas.atlas).unwrap().texture_view),
+                },
+                BindGroupEntry { binding: 1, resource: mesh.vertices.as_entire_binding() },
+                BindGroupEntry { binding: 2, resource: mesh.counter .as_entire_binding() },
+            ],
+        );
 
-        // 3 ░ Reset atomics + indirect
+        /* 5 ░ Reset atomics + indirect header. */
         queue.write_buffer(&mesh.counter, 0, bytemuck::bytes_of(&0u32));
         queue.write_buffer(&mesh.indirect, 4, bytemuck::bytes_of(&1u32)); // instance_count
         queue.write_buffer(&mesh.indirect, 8, bytemuck::bytes_of(&0u32));
-        queue.write_buffer(&mesh.indirect, 12, bytemuck::bytes_of(&0u32));
+        queue.write_buffer(&mesh.indirect, 12,bytemuck::bytes_of(&0u32));
 
-        // 4 ░ Work-group extents from largest slice
+        /* 6 ░ Compute grid = largest slice in this frame. */
         let w  = slices.0.iter().map(|s| s.0.size.x).max().unwrap();
         let h  = slices.0.iter().map(|s| s.0.size.y).max().unwrap();
         let gx = (w + WG_SIZE.0 - 1) / WG_SIZE.0;
         let gy = (h + WG_SIZE.1 - 1) / WG_SIZE.1;
 
-        // 5 ░ Dispatch
         {
             let mut pass = ctx.command_encoder().begin_compute_pass(&ComputePassDescriptor {
                 label: Some("dual_contour.compute"),
@@ -160,10 +161,14 @@ impl Node for DualContourNode {
             pass.dispatch_workgroups(gx, gy, 1);
         }
 
-        // 6 ░ Copy vertex-count → indirect buffer
+        /* 7 ░ Copy vertex count → indirect buffer. */
         ctx.command_encoder()
             .copy_buffer_to_buffer(&mesh.counter, 0, &mesh.indirect, 0, 4);
 
+        /* 8 ░ (Optional) timing – collected here but written elsewhere. */
+        let _gpu_ms = begin.elapsed().as_secs_f32() * 1_000.0;
+
         Ok(())
+        
     }
 }

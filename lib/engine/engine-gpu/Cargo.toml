@@ -1,28 +1,32 @@
 # ------------------------------------------------------------
-# • Introduces an opt-in `mesh_shaders` feature for the future
-#   fast-path (currently commented-out).
-# • Keeps `shaderc` behind its own `fallback_spirv` flag.
+# Mesh-shader fast-path is enabled by default.
+# Older GPUs fall back automatically at run-time.
 # ------------------------------------------------------------
 [package]
-name     = "engine-gpu"
-version  = "0.1.0"
-edition  = "2024"
+name    = "engine-gpu"
+version = "0.1.0"
+edition = "2024"
 
 [dependencies]
-bevy       = { workspace = true, features = ["bevy_render", "bevy_core_pipeline", "bevy_winit", "bevy_window"] }
-bevy_egui  = { workspace = true }
-bytemuck   = { workspace = true }
+bevy        = { workspace = true, features = ["bevy_render","bevy_core_pipeline","bevy_winit","bevy_window"] }
+bevy_egui   = { workspace = true }
+bytemuck    = { workspace = true }
+# still used elsewhere in the crate, keep it
+libloading  = { workspace = true }
 
-# GPU/Vulkan integration (optional, for mesh shader feature)
-ash       = { version = "0.32.1", optional = true }
-naga_oil  = { version = "0.18.0", optional = true }
-shaderc   = { version = "0.9.1", optional = true }
+# GPU / Vulkan integration (mesh-shader backend)
+wgpu        = { version = "24.0.5", default-features = false, features = ["wgsl"] }
+wgpu-hal    = { version = "24.0.4", optional = true, features = ["vulkan"] }
+
+ash         = { version = "0.38.0", optional = true }     # ← same version as wgpu-hal
+naga_oil    = { version = "0.18.0", optional = true }
+shaderc     = { version = "0.9.1",  optional = true }
 
 engine-core       = { path = "../engine-core" }
 simulation_kernel = { path = "../../simulation_kernel" }
 
 [features]
-default        = []                # lean build (GPU compute path)
-mesh_shaders   = ["ash", "naga_oil"]
+default        = ["mesh_shaders"]
+mesh_shaders   = ["ash", "naga_oil"]     # optional deps become features automatically
 fallback_spirv = ["shaderc"]
 gpu-debug      = []

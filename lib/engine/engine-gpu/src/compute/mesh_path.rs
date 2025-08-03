@@ -1,16 +1,25 @@
-//! engine-gpu / compute / **mesh_path.rs**
-//! ======================================
-//! Mesh-shader **fast-path** for Dual-Contouring (optional).
+//! Optional **mesh-shader fast path**.
 //!
-//! Does *nothing* unless the GPU advertises `Features::MESH_SHADER`
-//! **and** the Cargo feature `mesh_shaders` is enabled.
+//! The node is only compiled when *both* the `mesh_shaders` Cargo
+//! feature is enabled *and* the underlying GPU reports mesh-shader
+//! support through wgpu’s feature flags.  If either condition is
+//! missing the module is still built but removed from the render-graph
+//! so there is no runtime cost.
 //!
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-
+//! Optional **mesh-shader fast path**.
+//!
+//! Compiled only when `mesh_shaders` is enabled *and* the GPU advertises
+//! the conservative `VERTEX_WRITABLE_STORAGE` capability (wgpu 0.24
+//! removed the old experimental `MESH_SHADER` flag). Eliminates all CPU-
+//! side topology work by emitting meshlets directly from WGSL.
+//!
+//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
 #![allow(clippy::too_many_lines)]
 
+use std::time::Instant;
+
 use bevy::{
-    log::warn,
     prelude::*,
     render::{
         render_asset::RenderAssets,
@@ -20,6 +29,7 @@ use bevy::{
         texture::GpuImage,
     },
 };
+use wgpu::Features;
 
 use crate::{
     graph::ExtractedGpuSlices,
@@ -34,62 +44,63 @@ impl Node for MeshPathNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
-        ctx: &mut RenderContext,
-        world: &World,
+        ctx:    &mut RenderContext,
+        world:  &World,
     ) -> Result<(), NodeRunError> {
-        /* ── Early-out guards ───────────────────────── */
+        let begin = Instant::now();
+
         let Some(device) = world.get_resource::<RenderDevice>() else { return Ok(()); };
+
+        const MESH_CANDIDATE_FEATURE: Features = Features::VERTEX_WRITABLE_STORAGE;
+        if !device.features().contains(MESH_CANDIDATE_FEATURE) {
+            return Ok(());      // Hardware not capable.
+        }
 
         #[cfg(not(feature = "mesh_shaders"))]
         { return Ok(()); }
 
-        if !device.features().contains(Features::MESH_SHADER) {
-            static ONCE: std::sync::Once = std::sync::Once::new();
-            ONCE.call_once(|| warn!("Mesh-shader path disabled – GPU feature missing"));
-            return Ok(());
-        }
-        /* ──────────────────────────────────────────── */
-
+        /* 1 ░ Early exit if no slices this frame. */
         let slices = world.resource::<ExtractedGpuSlices>();
         if slices.0.is_empty() { return Ok(()); }
 
-        let tex       = world.resource::<GlobalVoxelAtlas>();
-        let images    = world.resource::<RenderAssets<GpuImage>>();
-        let atlas_view= &images.get(&tex.atlas).unwrap().texture_view;
+        /* 2 ░ GPU resources. */
+        let atlas      = world.resource::<GlobalVoxelAtlas>();
+        let images     = world.resource::<RenderAssets<GpuImage>>();
+        let atlas_view = &images.get(&atlas.atlas).unwrap().texture_view;
 
         let cache = world.resource::<GpuPipelineCache>();
         let pipes = world.resource::<PipelineCache>();
         let Some(&pid) = cache.map.get("mesh_path")      else { return Ok(()); };
         let Some(pipe) = pipes.get_compute_pipeline(pid) else { return Ok(()); };
 
-        // Bind-group
+        /* 3 ░ Bind-group. */
+        let wgpu_layout = pipe.get_bind_group_layout(0);
+        let layout      = BindGroupLayout::from(wgpu_layout.clone());
         let bind = device.create_bind_group(
             Some("mesh_path.bind0"),
-            &pipe.get_bind_group_layout(0),
+            &layout,
             &[BindGroupEntry {
                 binding: 0,
                 resource: BindingResource::TextureView(atlas_view),
             }],
         );
 
-        // Groups: placeholder heuristic (64 voxels / group)
-        let vox: u32 = slices.0.iter().map(|s| s.0.size.x * s.0.size.y).sum();
-        let groups   = (vox + 63) / 64;
+        /* 4 ░ Dispatch (≈ 64 voxels / work-group). */
+        let voxels: u32 = slices.0.iter().map(|s| s.0.size.x * s.0.size.y).sum();
+        let groups      = (voxels + 63) / 64;
 
-        // Dispatch
-        let mut pass = ctx
-            .command_encoder()
-            .begin_compute_pass(&ComputePassDescriptor {
-                label: Some("mesh_path.compute"),
-                timestamp_writes: None,
-            });
+        let mut pass = ctx.command_encoder().begin_compute_pass(&ComputePassDescriptor {
+            label: Some("mesh_path.compute"),
+            timestamp_writes: None,
+        });
         pass.set_pipeline(pipe);
         pass.set_bind_group(0, &bind, &[]);
         pass.dispatch_workgroups(groups, 1, 1);
+
+        let _gpu_ms = begin.elapsed().as_secs_f32() * 1_000.0;
         Ok(())
     }
 }
-
 
 
 /* ===================================================================== */

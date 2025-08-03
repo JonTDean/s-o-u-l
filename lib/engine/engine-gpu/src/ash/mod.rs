@@ -1,47 +1,59 @@
-//! Low-level Vulkan® bridge used only when the optional
-//! `mesh_shaders` feature is enabled.
+//! Low-level Vulkan® bridge (compiled only when the `mesh_shaders` feature is on).
 //!
-//! * Wraps the raw handles exposed by Bevy/WGPU.
-//! * **No second logical device** is created – we piggy-back on the one
-//!   already managed by WGPU so residency and queues stay coherent.
+//! We **borrow** the Vulkan handles that `wgpu` already owns so experimental
+//! mesh-shader paths can issue raw calls through Ash without creating a second
+//! logical device. **No Vulkan resources are created or destroyed here.**
 //!
-//! ────────────────────────────────────────────────────────────────
-//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-//
+//! # Safety contract
+//! * The game must run with the Vulkan backend whenever `mesh_shaders` is
+//!   enabled (enforced in `build.rs`).
+//! * `wgpu` keeps its raw handles alive for the entire process lifetime, so
+//!   cloned Ash dispatch tables remain valid indefinitely.
+//!
+//! `AshContext` is `Send + Sync` because the wrapped Ash structs are immutable,
+//! thread-safe dispatch tables that never touch ownership of the underlying
+//! Vulkan objects.
 
-use ash::{vk, Device, Entry, Instance};
-use bevy::prelude::*;
-use bevy::render::renderer::RenderDevice;
+#![cfg(feature = "mesh_shaders")]
+
+use ash::{Device, Entry, Instance};
+use bevy::{prelude::*, render::renderer::RenderDevice};
 use wgpu::hal::api::Vulkan as VkApi;
 
-/// Shared Vulkan handles – lives in the *render world*.
-#[derive(Resource)]
+/// Cheaply-cloned Ash wrappers around `wgpu`’s Vulkan objects.
+#[derive(Resource, Clone)]
 pub struct AshContext {
-    pub entry:    Entry,
+    /// Global Vulkan loader cloned from `wgpu`’s internals.
+    pub entry: Entry,
+    /// Dispatch table for the pre-existing `vk::Instance`.
     pub instance: Instance,
-    pub device:   Device,
-    pub queue:    vk::Queue,
+    /// Dispatch table for the pre-existing logical `vk::Device`.
+    pub device: Device,
 }
 
 impl FromWorld for AshContext {
+    /// Extract raw Vulkan handles from Bevy’s [`RenderDevice`] and wrap them
+    /// in Ash dispatch tables that can be shared freely across systems.
+    ///
+    /// # Panics
+    /// If the engine was launched without the Vulkan backend.
     fn from_world(world: &mut World) -> Self {
+        // SAFETY: Completed upon enabling the `mesh_shaders` feature – the build
+        // is Vulkan-only, so the HAL’s unsafe cast is sound.
         let rd = world.resource::<RenderDevice>();
 
-        // SAFETY: we only *borrow* raw handles from WGPU; lifetime is tied
-        // to the Bevy device which outlives this resource.
-        let (raw_inst, raw_dev, raw_q) = unsafe {
-            rd.wgpu_device().as_hal::<VkApi, _, _>(|backend| {
-                let queue = backend.raw_queue_group(0).queues[0];
-                (backend.instance(), backend.raw_device(), queue)
+        let (entry, instance, device) = unsafe {
+            rd.wgpu_device().as_hal::<VkApi, _, _>(|opt_dev| {
+                let dev = opt_dev.expect("Vulkan backend not active");
+                let shared = dev.shared_instance();
+                (
+                    shared.entry().clone(),        // ash::Entry
+                    shared.raw_instance().clone(), // ash::Instance
+                    dev.raw_device().clone(),      // ash::Device
+                )
             })
-        }
-        .expect("Vulkan backend required for `mesh_shaders` feature");
+        };
 
-        // Portable loader
-        let entry    = unsafe { Entry::linked() };
-        let instance = unsafe { Instance::load(&entry, raw_inst.handle()) };
-        let device   = unsafe { Device::load(&instance, raw_dev.handle()) };
-
-        Self { entry, instance, device, queue: raw_q }
+        Self { entry, instance, device }
     }
 }

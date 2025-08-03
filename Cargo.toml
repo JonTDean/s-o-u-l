@@ -71,3 +71,4 @@ toml        = { version = "0.9.2" }
 num-traits  = { version = "0.2" }
 rayon       = { version = "1.10.0" }
 bitflags    = { version = "2.9.1" }
+libloading  = { version = "0.8.8" }
