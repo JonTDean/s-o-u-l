@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine_core::events::{AutomataCommand, GenerateDebugFloor, ToggleDebugGrid};
+use engine_core::events::{AutomataCommand, GenerateDebugFloor};
 
 use crate::panels::main_menu::controller::scenario::new::ScenarioMeta;
 
@@ -11,7 +11,6 @@ pub fn spawn_panel(
     mut egui_ctx: EguiContexts,
     mut cmd_tx:   EventWriter<AutomataCommand>,     // patterns
     mut floor_tx: EventWriter<GenerateDebugFloor>,
-    mut grid_tx:  EventWriter<ToggleDebugGrid>,   
 ) {
     let ctx = egui_ctx.ctx_mut().unwrap();
 
@@ -36,10 +35,6 @@ pub fn spawn_panel(
 
             if ui.button("◻ Generate Debug Floor").clicked() {
                 floor_tx.write(GenerateDebugFloor);
-            }
-
-            if ui.button("⫷ Toggle Debug Grid").clicked() {
-                grid_tx.write(ToggleDebugGrid);
             }
         });
 }
