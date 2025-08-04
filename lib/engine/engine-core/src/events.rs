@@ -53,3 +53,10 @@ pub struct AutomatonAdded {
 pub struct AutomatonRemoved {
     pub id: AutomatonId,
 }
+
+
+#[derive(Event, Debug, Clone, Copy)]  
+pub struct ToggleDebugGrid;
+
+#[derive(Event, Debug, Clone, Copy)]
+pub struct GenerateDebugFloor;

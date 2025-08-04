@@ -2,14 +2,16 @@
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine_core::events::AutomataCommand;
+use engine_core::events::{AutomataCommand, GenerateDebugFloor, ToggleDebugGrid};
 
 use crate::panels::main_menu::controller::scenario::new::ScenarioMeta;
 
 pub fn spawn_panel(
-    selected: Res<ScenarioMeta>,
+    selected:    Res<ScenarioMeta>,
     mut egui_ctx: EguiContexts,
-    mut writer: EventWriter<AutomataCommand>,
+    mut cmd_tx:   EventWriter<AutomataCommand>,     // patterns
+    mut floor_tx: EventWriter<GenerateDebugFloor>,
+    mut grid_tx:  EventWriter<ToggleDebugGrid>,   
 ) {
     let ctx = egui_ctx.ctx_mut().unwrap();
 
@@ -22,14 +24,22 @@ pub fn spawn_panel(
 
             for id in &selected.0.selected_classical {
                 if ui.button(format!("➕ {id}")).clicked() {
-                    writer.write(AutomataCommand::SeedPattern { id: id.clone() });
+                    cmd_tx.write(AutomataCommand::SeedPattern { id: id.clone() });
                 }
             }
 
             if let Some(ref dyn_id) = selected.0.selected_dynamical {
                 if ui.button(format!("➕ {dyn_id}")).clicked() {
-                    writer.write(AutomataCommand::SeedPattern { id: dyn_id.clone() });
+                    cmd_tx.write(AutomataCommand::SeedPattern { id: dyn_id.clone() });
                 }
+            }
+
+            if ui.button("◻ Generate Debug Floor").clicked() {
+                floor_tx.write(GenerateDebugFloor);
+            }
+
+            if ui.button("⫷ Toggle Debug Grid").clicked() {
+                grid_tx.write(ToggleDebugGrid);
             }
         });
 }

@@ -3,7 +3,6 @@
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2};
 use engine_core::{
-    events::AutomataCommand,
     prelude::AppState,
     world::voxel_world::VoxelWorld,
 };
@@ -120,16 +119,5 @@ pub fn init_new_world(mut commands: Commands, draft: Res<ScenarioMeta>) {
         backend,
         voxel_size: m.voxel_size,
         bg_color:   bg,
-    });
-
-    /* spawn three demo boards so the user sees something ---------------- */
-    commands.queue(|world: &mut World| {
-        let mut writer = world
-            .get_resource_mut::<Events<AutomataCommand>>()
-            .expect("Events<AutomataCommand> missing");
-
-        for rule in ["life:conway", "wolfram:rule30", "lenia:orbium"] {
-            writer.send(AutomataCommand::SeedPattern { id: rule.to_string() });
-        }
     });
 }

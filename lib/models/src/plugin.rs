@@ -33,8 +33,8 @@
 
 use bevy::prelude::*;
 use engine_core::{
-    events::{AutomatonAdded, AutomatonRemoved},
-    systems::registry::{RuleRegistry, AutomataRegistry},
+    events::{AutomatonAdded, AutomatonRemoved, GenerateDebugFloor, ToggleDebugGrid},
+    systems::registry::{AutomataRegistry, RuleRegistry},
 };
 
 use crate::automata::plugin::AutomataPlugin;
@@ -76,7 +76,10 @@ impl Plugin for ComputationalIntelligencePlugin {
         //     aborts with *“Event not initialized”*.
         // ------------------------------------------------------------------
         app.add_event::<AutomatonAdded>()
-           .add_event::<AutomatonRemoved>();
+            .add_event::<AutomatonRemoved>()
+            /* NEW ░ initialise at start-up so EventReader never panics */
+            .add_event::<ToggleDebugGrid>()
+            .add_event::<GenerateDebugFloor>();
 
         // ------------------------------------------------------------------
         // 3.  Sub‑plugins — classical & dynamical rule families, world

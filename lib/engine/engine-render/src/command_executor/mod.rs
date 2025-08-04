@@ -4,12 +4,12 @@ use std::sync::Arc;
 use bevy::prelude::*;
 use engine_core::{
     automata::{AutomatonInfo, GpuGridSlice},
-    events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved},
+    events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved, GenerateDebugFloor, ToggleDebugGrid},
     prelude::{AppState, AutomataRegistry, RuleRegistry},
 };
 use serde_json::Value;
 
-use crate::WorldCamera;
+use crate::{render::materials::debug::debug_grid::DebugGridTag, WorldCamera};
 /* ───────────────────────────── constants ───────────────────────────── */
 
 const SLICE_SIDE:   u32  = 256;
@@ -23,7 +23,26 @@ const BG:           Color = Color::srgb(0.07, 0.07, 0.07);
 pub struct CommandExecutorPlugin;
 impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, handle_commands.run_if(in_state(AppState::InGame)))
+        use engine_core::systems::schedule::MainSet;
+
+        app
+            // existing command router
+            .add_systems(
+                Update,
+                handle_commands
+                    .in_set(MainSet::Input)
+                    .run_if(in_state(AppState::InGame)),
+            )
+            // NEW: floor & grid handlers (same set so they run before Logic/Render)
+            .add_systems(
+                Update,
+                (
+                    handle_generate_floor,
+                    handle_toggle_grid,
+                )
+                .in_set(MainSet::Input)
+                .run_if(in_state(AppState::InGame)),
+            )
             .add_systems(OnEnter(AppState::MainMenu), clear_on_main_menu);
     }
 }
@@ -112,3 +131,30 @@ pub fn focus_camera_on_new_auto(
     tf.translation.x = centre.x;
     tf.translation.y = centre.y;
 }
+
+
+fn handle_generate_floor(
+    mut ev:  EventReader<GenerateDebugFloor>,
+    mut out: EventWriter<AutomataCommand>,
+) {
+    if !ev.is_empty() {
+        out.write(AutomataCommand::SeedPattern { id: "__debug_floor__".into() });
+        ev.clear();
+    }
+}
+
+
+fn handle_toggle_grid(
+    mut ev: EventReader<ToggleDebugGrid>,
+    mut q:  Query<&mut Visibility, With<DebugGridTag>>,
+) {
+    if ev.is_empty() { return; }
+    if let Ok(mut vis) = q.single_mut() {          // <- unwrap the Result
+        *vis = match *vis {
+            Visibility::Hidden    => Visibility::Visible,
+            Visibility::Visible   => Visibility::Hidden,
+            Visibility::Inherited => Visibility::Hidden,
+        };
+    }
+    ev.clear();
+ }

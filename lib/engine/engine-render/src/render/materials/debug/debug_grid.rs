@@ -14,7 +14,7 @@ use crate::render::materials::debug::debug_floor::{DebugFloorMaterial, DebugFloo
 
 /// Tag so we can query the grid entity later.
 #[derive(Component)]
-struct DebugGridTag;
+pub(crate) struct DebugGridTag;
 
 /// Stores the material handle once the grid is spawned, avoiding the
 /// “`Handle<T>` is not a Component” compile error.
