@@ -13,11 +13,9 @@ use engine_core::prelude::AppState;
 use crate::controls::camera::manager::WorldCamera;
 
 pub mod main_menu;
-pub mod options;
 pub mod scenarios;
 
 pub use main_menu::MainMenuPlugin;
-pub use options::OptionsScenePlugin;
 pub use scenarios::ScenariosPlugin;
 
 /* =================================================================== */
@@ -35,7 +33,6 @@ impl Plugin for SceneManagerPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
                 MainMenuPlugin,
-                OptionsScenePlugin,
                 ScenariosPlugin,
             ))
             /* ------------------------ camera flips ------------------------ */

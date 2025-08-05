@@ -1,8 +1,8 @@
 use bevy::app::{App, Plugin};
 
-use crate::components::menus::scenarios_menu::{
+use crate::components::menus::meta::scenarios_menu::{
     load::plugin::LoadScenarioMenuUiPlugin, 
-    new::plugin::NewScenarioMenuUiPlugin
+    new::plugin::NewScenarioMenuUiPlugin, 
 };
 
 pub struct SenariosMenuUiPlugin;

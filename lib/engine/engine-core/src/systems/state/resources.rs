@@ -52,7 +52,7 @@ pub struct Settings {
     /// Autosave interval in **seconds**.
     pub autosave_interval: u64,
 
-    // Enable GPU settings
+    /// Enable/Disable GPU settings
     pub gpu_compute: bool,
 }
 

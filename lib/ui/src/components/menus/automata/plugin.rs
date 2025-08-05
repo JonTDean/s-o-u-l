@@ -5,19 +5,19 @@ use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
 
-use crate::panels::world::automata::{selection_arrow::SelectionArrowPlugin, show_active_automata::show_active_automata, spawn_panel::spawn_panel};
+use crate::components::menus::automata::{active_menu::show_active_automata, spawn_menu::spawner::spawner};
 
-pub struct AutomataPanelPlugin;
 
-impl Plugin for AutomataPanelPlugin {
+pub struct AutomataMenusPlugin;
+
+impl Plugin for AutomataMenusPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(EguiPrimaryContextPass,
         (
                 // HUD list
                 show_active_automata.run_if(in_state(AppState::InGame)),
                 // Spawn-pattern panel
-                spawn_panel.run_if(in_state(AppState::InGame)),
-        ))
-        .add_plugins(SelectionArrowPlugin);
+                spawner.run_if(in_state(AppState::InGame)),
+        ));
     }
 }

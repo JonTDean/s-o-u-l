@@ -35,12 +35,17 @@ use bevy::sprite::{Material2d, Material2dKey};
 /// * `TypePath` – stable identifier required by Asset V2 :contentReference[oaicite:6]{index=6}.  
 #[derive(Asset, AsBindGroup, Clone, TypePath)]
 pub struct AutomataMaterial {
-    #[uniform(0)] pub params: AutomataParams,
+    /// Uniform block with camera + grid parameters (std140 layout).
+    #[uniform(0)]
+    pub params: AutomataParams,
 
-    #[texture(1)] 
-    #[sampler(2)] 
+    /// R8/RGBA texture storing the automata state; sampled in the fragment
+    /// shader and updated by either the CPU or GPU compute back-end.
+    #[texture(1)]
+    #[sampler(2)]
     pub grid_texture: Handle<Image>,
 }
+
 
 /* ───────────────────────────── Uniform block ────────────────────────────── */
 

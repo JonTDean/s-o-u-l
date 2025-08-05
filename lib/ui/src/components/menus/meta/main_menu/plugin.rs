@@ -5,7 +5,8 @@ use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
 
-use crate::components::menus::{main_menu::MainMenuScreen, menu_runner};
+use crate::components::menus::{menu_runner, meta::main_menu::MainMenuScreen};
+
 
 
 pub struct MainMenuUiPlugin;

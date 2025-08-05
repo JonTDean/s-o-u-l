@@ -1,15 +1,17 @@
 use bevy::prelude::*;
 
-use crate::components::menus::{main_menu, options_menu, scenarios_menu};
+use crate::components::menus::{
+    meta::plugin::MetaMenusPlugin,
+    automata::plugin::AutomataMenusPlugin
+};
 
-pub struct MenusPlugin;        // add once, forget forever
+pub struct MenusPlugin;
 
 impl Plugin for MenusPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            main_menu::plugin::MainMenuUiPlugin,
-            options_menu::plugin::OptionsMenuUiPlugin,
-            scenarios_menu::plugin::SenariosMenuUiPlugin,
+            MetaMenusPlugin,
+            AutomataMenusPlugin,
         ));
     }
 }

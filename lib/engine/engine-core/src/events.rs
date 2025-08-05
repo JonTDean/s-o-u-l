@@ -31,7 +31,10 @@ pub struct AutomatonId(pub u32);
 #[derive(Event)]
 pub enum AutomataCommand {
     /// Spawn the default seed pattern that belongs to the rule `id`.
-    SeedPattern { id: String },
+    SeedPattern { 
+        /// String of ID
+        id: String
+     },
 
     /// Despawn **all** running automata.
     Clear,
@@ -44,13 +47,16 @@ pub enum AutomataCommand {
 ///              Bevy ECS (GPU slice allocator needs this)
 #[derive(Event)]
 pub struct AutomatonAdded {
-    pub id: AutomatonId, // logical CPU‑side handle
-    pub entity: Entity,  // ECS entity for GPU slice allocation
+    /// CPU-side identifier assigned by the [`AutomataRegistry`].
+    pub id: AutomatonId,
+    /// ECS entity that owns the render-world slice and components.
+    pub entity: Entity,
 }
 
 /// Emitted when an automaton is removed (optional convenience).
 #[derive(Event)]
 pub struct AutomatonRemoved {
+    /// Identifier of the automaton that has just been despawned.
     pub id: AutomatonId,
 }
 

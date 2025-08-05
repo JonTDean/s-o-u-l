@@ -2,9 +2,8 @@ use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
 use engine_core::prelude::AppState;
 
-pub mod main_menu;
-pub mod options_menu;
-pub mod scenarios_menu;
+pub mod automata;
+pub mod meta;
 
 pub mod plugin;
 

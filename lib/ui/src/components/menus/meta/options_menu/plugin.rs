@@ -2,7 +2,8 @@ use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
 
-use crate::components::menus::{options_menu::{commit_on_exit, OptionsMenu}, menu_runner};
+use crate::components::menus::{menu_runner, meta::options_menu::{commit_on_exit, OptionsMenu}};
+
 
 pub struct OptionsMenuUiPlugin;
 

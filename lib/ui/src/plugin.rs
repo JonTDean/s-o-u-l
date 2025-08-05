@@ -5,7 +5,6 @@ use bevy::prelude::*;
 use crate::{
     components::plugin::ComponentsPlugin, 
     overlays::plugin::OverlaysPlugin, 
-    panels::plugin::PanelsPlugin, 
     styles::plugin::StylesPlugin,
 };
 

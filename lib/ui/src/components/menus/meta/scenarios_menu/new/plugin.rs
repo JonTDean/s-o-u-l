@@ -5,8 +5,10 @@ use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
 use engine_core::prelude::AppState;
 
-use crate::components::menus::{menu_runner, scenarios_menu::new::NewScenarioMenuScreen};
-
+use crate::components::menus::{
+    menu_runner,
+    meta::scenarios_menu::new::NewScenarioMenuScreen
+};
 
 pub struct NewScenarioMenuUiPlugin;
 
