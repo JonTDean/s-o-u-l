@@ -1,10 +1,17 @@
+//! Right- / Middle-mouse **drag pan** for the orthographic world camera.
+//!
+//! All intermediate state is stored in the shared [`DragState`] resource
+//! so multiple input systems can cooperate safely.
+//! 
 use bevy::prelude::*;
 
-use super::super::systems::{DragState, WorldCamera};
+use crate::controls::camera::manager::{DragState, WorldCamera};
 
 /// Start right / middle mouse drag.
 pub fn begin_drag(
-    buttons: Res<ButtonInput<MouseButton>>, mut drag: ResMut<DragState>, windows: Query<&Window>,
+    buttons: Res<ButtonInput<MouseButton>>,
+    mut drag: ResMut<DragState>,
+    windows: Query<&Window>,
 ) {
     if buttons.just_pressed(MouseButton::Right) || buttons.just_pressed(MouseButton::Middle) {
         drag.0 = windows.single().ok().and_then(|w| w.cursor_position());

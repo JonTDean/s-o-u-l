@@ -1,14 +1,7 @@
 //! Orthographic *world-camera* controller (panning / zoom / follow).
 //!
 //! All mutable state lives inside [`CameraController`] so concurrent
-//! systems can **read** it safely – eg. UI widgets, minimap, debug gizmos.
-//!
-//! ## Highlights
-//! * **Modes** – `Free`, `Follow`, `Recenter`.
-//! * **Predictable zoom** – physical world-units per screen-pixel.
-//! * **Pixel-perfect pan** – keyboard + mouse with zoom compensation.
-//! * **Thread-friendly** – input collection in `CameraSet::Input`,
-//!   heavy math in `CameraSet::Heavy`.
+//! systems can **read** it safely – e.g. UI widgets, minimap, gizmos.
 
 use bevy::{
     input::mouse::MouseWheel,
@@ -17,12 +10,9 @@ use bevy::{
 };
 use engine_core::prelude::{AutomataRegistry, AutomatonId};
 
-use super::{
-    systems::{
-        fit_or_clamp_camera, DragState, WorldCamera, KEY_PAN_SPEED, MAX_SCALE, MIN_SCALE_CONST,
-        ZOOM_FACTOR,
-    },
-    CameraSet,
+use crate::controls::camera::manager::{
+    fit_or_clamp_camera, DragState, WorldCamera, KEY_PAN_SPEED, MAX_SCALE,
+    MIN_SCALE_CONST, ZOOM_FACTOR,
 };
 
 /* =================================================================== */
@@ -40,22 +30,22 @@ pub enum Mode {
     Recenter,
 }
 
-/// Global resource: the *single source of truth* for camera state.
+/// Global resource – the *single source of truth* for the world camera.
 #[derive(Resource, Debug)]
 pub struct CameraController {
-    /// Current mode.
+    /// Currently selected [`Mode`].
     pub mode: Mode,
-    /// Automaton currently tracked (optional; may be unused for now).
+    /// Automaton to track (if any).
     pub target: Option<AutomatonId>,
-    /// Physical world-units per screen-pixel (orthographic *scale*).
+    /// Orthographic *scale* – **world‐units / pixel**.
     pub zoom: f32,
-    /// Configurable limits.
+    /// Minimum allowed zoom level.
     pub min_zoom: f32,
+    /// Maximum allowed zoom level.
     pub max_zoom: f32,
-    /// Pan motion accumulated this frame (world units).
+    /// Pan motion gathered during the current frame.
     pub pan_delta: Vec2,
 }
-
 impl Default for CameraController {
     fn default() -> Self {
         Self {
@@ -70,30 +60,7 @@ impl Default for CameraController {
 }
 
 /* =================================================================== */
-/* Plugin                                                              */
-/* =================================================================== */
-
-/// Bundles the resource + tick systems.
-pub struct CameraControllerPlugin;
-impl Plugin for CameraControllerPlugin {
-    fn build(&self, app: &mut App) {
-        /* 1 ░ resources */
-        app.init_resource::<CameraController>()
-           .init_resource::<DragState>();
-
-        /* 2 ░ systems – input then heavy update */
-        app.add_systems(
-            Update,
-            (
-                gather_input.in_set(CameraSet::Input),
-                apply_camera_controller.in_set(CameraSet::Heavy),
-            ),
-        );
-    }
-}
-
-/* =================================================================== */
-/* System: gather_input (light-weight)                                 */
+/* Public systems (called by plugin)                                   */
 /* =================================================================== */
 
 /// Polls input devices and mutates [`CameraController`].
@@ -104,7 +71,7 @@ impl Plugin for CameraControllerPlugin {
 /// * **C** key → recenter once  
 /// * **F** key → toggle follow
 #[allow(clippy::too_many_arguments)]
-fn gather_input(
+pub fn gather_input(
     mut ctrl:   ResMut<CameraController>,
     mut drag:   ResMut<DragState>,
     mut wheel:  EventReader<MouseWheel>,
@@ -168,11 +135,15 @@ fn gather_input(
     }
 }
 
-/* =================================================================== */
-/* System: apply_camera_controller (heavy)                             */
-/* =================================================================== */
+/* ------------------------------------------------------------------- */
+
+
+/// Applies the controller state to the active [`WorldCamera`].
+///
+/// Heavy, world-space computations live here so they can run in the
+/// `CameraSet::Heavy` stage after lightweight input has settled.
 #[allow(clippy::too_many_arguments)]
-fn apply_camera_controller(
+pub fn apply_camera_controller(
     mut ctrl:      ResMut<CameraController>,
     registry:      Res<AutomataRegistry>,
     windows:       Query<&Window>,
@@ -189,7 +160,7 @@ fn apply_camera_controller(
         o.scale = ctrl.zoom;
     }
 
-    /* ── mode-specific logic ──────────────────────────────────────── */
+    /* ── mode-specific logic ─────────────────────────────────────── */
     match ctrl.mode {
         Mode::Free => {}
         Mode::Recenter | Mode::Follow => {
@@ -232,3 +203,9 @@ fn apply_camera_controller(
     /* floating-origin compatible: Z stays high so we never cross UI */
     tf.translation.z = 1_000.0;
 }
+
+/* =================================================================== */
+/* Sub-module: plugin                                                  */
+/* =================================================================== */
+
+pub mod plugin;

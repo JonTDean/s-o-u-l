@@ -22,8 +22,7 @@ impl MenuScreen for MainMenu {
             .show(ctx, |_| {});
 
         // ── 2. dynamic vertical offset: 30 % of window height ───────────────
-        let offset_y = -(ctx.screen_rect().height() * 0.30).max(-8.0);
-
+        let offset_y = -(ctx.screen_rect().height() * 0.30).min(-8.0);
 
         // ── 3. button column inside a frameless “div” ───────────────────────
         egui::Area::new("main_menu_buttons".into())

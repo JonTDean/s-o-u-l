@@ -1,8 +1,9 @@
-//! World- & UI-camera manager (orthographic by default but 3-D-ready).
+//! World- & UI-camera **manager** (orthographic by default, 3-D ready).
 //!
-//! *No panning / zooming / follow logic lives here* – that is provided by
-//! [`super::controller`] so you can replace it at run-time if needed
-//! (editor, cut-scenes, network sync…).
+//! *All* low-level glue lives here: camera spawning, diagnostics
+//! refresh, built-in orbit/zoom/drag helpers, etc.  
+//! Higher-level behaviour such as panning / follow lives in
+//! [`super::controller`].
 
 use bevy::{
     prelude::*,
@@ -11,122 +12,103 @@ use bevy::{
         view::RenderLayers,
     },
 };
-use engine_core::prelude::AppState;
 
-use super::{
-    input::{
-        apply_orbit, begin_drag, drag_pan, end_drag, gather_orbit_input, key_pan, zoom_keyboard,
-        zoom_scroll,
-    },
-    freecam::FreeCamPlugin,
-};
+
+use super::input::{
+        apply_orbit, begin_drag, drag_pan, end_drag, gather_orbit_input, key_pan,
+        zoom_keyboard, zoom_scroll,
+    };
 
 /* ───────────────────────────── diagnostics ────────────────────────── */
 
 /// World-space rectangle covered by the active viewport (debug overlay).
 #[derive(Component, Debug, Clone, Copy, Default)]
 pub struct ViewportRect {
+    /// Lower-left world-space corner.
     pub min: Vec2,
+    /// Upper-right world-space corner.
     pub max: Vec2,
 }
 
-/// Global camera diagnostics – updated every frame by `update_camera_metrics`.
+/// Metrics refreshed once per frame by [`update_camera_metrics`].
 #[derive(Resource, Debug, Clone, Copy, Default)]
 pub struct CameraMetrics {
+    /// World-space centre of the view.
     pub centre:    Vec2,
+    /// Current orthographic scale (**world-units / pixel**).
     pub zoom:      f32,
+    /// Half-size of the viewport in world units.
     pub half_view: Vec2,
 }
-
 /* ───────────────────────── constants / helpers ────────────────────── */
 
+/// Render layer used exclusively for 2-D UI/HUD elements.
 pub const UI_LAYER:    u8 = 0;
+/// Render layer reserved for world geometry & game entities.
 pub const WORLD_LAYER: u8 = 1;
 
+/// Mask containing only [`UI_LAYER`].
 #[inline] pub fn layers_ui()    -> RenderLayers { RenderLayers::layer(UI_LAYER.into()) }
+/// Mask containing only [`WORLD_LAYER`].
 #[inline] pub fn layers_world() -> RenderLayers { RenderLayers::layer(WORLD_LAYER.into()) }
 
+/// Linear keyboard-pan speed (**world-units · s⁻¹**).
 pub const KEY_PAN_SPEED:   f32 = 400.0;
+/// Minimum orthographic scale (world-units per screen-pixel).
 pub const MIN_SCALE_CONST: f32 = 0.05;
+/// Maximum orthographic scale (world-units per screen-pixel).
 pub const MAX_SCALE:       f32 = 128.0;
+/// Exponential zoom factor (≈ 10 % per wheel-tick).
 pub const ZOOM_FACTOR:     f32 = 1.1;
 
-/* ───────────────────────── shared ECS types ───────────────────────── */
+/* ───────────────────── shared ECS types ──────────────────────────── */
 
-#[derive(Component)]           pub struct WorldCamera;
-#[derive(Resource, Default)]   pub struct DragState(pub Option<Vec2>);
+
+/// Struct for world camera component
+#[derive(Component)]           
+
+pub struct WorldCamera;
+#[derive(Resource, Default)]
+/// Mouse-drag state shared between input systems.
+pub struct DragState(pub Option<Vec2>);
+
+/// Stores the original “boot” zoom and the current live zoom.
 #[derive(Resource, Clone, Copy)]
-pub struct ZoomInfo { pub base: f32, pub current: f32 }
+pub struct ZoomInfo {
+    /// Zoom level when the camera was spawned.
+    pub base:     f32,
+    /// Current zoom level.
+    pub current:  f32,
+}
+
 impl Default for ZoomInfo { fn default() -> Self { Self { base: 1.0, current: 1.0 } } }
+
 
 /* ───────────────────────── internal system sets ───────────────────── */
 
+/// Sub-stages used by the camera stack.
 #[derive(SystemSet, Hash, Debug, Eq, PartialEq, Clone)]
-pub enum CameraSet { Input, Heavy }
-
-/* ───────────────────────── top-level plugin ───────────────────────── */
-
-/// Manages the low-level orthographic camera(s) plus metrics refresh.
-pub struct CameraManagerPlugin;
-impl Plugin for CameraManagerPlugin {
-    fn build(&self, app: &mut App) {
-        /* register resources read / written by our systems */
-        app.init_resource::<ZoomInfo>()
-           .init_resource::<DragState>()
-           .init_resource::<CameraMetrics>()
-
-           /* create deterministic stages */
-           .configure_sets(Update, (CameraSet::Input, CameraSet::Heavy.after(CameraSet::Input)))
-
-           /* spawners */
-           .add_systems(Startup, spawn_cameras)
-
-           /* lightweight input (orthographic editor cam) */
-           .add_systems(
-               Update,
-               (
-                   // zoom
-                   zoom_scroll, zoom_keyboard,
-                   // drag
-                   begin_drag, drag_pan, end_drag,
-                   // pan
-                   key_pan,
-                   // orbit (optional)
-                   gather_orbit_input,
-               )
-               .in_set(CameraSet::Input)
-               .run_if(in_state(AppState::InGame)),
-           )
-
-           /* heavy work – metrics + orbit application */
-           .add_systems(
-               Update,
-               (
-                   refresh_zoom_info,
-                   update_camera_metrics,
-                   apply_orbit,
-               )
-               .in_set(CameraSet::Heavy)
-               .run_if(in_state(AppState::InGame)),
-           )
-
-           .add_plugins(FreeCamPlugin);
-    }
+pub enum CameraSet {
+    /// Runs *before* heavy maths – gathers input only.
+    Input,
+    /// Expensive computations (orbit integrator, metrics refresh…).
+    Heavy,
 }
+
 
 /* ───────────────────────── helper systems ─────────────────────────── */
 
-/// Sync `ZoomInfo.current` with the active orthographic projection.
-fn refresh_zoom_info(cam_q: Query<&Projection, With<WorldCamera>>, mut z: ResMut<ZoomInfo>) {
+/// Sync [`ZoomInfo::current`] with the active orthographic projection.
+pub fn refresh_zoom_info(cam_q: Query<&Projection, With<WorldCamera>>, mut z: ResMut<ZoomInfo>) {
     if let Ok(Projection::Orthographic(o)) = cam_q.single() {
         z.current = o.scale;
     }
 }
 
 /// Cache camera metrics once per frame; used by gizmos, minimap, etc.
-fn update_camera_metrics(
-    windows:  Query<&Window>,
-    mut cam_q: Query<(&Transform, &Projection, &mut ViewportRect), With<WorldCamera>>,
+pub fn update_camera_metrics(
+    windows:     Query<&Window>,
+    mut cam_q:   Query<(&Transform, &Projection, &mut ViewportRect), With<WorldCamera>>,
     mut metrics: ResMut<CameraMetrics>,
 ) {
     let (Ok(win), Ok((tf, proj, mut rect))) = (windows.single(), cam_q.single_mut()) else { return };
@@ -151,16 +133,33 @@ fn update_camera_metrics(
 
 /* ───────────────────────── camera spawner ─────────────────────────── */
 
-/// Creates the UI + World camera pair (hidden until activated).
-pub(crate) fn spawn_cameras(mut cmd: Commands, mut z: ResMut<ZoomInfo>) {
-    z.base = 1.0; z.current = 1.0;
+/// Creates the **single** UI camera (if missing) and the inactive world-camera.
+///
+/// * Called once during `Startup`.
+/// * Safe even if another plugin (egui, a debug overlay, etc.) already added
+///   its own 2-D camera – we simply re-use that one instead of spawning ours.\
+/// 
+/// args:
+///     existing_ui: Query<Entity, With<Camera2d>>,  /// All cameras that *already* exist when we run.
+pub fn spawn_cameras(
+    mut cmd: Commands,
+    mut z:   ResMut<ZoomInfo>,
+    existing_ui: Query<Entity, With<Camera2d>>,
+) {
+    z.base = 1.0;
+    z.current = 1.0;
 
-    /* UI camera – 2-D overlay (Egui, sprite HUD, etc.) */
-    cmd.spawn((
-        Camera2d::default(),
-        Camera { order: 100, clear_color: ClearColorConfig::None, ..default() },
-        layers_ui(),
-    ));
+    // ── UI camera ─────────────────────────────────────────────────────
+    if existing_ui.iter().next().is_none() {
+        cmd.spawn((
+            Camera2d::default(),
+            // Use a *unique* order so we never clash with other UI cameras.
+            Camera { order: 50, clear_color: ClearColorConfig::None, ..default() },
+            layers_ui(),
+        ));
+    }
+
+    // ── World camera (inactive until InGame) ──────────────────────────
 
     /* World camera – 3-D orthographic, inactive by default */
     let mut ortho = OrthographicProjection::default_3d();
@@ -177,9 +176,10 @@ pub(crate) fn spawn_cameras(mut cmd: Commands, mut z: ResMut<ZoomInfo>) {
     ));
 }
 
-/* ───────────────────────── AABB fit / clamp helper ────────────────── */
-/// Compute `(centre, scale)` so the rectangle `world_min..=world_max`
-/// is fully visible *and* clamped if smaller than the viewport.
+/* ─────────────────────── AABB fit / clamp helper ──────────────────── */
+
+/// Compute *(centre, scale)* so that `world_min..=world_max` is fully
+/// visible *and* clamped if smaller than the viewport.
 #[allow(clippy::too_many_arguments)]
 pub fn fit_or_clamp_camera(
     world_min: Vec3,
@@ -211,3 +211,7 @@ pub fn fit_or_clamp_camera(
     }
     (centre, scale)
 }
+
+/* ───────────────────────── sub-module: plugin ─────────────────────── */
+
+pub mod plugin;

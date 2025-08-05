@@ -1,14 +1,22 @@
-use bevy::{input::mouse::MouseMotion, prelude::*};
-use super::super::systems::WorldCamera;
+//! Simple orbital camera – hold **Alt + LMB** and drag to yaw / pitch.
 
-/* ─────────────────────────── resource ───────────────────────────── */
+use bevy::{input::mouse::MouseMotion, prelude::*};
+use crate::controls::camera::manager::WorldCamera;
+
+/* resource ---------------------------------------------------------- */
+
+/// Yaw / pitch angles accumulated this frame (radians).
 #[derive(Resource, Default)]
 pub struct OrbitAngles {
-    pub yaw:   f32,   // rotation around +Z (world “up”)
-    pub pitch: f32,   // rotation around +X (local)
+    /// Rotation around +Z (world “up”).
+    pub yaw:   f32,
+    /// Rotation around +X (camera local right).
+    pub pitch: f32,
 }
 
-/* ─────────────────────── input collection ───────────────────────── */
+/* input collection -------------------------------------------------- */
+/// Reads mouse motion while *Alt + LMB* is held and updates
+/// [`OrbitAngles`].
 pub fn gather_orbit_input(
     mut angles: ResMut<OrbitAngles>,
     buttons:    Res<ButtonInput<MouseButton>>,
@@ -25,7 +33,8 @@ pub fn gather_orbit_input(
     angles.pitch = (angles.pitch - delta.y * 0.005).clamp(-1.55, 1.55); // ±89 °
 }
 
-/* ─────────────────────── application ────────────────────────────── */
+/* application ------------------------------------------------------- */
+/// Applies the queued yaw / pitch to the active [`WorldCamera`].
 pub fn apply_orbit(
     angles: Res<OrbitAngles>,
     mut cam_q: Query<&mut Transform, With<WorldCamera>>,

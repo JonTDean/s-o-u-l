@@ -1,3 +1,8 @@
+//! Lightweight **perspective free-cam** helper.
+//!
+//! The module is dormant until you explicitly call [`spawn_freecam`]; it
+//! never interferes with the orthographic world camera.
+
 use bevy::{
     prelude::*,
     input::{
@@ -8,8 +13,6 @@ use bevy::{
     render::camera::Projection,
 };
 
-use super::systems::WorldCamera;
-
 /* ========================================================================== */
 /* Configuration                                                              */
 /* ========================================================================== */
@@ -19,13 +22,17 @@ pub const DEFAULT_MOVE_SPEED: f32 = 10.0;
 /// Default mouse-look sensitivity (**radians · pixel⁻¹**).
 pub const DEFAULT_LOOK_SENS:  f32 = 0.0025;
 
-/// Run-time adjustable settings (eg. via Egui).
+/// Run-time adjustable settings (e.g. via *egui*).
 #[derive(Resource, Debug, Clone, Copy)]
 pub struct FreeCamSettings {
+    /// Linear speed in **world-units · s⁻¹**.
     pub move_speed: f32,
+    /// Mouse-look sensitivity.
     pub look_sens:  f32,
+    /// Optional mouse button that must be held for look/drag.
     pub require_mouse_button: Option<MouseButton>,
 }
+
 impl Default for FreeCamSettings {
     fn default() -> Self {
         Self {
@@ -44,13 +51,19 @@ impl Default for FreeCamSettings {
 #[derive(Component, Debug)]
 pub struct FreeCam;
 
-/// Linear velocity accumulated by the input systems.
+/// Per-frame linear velocity accumulator.
 #[derive(Component, Debug, Default)]
-struct Velocity(Vec3);
+pub struct Velocity(Vec3);
 
-/// Yaw/pitch deltas accumulated by mouse-look.
+/// Per-frame yaw / pitch accumulator.
 #[derive(Component, Debug, Default)]
-struct RotationDelta { yaw: f32, pitch: f32 }
+pub struct RotationDelta {
+    /// Yaw around +Y (world up).
+    pub yaw: f32,
+    /// Pitch around +X (local right).
+    pub pitch: f32,
+}
+
 
 /* ========================================================================== */
 /* Spawner                                                                    */
@@ -69,18 +82,17 @@ pub fn spawn_freecam(cmd: &mut Commands) {
         }),
         Transform::from_xyz(0.0, 0.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
         FreeCam,
-        WorldCamera,
         Velocity::default(),
         RotationDelta::default(),
     ));
 }
 
 /* ========================================================================== */
-/* Stateless input systems                                                    */
+/* Stateless input systems – public                                           */
 /* ========================================================================== */
 
-/// Collects WASD / Space / Q input and writes a world-space velocity.
-fn gather_keyboard_input(
+/// Keyboard movement (WASD, QE, Space).
+pub fn gather_keyboard_input(
     keys:      Res<'_, ButtonInput<KeyCode>>,
     settings:  Res<'_, FreeCamSettings>,
     time:      Res<'_, Time>,
@@ -107,8 +119,8 @@ fn gather_keyboard_input(
     };
 }
 
-/// Translates mouse movement into yaw / pitch deltas.
-fn gather_mouse_input(
+/// Mouse-look yaw / pitch.
+pub fn gather_mouse_input(
     buttons:   Res<'_, ButtonInput<MouseButton>>,
     mut motion: EventReader<'_, '_, MouseMotion>,
     settings:  Res<'_, FreeCamSettings>,
@@ -134,7 +146,8 @@ fn gather_mouse_input(
 /* Heavy integrator – applies queued deltas                                   */
 /* ========================================================================== */
 
-fn apply_freecam_motion(
+/// Integrator that applies queued yaw / pitch / velocity.
+pub fn apply_freecam_motion(
     mut q_cam: Query<
         (
             &mut Transform,
@@ -163,30 +176,7 @@ fn apply_freecam_motion(
 }
 
 /* ========================================================================== */
-/* Plugin                                                                     */
+/* Sub-module: plugin                                                         */
 /* ========================================================================== */
 
-/// Drop-in free-cam plugin (disabled until spawned).
-pub struct FreeCamPlugin;
-impl Plugin for FreeCamPlugin {
-    fn build(&self, app: &mut App) {
-        use super::CameraSet;
-        use engine_core::systems::state::AppState;
-
-        app.init_resource::<FreeCamSettings>()
-            .add_systems(
-                Update,
-                (
-                    gather_keyboard_input.in_set(CameraSet::Input),
-                    gather_mouse_input.in_set(CameraSet::Input),
-                )
-                .run_if(in_state(AppState::InGame)),
-            )
-            .add_systems(
-                Update,
-                apply_freecam_motion
-                    .in_set(CameraSet::Heavy)
-                    .run_if(in_state(AppState::InGame)),
-            );
-    }
-}
+pub mod plugin;

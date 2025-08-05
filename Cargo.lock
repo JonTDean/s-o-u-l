@@ -4669,6 +4669,7 @@ dependencies = [
  "bevy_egui",
  "dirs-next",
  "egui 0.32.0",
+ "engine-common",
  "engine-core",
  "engine-gpu",
  "engine-render",

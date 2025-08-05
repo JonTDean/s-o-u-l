@@ -1,6 +1,8 @@
+//! Keyboard panning – classic **W A S D / arrow keys**.
+
 use bevy::prelude::*;
 
-use super::super::systems::{WorldCamera, KEY_PAN_SPEED};
+use crate::controls::camera::manager::{WorldCamera, KEY_PAN_SPEED};
 
 /// WASD / arrow-key panning.
 pub fn key_pan(

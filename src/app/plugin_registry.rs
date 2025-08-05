@@ -12,6 +12,7 @@
 use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 use bevy_egui::EguiPlugin;
 
+use engine_common::EngineCommonPlugin;
 use engine_core::{plugin::EngineCorePlugin, systems::state::StatePlugin};
 use engine_render::plugin::EngineRendererPlugin;
 use models::plugin::ComputationalIntelligencePlugin;
@@ -28,16 +29,19 @@ pub fn add_all_plugins(app: &mut App) {
     /* 2  dev / runtime state */
     app.add_plugins(StatePlugin);
 
-    /* 3  core engine */
+    /* 3  common engine */
+    app.add_plugins(EngineCommonPlugin);
+    
+    /* 4  core engine */
     app.add_plugins(EngineCorePlugin);
 
-    /* 4  render stack */
+    /* 5  render stack */
     app.add_plugins(EngineRendererPlugin);
 
-    /* 5  computational-intelligence layer */
+    /* 6  computational-intelligence layer */
     app.add_plugins(ComputationalIntelligencePlugin);
 
-    /* 6  UI / HUD */
+    /* 7  UI / HUD */
     app.add_plugins(OutputPlugin);
 }
 

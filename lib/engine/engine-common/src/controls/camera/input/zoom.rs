@@ -1,9 +1,15 @@
+//! Zoom helpers – scroll-wheel & keyboard shortcuts.
+//!
+//! Keeps mouse-centric zoom behaviour in sync with [`ZoomInfo`] so other
+//! systems (minimap, gizmos…) can read the live orthographic scale.
+
 use bevy::{
     input::mouse::MouseWheel,
     prelude::*,
     render::camera::Projection,
 };
-use super::super::systems::{
+
+use crate::controls::camera::manager::{
     WorldCamera, ZoomInfo, ZOOM_FACTOR, MIN_SCALE_CONST, MAX_SCALE,
 };
 
@@ -40,8 +46,8 @@ pub fn zoom_scroll(
 
 /// Keyboard zoom (`Z` / `X`).
 pub fn zoom_keyboard(
-    keys:    Res<ButtonInput<KeyCode>>,
-    mut cam: Query<&mut Projection, With<WorldCamera>>,
+    keys:  Res<ButtonInput<KeyCode>>,
+    mut cam:  Query<&mut Projection, With<WorldCamera>>,
     mut zoom: ResMut<ZoomInfo>,
 ) {
     if !(keys.just_pressed(KeyCode::KeyZ) ^ keys.just_pressed(KeyCode::KeyX)) { return; }
