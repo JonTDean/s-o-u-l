@@ -24,7 +24,7 @@ impl MenuScreen for MainMenuScreen {
         egui::Area::new("main_menu_btns".into())
             .anchor(Align2::CENTER_BOTTOM, [0.0, offset_y])
             .show(ctx, |ui| {
-                Frame::none().show(ui, |ui| {
+                Frame::new().show(ui, |ui| {
                     ui.spacing_mut().item_spacing.y = 10.0;
                     ui.vertical_centered(|ui| {
                         if ui.button("New Scenario").clicked()  { next.set(AppState::NewScenario); }

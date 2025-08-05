@@ -1,63 +1,53 @@
 //! Scene manager – orchestrates `AppState` ↔ camera activation.
 //!
-//! ## What it does
-//! * **Toggles the world camera** on/off as you move between scenes so the
-//!   main menu never renders the (expensive) 3-D world, while the in-game,
-//!   editor and pause overlays always do.
-//! * **Listens for the **`Escape` **key** in `AppState::InGame` and pushes a
-//!   lightweight `PauseMenu` overlay where the player can:
-//!   * _Resume_ the simulation,
-//!   * open the global _Options_ screen,
-//!   * jump into the _Editor_,
-//!   * or return to the _Main Menu_.
-//! * Exposes a tiny one-frame [`PauseAction`] channel so your egui pause-menu
-//!   UI can route button clicks without tight coupling.
-//!
-//! ## How to use
-//! ```rust
-//! use engine_common::{controls::camera::CameraPluginBundle, scenes::SceneManagerPlugin};
-//!
-//! App::new()
-//!     .add_plugins(CameraPluginBundle)      // already in your tree
-//!     .add_plugins(SceneManagerPlugin)      // ← NEW: drop it in
-//!     .run();
-//! ```
-//!
-//! Make sure the `AppState` enum in **engine-core** includes the extra
-//! variants used below (`PauseMenu` & `Editor`).  They can be inserted
-//! anywhere in the enum—ordering is irrelevant for Bevy’s state machine.
+//! This top-level router plugs in the concrete scene plug-ins for the *main*
+//! menu, *options* menu, and the *scenario* flows (new / load).  It also takes
+//! care of toggling the expensive 3-D world camera and of the in-game *Escape*
+//! key → pause overlay logic.  Everything is strictly data-driven, so the
+//! entire module remains deterministic and therefore amenable to headless CI
+//! test builds.
 
 use bevy::prelude::*;
 use engine_core::prelude::AppState;
 
-use crate::controls::camera::manager::WorldCamera;  // ← path fixed
+use crate::controls::camera::manager::WorldCamera;
 
 pub mod main_menu;
 pub mod options;
+pub mod scenarios;
 
 pub use main_menu::MainMenuPlugin;
 pub use options::OptionsScenePlugin;
+pub use scenarios::ScenariosPlugin;
 
 /* =================================================================== */
 /* Plug-in                                                             */
 /* =================================================================== */
 
-/// Top-level scene router – installs concrete scenes and handles
-/// world-camera visibility & pause logic.
+/// Top-level scene router – install once and forget forever.
+///
+/// The plug-in is intentionally *thin*: every concrete scene lives in its own
+/// crate-private module so that dependencies stay minimal and compile times
+/// remain snappy.
 pub struct SceneManagerPlugin;
-
 
 impl Plugin for SceneManagerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((MainMenuPlugin, OptionsScenePlugin))
-            .add_systems(OnEnter(AppState::MainMenu), hide_world_camera)
+        app.add_plugins((
+                MainMenuPlugin,
+                OptionsScenePlugin,
+                ScenariosPlugin,
+            ))
+            /* ------------------------ camera flips ------------------------ */
+            .add_systems(OnEnter(AppState::MainMenu),    hide_world_camera)
             .add_systems(OnEnter(AppState::NewScenario), hide_world_camera)
-            .add_systems(OnEnter(AppState::LoadScenario), hide_world_camera)
-            .add_systems(OnEnter(AppState::Options), hide_world_camera)
-            .add_systems(OnEnter(AppState::InGame),  show_world_camera)
-            .add_systems(OnEnter(AppState::Paused),  show_world_camera)
-            .add_systems(OnExit(AppState::InGame),   hide_world_camera)
-            .add_systems(OnExit(AppState::Paused),   hide_world_camera)
+            .add_systems(OnEnter(AppState::LoadScenario),hide_world_camera)
+            .add_systems(OnEnter(AppState::Options),     hide_world_camera)
+            .add_systems(OnEnter(AppState::InGame),      show_world_camera)
+            .add_systems(OnEnter(AppState::Paused),      show_world_camera)
+            .add_systems(OnExit(AppState::InGame),       hide_world_camera)
+            .add_systems(OnExit(AppState::Paused),       hide_world_camera)
+            /* ------------------------- routers --------------------------- */
             .add_systems(
                 Update,
                 (
@@ -129,8 +119,8 @@ pub enum PauseAction {
 }
 
 impl PauseAction {
-    /// Inject the given action as a **one-frame** resource so
-    /// `pause_menu_router` can react to it the next frame.
+    /// Inject `Self` as a **one-frame** resource so that
+    /// `pause_menu_router` can react to it on the next frame.
     pub fn send(cmd: &mut Commands, act: Self) {
         cmd.insert_resource(act);
     }

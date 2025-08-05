@@ -9,3 +9,4 @@ path = "src/lib.rs"
 [dependencies]
 bevy          = { workspace = true, features = ["bevy_winit", "bevy_render"] }
 engine-core   = { path = "../engine-core" }            # shared core utilities
+dirs-next     = { workspace =  true }
