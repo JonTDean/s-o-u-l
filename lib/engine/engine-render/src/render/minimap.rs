@@ -4,18 +4,17 @@
 //! `render::worldgrid::minimap` module so downstream UI code can keep the
 //! exact same data-flow with **zero logic changes**.
 
-use std::collections::HashMap;
 use bevy::prelude::*;
-use engine_core::{
-    automata::GpuGridSlice,
-    events::AutomatonId,
-};
+use engine_core::{automata::GpuGridSlice, events::AutomatonId};
+use std::collections::HashMap;
 
 /// Per-automaton data required by the minimap overlay.
 #[derive(Clone)]
 pub struct MinimapEntry {
-    pub slice:   GpuGridSlice,  // where in the atlas this board lives
-    pub texture: Handle<Image>, // 2-D view (filled in render-world)
+    /// Atlas slice describing where the board lives.
+    pub slice: GpuGridSlice,
+    /// 2‑D texture view populated in the render world.
+    pub texture: Handle<Image>,
 }
 
 /// Global mapping: `AutomatonId → minimap thumbnail`.

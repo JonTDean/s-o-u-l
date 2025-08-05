@@ -25,10 +25,7 @@
 //! ```
 use std::time::Duration;
 
-use bevy::{
-    prelude::*,
-    time::Fixed,
-};
+use bevy::{prelude::*, time::Fixed};
 
 /* ===================================================================== */
 /* Resources                                                             */
@@ -48,7 +45,10 @@ impl FixedStepConfig {
     #[inline]
     pub fn from_hz(hz: u32, max_steps_per_frame: u8) -> Self {
         let dt = Duration::from_secs_f64(1.0 / hz as f64);
-        Self { dt, max_steps_per_frame }
+        Self {
+            dt,
+            max_steps_per_frame,
+        }
     }
 }
 
@@ -56,7 +56,8 @@ impl FixedStepConfig {
 /// can interpolate: `alpha = accum / dt` (see `RenderInterpolator`).
 #[derive(Resource, Default, Debug)]
 pub struct SimAccumulator {
-    pub accum: f64,   // seconds
+    /// Real time accumulated since the last simulation tick, in seconds.
+    pub accum: f64,
 }
 
 /* ===================================================================== */
@@ -83,9 +84,9 @@ pub struct SimulationStep;
 #[allow(clippy::needless_pass_by_value)]
 pub fn accumulate_and_step(
     time_fixed: Res<Time<Fixed>>,
-    cfg:        Res<FixedStepConfig>,
-    mut acc:    ResMut<SimAccumulator>,
-    mut steps:  EventWriter<SimulationStep>,
+    cfg: Res<FixedStepConfig>,
+    mut acc: ResMut<SimAccumulator>,
+    mut steps: EventWriter<SimulationStep>,
 ) {
     // Pull the *exact* fixed-timestep delta (e.g. 1/60 s == 16 666 µs).
     acc.accum += time_fixed.delta_secs() as f64;
@@ -96,7 +97,7 @@ pub fn accumulate_and_step(
     while acc.accum >= dt_sec && cnt < cfg.max_steps_per_frame {
         steps.write(SimulationStep);
         acc.accum -= dt_sec;
-        cnt       += 1;
+        cnt += 1;
     }
 
     // Clamp runaway accumulators to avoid spiral-of-death.
