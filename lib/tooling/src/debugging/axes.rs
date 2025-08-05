@@ -27,15 +27,18 @@ pub fn draw_axes(
     flags:  Res<CameraDebug>,
     mut giz: Gizmos,
 ) {
-    /* ── smart clearing ──────────────────────────────────────────────── */
-    // Combine the flags that draw line gizmos each frame. We compute this
-    // at run‑time to avoid `const` limitations with `bitflags` (the `|`
-    // operator isn’t a const‑fn).
+    /* ── deterministic clearing ─────────────────────────────────────── */
+    // Union of everything that *draws* in this file:
     let line_flags = CameraDebug::AXES | CameraDebug::FLOOR_GRID | CameraDebug::GRID_3D;
 
-    if flags.is_changed() && !flags.intersects(line_flags) {
+    // 1. Nothing selected  → wipe & bail out early.
+    if !flags.intersects(line_flags) {
         giz.clear();
+        return;
     }
+    // 2. We are about to redraw a full new frame of lines → wipe first
+    //    so we never accumulate ghosts from previous frames.
+    giz.clear();
 
     /* ── grey XY floor grid (1 m spacing, ±500 m extent) ───────────── */
     if flags.contains(CameraDebug::FLOOR_GRID) {

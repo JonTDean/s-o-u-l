@@ -1,4 +1,9 @@
 //! Debug-drawing helpers for camera frustum & automata bounds.
+//
+//! • Clears the gizmo layer deterministically *once per frame* whenever
+//!   we are about to (re)draw either the frustum or the automata bounds.
+//!   This removes the “right-hand quadrant” artefact that was caused by
+//!   stale geometry accumulating every frame.
 
 use bevy::prelude::*;
 use engine_core::prelude::AutomataRegistry;
@@ -13,12 +18,21 @@ pub fn draw_camera_gizmos(
     registry: Res<AutomataRegistry>,
     mut gizmos: Gizmos,
 ) {
-    if flags.is_changed()
-        && !flags.intersects(CameraDebug::DRAW_BOUNDS | CameraDebug::FRUSTUM)
-    {
+    /* ───── determine whether we need to draw anything this frame ───── */
+    let wants_frustum = flags.contains(CameraDebug::FRUSTUM);
+    let wants_bounds  = flags.contains(CameraDebug::DRAW_BOUNDS);
+    let active        = wants_frustum || wants_bounds;
+
+    /* ───── when nothing is active, wipe the old gizmos and bail out ── */
+    if !active {
         gizmos.clear();
+        return;
     }
 
+    /* ───── we *will* draw – start with a clean slate every frame ───── */
+    gizmos.clear();
+
+    /* ───── fetch camera + window ───────────────────────────────────── */
     let (Ok((xf, Projection::Orthographic(o), rect)), Ok(win)) =
         (cam_q.single(), windows.single())
     else { return };
@@ -27,8 +41,8 @@ pub fn draw_camera_gizmos(
     let half_h = win.height() * 0.5 * o.scale;
     let c      = xf.translation();
 
-    /* ───────────────────── camera frustum ───────────────────── */
-    if flags.contains(CameraDebug::FRUSTUM) {
+    /* ───────────────────── camera frustum ──────────────────────────── */
+    if wants_frustum {
         let r = [
             Vec3::new(rect.min.x, rect.min.y, 0.0),
             Vec3::new(rect.max.x, rect.min.y, 0.0),
@@ -40,16 +54,14 @@ pub fn draw_camera_gizmos(
         }
     }
 
-    /* ─────────────────── automata world bounds ───────────────── */
-    if flags.contains(CameraDebug::DRAW_BOUNDS) {
-        if registry.list().is_empty() {
-            return;
-        }
+    /* ─────────────────── automata world bounds ─────────────────────── */
+    if wants_bounds {
+        if registry.list().is_empty() { return; }
 
         let mut min = Vec3::splat(f32::INFINITY);
         let mut max = Vec3::splat(f32::NEG_INFINITY);
         for info in registry.list() {
-            let off = info.world_offset;
+            let off  = info.world_offset;
             let size = Vec3::new(
                 info.slice.size.x as f32,
                 info.slice.size.y as f32,
@@ -59,7 +71,7 @@ pub fn draw_camera_gizmos(
             max = max.max(off + size);
         }
 
-        /* ensure box at least one viewport in size so it never disappears */
+        /* ensure the box spans at least one viewport so it never vanishes */
         min.x = min.x.min(c.x - half_w);
         min.y = min.y.min(c.y - half_h);
         max.x = max.x.max(c.x + half_w);
