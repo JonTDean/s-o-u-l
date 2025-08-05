@@ -15,6 +15,7 @@ glam                = { workspace = true }
 bevy                = { workspace = true,  features = [ "bevy_render", "bevy_sprite" ] }          # full Bevy with renderer & UI
 bevy_ecs            = { workspace = true }
 bevy_reflect        = { version = "0.16.1" }
+engine-common         = { path = "../engine-common" }
 engine-core         = { path = "../engine-core" }
 engine-gpu          = { path = "../engine-gpu", optional = true }
 tooling             = { path = "../../tooling" }

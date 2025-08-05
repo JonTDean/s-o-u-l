@@ -12,17 +12,15 @@
 //! © 2025 Obaven Inc.
 
 use bevy::{
-    ecs::system::{Local, Res, ResMut},
+    ecs::system::{Local, Res},
     input::{keyboard::KeyCode, ButtonInput},
 };
 use bevy_egui::{egui, EguiContexts};
-use tooling::debugging::camera::CameraDebug;
 
 /// Immediate‑mode egui window toggled with **F3**.
 pub fn debug_menu(
     mut egui_ctx: EguiContexts,
     keys:        Res<ButtonInput<KeyCode>>,
-    mut flags:   ResMut<CameraDebug>,
     mut open:    Local<bool>,
 ) {
     // Hot‑key – open/close.
@@ -41,21 +39,5 @@ pub fn debug_menu(
         });
         ui.separator();
 
-        // Tuple array: (checkbox label, associated CameraDebug flag)
-        for (label, bit) in [
-            ("3‑D voxel grid", CameraDebug::GRID_3D),   // coloured XYZ lattice
-            ("Floor grid"     , CameraDebug::FLOOR_GRID),// grey XY plane lines
-            ("XYZ axes"       , CameraDebug::AXES),
-            ("Clamp camera"   , CameraDebug::CLAMP),
-            ("Draw bounds"    , CameraDebug::DRAW_BOUNDS),
-            ("Draw frustum"   , CameraDebug::FRUSTUM),
-            ("Freeze input"   , CameraDebug::FREEZE),
-            ("Log snaps"      , CameraDebug::LOG_SNAP),
-        ] {
-            let mut v = flags.contains(bit);
-            if ui.checkbox(&mut v, label).clicked() {
-                flags.set(bit, v);
-            }
-        }
     });
 }

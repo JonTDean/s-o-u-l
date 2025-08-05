@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::MainSet};
-use crate::render::{camera::systems::CameraManagerPlugin, interpolator::{update_alpha, RenderInterpolator}, materials::plugin::MaterialsPlugin};
+use crate::render::{interpolator::{update_alpha, RenderInterpolator}, materials::plugin::MaterialsPlugin};
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::GpuAutomataComputePlugin;
@@ -15,12 +15,6 @@ impl Plugin for EngineRendererPlugin {
     fn build(&self, app: &mut App) {
         /* 1 ░ global events */
         app.add_event::<AutomataCommand>();
-
-        /* 2 ░ camera stack
-         * ── orthographic manager   (UI + world layers, metrics, etc.)
-            * ── perspective free-cam   (spawns on InGame → flies anywhere)
-         */
-        app.add_plugins(CameraManagerPlugin);
 
         app.init_resource::<RenderInterpolator>()
         .add_systems(

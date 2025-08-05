@@ -2161,6 +2161,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "engine-common"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "engine-core",
+]
+
+[[package]]
 name = "engine-core"
 version = "0.1.0"
 dependencies = [
@@ -2198,6 +2206,7 @@ dependencies = [
  "bevy",
  "bevy_ecs",
  "bevy_reflect",
+ "engine-common",
  "engine-core",
  "engine-gpu",
  "glam",
@@ -5065,6 +5074,7 @@ dependencies = [
  "bevy_egui",
  "bitflags 2.9.1",
  "bytemuck",
+ "engine-common",
  "engine-core",
  "engine-render",
  "models",

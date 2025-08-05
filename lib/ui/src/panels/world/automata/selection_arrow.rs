@@ -2,8 +2,8 @@
 //! (updated 2025-08-01 – uses `AutomatonInfo::slice`)
 
 use bevy::prelude::*;
+use engine_common::controls::camera::WorldCamera;
 use engine_core::prelude::{AppState, AutomataRegistry};
-use engine_render::WorldCamera;
 
 use crate::overlays::minimap::MinimapSelection;
 

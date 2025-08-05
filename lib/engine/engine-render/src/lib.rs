@@ -4,12 +4,6 @@ pub mod render;
 
 use bevy_ecs::resource::Resource;
 
-/* public surface ---------------------------------------------------- */
-pub use render::{
-    CameraPlugin,
-    WorldCamera,
-};
-
 /* helper wrapper ---------------------------------------------------- */
 #[derive(Resource, Clone)]
 pub struct RuleParams(pub serde_json::Value);

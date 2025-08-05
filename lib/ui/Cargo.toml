@@ -17,5 +17,6 @@ bitflags            = { workspace = true }
 models              = { path = "../models" }
 simulation_kernel   = { path = "../simulation_kernel" }
 tooling             = { path = "../tooling" }
+engine-common         = { path = "../engine/engine-common" }
 engine-core         = { path = "../engine/engine-core" }
 engine-render       = { path = "../engine/engine-render" }

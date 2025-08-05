@@ -6,8 +6,8 @@
 
 use bevy::prelude::*;
 use bevy::sprite::Material2dPlugin;
+use engine_common::controls::camera::WorldCamera;
 
-use crate::render::camera::WorldCamera;
 use crate::render::materials::debug::debug_floor::{DebugFloorMaterial, DebugFloorParams};
 
 /* ─────────────────────────────────────────────────────────────── Components */

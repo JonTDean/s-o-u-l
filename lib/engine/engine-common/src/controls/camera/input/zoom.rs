@@ -3,8 +3,6 @@ use bevy::{
     prelude::*,
     render::camera::Projection,
 };
-use tooling::debugging::camera::CameraDebug;
-
 use super::super::systems::{
     WorldCamera, ZoomInfo, ZOOM_FACTOR, MIN_SCALE_CONST, MAX_SCALE,
 };
@@ -15,10 +13,7 @@ pub fn zoom_scroll(
     windows:  Query<&Window>,
     mut cam_q: Query<(&mut Transform, &mut Projection), With<WorldCamera>>,
     mut zoom: ResMut<ZoomInfo>,
-    flags:    Res<CameraDebug>,
 ) {
-    if flags.contains(CameraDebug::FREEZE) { return; }
-
     let scroll: f32 = wheel.read().map(|e| e.y).sum();
     if scroll == 0.0 { return; }
 
@@ -43,7 +38,7 @@ pub fn zoom_scroll(
     }
 }
 
-/// Keyboard zoom (Z / X).
+/// Keyboard zoom (`Z` / `X`).
 pub fn zoom_keyboard(
     keys:    Res<ButtonInput<KeyCode>>,
     mut cam: Query<&mut Projection, With<WorldCamera>>,

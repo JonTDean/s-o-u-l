@@ -8,7 +8,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
-use engine_render::{prelude::ZoomInfo, WorldCamera};
+use engine_common::controls::camera::{WorldCamera, ZoomInfo};
 
 pub mod zoom_overlay;
 

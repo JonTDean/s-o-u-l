@@ -14,11 +14,9 @@ use bevy_egui::{
     EguiContexts,
 };
 
+use engine_common::controls::camera::WorldCamera;
 use engine_core::{events::AutomatonId, prelude::AutomataRegistry};
-use engine_render::{
-    render::minimap::MinimapTextures,
-    WorldCamera,
-};
+use engine_render::render::minimap::MinimapTextures;
 
 /* --------------------------------------------------------------------- */
 /*                                Resources                              */

@@ -53,7 +53,10 @@ pub fn build(cfg: RuntimeConfig) -> App {
     }
 
     /* 2 ░ global resources & always-on systems ----------------------- */
-    app.init_state::<AppState>();           // default == MainMenu
+    app.init_state::<AppState>()
+        .add_systems(Startup, |mut next: ResMut<NextState<AppState>>| {
+            next.set(AppState::MainMenu);
+        });           // default == MainMenu
 
     // Fixed-step configuration + accumulator + event type
     let fixed_cfg = FixedStepConfig::from_hz(cfg.simulation_rate_hz, cfg.max_sim_steps_per_frame);

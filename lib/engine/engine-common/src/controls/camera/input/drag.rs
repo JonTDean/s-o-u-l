@@ -11,7 +11,7 @@ pub fn begin_drag(
     }
 }
 
-/// Continue drag → pan camera in world units (zoom‑corrected).
+/// Continue drag → pan camera in world units (zoom-corrected).
 pub fn drag_pan(
     buttons: Res<ButtonInput<MouseButton>>,
     mut drag: ResMut<DragState>,
@@ -19,7 +19,7 @@ pub fn drag_pan(
     mut cam_q: Query<(&mut Transform, &Projection), With<WorldCamera>>,
 ) {
     if !(buttons.pressed(MouseButton::Right) || buttons.pressed(MouseButton::Middle)) { return; }
-    let (Some(prev), Ok(win)) = (drag.0, windows.single()) else { return }; // previous cursor pos
+    let (Some(prev), Ok(win)) = (drag.0, windows.single()) else { return };
     let Some(cur) = win.cursor_position() else { return };
     let Ok((mut tf, proj)) = cam_q.single_mut() else { return };
 

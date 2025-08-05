@@ -46,7 +46,7 @@ members = [
     "lib/engine/engine-render",
     "lib/ui",
     "lib/tooling", 
-    "lib/simulation_kernel", "lib/tests",
+    "lib/simulation_kernel", "lib/tests", "lib/engine/engine-common",
 ]
 resolver = "2"
 

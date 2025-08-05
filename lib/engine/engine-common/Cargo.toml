@@ -1,0 +1,12 @@
+[package]
+name = "engine-common"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+bevy          = { workspace = true, features = ["bevy_winit", "bevy_render"] }
+
+engine-core   = { path = "../engine-core" }            # shared core utilities

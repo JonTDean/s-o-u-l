@@ -2,6 +2,7 @@
 
 use std::sync::Arc;
 use bevy::prelude::*;
+use engine_common::controls::camera::WorldCamera;
 use engine_core::{
     automata::{AutomatonInfo, GpuGridSlice},
     events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved, GenerateDebugFloor, ToggleDebugGrid},
@@ -9,7 +10,7 @@ use engine_core::{
 };
 use serde_json::Value;
 
-use crate::{render::materials::debug::debug_grid::DebugGridTag, WorldCamera};
+use crate::render::materials::debug::debug_grid::DebugGridTag;
 /* ───────────────────────────── constants ───────────────────────────── */
 
 const SLICE_SIDE:   u32  = 256;
