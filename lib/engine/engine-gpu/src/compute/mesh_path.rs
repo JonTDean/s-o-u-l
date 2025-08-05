@@ -24,19 +24,16 @@ use bevy::{
     render::{
         render_asset::RenderAssets,
         render_graph::{Node, NodeRunError, RenderGraphContext},
-        renderer::{RenderContext, RenderDevice},
         render_resource::*,
+        renderer::{RenderContext, RenderDevice},
         texture::GpuImage,
     },
 };
 use wgpu::Features;
 
-use crate::{
-    graph::ExtractedGpuSlices,
-    pipelines::GpuPipelineCache,
-    plugin::GlobalVoxelAtlas,
-};
+use crate::{graph::ExtractedGpuSlices, pipelines::GpuPipelineCache, plugin::GlobalVoxelAtlas};
 
+/// Render-graph node implementing the mesh-shader fast path.
 #[derive(Debug)]
 pub struct MeshPathNode;
 
@@ -44,38 +41,48 @@ impl Node for MeshPathNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
-        ctx:    &mut RenderContext,
-        world:  &World,
+        ctx: &mut RenderContext,
+        world: &World,
     ) -> Result<(), NodeRunError> {
         let begin = Instant::now();
 
-        let Some(device) = world.get_resource::<RenderDevice>() else { return Ok(()); };
+        let Some(device) = world.get_resource::<RenderDevice>() else {
+            return Ok(());
+        };
 
         const MESH_CANDIDATE_FEATURE: Features = Features::VERTEX_WRITABLE_STORAGE;
         if !device.features().contains(MESH_CANDIDATE_FEATURE) {
-            return Ok(());      // Hardware not capable.
+            return Ok(()); // Hardware not capable.
         }
 
         #[cfg(not(feature = "mesh_shaders"))]
-        { return Ok(()); }
+        {
+            return Ok(());
+        }
 
         /* 1 ░ Early exit if no slices this frame. */
         let slices = world.resource::<ExtractedGpuSlices>();
-        if slices.0.is_empty() { return Ok(()); }
+        if slices.0.is_empty() {
+            return Ok(());
+        }
 
         /* 2 ░ GPU resources. */
-        let atlas      = world.resource::<GlobalVoxelAtlas>();
-        let images     = world.resource::<RenderAssets<GpuImage>>();
+        let atlas = world.resource::<GlobalVoxelAtlas>();
+        let images = world.resource::<RenderAssets<GpuImage>>();
         let atlas_view = &images.get(&atlas.atlas).unwrap().texture_view;
 
         let cache = world.resource::<GpuPipelineCache>();
         let pipes = world.resource::<PipelineCache>();
-        let Some(&pid) = cache.map.get("mesh_path")      else { return Ok(()); };
-        let Some(pipe) = pipes.get_compute_pipeline(pid) else { return Ok(()); };
+        let Some(&pid) = cache.map.get("mesh_path") else {
+            return Ok(());
+        };
+        let Some(pipe) = pipes.get_compute_pipeline(pid) else {
+            return Ok(());
+        };
 
         /* 3 ░ Bind-group. */
         let wgpu_layout = pipe.get_bind_group_layout(0);
-        let layout      = BindGroupLayout::from(wgpu_layout.clone());
+        let layout = BindGroupLayout::from(wgpu_layout.clone());
         let bind = device.create_bind_group(
             Some("mesh_path.bind0"),
             &layout,
@@ -87,12 +94,14 @@ impl Node for MeshPathNode {
 
         /* 4 ░ Dispatch (≈ 64 voxels / work-group). */
         let voxels: u32 = slices.0.iter().map(|s| s.0.size.x * s.0.size.y).sum();
-        let groups      = (voxels + 63) / 64;
+        let groups = (voxels + 63) / 64;
 
-        let mut pass = ctx.command_encoder().begin_compute_pass(&ComputePassDescriptor {
-            label: Some("mesh_path.compute"),
-            timestamp_writes: None,
-        });
+        let mut pass = ctx
+            .command_encoder()
+            .begin_compute_pass(&ComputePassDescriptor {
+                label: Some("mesh_path.compute"),
+                timestamp_writes: None,
+            });
         pass.set_pipeline(pipe);
         pass.set_bind_group(0, &bind, &[]);
         pass.dispatch_workgroups(groups, 1, 1);
@@ -101,7 +110,6 @@ impl Node for MeshPathNode {
         Ok(())
     }
 }
-
 
 /* ===================================================================== */
 /* Notes for future work                                                 */

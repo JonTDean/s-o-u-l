@@ -44,8 +44,8 @@ pub enum AutomataCommand {
 ///              Bevy ECS (GPU slice allocator needs this)
 #[derive(Event)]
 pub struct AutomatonAdded {
-    pub id:     AutomatonId,    // logical CPU‑side handle
-    pub entity: Entity,         // ECS entity for GPU slice allocation
+    pub id: AutomatonId, // logical CPU‑side handle
+    pub entity: Entity,  // ECS entity for GPU slice allocation
 }
 
 /// Emitted when an automaton is removed (optional convenience).
@@ -54,9 +54,10 @@ pub struct AutomatonRemoved {
     pub id: AutomatonId,
 }
 
-
-#[derive(Event, Debug, Clone, Copy)]  
+#[derive(Event, Debug, Clone, Copy)]
+/// Toggles the visibility of the debug grid overlay.
 pub struct ToggleDebugGrid;
 
 #[derive(Event, Debug, Clone, Copy)]
+/// Requests that a flat debug floor be spawned.
 pub struct GenerateDebugFloor;

@@ -14,15 +14,14 @@ use bevy::{
     core_pipeline::core_3d::graph::{Core3d, Node3d},
     prelude::*,
     render::{
+        ExtractSchedule, Render, RenderApp, RenderSet,
         render_graph::{NodeRunError, RenderGraph, RenderGraphContext},
         render_resource::{
-            CachedRenderPipelineId, FragmentState, MultisampleState, PipelineCache,
-            PrimitiveState, RenderPipelineDescriptor, TextureFormat,
-            VertexAttribute, VertexBufferLayout, VertexFormat, VertexState,
-            VertexStepMode,
+            CachedRenderPipelineId, FragmentState, MultisampleState, PipelineCache, PrimitiveState,
+            RenderPipelineDescriptor, TextureFormat, VertexAttribute, VertexBufferLayout,
+            VertexFormat, VertexState, VertexStepMode,
         },
         renderer::RenderDevice,
-        ExtractSchedule, Render, RenderApp, RenderSet,
     },
 };
 use wgpu::{ColorTargetState, ColorWrites, Features};
@@ -46,8 +45,8 @@ use labels::*;
 use textures::{make_atlas, make_image};
 
 use crate::{
-    compute::dual_contour::{DualContourNode, MeshletBuffers, MAX_VOXELS},
-    graph::{extract_gpu_slices, ComputeAutomataNode, ExtractedGpuSlices},
+    compute::dual_contour::{DualContourNode, MAX_VOXELS, MeshletBuffers},
+    graph::{ComputeAutomataNode, ExtractedGpuSlices, extract_gpu_slices},
     pipelines::GpuPipelineCache,
 };
 
@@ -55,18 +54,25 @@ use crate::{
 use crate::compute::mesh_path::MeshPathNode;
 
 /* ───────────────── Resources ───────────────── */
+/// Handles for the global voxel atlas textures.
 #[derive(Resource, Clone)]
 pub struct GlobalVoxelAtlas {
+    /// 3‑D texture storing automaton state.
     pub atlas: Handle<Image>,
+    /// 2‑D signalling texture for debugging/comms.
     pub signal: Handle<Image>,
 }
 
+/// Toggles between even/odd frames for ping‑pong resources.
 #[derive(Resource, Default)]
 pub struct FrameParity(pub bool);
 
+/// Per-frame simulation statistics.
 #[derive(Resource, Default, Clone, Copy)]
 pub struct StepsThisFrame {
+    /// Number of simulation steps executed this frame.
     pub steps: u32,
+    /// GPU time spent stepping automata in milliseconds.
     pub gpu_time_ms: f32,
 }
 
@@ -84,8 +90,10 @@ fn init_meshlet_buffers(mut cmd: Commands, dev: Res<RenderDevice>) {
 }
 
 /* Tiny voxel debug pipeline ------------------------------------------------ */
+/// Render pipeline used for drawing debugging voxels.
 #[derive(Resource)]
 pub struct VoxelPipeline {
+    /// Cached pipeline identifier.
     pub id: CachedRenderPipelineId,
 }
 
@@ -189,6 +197,7 @@ impl bevy::render::render_graph::Node for VoxelDrawNode {
 }
 
 /* ───────────────── Plugin body ───────────────── */
+/// Boots the GPU compute back-end and render-graph nodes.
 pub struct GpuAutomataComputePlugin;
 
 impl Plugin for GpuAutomataComputePlugin {
@@ -220,7 +229,9 @@ impl Plugin for GpuAutomataComputePlugin {
                     if slice_q.get(ev.entity).is_ok() {
                         continue;
                     }
-                    let Some(info) = reg.get_mut(ev.id) else { continue };
+                    let Some(info) = reg.get_mut(ev.id) else {
+                        continue;
+                    };
                     let want = info.slice.size.max(UVec2::splat(256));
                     if let Some((layer, off)) = alloc.allocate(want) {
                         let slice = GpuGridSlice {
@@ -276,7 +287,11 @@ impl Plugin for GpuAutomataComputePlugin {
             )
             .add_systems(
                 Startup,
-                (init_meshlet_buffers, init_voxel_pipeline, init_compute_pipelines),
+                (
+                    init_meshlet_buffers,
+                    init_voxel_pipeline,
+                    init_compute_pipelines,
+                ),
             )
             .configure_sets(Render, (RenderSet::Queue,));
 
@@ -284,9 +299,7 @@ impl Plugin for GpuAutomataComputePlugin {
         render_app.add_systems(Render, render_debug_squares.after(RenderSet::Queue));
 
         /* 5 ░ Render-graph wiring */
-        let mut graph = render_app
-            .world_mut()
-            .resource_mut::<RenderGraph>();
+        let mut graph = render_app.world_mut().resource_mut::<RenderGraph>();
         let core3d_sub = graph.get_sub_graph_mut(Core3d).unwrap();
         core3d_sub.add_node(AutomataStepLabel, ComputeAutomataNode);
 

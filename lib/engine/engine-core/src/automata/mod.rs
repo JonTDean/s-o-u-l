@@ -52,17 +52,28 @@ pub struct GpuGridSlice {
 /// [`AutomataRegistry`].  It’s *not* a component because UI code needs
 /// to access it even when the automaton entity might not be in scope.
 pub struct AutomatonInfo {
-    pub id:               AutomatonId,
-    pub name:             String,
-    pub rule:             Arc<dyn AutomatonRule<D = Dim> + Send + Sync>,
-    pub params:           Value,
-    pub seed_fn:          Option<fn(&mut ())>, // placeholder until CPU grid returns
-    pub slice:            GpuGridSlice,
-    pub dimension:        u8,                  // kept for backwards-compat with old UI
-    pub voxel_size:       f32,
-    pub world_offset:     Vec3,
+    /// Logical identifier assigned by the CPU registry.
+    pub id: AutomatonId,
+    /// Human‑readable name of the automaton/rule.
+    pub name: String,
+    /// Rule implementation driving the simulation.
+    pub rule: Arc<dyn AutomatonRule<D = Dim> + Send + Sync>,
+    /// Arbitrary JSON parameters passed to the rule.
+    pub params: Value,
+    /// Optional CPU seeding function.
+    pub seed_fn: Option<fn(&mut ())>, // placeholder until CPU grid returns
+    /// Slice inside the global GPU atlas where state is stored.
+    pub slice: GpuGridSlice,
+    /// Dimensionality of the automaton.
+    pub dimension: u8, // kept for backwards-compat with old UI
+    /// Size of one voxel edge in world units.
+    pub voxel_size: f32,
+    /// Translation applied to position the automaton in world space.
+    pub world_offset: Vec3,
+    /// Clear colour used for empty space.
     pub background_color: Color,
-    pub palette:          Option<Vec<Color>>,
+    /// Optional colour palette for visualisation.
+    pub palette: Option<Vec<Color>>,
 }
 
 impl std::fmt::Debug for AutomatonInfo {

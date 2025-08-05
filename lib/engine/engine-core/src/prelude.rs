@@ -1,9 +1,10 @@
+//! Convenience re-exports for engine-core consumers.
+
 pub use crate::{
-    events::*,
     automata::AutomatonInfo,
+    events::*,
     systems::{registry::*, schedule::*, state::AppState},
     world::*,
-    
 };
 
 pub use bevy::prelude::*;

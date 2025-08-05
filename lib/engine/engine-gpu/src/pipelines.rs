@@ -9,12 +9,15 @@ use std::borrow::Cow;
 use bevy::prelude::*;
 use bevy::render::{render_resource::*, renderer::RenderDevice};
 
+/// Simple wrapper storing cached compute pipelines keyed by rule ID.
 #[derive(Resource, Default, Clone)]
 pub struct GpuPipelineCache {
+    /// Mapping from rule identifier to compiled pipeline ID.
     pub map: std::collections::HashMap<String, CachedComputePipelineId>,
 }
 
 impl GpuPipelineCache {
+    /// Retrieve an existing pipeline or compile a new one from WGSL source.
     pub fn get_or_create(
         &mut self,
         id: &str,

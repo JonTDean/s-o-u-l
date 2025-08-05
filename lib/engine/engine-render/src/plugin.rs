@@ -1,14 +1,18 @@
 //! engine/plugin.rs – root **engine** plug-in.
 
+use crate::render::{
+    interpolator::{RenderInterpolator, update_alpha},
+    materials::plugin::MaterialsPlugin,
+};
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::MainSet};
-use crate::render::{interpolator::{update_alpha, RenderInterpolator}, materials::plugin::MaterialsPlugin};
 
-#[cfg(feature = "gpu-compute")]
-use engine_gpu::GpuAutomataComputePlugin;
 #[cfg(feature = "gpu-compute")]
 use engine_core::systems::state::resources::RuntimeFlags;
+#[cfg(feature = "gpu-compute")]
+use engine_gpu::GpuAutomataComputePlugin;
 
+/// Top‑level plugin wiring all renderer systems.
 pub struct EngineRendererPlugin;
 
 impl Plugin for EngineRendererPlugin {
@@ -16,14 +20,11 @@ impl Plugin for EngineRendererPlugin {
         /* 1 ░ global events */
         app.add_event::<AutomataCommand>();
 
-        app.init_resource::<RenderInterpolator>()
-        .add_systems(
+        app.init_resource::<RenderInterpolator>().add_systems(
             Update,
-            update_alpha
-                .in_set(MainSet::Render)
-                .after(MainSet::Logic),          // ← instead of .after(FixedUpdate)
+            update_alpha.in_set(MainSet::Render).after(MainSet::Logic), // ← instead of .after(FixedUpdate)
         );
-        
+
         /* 3 ░ optional GPU compute */
         #[cfg(feature = "gpu-compute")]
         {

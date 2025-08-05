@@ -22,7 +22,7 @@ pub struct RuntimeFlags {
 
 impl FromWorld for RuntimeFlags {
     fn from_world(world: &mut World) -> Self {
-        let settings      = world.get_resource::<Settings>();
+        let settings = world.get_resource::<Settings>();
         let force_cpu_env = std::env::var_os("SOUL_CPU").is_some();
         Self {
             gpu_enabled: settings.map_or(true, |s| s.gpu_compute) && !force_cpu_env,
@@ -30,14 +30,14 @@ impl FromWorld for RuntimeFlags {
     }
 }
 
-
 /// Runtime counters.
 #[derive(Resource, Debug, Default)]
 pub struct Session {
-    pub frame:      u64,
+    /// Number of frames rendered since start.
+    pub frame: u64,
+    /// Whether the simulation is currently paused.
     pub sim_paused: bool,
 }
-
 
 /// User / application preferences (saved as TOML).
 #[derive(Resource, Debug, Clone, Serialize, Deserialize)]
@@ -45,7 +45,7 @@ pub struct Settings {
     /// Master volume (0–1).  *Not used yet.*
     pub master_volume: f32,
     /// Base egui font size.
-    pub ui_font_size:  f32,
+    pub ui_font_size: f32,
 
     /// Autosave enabled?
     pub autosave: bool,
@@ -58,7 +58,13 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        Self { master_volume: 1.0, ui_font_size: 16.0, autosave: true, autosave_interval: 30, gpu_compute: true, }
+        Self {
+            master_volume: 1.0,
+            ui_font_size: 16.0,
+            autosave: true,
+            autosave_interval: 30,
+            gpu_compute: true,
+        }
     }
 }
 
@@ -74,6 +80,7 @@ impl Settings {
             .unwrap_or_default()
     }
 
+    /// Persist the settings to disk.
     pub fn save(&self) {
         let _ = fs::create_dir_all(Self::config_dir());
         let path = Settings::config_path();
@@ -83,7 +90,9 @@ impl Settings {
     }
 
     fn config_dir() -> PathBuf {
-        dirs_next::document_dir().unwrap_or(PathBuf::from(".")).join("SOUL")
+        dirs_next::document_dir()
+            .unwrap_or(PathBuf::from("."))
+            .join("SOUL")
     }
 
     fn config_path() -> PathBuf {
