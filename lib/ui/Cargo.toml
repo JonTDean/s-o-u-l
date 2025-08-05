@@ -12,7 +12,7 @@ serde               = { workspace = true }
 serde_json          = { workspace = true }
 rand                = { workspace = true }
 bitflags            = { workspace = true }
-
+rayon               = { workspace = true }
 # Local
 models              = { path = "../models" }
 simulation_kernel   = { path = "../simulation_kernel" }
