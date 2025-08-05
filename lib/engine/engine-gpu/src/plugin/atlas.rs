@@ -13,7 +13,6 @@ struct Rect {
     size: UVec2,
 }
 
-#[derive(Resource)]
 /// Minimal 2‑D guillotine allocator used per atlas layer.
 #[derive(Resource)]
 pub struct AtlasAllocator {
