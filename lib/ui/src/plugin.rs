@@ -19,8 +19,6 @@ pub struct OutputPlugin;
         │   ui::OutputPlugin         │   ← egui menus, HUD, fade, etc.
         │   ├─ ui::components::*     │
         │   ├─ ui::overlays::*       │
-        │   ├─ ui::panels::MainMenu  │
-        │   ├─ ui::panels::WorldHUD  │
         │   └─ engine_render::ActiveAutomataRenderPlugin (re-export) ─┐
         └────────────────────────────┘                                │
                                                                       │ public API
@@ -33,10 +31,9 @@ pub struct OutputPlugin;
 impl Plugin for OutputPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
+                StylesPlugin,
                 ComponentsPlugin,
                 OverlaysPlugin,
-                PanelsPlugin,
-                StylesPlugin,
            ));
     }
 }

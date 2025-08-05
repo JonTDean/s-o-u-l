@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy_egui::egui;
 use engine_core::prelude::AppState;
 
-use crate::{panels::{ui_runner, MenuScreen}, styles};
+use crate::{components::menus::{menu_runner, MenuScreen}, styles};
 
 
 #[derive(Resource, Default)]
@@ -56,7 +56,7 @@ impl Plugin for PauseMenuPlugin {
         // show the pause UI only while paused
         app.add_systems(
             bevy_egui::EguiPrimaryContextPass,
-            ui_runner::<PauseMenu>.run_if(in_state(AppState::Paused)),
+            menu_runner::<PauseMenu>.run_if(in_state(AppState::Paused)),
         )
         .add_systems(
             OnEnter(AppState::Paused),

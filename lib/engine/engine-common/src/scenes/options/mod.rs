@@ -6,10 +6,7 @@
 use bevy::prelude::*;
 use engine_core::{
     prelude::AppState,
-    systems::{
-        schedule::MainSet,
-        state::resources::{RuntimeFlags, Settings},
-    },
+    systems::state::resources::Settings,
 };
 
 /* ------------------------------------------------------------------ */
