@@ -2193,6 +2193,7 @@ dependencies = [
  "bytemuck",
  "engine-core",
  "libloading",
+ "naga 24.0.0",
  "naga_oil 0.18.0",
  "shaderc",
  "simulation_kernel",

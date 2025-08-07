@@ -121,12 +121,14 @@ impl Node for ComputeAutomataNode {
                 let params: Vec<AutomatonParams> = slices
                     .iter()
                     .map(|s| AutomatonParams {
-                        size_x: s.0.size.x,
-                        size_y: s.0.size.y,
-                        layer: s.0.layer,
-                        rule: s.0.rule_bits,
+                        size_x:  s.0.size.x,
+                        size_y:  s.0.size.y,
+                        size_z:  s.0.depth.max(1),
+                        layer:   s.0.layer,
+                        rule:    s.0.rule_bits,
                     })
                     .collect();
+
                 let params_buf = device.create_buffer(&BufferDescriptor {
                     label: Some("params_array"),
                     size: (params.len() * size_of::<AutomatonParams>()) as u64,

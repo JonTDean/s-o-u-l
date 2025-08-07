@@ -14,7 +14,7 @@
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
 use engine_core::{
-    events::{AutomataCommand, GenerateDebugFloor},
+    events::AutomataCommand,
     systems::registry::RuleRegistry,
     systems::state::resources::RuntimeFlags,
 };
@@ -37,7 +37,6 @@ pub fn spawner(
     flags:  Res<RuntimeFlags>,        // ← CPU vs GPU hint
     mut ui: EguiContexts,             // ← egui context provider
     mut tx: EventWriter<AutomataCommand>,
-    mut dbg_tx: EventWriter<GenerateDebugFloor>,
 ) {
     let ctx = match ui.ctx_mut() {
         Ok(c) => c,
@@ -109,14 +108,6 @@ pub fn spawner(
                         }
                     });
             });
-        }
-
-        /* -------------------------------------------------------------- */
-        /* 2.B ░ Misc debug helpers                                      */
-        /* -------------------------------------------------------------- */
-        ui.separator();
-        if ui.button("◻ Generate Debug Floor").clicked() {
-            dbg_tx.write(GenerateDebugFloor);
         }
     });
 }

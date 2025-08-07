@@ -1,83 +1,105 @@
-//! Builds one **graphics pipeline** that consumes TASK + MESH shaders.
-//!
-//! WGSL kernels live in
-//! `assets/shaders/automatoxel/mesh_{task,mesh}.wgsl` and are compiled to
-//! SPIR-V at runtime through *Naga-Oil* so Bevy hot-reload continues to
-//! work even though mesh-shader stages are still experimental in WGPU.
-//!
-//! ────────────────────────────────────────────────────────────────
-//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-//
+//! Builds the graphics pipeline that uses TASK + MESH shaders.
+#![cfg(feature = "mesh_shaders")]
 
-use ash::{vk, Device};
-use naga_oil::{back::spv, compose::Composer};
+/* ── imports ─────────────────────────────────────────────── */
+use ash::vk;
+use naga::{
+    back::spv,
+    front::wgsl,
+    valid::{Capabilities, ValidationFlags, Validator},
+};
+use std::ffi::CStr;
 
 use crate::ash::AshContext;
 
-/// Compile WGSL → SPIR-V and create a mesh-shader pipeline.
-/// Returns the finished `vk::Pipeline`.
+/* ── helper macro: C‑string literals for Ash ─────────────── */
+macro_rules! cstr {
+    ($s:expr) => {{
+        const BYTES: &[u8] = concat!($s, "\0").as_bytes();
+        // SAFETY: BYTES is NUL‑terminated and has no interior NULs.
+        unsafe { CStr::from_bytes_with_nul_unchecked(BYTES) }
+    }};
+}
+
+/* ------------------------------------------------------------------ */
 pub fn create_mesh_pipeline(
     ctx:             &AshContext,
     render_pass:     vk::RenderPass,
     pipeline_layout: vk::PipelineLayout,
 ) -> vk::Pipeline {
-    // ── 1 · WGSL → SPIR-V ─────────────────────────────────────────────
-    let mut comp = Composer::default();
-    let mesh_spv = compile_wgsl(
-        &mut comp,
-        include_str!("../../../assets/shaders/automatoxel/mesh_path.wgsl"),
-    );
-    let task_spv = compile_wgsl(
-        &mut comp,
-        include_str!("../../../assets/shaders/automatoxel/mesh_task.wgsl"),
-    );
+    /* 1 · WGSL → SPIR‑V --------------------------------------------- */
+    const MESH_SRC: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/assets/mesh/mesh_topology.wgsl"
+    ));
+    const TASK_SRC: &str = include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/assets/mesh/mesh_task.wgsl"
+    ));
 
-    unsafe {
-        // Shader modules
-        let mesh_mod = create_module(&ctx.device, &mesh_spv);
-        let task_mod = create_module(&ctx.device, &task_spv);
+    let mesh_spv = wgsl_to_spirv(MESH_SRC,  "mesh_topology.wgsl");
+    let task_spv = wgsl_to_spirv(TASK_SRC,  "mesh_task.wgsl");
 
-        // Stage array
-        let stages = [
-            vk::PipelineShaderStageCreateInfo::default()
-                .stage(vk::ShaderStageFlags::MESH_EXT)
-                .module(mesh_mod)
-                .name(cstr!("main")),
-            vk::PipelineShaderStageCreateInfo::default()
-                .stage(vk::ShaderStageFlags::TASK_EXT)
-                .module(task_mod)
-                .name(cstr!("main")),
-        ];
+    /* 2 · Create shader modules + pipeline --------------------------- */
+    // Unsafe FFI boundary: Ash expects raw SPIR‑V to be valid.
+    let mesh_module = unsafe { shader_module(&ctx.device, &mesh_spv) };
+    let task_module = unsafe { shader_module(&ctx.device, &task_spv) };
 
-        // Mesh-shader specific create-info (still “experimental”)
-        let create_info = vk::GraphicsPipelineCreateInfo::default()
-            .stages(&stages)
-            .layout(pipeline_layout)
-            .render_pass(render_pass)
-            .dynamic_state(&vk::PipelineDynamicStateCreateInfo::default());
+    let stages = [
+        vk::PipelineShaderStageCreateInfo::default()
+            .stage(vk::ShaderStageFlags::MESH_EXT)
+            .module(mesh_module)
+            .name(cstr!("main")),
+        vk::PipelineShaderStageCreateInfo::default()
+            .stage(vk::ShaderStageFlags::TASK_EXT)
+            .module(task_module)
+            .name(cstr!("main")),
+    ];
+    let dyn_state = vk::PipelineDynamicStateCreateInfo::default();
 
+    // Whole pipeline creation is also an unsafe Vulkan FFI call.
+    let pipeline = unsafe {
         ctx.device
-            .create_graphics_pipelines(vk::PipelineCache::null(), &[create_info], None)
-            .expect("mesh pipeline")[0]
-    }
-}
-
-// ────────────────────────────────────────────────────────────────────
-// helpers
-// ────────────────────────────────────────────────────────────────────
-fn compile_wgsl(comp: &mut Composer, src: &str) -> Vec<u32> {
-    let module = comp.make_naga_module(src).expect("WGSL → IR");
-    spv::write_vec(&module, &spv::Options::default()).expect("IR → SPIR-V")
-}
-
-unsafe fn create_module(device: &Device, words: &[u32]) -> vk::ShaderModule {
-    let info = vk::ShaderModuleCreateInfo::default().code(words);
-    device.create_shader_module(&info, None).expect("shader module")
-}
-
-// Tiny macro for NUL-terminated entry-point names.
-macro_rules! cstr {
-    ($s:expr) => {
-        concat!($s, "\0").as_ptr() as *const i8
+            .create_graphics_pipelines(
+                vk::PipelineCache::null(),
+                &[vk::GraphicsPipelineCreateInfo::default()
+                    .stages(&stages)
+                    .layout(pipeline_layout)
+                    .render_pass(render_pass)
+                    .dynamic_state(&dyn_state)],
+                None,
+            )
+            .expect("create mesh pipeline")[0]
     };
+
+    // Shader modules can be freed right after pipeline creation.
+    unsafe {
+        ctx.device.destroy_shader_module(mesh_module, None);
+        ctx.device.destroy_shader_module(task_module, None);
+    }
+
+    pipeline
+}
+
+/* ── helpers ─────────────────────────────────────────────── */
+fn wgsl_to_spirv(source: &str, file_name: &str) -> Vec<u32> {
+    let module = wgsl::parse_str(source).expect(file_name);
+    let info = Validator::new(ValidationFlags::all(), Capabilities::all())
+        .validate(&module)
+        .expect("naga validation");
+    spv::write_vec(&module, &info, &spv::Options::default(), None)
+        .expect("write SPIR‑V")
+}
+
+/// Create a Vulkan shader module from raw SPIR‑V words.
+///
+/// # Safety
+/// Caller must guarantee that `words` form a valid SPIR‑V module for
+/// the target device.
+unsafe fn shader_module(device: &ash::Device, words: &[u32]) -> vk::ShaderModule {
+    unsafe {
+        device
+            .create_shader_module(&vk::ShaderModuleCreateInfo::default().code(words), None)
+            .expect("shader module")
+    }
 }

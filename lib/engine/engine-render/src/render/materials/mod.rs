@@ -8,11 +8,5 @@
 //!                call `MaterialsPlugin` once.
 #![allow(clippy::module_name_repetitions)]   // optional quality-of-life
 
-/// GPU material that draws a full automata grid (see [`automata`]).
-pub mod automata;
-
-/// Visual debugging helpers such as the checkerboard background.
-pub mod debug;
-
 /// Umbrella plug-in that registers every material sub-plug-in.
 pub mod plugin;

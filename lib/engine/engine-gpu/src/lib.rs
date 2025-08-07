@@ -7,15 +7,17 @@
 #![warn(missing_docs)]
 
 pub use plugin::GpuAutomataComputePlugin;
+pub use fixed_sim::FixedSimPlugin;
 pub use types::AutomatonParams;
 
 /* internal */
 mod compute;
 mod graph;
 mod pipelines;
-mod plugin;
+pub mod plugin;
 mod seed;
 mod types;
+mod fixed_sim;
 
 #[cfg(feature = "mesh_shaders")]
 pub mod ash;

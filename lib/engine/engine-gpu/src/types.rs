@@ -14,6 +14,8 @@ pub struct AutomatonParams {
     pub size_x: u32,
     /// Height of the automaton grid in texels.
     pub size_y: u32,
+    /// Depth of the automaton grid in texels.
+    pub size_z: u32,
     /// Z‑layer inside the 3‑D atlas texture where this board lives.
     pub layer:  u32,
     /// Packed rule bits (e.g. Conway B/S or Lenia kernel index).

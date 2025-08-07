@@ -1,37 +1,35 @@
-//! Optional **mesh-shader fast path**.
+//! Mesh-path compute stage – optional fast-path when `VK_EXT_mesh_shader`
+//! hardware is available.
 //!
-//! The node is only compiled when *both* the `mesh_shaders` Cargo
-//! feature is enabled *and* the underlying GPU reports mesh-shader
-//! support through wgpu’s feature flags.  If either condition is
-//! missing the module is still built but removed from the render-graph
-//! so there is no runtime cost.
+//! The node runs **after** `DualContourNode` and turns the raw vertex
+//! stream into an indirect-draw argument buffer.  Right now the shader is
+//! an identity pass; later we can add compaction or meshlet generation.
 //!
-//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-//! Optional **mesh-shader fast path**.
-//!
-//! Compiled only when `mesh_shaders` is enabled *and* the GPU advertises
-//! the conservative `VERTEX_WRITABLE_STORAGE` capability (wgpu 0.24
-//! removed the old experimental `MESH_SHADER` flag). Eliminates all CPU-
-//! side topology work by emitting meshlets directly from WGSL.
-//!
-//! © 2025 Obaven Inc. — Apache-2.0 OR MIT
-#![allow(clippy::too_many_lines)]
+//! ## Bindings (group 0)
+//! | index | resource                        | access |
+//! |-------|---------------------------------|--------|
+//! |   0   | input  vertex buffer            | read   |
+//! |   1   | output vertex buffer (may be #0)| rw     |
+//! |   2   | `DrawArgs` struct (`DrawIndirect`)| rw  |
+//! |   3   | atomic vertex counter           | read   |
 
 use std::time::Instant;
 
 use bevy::{
     prelude::*,
     render::{
-        render_asset::RenderAssets,
         render_graph::{Node, NodeRunError, RenderGraphContext},
         render_resource::*,
-        renderer::{RenderContext, RenderDevice},
-        texture::GpuImage,
+        renderer::{RenderContext, RenderDevice, RenderQueue},
     },
 };
 use wgpu::Features;
 
-use crate::{graph::ExtractedGpuSlices, pipelines::GpuPipelineCache, plugin::GlobalVoxelAtlas};
+use crate::{
+    compute::dual_contour::{MeshletBuffers, BYTES_PER_VERT},
+    graph::ExtractedGpuSlices,
+    pipelines::GpuPipelineCache,
+};
 
 /// Render-graph node implementing the mesh-shader fast path.
 #[derive(Debug)]
@@ -46,55 +44,50 @@ impl Node for MeshPathNode {
     ) -> Result<(), NodeRunError> {
         let begin = Instant::now();
 
-        let Some(device) = world.get_resource::<RenderDevice>() else {
+        /* 1 ░ GPU resources ready? */
+        let (Some(device), Some(queue)) = (
+            world.get_resource::<RenderDevice>(),
+            world.get_resource::<RenderQueue>(),
+        ) else {
             return Ok(());
         };
 
-        const MESH_CANDIDATE_FEATURE: Features = Features::VERTEX_WRITABLE_STORAGE;
-        if !device.features().contains(MESH_CANDIDATE_FEATURE) {
-            return Ok(()); // Hardware not capable.
-        }
-
-        #[cfg(not(feature = "mesh_shaders"))]
-        {
+        /* 2 ░ Early-out when there were no active slices this frame. */
+        if world.resource::<ExtractedGpuSlices>().0.is_empty() {
             return Ok(());
         }
 
-        /* 1 ░ Early exit if no slices this frame. */
-        let slices = world.resource::<ExtractedGpuSlices>();
-        if slices.0.is_empty() {
-            return Ok(());
-        }
+        /* 3 ░ Resolve the compiled compute pipeline from Bevy’s cache. */
+        let cache   = world.resource::<GpuPipelineCache>();
+        let pipes   = world.resource::<PipelineCache>();
+        let Some(&pid) = cache.map.get("mesh_path")        else { return Ok(()); };
+        let Some(pipe) = pipes.get_compute_pipeline(pid)   else { return Ok(()); };
 
-        /* 2 ░ GPU resources. */
-        let atlas = world.resource::<GlobalVoxelAtlas>();
-        let images = world.resource::<RenderAssets<GpuImage>>();
-        let atlas_view = &images.get(&atlas.atlas).unwrap().texture_view;
+        /* 4 ░ Build the bind-group that matches `mesh_path.wgsl`. */
+        let buffers = world.resource::<MeshletBuffers>();
+        let layout  = BindGroupLayout::from(pipe.get_bind_group_layout(0));
 
-        let cache = world.resource::<GpuPipelineCache>();
-        let pipes = world.resource::<PipelineCache>();
-        let Some(&pid) = cache.map.get("mesh_path") else {
-            return Ok(());
-        };
-        let Some(pipe) = pipes.get_compute_pipeline(pid) else {
-            return Ok(());
-        };
-
-        /* 3 ░ Bind-group. */
-        let wgpu_layout = pipe.get_bind_group_layout(0);
-        let layout = BindGroupLayout::from(wgpu_layout.clone());
         let bind = device.create_bind_group(
             Some("mesh_path.bind0"),
             &layout,
-            &[BindGroupEntry {
-                binding: 0,
-                resource: BindingResource::TextureView(atlas_view),
-            }],
+            &[
+                // in-buffer (read-only)
+                BindGroupEntry { binding: 0, resource: buffers.vertices.as_entire_binding() },
+                // out-buffer (read / write) – for now the same buffer
+                BindGroupEntry { binding: 1, resource: buffers.vertices.as_entire_binding() },
+                // DrawArgs
+                BindGroupEntry { binding: 2, resource: buffers.indirect.as_entire_binding() },
+                // atomic counter
+                BindGroupEntry { binding: 3, resource: buffers.counter.as_entire_binding() },
+            ],
         );
 
-        /* 4 ░ Dispatch (≈ 64 voxels / work-group). */
-        let voxels: u32 = slices.0.iter().map(|s| s.0.size.x * s.0.size.y).sum();
-        let groups = (voxels + 63) / 64;
+        /* 5 ░ Clear DrawArgs so the shader writes fresh numbers. */
+        queue.write_buffer(&buffers.indirect, 0, &[0u8; 16]);
+
+        /* 6 ░ Dispatch: one thread per vertex (group size = 256). */
+        let max_vertices = (buffers.capacity / BYTES_PER_VERT) as u32;
+        let groups = (max_vertices + 255) / 256;
 
         let mut pass = ctx
             .command_encoder()
@@ -106,10 +99,14 @@ impl Node for MeshPathNode {
         pass.set_bind_group(0, &bind, &[]);
         pass.dispatch_workgroups(groups, 1, 1);
 
+        /* 7 ░ (Optional) GPU timing – collect if you need it. */
         let _gpu_ms = begin.elapsed().as_secs_f32() * 1_000.0;
+
         Ok(())
     }
 }
+
+
 
 /* ===================================================================== */
 /* Notes for future work                                                 */

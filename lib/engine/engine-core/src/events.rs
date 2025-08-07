@@ -59,11 +59,3 @@ pub struct AutomatonRemoved {
     /// Identifier of the automaton that has just been despawned.
     pub id: AutomatonId,
 }
-
-#[derive(Event, Debug, Clone, Copy)]
-/// Toggles the visibility of the debug grid overlay.
-pub struct ToggleDebugGrid;
-
-#[derive(Event, Debug, Clone, Copy)]
-/// Requests that a flat debug floor be spawned.
-pub struct GenerateDebugFloor;

@@ -7,15 +7,13 @@ use engine_common::controls::camera::WorldCamera;
 use engine_core::{
     automata::{AutomatonInfo, GpuGridSlice},
     events::{
-        AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved, GenerateDebugFloor,
-        ToggleDebugGrid,
+        AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved
     },
     prelude::{AppState, AutomataRegistry, RuleRegistry},
 };
 use serde_json::Value;
 use std::sync::Arc;
 
-use crate::render::materials::debug::debug_grid::DebugGridTag;
 /* ───────────────────────────── constants ───────────────────────────── */
 
 const SLICE_SIDE: u32 = 256;
@@ -37,12 +35,12 @@ impl Plugin for CommandExecutorPlugin {
                     .in_set(MainSet::Input)
                     .run_if(in_state(AppState::InGame)),
             )
-            // NEW: floor & grid handlers (same set so they run before Logic/Render)
             .add_systems(
-                Update,
-                (handle_generate_floor, handle_toggle_grid)
-                    .in_set(MainSet::Input)
-                    .run_if(in_state(AppState::InGame)),
+               Update,
+               focus_camera_on_new_auto
+                   .after(handle_commands)
+                   .in_set(MainSet::Input)
+                   .run_if(in_state(AppState::InGame)),
             )
             .add_systems(OnEnter(AppState::MainMenu), clear_on_main_menu);
     }
@@ -78,10 +76,11 @@ fn handle_commands(
 
                 /* logical slice – offset always (0,0); layer filled in later */
                 let gpu_slice = GpuGridSlice {
-                    layer: 0, // real Z picked by atlas allocator
+                    layer:  0,                       // real Z picked by atlas allocator
                     offset: UVec2::ZERO,
-                    size: UVec2::splat(SLICE_SIDE),
-                    rule: id.clone(),
+                    size:   UVec2::splat(SLICE_SIDE),
+                    depth:  1,                       // every fresh slice starts 1-deep
+                    rule:   id.clone(),              // rule id ("lenia", "life", …)
                     rule_bits: 0,
                 };
 
@@ -90,9 +89,7 @@ fn handle_commands(
                     name: id.clone(),
                     rule: Arc::clone(rule),
                     params: Value::Null,
-                    seed_fn: None,
                     slice: gpu_slice,
-                    dimension: 3,
                     voxel_size: DEFAULT_VOXEL,
                     world_offset: Vec3::ZERO,
                     background_color: BG,
@@ -140,32 +137,3 @@ pub fn focus_camera_on_new_auto(
     tf.translation.y = centre.y;
 }
 
-fn handle_generate_floor(
-    mut ev: EventReader<GenerateDebugFloor>,
-    mut out: EventWriter<AutomataCommand>,
-) {
-    if !ev.is_empty() {
-        out.write(AutomataCommand::SeedPattern {
-            id: "__debug_floor__".into(),
-        });
-        ev.clear();
-    }
-}
-
-fn handle_toggle_grid(
-    mut ev: EventReader<ToggleDebugGrid>,
-    mut q: Query<&mut Visibility, With<DebugGridTag>>,
-) {
-    if ev.is_empty() {
-        return;
-    }
-    if let Ok(mut vis) = q.single_mut() {
-        // <- unwrap the Result
-        *vis = match *vis {
-            Visibility::Hidden => Visibility::Visible,
-            Visibility::Visible => Visibility::Hidden,
-            Visibility::Inherited => Visibility::Hidden,
-        };
-    }
-    ev.clear();
-}

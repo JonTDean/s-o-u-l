@@ -2,9 +2,7 @@
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
 
 use bevy::{
-    asset::RenderAssetUsages,
-    prelude::*,
-    render::render_resource::{Extent3d, TextureDimension, TextureFormat, TextureUsages},
+    asset::RenderAssetUsages, image::ImageSampler, prelude::*, render::render_resource::{Extent3d, TextureDimension, TextureFormat, TextureUsages}
 };
 
 /// Width of the voxel atlas in texels.
@@ -33,7 +31,14 @@ pub fn make_atlas(label: &'static str) -> Image {
         RenderAssetUsages::RENDER_WORLD,
     );
     img.texture_descriptor.label = Some(label);
-    img.texture_descriptor.usage |= TextureUsages::STORAGE_BINDING | TextureUsages::TEXTURE_BINDING;
+    
+    img.texture_descriptor.usage |=
+        TextureUsages::STORAGE_BINDING | TextureUsages::TEXTURE_BINDING;
+
+    // integer textures -> point sampling: 
+    //  integer textures must use a non-filtering sampler
+    img.sampler = ImageSampler::nearest();    // <-- field & call changed
+
     img
 }
 
@@ -57,6 +62,11 @@ pub fn make_image(label: &'static str) -> Image {
         RenderAssetUsages::RENDER_WORLD,
     );
     img.texture_descriptor.label = Some(label);
-    img.texture_descriptor.usage |= TextureUsages::STORAGE_BINDING | TextureUsages::TEXTURE_BINDING;
+    img.texture_descriptor.usage |=
+        TextureUsages::STORAGE_BINDING | TextureUsages::TEXTURE_BINDING;
+
+    // integer textures -> point sampling: 
+    //  integer textures must use a non-filtering sampler
+    img.sampler = ImageSampler::nearest();    // same here
     img
 }
