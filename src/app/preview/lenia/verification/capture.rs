@@ -6,6 +6,9 @@ pub(super) fn request(world: &mut World, verification: &mut Verification) {
     let path = verification
         .output
         .join(format!("lenia-phase-{}.png", verification.phase));
+    if path.exists() {
+        std::fs::remove_file(&path).expect("remove previous capture");
+    }
     let finished = Arc::new(AtomicBool::new(false));
     let signal = finished.clone();
     let mut save = save_to_disk(path.clone());

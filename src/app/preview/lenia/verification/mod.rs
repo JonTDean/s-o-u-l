@@ -30,6 +30,10 @@ pub(super) fn install(app: &mut App) {
     };
     let output = PathBuf::from(output);
     std::fs::create_dir_all(&output).expect("Lenia evidence directory");
+    let success = output.join("SUCCESS");
+    if success.exists() {
+        std::fs::remove_file(success).expect("remove previous qualification result");
+    }
     std::fs::write(
         output.join("readbacks.csv"),
         "phase,epoch,tick,alive,density_sum,fnv64\n",
