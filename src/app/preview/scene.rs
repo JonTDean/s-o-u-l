@@ -13,7 +13,15 @@ pub(super) fn setup(mut commands: Commands, mut next: ResMut<NextState<AppState>
         rule: "voxel-demo".into(),
         rule_bits: 0,
     });
-    let centre = Vec3::new(160.0, 154.0, 32.0);
+    camera(
+        &mut commands,
+        Vec3::new(160.0, 154.0, 32.0),
+        "S.O.U.L. / Static voxel preview",
+    );
+    info!("Voxel preview: 16³ fixture at atlas (32,32,8), 4 world units per voxel");
+}
+
+pub(super) fn camera(commands: &mut Commands, centre: Vec3, label: &str) {
     commands.spawn((
         Camera3d::default(),
         Msaa::Off,
@@ -26,10 +34,20 @@ pub(super) fn setup(mut commands: Commands, mut next: ResMut<NextState<AppState>
             .looking_at(centre, Vec3::Y),
         layers_world(),
     ));
-    commands.spawn((Text::new("S.O.U.L.  /  Voxel Preview\nGPU surface extraction / depth-tested indirect draw\nStatic rendering fixture; Lenia evolution is pending"),
-        TextFont { font_size: 18.0, ..default() }, TextColor(Color::srgb(0.78, 0.85, 0.9)),
-        Node { position_type: PositionType::Absolute, left: Val::Px(24.0), bottom: Val::Px(24.0), ..default() }));
-    info!("Voxel preview: 16³ fixture at atlas (32,32,8), 4 world units per voxel");
+    commands.spawn((
+        Text::new(label),
+        TextFont {
+            font_size: 18.0,
+            ..default()
+        },
+        TextColor(Color::srgb(0.78, 0.85, 0.9)),
+        Node {
+            position_type: PositionType::Absolute,
+            left: Val::Px(24.0),
+            bottom: Val::Px(24.0),
+            ..default()
+        },
+    ));
 }
 
 pub(super) fn isolate_preview_camera(mut cameras: Query<&mut Camera, With<WorldCamera>>) {
