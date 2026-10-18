@@ -3,6 +3,7 @@ use bevy::{prelude::*, render::Extract};
 use engine_core::automata::{GpuGridSlice, lenia::LeniaSimulation};
 mod execute;
 mod node;
+pub(crate) mod probe;
 pub(crate) mod state;
 pub(crate) use node::LeniaStepNode;
 pub(crate) use state::GpuSimulations;

@@ -8,6 +8,7 @@
 
 pub use fixed_sim::FixedSimPlugin;
 pub use plugin::{GpuAutomataComputePlugin, VoxelRenderStatus};
+pub use render::compute::lenia::runtime::probe::{LeniaProbe, LeniaSnapshot};
 pub use render::pipelines::GpuPipelineCache;
 pub use types::AutomatonParams;
 
