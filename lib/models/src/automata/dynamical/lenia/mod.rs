@@ -12,9 +12,11 @@ use simulation_kernel::{
 };
 
 pub mod plugin;
+#[cfg(test)]
+mod tests;
 
-use simulation_kernel::core::lenia::KERNEL;
 pub use simulation_kernel::core::lenia::LeniaParams;
+use simulation_kernel::core::lenia::{KERNEL, next_density};
 
 /* ───────────────── rule type ───────────────── */
 #[derive(Clone)]
@@ -29,14 +31,6 @@ impl LeniaRule {
             .then(|| if let CellState::Alive(l) = cs { l } else { 0 } as f32 / 255.0)
             .unwrap_or(0.0)
     }
-    #[inline]
-    fn to_state(rho: f32) -> CellState {
-        if rho == 0.0 {
-            CellState::Dead
-        } else {
-            CellState::Alive((rho * 255.0).round() as u8)
-        }
-    }
 }
 
 impl AutomatonRule for LeniaRule {
@@ -44,24 +38,25 @@ impl AutomatonRule for LeniaRule {
 
     fn next_state(&self, ctx: CellCtx<Self::D>, params: &Value) -> CellOutcome {
         let p: LeniaParams = serde_json::from_value(params.clone()).unwrap_or_default();
+        let Ok(p) = p.validate() else {
+            return CellOutcome::Unchanged;
+        };
         /* 1 — convolution on XY plane (neighbours with z=0) */
         let mut u = Self::rho(ctx.self_state) * KERNEL[1][1];
         for (i, off) in Dim::NEIGHBOUR_OFFSETS
             .iter()
-            .filter(|o| o.z == 0)
             .enumerate()
+            .filter(|(_, o)| o.z == 0)
         {
             let dx = (off.x + 1) as usize;
             let dy = (off.y + 1) as usize;
             u += Self::rho(ctx.neighbourhood[i]) * KERNEL[dy][dx];
         }
-        /* 2 — bell-shaped growth */
-        let g = 2.0 * (-(u - p.mu).powi(2) / (2.0 * p.sigma.powi(2))).exp() - 1.0;
-        /* 3 — Euler step */
-        let mut rho = Self::rho(ctx.self_state);
-        rho = (rho + p.dt * g).clamp(0.0, 1.0);
-        /* 4 — quantise back */
-        let next_state = Self::to_state(rho);
+        let density = match ctx.self_state {
+            CellState::Dead => 0,
+            CellState::Alive(v) => v,
+        };
+        let next_state = CellState::from(next_density(density, u, p));
         if next_state == ctx.self_state {
             CellOutcome::Unchanged
         } else {
