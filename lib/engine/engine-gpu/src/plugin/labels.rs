@@ -5,6 +5,10 @@ use bevy::render::render_graph::RenderLabel;
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
 pub struct AutomataStepLabel;
 
+/// Stateful Lenia updates precede surface extraction in every 3D view.
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
+pub struct LeniaStepLabel;
+
 /// Extract exposed voxel faces into the bounded vertex stream.
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
 pub struct VoxelSurfaceLabel;
