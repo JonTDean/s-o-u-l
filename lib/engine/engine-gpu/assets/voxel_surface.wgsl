@@ -13,7 +13,7 @@ fn occupied(local: vec3<i32>) -> bool {
     if any(local < vec3<i32>(0)) || any(local >= vec3<i32>(params.size.xyz)) { return false; }
     let position = local + vec3<i32>(params.origin.xyz);
     if any(position >= vec3<i32>(textureDimensions(atlas))) { return false; }
-    return textureLoad(atlas, position, 0).r > 127u;
+    return textureLoad(atlas, position, 0).r > 0u;
 }
 
 // Explicit face bases avoid runtime indexing of constant vector arrays in
@@ -22,7 +22,8 @@ fn emit_face(id: vec3<u32>, normal_i: vec3<i32>, u: vec3<f32>, v: vec3<f32>) {
     if occupied(vec3<i32>(id) + normal_i) { return; }
     let base = atomicAdd(&counter, 6u);
     if base + 6u > arrayLength(&vertices) { return; }
-    let normal = vec4<f32>(vec3<f32>(normal_i), 0.0);
+    let density = f32(textureLoad(atlas, vec3<i32>(id + params.origin.xyz), 0).r) / 255.0;
+    let normal = vec4<f32>(vec3<f32>(normal_i), density);
     let centre = vec3<f32>(id) + vec3<f32>(0.5) + normal.xyz * 0.5;
     let a = vec4<f32>(params.world.xyz + (centre - u*0.5 - v*0.5)*params.world.w, 1.0);
     let b = vec4<f32>(params.world.xyz + (centre + u*0.5 - v*0.5)*params.world.w, 1.0);

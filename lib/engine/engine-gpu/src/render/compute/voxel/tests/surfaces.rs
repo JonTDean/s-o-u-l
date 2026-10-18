@@ -2,6 +2,15 @@
 use super::gpu::run;
 
 #[test]
+fn subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream() {
+    let (vertices, draw) = run(&[64], [1, 1, 1], 36, [2, 3, 1]);
+    assert_eq!(draw[0], 36);
+    for vertex in vertices {
+        assert!((vertex[7] - 64.0 / 255.0).abs() < 0.00001);
+    }
+}
+
+#[test]
 fn one_voxel_has_six_outward_faces_at_the_requested_world_transform() {
     let (vertices, draw) = run(&[255], [1, 1, 1], 36, [3, 5, 2]);
     assert_eq!(draw, [36, 1, 0, 0]);
