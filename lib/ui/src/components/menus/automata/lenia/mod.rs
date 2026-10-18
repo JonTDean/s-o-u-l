@@ -1,6 +1,7 @@
 //! Controls for the qualified Lenia evolution path.
 use bevy::prelude::*;
 mod panel;
+mod parameters;
 
 pub(super) struct LeniaWorkbenchPlugin;
 

@@ -48,6 +48,7 @@ pub(super) fn show(
                             send(LeniaAction::Reset);
                         }
                     });
+                    super::parameters::show(ui, entity, sim, &mut commands);
                     ui.separator();
                 });
             }

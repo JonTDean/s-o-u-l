@@ -17,7 +17,7 @@ fn friendly_name(id: &str) -> &str {
         "life:conway" => "Conway’s Life",
         "life:dean" => "Dean’s Life",
         "lenia" => "Lenia (blob)",
-        "lenia:orbium" => "Lenia – Orbium",
+        "lenia:orbium" => "Lenia (ring)",
         "particle:hpp" => "Lattice-gas HPP",
         _ => id,
     }
