@@ -99,5 +99,9 @@ pub fn spawner(
                     });
             });
         }
+        ui.separator();
+        if ui.button("Clear all automata").clicked() {
+            tx.write(AutomataCommand::Clear);
+        }
     });
 }
