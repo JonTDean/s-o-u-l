@@ -14,7 +14,7 @@ pub(crate) struct Slot {
 #[derive(Resource, Default)]
 pub(crate) struct GpuSimulations(pub Mutex<HashMap<Entity, Slot>>);
 
-pub(super) fn synchronize(
+pub(crate) fn synchronize(
     slots: &mut HashMap<Entity, Slot>,
     live: &LiveSimulations,
     device: &RenderDevice,

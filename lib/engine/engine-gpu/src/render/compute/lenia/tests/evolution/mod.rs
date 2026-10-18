@@ -2,6 +2,7 @@ use super::super::LeniaBuffers;
 use super::device::Gpu;
 use bevy::render::render_resource::*;
 use simulation_kernel::core::lenia::{LeniaParams, step};
+mod isolation;
 mod packing;
 
 #[test]
