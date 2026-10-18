@@ -36,9 +36,8 @@ pub(in crate::plugin) fn seed_new_slices(
         if done.0.contains(&key) {
             continue;
         }
-        match slice.0.rule.as_str() {
-            "voxel-demo" => crate::seed::demo::upload(&queue, &images, &atlas, &slice.0),
-            _ => {}
+        if slice.0.rule == "voxel-demo" {
+            crate::seed::demo::upload(&queue, &images, &atlas, &slice.0);
         }
         done.0.insert(key);
     }
