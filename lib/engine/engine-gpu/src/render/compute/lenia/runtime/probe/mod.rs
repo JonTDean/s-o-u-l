@@ -1,6 +1,8 @@
 //! Explicit GPU readback requests; ordinary rendering performs no readbacks.
 use bevy::prelude::*;
 use simulation_kernel::core::lenia::LeniaParams;
+mod readback;
+pub(crate) use readback::{PendingReadbacks, complete, record};
 use std::{
     collections::{HashMap, HashSet},
     sync::{Arc, Mutex},
