@@ -18,6 +18,7 @@ use simulation_kernel::{AutomatonRule, core::dim::Dim};
 use std::sync::Arc;
 
 use crate::events::AutomatonId;
+pub mod lenia;
 
 /* ------------------------------------------------------------------ */
 /* GPU atlas slice                                                    */
