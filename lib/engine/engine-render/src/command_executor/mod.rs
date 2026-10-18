@@ -101,6 +101,7 @@ fn handle_commands(
                 if is_lenia {
                     use simulation_kernel::core::lenia::LeniaSeed;
                     owner.insert(engine_core::automata::lenia::LeniaSimulation {
+                        paused: true,
                         seed: if id == "lenia:orbium" {
                             LeniaSeed::Ring
                         } else {

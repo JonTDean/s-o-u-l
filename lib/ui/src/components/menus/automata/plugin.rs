@@ -13,6 +13,7 @@ pub struct AutomataMenusPlugin;
 
 impl Plugin for AutomataMenusPlugin {
     fn build(&self, app: &mut App) {
+        app.add_plugins(super::lenia::LeniaWorkbenchPlugin);
         app.add_systems(
             EguiPrimaryContextPass,
             (
