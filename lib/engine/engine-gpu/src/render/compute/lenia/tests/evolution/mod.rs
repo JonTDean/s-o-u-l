@@ -3,6 +3,7 @@ use super::device::Gpu;
 use bevy::render::render_resource::*;
 use simulation_kernel::core::lenia::{LeniaParams, step};
 mod isolation;
+mod ownership;
 mod packing;
 mod transition;
 
