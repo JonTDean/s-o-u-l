@@ -1,7 +1,6 @@
 //! Continuous Lenia rule (quantised 0–255 levels, 3×3 Gaussian kernel).
 
 use glam::IVec3;
-use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use simulation_kernel::{
     AutomatonRule,
@@ -14,29 +13,8 @@ use simulation_kernel::{
 
 pub mod plugin;
 
-/* ───────────────── parameters ───────────────── */
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub struct LeniaParams {
-    pub mu: f32,
-    pub sigma: f32,
-    pub dt: f32,
-}
-impl Default for LeniaParams {
-    fn default() -> Self {
-        Self {
-            mu: 0.30,
-            sigma: 0.06,
-            dt: 0.05,
-        }
-    }
-}
-
-/* ───────── 3×3 Gaussian kernel (XY plane) ───────── */
-const KERNEL: [[f32; 3]; 3] = [
-    [0.058_549_83, 0.096_532_35, 0.058_549_83],
-    [0.096_532_35, 0.159_154_94, 0.096_532_35],
-    [0.058_549_83, 0.096_532_35, 0.058_549_83],
-];
+use simulation_kernel::core::lenia::KERNEL;
+pub use simulation_kernel::core::lenia::LeniaParams;
 
 /* ───────────────── rule type ───────────────── */
 #[derive(Clone)]
