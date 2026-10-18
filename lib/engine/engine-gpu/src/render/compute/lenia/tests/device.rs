@@ -12,6 +12,18 @@ pub(super) struct Gpu {
 }
 
 impl Gpu {
+    pub fn values(&self, state: &super::super::LeniaBuffers) -> Vec<u8> {
+        let mut encoder = self
+            .device
+            .create_command_encoder(&CommandEncoderDescriptor::default());
+        let buffer = self.read(&mut encoder, &state.states[state.current]);
+        self.queue.submit([encoder.finish()]);
+        self.bytes(&buffer)
+            .chunks_exact(4)
+            .map(|word| u32::from_le_bytes(word.try_into().unwrap()) as u8)
+            .collect()
+    }
+
     pub fn new() -> Self {
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::VULKAN,

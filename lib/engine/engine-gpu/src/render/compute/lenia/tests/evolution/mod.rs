@@ -4,6 +4,7 @@ use bevy::render::render_resource::*;
 use simulation_kernel::core::lenia::{LeniaParams, step};
 mod isolation;
 mod packing;
+mod transition;
 
 #[test]
 fn gpu_lenia_matches_cpu_for_odd_and_even_tick_batches() {
