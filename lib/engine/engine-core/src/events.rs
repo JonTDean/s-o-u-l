@@ -1,6 +1,6 @@
 //! Cross‑crate events shared by the whole application.
 
-use bevy_ecs::{entity::Entity, event::Event};
+use bevy_ecs::{component::Component, entity::Entity, event::Event};
 use serde::{Deserialize, Serialize};
 
 use crate::automata::GpuGridSlice;
@@ -24,7 +24,7 @@ pub struct DebugSeedSquare {
 /// value, but the type lives in *engine_core* so low‑level modules (GPU,
 /// events, render bridges) can reference it **without** creating a
 /// dependency cycle.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Component, Debug, Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct AutomatonId(pub u32);
 
 /// High‑level requests coming from the UI / scenarios.

@@ -73,11 +73,12 @@ fn handle_commands(
                 };
 
                 /* logical slice – offset always (0,0); layer filled in later */
+                let is_lenia = id == "lenia" || id == "lenia:orbium";
                 let gpu_slice = GpuGridSlice {
                     layer: 0, // real Z picked by atlas allocator
                     offset: UVec2::ZERO,
-                    size: UVec2::splat(SLICE_SIDE),
-                    depth: 1,         // every fresh slice starts 1-deep
+                    size: UVec2::splat(if is_lenia { 64 } else { SLICE_SIDE }),
+                    depth: if is_lenia { 8 } else { 1 },
                     rule: id.clone(), // rule id ("lenia", "life", …)
                     rule_bits: 0,
                 };
@@ -96,7 +97,19 @@ fn handle_commands(
                 let new_id = registry.register(info);
 
                 /* create empty entity – GPU plugin will patch slice & layer */
-                let entity = commands.spawn_empty().id();
+                let mut owner = commands.spawn(new_id);
+                if is_lenia {
+                    use simulation_kernel::core::lenia::LeniaSeed;
+                    owner.insert(engine_core::automata::lenia::LeniaSimulation {
+                        seed: if id == "lenia:orbium" {
+                            LeniaSeed::Ring
+                        } else {
+                            LeniaSeed::Blob
+                        },
+                        ..default()
+                    });
+                }
+                let entity = owner.id();
                 added_writer.write(AutomatonAdded { id: new_id, entity });
             }
 
