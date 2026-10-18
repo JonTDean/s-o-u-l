@@ -1,5 +1,5 @@
 //! Seed newly extracted slices only after their GPU texture is ready.
-use crate::{graph::ExtractedGpuSlices, plugin::GlobalVoxelAtlas, seed::lenia::seed_orbium};
+use crate::{graph::ExtractedGpuSlices, plugin::GlobalVoxelAtlas};
 use bevy::{
     prelude::*,
     render::{render_asset::RenderAssets, renderer::RenderQueue, texture::GpuImage},
@@ -37,7 +37,6 @@ pub(in crate::plugin) fn seed_new_slices(
             continue;
         }
         match slice.0.rule.as_str() {
-            "lenia" | "lenia:orbium" => seed_orbium(&queue, &images, &atlas, slice),
             "voxel-demo" => crate::seed::demo::upload(&queue, &images, &atlas, &slice.0),
             _ => {}
         }
