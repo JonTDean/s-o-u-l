@@ -1,8 +1,8 @@
 # Lenia evolution qualification
 
-The next working item is a deterministic CPU reference, followed by GPU parity,
-workbench controls, and native runtime qualification. Commits stop at 100 changed
-source lines, with smaller cohesive checkpoints where practical.
+Completed 2026-10-18: deterministic CPU reference, GPU parity, workbench controls,
+and native runtime qualification. [Evidence](../verification/lenia/README.md).
+Commits stop at 100 changed source lines, with smaller cohesive checkpoints.
 
 ## Contract
 
@@ -24,12 +24,12 @@ the historical ring seed reproduces the published Orbium organism.
 
 ## Acceptance
 
-- [ ] CPU: independent expected values, neighbors, boundaries, clamps, invalid
+- [x] CPU: independent expected values, neighbors, boundaries, clamps, invalid
   parameters, deterministic multi-tick fixtures, and model/stepper agreement.
-- [ ] GPU: production pipeline readback agrees with CPU on NVIDIA and Mesa for
+- [x] GPU: production pipeline readback agrees with CPU on NVIDIA and Mesa for
   odd/even tick counts, edge cells, nonzero origins, independent slices, reset,
   parameter changes, and output packing/padding.
-- [ ] Workbench: spawn, pause/resume, single-step, reset, parameter controls,
+- [x] Workbench: spawn, pause/resume, single-step, reset, parameter controls,
   and clear; deterministic tests exercise the same command handling as the UI.
-- [ ] Runtime: visible evolving voxels in a window on monitor 1, screenshots,
+- [x] Runtime: visible evolving voxels in a window on monitor 1, screenshots,
   clean logs, complete `make check`, and an evidence-based roadmap update.

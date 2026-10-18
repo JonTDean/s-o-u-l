@@ -1,0 +1,24 @@
+2026-10-18T20:38:55.678255Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+2026-10-18T20:38:55.678283Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevyengine.org/learn/errors/b0006/
+2026-10-18T20:38:55.828591Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
+2026-10-18T20:38:56.072392Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-18T20:38:56.099259Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-18T20:38:56.099306Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-18T20:38:56.103039Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
+2026-10-18T20:38:56.605965Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 0 verified: epoch 0, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-18T20:38:56.670297Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-0.png
+2026-10-18T20:38:56.728986Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 1 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-18T20:38:57.109081Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 2 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-18T20:38:57.174973Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 3 verified: epoch 0, tick 2, 2636 live cells, checksum 59b0f5c1511db19d
+2026-10-18T20:38:57.223920Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-3.png
+2026-10-18T20:38:57.264534Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 4 verified: epoch 1, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-18T20:38:57.321956Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 5 verified: epoch 2, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-18T20:38:57.537358Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 6 verified: epoch 2, tick 9, 1856 live cells, checksum 0c14ee94a215d92d
+2026-10-18T20:38:57.579488Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-6.png
+2026-10-18T20:38:57.617157Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 7 verified: epoch 3, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-18T20:38:57.660868Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-7.png
+2026-10-18T20:38:57.682949Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia clear verified: no live ECS owners or GPU slots
+2026-10-18T20:38:57.718238Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-8.png
+2026-10-18T20:38:57.741478Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 9 verified: epoch 0, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-18T20:38:57.784888Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/mesa/lenia-phase-9.png
+2026-10-18T20:38:57.786454Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::actions: LENIA_RUNTIME_VERIFIED: all workbench phases passed

@@ -2,7 +2,8 @@
 
 A Bevy workbench for cellular automata and volumetric simulation experiments.
 The current renderer uses portable GPU surface extraction and indirect drawing.
-Lenia evolution and the optional ash/Vulkan mesh-shader backend remain unfinished.
+Quantized Lenia evolution is verified on NVIDIA and Mesa Vulkan. The optional
+ash/Vulkan mesh-shader backend remains experimental.
 
 ## Run
 
@@ -11,6 +12,35 @@ Use the stable Rust toolchain, Python 3.11+, and native Bevy build dependencies.
 ```sh
 cargo run
 ```
+
+Start the verified Lenia workbench, paused with a deterministic blob:
+
+```sh
+make lenia
+```
+
+Use Pause/Resume, Single step, Reset, Blob/Ring, growth parameter sliders, and
+Restore growth defaults in the Lenia panel. The spawner also supports clearing
+all automata and spawning new instances. Each instance owns its state and clock.
+The window opens on monitor 1 at (80, 80), sized 1280 × 720.
+
+This variant stores density in 0..255 and evolves independent XY planes using a
+finite 3×3 Gaussian kernel with zero boundaries. GPU buffers swap every tick;
+the final density feeds voxel extraction and shading. The bounded ring fixture
+is not a qualified published Orbium organism or isotropic 3-D Lenia.
+
+Run the automated native workbench qualification and save screenshots/readbacks:
+
+```sh
+make verify-lenia
+# Force software Vulkan on this Linux workstation:
+VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json make verify-lenia
+```
+
+Set `SOUL_LENIA_VERIFY` to change the default `/tmp/soul-lenia-verification`
+output directory. Qualification exits after spawn, step, pause, parameter edit,
+reset, seed change, resume, clear, and respawn have matched the CPU reference.
+See the [Lenia evidence](docs/verification/lenia/README.md) for captured results.
 
 The normal application starts at the main menu. To inspect a deterministic
 16 × 16 × 16 voxel volume without navigating the scenario menus:
@@ -89,13 +119,16 @@ make check
 `make check` runs the governance self-tests and complete audit, Rust formatting,
 workspace Clippy with all targets/features and warnings denied, and native tests.
 The GPU tests require a Vulkan adapter; CI installs Mesa for software execution.
-They use the production buffers, pipeline and bindings, and compare surface
-counts with an independent CPU reference. They also test adjacency, transforms,
-empty regions and bounded overflow.
+They use production buffers, pipelines and bindings to compare Lenia densities
+and surface counts with CPU references. Coverage includes tick parity, boundaries,
+independent allocations, reset/removal/reuse, row packing, adjacency, transforms,
+empty regions, low-density visibility and bounded overflow.
 
 Pick a task from `docs/kanban/v0-0-2.md`, keep its status current, and include
 before/after screenshots or GIFs for rendering changes. Keep structural and behavioral changes
-reviewable and preserve unrelated working-tree changes. CI runs `make check`.
+reviewable and preserve unrelated working-tree changes. Commit at every 100
+changed source lines (added plus removed nonblank, non-comment lines), or sooner.
+CI runs `make check`; local passing checks do not imply a hosted CI run.
 
 ## Verified rendering baseline
 
@@ -112,7 +145,8 @@ UI presentation, and tooling telemetry. Existing consumer import paths are
 re-exported where implementations moved.
 
 On 2026-10-18, `CARGO_BUILD_JOBS=2 CMAKE_BUILD_PARALLEL_LEVEL=2 make check` passed
-20 governance self-tests, 9 native tests, and 9 documentation tests, with zero
-structural violations across all 14 roots. The GPU checks also passed on Mesa's
-software Vulkan backend. CI selects Python 3.13 and Rust 1.94.1 for consistency
-with the verified local tools.
+20 governance self-tests, 25 native tests, and 9 documentation tests, with zero
+structural violations across 261 source files in all 14 roots (largest: 144 SLOC).
+GPU checks and the complete Lenia workbench qualification passed on RTX 3090 and
+Mesa software Vulkan. CI selects Python 3.13 and Rust 1.94.1 for consistency with
+the verified local tools. See the [qualification record](docs/verification/lenia/README.md).

@@ -1,0 +1,62 @@
+[
+  {
+    "adapter": "rtx3090",
+    "phase": 0,
+    "cyan_model_pixels": 164107
+  },
+  {
+    "adapter": "rtx3090",
+    "phase": 3,
+    "cyan_model_pixels": 169170
+  },
+  {
+    "adapter": "rtx3090",
+    "phase": 6,
+    "cyan_model_pixels": 169719
+  },
+  {
+    "adapter": "rtx3090",
+    "phase": 7,
+    "cyan_model_pixels": 161846
+  },
+  {
+    "adapter": "rtx3090",
+    "phase": 8,
+    "cyan_model_pixels": 0
+  },
+  {
+    "adapter": "rtx3090",
+    "phase": 9,
+    "cyan_model_pixels": 161846
+  },
+  {
+    "adapter": "mesa",
+    "phase": 0,
+    "cyan_model_pixels": 164107
+  },
+  {
+    "adapter": "mesa",
+    "phase": 3,
+    "cyan_model_pixels": 169170
+  },
+  {
+    "adapter": "mesa",
+    "phase": 6,
+    "cyan_model_pixels": 169719
+  },
+  {
+    "adapter": "mesa",
+    "phase": 7,
+    "cyan_model_pixels": 161846
+  },
+  {
+    "adapter": "mesa",
+    "phase": 8,
+    "cyan_model_pixels": 0
+  },
+  {
+    "adapter": "mesa",
+    "phase": 9,
+    "cyan_model_pixels": 161846
+  }
+]

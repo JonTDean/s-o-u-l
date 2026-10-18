@@ -1,0 +1,231 @@
+{
+  "base": "356184e",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "5e829999c8248b181c7dd1500107ab295c9e372e",
+      "changed_sloc": 0,
+      "subject": "docs: define Lenia evolution qualification contract"
+    },
+    {
+      "commit": "05d2e74b17ea77d38fbd2138a5750286128a1f95",
+      "changed_sloc": 71,
+      "subject": "feat: define validated quantized Lenia reference semantics"
+    },
+    {
+      "commit": "088301193b105ce9b133a47f1893af48d14d1e34",
+      "changed_sloc": 69,
+      "subject": "test: cover Lenia growth neighbors and zero boundaries"
+    },
+    {
+      "commit": "02c76d80ec55cecb29673f217b7b999968ed01c8",
+      "changed_sloc": 22,
+      "subject": "refactor: share Lenia parameters and kernel with simulation core"
+    },
+    {
+      "commit": "192be6d4ae0e60a4d51b315840b9b28de39ba780",
+      "changed_sloc": 67,
+      "subject": "fix: preserve Lenia neighbor indices and verify CPU steppers"
+    },
+    {
+      "commit": "af2b708c7a9d57cf6a2a12700e9714e01428b23b",
+      "changed_sloc": 32,
+      "subject": "feat: add shared bounded Lenia blob and ring fixtures"
+    },
+    {
+      "commit": "69b06c8c381e1f1dfbc1e0ee8adafdb0c0671490",
+      "changed_sloc": 63,
+      "subject": "test: qualify Lenia reference against independent numerics"
+    },
+    {
+      "commit": "9b88e83077b386354400b92ff174a1b0c9474fb9",
+      "changed_sloc": 47,
+      "subject": "feat: implement bounded Lenia evolution and texture packing shader"
+    },
+    {
+      "commit": "16f4a2f3b6d916a83173402ff5616516c9a36928",
+      "changed_sloc": 39,
+      "subject": "feat: define explicit portable Lenia compute pipelines"
+    },
+    {
+      "commit": "ca73ccd14b629d87cc2e3533c339cf2be30ea2be",
+      "changed_sloc": 82,
+      "subject": "style: format Lenia pipeline declarations"
+    },
+    {
+      "commit": "513bad7fa1c4c54a5662e545e8dc0ae38a4c9744",
+      "changed_sloc": 89,
+      "subject": "feat: allocate bounded per-slice Lenia ping-pong buffers"
+    },
+    {
+      "commit": "dfadafd7128bdad455a834d2c59fb2cfc4eb1e79",
+      "changed_sloc": 75,
+      "subject": "feat: swap Lenia state per tick and publish packed atlas slices"
+    },
+    {
+      "commit": "1f9e6447f89138c6636dd3e6725555454782829b",
+      "changed_sloc": 75,
+      "subject": "test: add native Lenia GPU fixture and bounded row dispatch"
+    },
+    {
+      "commit": "990469af92672c8477e9d889d8654e23bba225b0",
+      "changed_sloc": 37,
+      "subject": "test: compare GPU Lenia against CPU across odd and even tick batches"
+    },
+    {
+      "commit": "7f44c3fc0c68e0d80b8cdf52316e585f5ded6115",
+      "changed_sloc": 64,
+      "subject": "feat: define per-automaton Lenia control and reset state"
+    },
+    {
+      "commit": "cb5f38591a18813e8f2a6f108071ecb9780a1a41",
+      "changed_sloc": 66,
+      "subject": "test: exercise Lenia controls through the workbench command handler"
+    },
+    {
+      "commit": "4b004b46ca6d2fba888176f2e5fef42e745712c8",
+      "changed_sloc": 79,
+      "subject": "feat: queue durable Lenia ticks with application and per-instance pause"
+    },
+    {
+      "commit": "622488abf2f5e5f4215c9ed681f3e473dfbed635",
+      "changed_sloc": 77,
+      "subject": "feat: own extracted Lenia simulations by entity and reset generation"
+    },
+    {
+      "commit": "3472fd14247a85666dd7f7f54d1b09db21872fed",
+      "changed_sloc": 5,
+      "subject": "feat: prepare render-world resources for Lenia evolution"
+    },
+    {
+      "commit": "433ca89629f668c407b215a62cff121f94f8a9e2",
+      "changed_sloc": 98,
+      "subject": "feat: run Lenia evolution before voxel surface extraction"
+    },
+    {
+      "commit": "fc7511e0d9754254568d8d12d12daede4ddc8d8e",
+      "changed_sloc": 39,
+      "subject": "feat: spawn bounded volumetric Lenia instances with owned controls"
+    },
+    {
+      "commit": "883c219374544d9590b784441c8f2c10ec06d9dc",
+      "changed_sloc": 43,
+      "subject": "fix: retire cleared GPU entities and reclaim atlas allocations"
+    },
+    {
+      "commit": "c9f574053073767757a7a5aa82f8eacf1bad2555",
+      "changed_sloc": 85,
+      "subject": "test: add atlas texture readback with padding and sentinel guards"
+    },
+    {
+      "commit": "97856c9a31e65499dee4c1e4b2140b6f6739e2c4",
+      "changed_sloc": 57,
+      "subject": "test: verify odd-width Lenia atlas copies and zero padding"
+    },
+    {
+      "commit": "316aaac5ca8ea78ed8c29cb604d5faded6d06cb1",
+      "changed_sloc": 48,
+      "subject": "refactor: seed evolving Lenia exclusively from the qualified shared fixtures"
+    },
+    {
+      "commit": "8d465e177243ed2424f33d345a9ca8030eed9d06",
+      "changed_sloc": 37,
+      "subject": "fix: use bounded shared Lenia seeds in CPU model callbacks"
+    },
+    {
+      "commit": "8d216196e42cd3a825cb95e0c1ca01037ae84310",
+      "changed_sloc": 69,
+      "subject": "feat: expose Lenia pause single-step and reset controls in the workbench"
+    },
+    {
+      "commit": "51dee4d92ac73a5c4786a20e90a07e00e4a615e5",
+      "changed_sloc": 44,
+      "subject": "feat: add validated Lenia growth and deterministic seed controls"
+    },
+    {
+      "commit": "e836ab140519c570eda3075832e9dc8eede72614",
+      "changed_sloc": 76,
+      "subject": "test: qualify independent Lenia states and atlas allocations"
+    },
+    {
+      "commit": "1293c63f48bcdb0c1ede91f495673ac820824311",
+      "changed_sloc": 56,
+      "subject": "feat: launch a deterministic Lenia workbench on monitor one"
+    },
+    {
+      "commit": "6cffa736b95da943b0f888e56276f8f3e6c94d9a",
+      "changed_sloc": 36,
+      "subject": "feat: expose explicit asynchronous Lenia GPU verification requests"
+    },
+    {
+      "commit": "ad5b9ece19c139bc63b05de24cc64cba4ee3e0b1",
+      "changed_sloc": 98,
+      "subject": "feat: read submitted Lenia GPU state without blocking ordinary rendering"
+    },
+    {
+      "commit": "a4d2ee10334be1a767fc8d146ef6ebbadf78af9a",
+      "changed_sloc": 16,
+      "subject": "feat: connect Lenia runtime readback and reject overflowing slice shapes"
+    },
+    {
+      "commit": "66d277c7b32ae0d51c6d641e450c6031d471e5eb",
+      "changed_sloc": 17,
+      "subject": "fix: render continuous Lenia densities below the binary voxel threshold"
+    },
+    {
+      "commit": "f1cc8af830c3b5ac073eb001b2b0adfd3e426baf",
+      "changed_sloc": 10,
+      "subject": "feat: report synchronized GPU instance ownership for lifecycle verification"
+    },
+    {
+      "commit": "45721e1bd133fd6c9ac6e1d69d08dd9c180d218d",
+      "changed_sloc": 83,
+      "subject": "test: define native Lenia qualification state and window-only captures"
+    },
+    {
+      "commit": "bd0e9cbe2cc4887093eb5741ff28331b837e0641",
+      "changed_sloc": 71,
+      "subject": "test: script native Lenia lifecycle through public workbench actions"
+    },
+    {
+      "commit": "604e8a41251a1cc373347ca3af16e63b6f3cabb4",
+      "changed_sloc": 73,
+      "subject": "test: gate Lenia runtime phases on GPU readback and captured images"
+    },
+    {
+      "commit": "be589f271ed1d5a4d418c258fdd0e499496364dd",
+      "changed_sloc": 45,
+      "subject": "test: verify paused stability and fixed-clock resume through the native workbench"
+    },
+    {
+      "commit": "f35634915013a6ad5f15852ee6fd46026c214aee",
+      "changed_sloc": 64,
+      "subject": "test: qualify native Lenia state with exact CPU comparisons and evidence logs"
+    },
+    {
+      "commit": "1f3d2e569936044ed2b5a988676c2c7b4a067930",
+      "changed_sloc": 5,
+      "subject": "refactor: simplify the remaining static fixture seeding branch"
+    },
+    {
+      "commit": "733b604d0a8600fa8ca7f1aa889c573168e9beaf",
+      "changed_sloc": 65,
+      "subject": "test: verify live Lenia parameter changes and invalid update rejection"
+    },
+    {
+      "commit": "2338dff2daa3e51a5561f6d2bb9a3d962635a49f",
+      "changed_sloc": 68,
+      "subject": "test: verify GPU reset removal reuse and invalid slice boundaries"
+    },
+    {
+      "commit": "685f4bad4585b5145575e7d8fbdbd6f32f76a479",
+      "changed_sloc": 4,
+      "subject": "feat: expose clear-all through the workbench spawner"
+    },
+    {
+      "commit": "c75bf14de04b001646d72a969aea4452144d8170",
+      "changed_sloc": 7,
+      "subject": "test: reject stale success markers and captures on qualification reruns"
+    }
+  ]
+}
