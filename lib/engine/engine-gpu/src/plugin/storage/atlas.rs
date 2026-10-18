@@ -31,6 +31,11 @@ impl Default for AtlasAllocator {
 }
 
 impl AtlasAllocator {
+    /// Return a retired rectangle; depth allocations never overlap in XY.
+    pub fn release(&mut self, off: UVec2, size: UVec2) {
+        self.free.push(Rect { off, size });
+    }
+
     /// Allocate space; returns `(layer, offset)` or `None` if full.
     pub fn allocate(&mut self, size: UVec2) -> Option<(u32, UVec2)> {
         let idx = self

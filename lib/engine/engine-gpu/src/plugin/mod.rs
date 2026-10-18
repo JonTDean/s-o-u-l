@@ -30,7 +30,15 @@ impl Plugin for GpuAutomataComputePlugin {
             .init_resource::<VoxelRenderStatus>()
             .add_systems(Update, setup::count_sim_steps_main)
             .add_systems(Update, setup::ticks::request_ticks)
-            .add_systems(Update, setup::allocation::allocate_slices)
+            .add_systems(
+                Update,
+                (
+                    setup::allocation::remove_slices,
+                    setup::allocation::allocate_slices,
+                )
+                    .chain()
+                    .in_set(engine_core::prelude::MainSet::Logic),
+            )
             .add_systems(OnEnter(AppState::MainMenu), setup::allocation::reset_atlas);
         let mut images = app.world_mut().resource_mut::<Assets<Image>>();
         let atlas = images.add(textures::make_atlas("ca.atlas"));

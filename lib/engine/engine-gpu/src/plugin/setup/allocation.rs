@@ -1,7 +1,34 @@
 //! Allocate GPU slices for newly registered automata.
 use crate::plugin::atlas::AtlasAllocator;
 use bevy::prelude::*;
-use engine_core::{automata::GpuGridSlice, events::AutomatonAdded, prelude::AutomataRegistry};
+use engine_core::{
+    automata::GpuGridSlice,
+    events::{AutomatonAdded, AutomatonId, AutomatonRemoved},
+    prelude::AutomataRegistry,
+};
+
+pub(in crate::plugin) fn remove_slices(
+    mut commands: Commands,
+    mut removed: EventReader<AutomatonRemoved>,
+    owners: Query<(Entity, &AutomatonId, Option<&GpuGridSlice>)>,
+    mut allocator: ResMut<AtlasAllocator>,
+    registry: Res<AutomataRegistry>,
+) {
+    for event in removed.read() {
+        for (entity, id, slice) in &owners {
+            if *id != event.id {
+                continue;
+            }
+            if let Some(slice) = slice {
+                allocator.release(slice.offset, slice.size);
+            }
+            commands.entity(entity).despawn();
+        }
+    }
+    if registry.list().is_empty() {
+        *allocator = AtlasAllocator::default();
+    }
+}
 
 pub(in crate::plugin) fn allocate_slices(
     mut commands: Commands,

@@ -37,7 +37,7 @@ impl Plugin for CommandExecutorPlugin {
                 Update,
                 focus_camera_on_new_auto
                     .after(handle_commands)
-                    .in_set(MainSet::Input)
+                    .in_set(MainSet::Render)
                     .run_if(in_state(AppState::InGame)),
             )
             .add_systems(OnEnter(AppState::MainMenu), clear_on_main_menu);
