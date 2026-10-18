@@ -3,3 +3,6 @@ mod params;
 mod reference;
 pub use params::LeniaParams;
 pub use reference::{KERNEL, next_density, step};
+
+#[cfg(test)]
+mod tests;
