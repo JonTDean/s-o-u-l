@@ -29,9 +29,11 @@ pub(crate) fn synchronize(
             crate::plugin::textures::MAX_H,
             crate::plugin::textures::MAX_LAYERS,
         ];
-        let cells = size.iter().map(|&n| n as u64).product::<u64>();
+        let cells = size.iter().try_fold(1u64, |n, &v| n.checked_mul(v as u64));
         if size.contains(&0)
-            || cells * 4 > device.limits().max_storage_buffer_binding_size as u64
+            || cells
+                .and_then(|n| n.checked_mul(4))
+                .is_none_or(|bytes| bytes > device.limits().max_storage_buffer_binding_size as u64)
             || (0..3).any(|i| {
                 origin[i]
                     .checked_add(size[i])

@@ -52,5 +52,6 @@ pub(super) fn run(context: &mut RenderContext, world: &World) {
                 z: slice.layer,
             },
         );
+        super::probe::record(world, context.command_encoder(), *entity, slot, sim.params);
     }
 }

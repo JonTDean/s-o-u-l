@@ -28,6 +28,7 @@ impl Plugin for GpuAutomataComputePlugin {
             .add_event::<DebugSeedSquare>()
             .init_resource::<StepsThisFrame>()
             .init_resource::<VoxelRenderStatus>()
+            .init_resource::<crate::LeniaProbe>()
             .add_systems(Update, setup::count_sim_steps_main)
             .add_systems(Update, setup::ticks::request_ticks)
             .add_systems(
@@ -50,7 +51,15 @@ impl Plugin for GpuAutomataComputePlugin {
         .init_resource::<atlas::AtlasAllocator>();
         let shader = drawing::pipeline::VoxelShader::register(app.world_mut());
         let status = app.world().resource::<VoxelRenderStatus>().clone();
+        let probe = app.world().resource::<crate::LeniaProbe>().clone();
         let render_app = app.sub_app_mut(RenderApp);
+        render_app
+            .insert_resource(probe)
+            .init_resource::<crate::compute::lenia::runtime::probe::PendingReadbacks>()
+            .add_systems(
+                Render,
+                crate::compute::lenia::runtime::probe::complete.in_set(RenderSet::Cleanup),
+            );
         render_app.insert_resource(shader).insert_resource(status);
         render_app
             .insert_resource(GlobalVoxelAtlas { atlas, signal })
