@@ -5,10 +5,10 @@ use bevy::prelude::*;
 
 use crate::controls::camera::{
     input::{
-        zoom::{zoom_scroll, zoom_keyboard},
         drag::{begin_drag, drag_pan, end_drag},
         pan::key_pan,
-        rotate::{gather_orbit_input, apply_orbit},
+        rotate::{apply_orbit, gather_orbit_input},
+        zoom::{zoom_keyboard, zoom_scroll},
     },
     manager::{CameraSet, DragState},
 };
@@ -30,8 +30,8 @@ impl Plugin for InputFacadePlugin {
                 key_pan,
                 gather_orbit_input,
             )
-            .in_set(CameraSet::Input)
-            .run_if(in_state(AppState::InGame)),
+                .in_set(CameraSet::Input)
+                .run_if(in_state(AppState::InGame)),
         )
         .add_systems(
             Update,

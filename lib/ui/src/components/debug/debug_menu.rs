@@ -13,15 +13,15 @@
 
 use bevy::{
     ecs::system::{Local, Res},
-    input::{keyboard::KeyCode, ButtonInput},
+    input::{ButtonInput, keyboard::KeyCode},
 };
-use bevy_egui::{egui, EguiContexts};
+use bevy_egui::{EguiContexts, egui};
 
 /// Immediate‑mode egui window toggled with **F3**.
 pub fn debug_menu(
     mut egui_ctx: EguiContexts,
-    keys:        Res<ButtonInput<KeyCode>>,
-    mut open:    Local<bool>,
+    keys: Res<ButtonInput<KeyCode>>,
+    mut open: Local<bool>,
 ) {
     // Hot‑key – open/close.
     if keys.just_pressed(KeyCode::F3) {
@@ -38,6 +38,5 @@ pub fn debug_menu(
             ui.label("Hot‑keys:  F3 show/hide  •  Ctrl+Click resets all");
         });
         ui.separator();
-
     });
 }

@@ -8,8 +8,8 @@ pub struct StylesPlugin;
 impl Plugin for StylesPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-                /* global fade-in / fade-out transitions                   */
-                FadePlugin,
-           ));
+            /* global fade-in / fade-out transitions                   */
+            FadePlugin,
+        ));
     }
 }

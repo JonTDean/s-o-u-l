@@ -5,7 +5,6 @@
 //! ```
 
 pub use super::{
-    plugin::ComputationalIntelligencePlugin,
     automata::classical::plugin::ClassicalAutomataPlugin,
-    automata::dynamical::plugin::DynamicalAutomataPlugin,
+    automata::dynamical::plugin::DynamicalAutomataPlugin, plugin::ComputationalIntelligencePlugin,
 };

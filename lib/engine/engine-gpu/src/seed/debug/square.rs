@@ -6,8 +6,8 @@
 use bevy::prelude::*;
 use bevy::render::{
     render_asset::RenderAssets,
-    renderer::RenderQueue as Queue,
     render_resource::{Extent3d, Origin3d, TexelCopyBufferLayout},
+    renderer::RenderQueue as Queue,
     texture::GpuImage,
 };
 
@@ -16,11 +16,11 @@ use crate::{graph::GpuGridSlice, plugin::GlobalVoxelAtlas};
 /// Write a solid 3 × 3 square (`value`) into the *centre* of `slice`.
 #[allow(clippy::too_many_arguments)]
 pub fn seed_debug_square(
-    queue:      &Queue,
+    queue: &Queue,
     gpu_images: &RenderAssets<GpuImage>,
-    textures:   &GlobalVoxelAtlas,
-    slice:      &GpuGridSlice,
-    value:      u8,
+    textures: &GlobalVoxelAtlas,
+    slice: &GpuGridSlice,
+    value: u8,
 ) {
     // 0 ░ resolve texture
     let Some(atlas_gpu) = gpu_images.get(&textures.atlas) else {
@@ -35,7 +35,11 @@ pub fn seed_debug_square(
     let mut dst = atlas_gpu.texture.as_image_copy();
     let cx = slice.offset.x + slice.size.x / 2 - 1;
     let cy = slice.offset.y + slice.size.y / 2 - 1;
-    dst.origin = Origin3d { x: cx, y: cy, z: slice.layer };
+    dst.origin = Origin3d {
+        x: cx,
+        y: cy,
+        z: slice.layer,
+    };
 
     // 3 ░ upload three consecutive layers
     for dz in 0..3 {
@@ -43,8 +47,16 @@ pub fn seed_debug_square(
         queue.write_texture(
             dst,
             &data,
-            TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(3), rows_per_image: Some(3) },
-            Extent3d { width: 3, height: 3, depth_or_array_layers: 1 },
+            TexelCopyBufferLayout {
+                offset: 0,
+                bytes_per_row: Some(3),
+                rows_per_image: Some(3),
+            },
+            Extent3d {
+                width: 3,
+                height: 3,
+                depth_or_array_layers: 1,
+            },
         );
     }
 }

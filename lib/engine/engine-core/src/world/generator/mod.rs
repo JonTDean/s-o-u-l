@@ -6,7 +6,7 @@
 
 use bevy::prelude::*;
 use glam::{IVec3, UVec3};
-use simulation_kernel::grid::{dense::DenseGrid, GridBackend};
+use simulation_kernel::grid::{GridBackend, dense::DenseGrid};
 
 use super::voxel_world::VoxelWorld;
 

@@ -12,8 +12,14 @@ pub struct SparseGrid {
 }
 
 impl SparseGrid {
-    #[inline] pub fn get    (&self, p: IVec3) -> Option<&Cell>         { self.map.get(&p) }
-    #[inline] pub fn get_mut(&mut self, p: IVec3) -> Option<&mut Cell> { self.map.get_mut(&p) }
+    #[inline]
+    pub fn get(&self, p: IVec3) -> Option<&Cell> {
+        self.map.get(&p)
+    }
+    #[inline]
+    pub fn get_mut(&mut self, p: IVec3) -> Option<&mut Cell> {
+        self.map.get_mut(&p)
+    }
 
     #[inline]
     pub fn set_state(&mut self, p: IVec3, s: CellState) {

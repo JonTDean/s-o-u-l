@@ -19,7 +19,7 @@
 //! * Padding & margins follow the global `styles::BOTTOM_PAD` constant.
 
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts};
+use bevy_egui::{EguiContexts, egui};
 use engine_core::prelude::AppState;
 
 /// Bevy *plugin* that registers the pause-banner UI system.
@@ -46,7 +46,7 @@ fn pause_banner_ui(mut egui_ctx: EguiContexts<'_, '_>) {
         .anchor(egui::Align2::CENTER_TOP, [0.0, 16.0])
         .interactable(false)
         .show(ctx, |ui| {
-            use egui::{Color32, Frame, RichText, Margin};
+            use egui::{Color32, Frame, Margin, RichText};
 
             Frame::new()
                 .fill(Color32::from_rgba_premultiplied(0, 0, 0, 180))
@@ -64,7 +64,9 @@ fn pause_banner_ui(mut egui_ctx: EguiContexts<'_, '_>) {
                         ui.add_space(4.0);
                         ui.label(RichText::new("⏸ Simulation paused").strong());
                         ui.add_space(12.0);
-                        ui.label(RichText::new("P = resume   N = step").color(Color32::LIGHT_GREEN));
+                        ui.label(
+                            RichText::new("P = resume   N = step").color(Color32::LIGHT_GREEN),
+                        );
                         ui.add_space(4.0);
                     });
                 });

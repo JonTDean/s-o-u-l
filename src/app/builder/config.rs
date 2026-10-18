@@ -90,9 +90,7 @@ impl RuntimeConfig {
                 Ok(toml) => match toml::from_str::<PartialConfig>(&toml) {
                     Ok(p) => return Self::default().merge_partial(p),
                     Err(e) => {
-                        warn!(
-                            "Malformed config ({path:?}): {e}; falling back to defaults."
-                        );
+                        warn!("Malformed config ({path:?}): {e}; falling back to defaults.");
                         break;
                     }
                 },
@@ -174,15 +172,15 @@ impl RuntimeConfig {
         if let Some(v) = other.networking {
             self.networking = v;
         }
-        if let Some(v) = other.simulation_rate {
-            if v > 0 {
-                self.simulation_rate_hz = v;
-            }
+        if let Some(v) = other.simulation_rate
+            && v > 0
+        {
+            self.simulation_rate_hz = v;
         }
-        if let Some(v) = other.max_steps_per_frame {
-            if v > 0 {
-                self.max_sim_steps_per_frame = v;
-            }
+        if let Some(v) = other.max_steps_per_frame
+            && v > 0
+        {
+            self.max_sim_steps_per_frame = v;
         }
         self
     }

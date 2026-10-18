@@ -18,7 +18,9 @@ pub struct NewScenarioMenuScreen {
 
 impl MenuScreen for NewScenarioMenuScreen {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
-        CentralPanel::default().frame(styles::fullscreen_bg()).show(ctx, |_| {});
+        CentralPanel::default()
+            .frame(styles::fullscreen_bg())
+            .show(ctx, |_| {});
 
         egui::Area::new("new_scenario_win".into())
             .anchor(Align2::CENTER_CENTER, [0.0, 0.0])
@@ -32,7 +34,10 @@ impl MenuScreen for NewScenarioMenuScreen {
                         ui.add_space(8.0);
                         ui.horizontal(|ui| {
                             if ui
-                                .add_enabled(!self.name.trim().is_empty(), egui::Button::new("Start"))
+                                .add_enabled(
+                                    !self.name.trim().is_empty(),
+                                    egui::Button::new("Start"),
+                                )
                                 .clicked()
                             {
                                 // A real implementation would stash the draft into a resource that

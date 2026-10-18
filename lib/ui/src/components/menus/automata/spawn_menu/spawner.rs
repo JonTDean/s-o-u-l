@@ -12,10 +12,9 @@
 //! _This file fully replaces the previous implementation._
 
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts};
+use bevy_egui::{EguiContexts, egui};
 use engine_core::{
-    events::AutomataCommand,
-    systems::registry::RuleRegistry,
+    events::AutomataCommand, systems::registry::RuleRegistry,
     systems::state::resources::RuntimeFlags,
 };
 
@@ -33,14 +32,14 @@ use rayon::prelude::*;
 /// automatically appear here without further wiring.
 #[allow(clippy::needless_pass_by_value)]
 pub fn spawner(
-    rules:  Res<RuleRegistry>,        // ← global rule catalogue
-    flags:  Res<RuntimeFlags>,        // ← CPU vs GPU hint
-    mut ui: EguiContexts,             // ← egui context provider
+    rules: Res<RuleRegistry>, // ← global rule catalogue
+    flags: Res<RuntimeFlags>, // ← CPU vs GPU hint
+    mut ui: EguiContexts,     // ← egui context provider
     mut tx: EventWriter<AutomataCommand>,
 ) {
     let ctx = match ui.ctx_mut() {
         Ok(c) => c,
-        Err(_) => return,             // egui not ready yet
+        Err(_) => return, // egui not ready yet
     };
 
     /* ----------------------------------------------------------------- */
@@ -49,11 +48,7 @@ pub fn spawner(
     let grouped: Vec<(String, Vec<String>)> = {
         // Collect & sort rule IDs – the list is usually small (<100),
         // but we parallelise anyway to stay scalable.
-        let mut ids: Vec<String> = rules
-            .ids()
-            .par_bridge()
-            .map(|s| s.clone())
-            .collect();
+        let mut ids: Vec<String> = rules.ids().par_bridge().map(|s| s.clone()).collect();
 
         ids.par_sort_unstable();
 
@@ -63,13 +58,8 @@ pub fn spawner(
             std::collections::BTreeMap::new();
 
         for id in ids {
-            let family = id
-                .split_once(':')
-                .map(|(f, _)| f)
-                .unwrap_or(id.as_str());
-            map.entry(family.to_owned())
-                .or_default()
-                .push(id);
+            let family = id.split_once(':').map(|(f, _)| f).unwrap_or(id.as_str());
+            map.entry(family.to_owned()).or_default().push(id);
         }
         map.into_iter().collect()
     };

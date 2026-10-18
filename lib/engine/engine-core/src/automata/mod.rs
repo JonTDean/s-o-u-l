@@ -11,11 +11,11 @@
 //! engine-core ▸ automata – runtime metadata shared with the GPU.
 //! Now 3-D-aware: every slice knows its voxel **depth** inside the layer.
 
-use std::sync::Arc;
 use bevy::prelude::{Color, Component};
 use glam::{UVec2, Vec3};
 use serde_json::Value;
 use simulation_kernel::{AutomatonRule, core::dim::Dim};
+use std::sync::Arc;
 
 use crate::events::AutomatonId;
 

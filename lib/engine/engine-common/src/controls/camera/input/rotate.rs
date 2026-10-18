@@ -1,7 +1,7 @@
 //! Simple orbital camera – hold **Alt + LMB** and drag to yaw / pitch.
 
-use bevy::{input::mouse::MouseMotion, prelude::*};
 use crate::controls::camera::manager::WorldCamera;
+use bevy::{input::mouse::MouseMotion, prelude::*};
 
 /* resource ---------------------------------------------------------- */
 
@@ -9,7 +9,7 @@ use crate::controls::camera::manager::WorldCamera;
 #[derive(Resource, Default)]
 pub struct OrbitAngles {
     /// Rotation around +Z (world “up”).
-    pub yaw:   f32,
+    pub yaw: f32,
     /// Rotation around +X (camera local right).
     pub pitch: f32,
 }
@@ -19,27 +19,28 @@ pub struct OrbitAngles {
 /// [`OrbitAngles`].
 pub fn gather_orbit_input(
     mut angles: ResMut<OrbitAngles>,
-    buttons:    Res<ButtonInput<MouseButton>>,
-    keys:       Res<ButtonInput<KeyCode>>,
+    buttons: Res<ButtonInput<MouseButton>>,
+    keys: Res<ButtonInput<KeyCode>>,
     mut motion: EventReader<MouseMotion>,
 ) {
     if !(buttons.pressed(MouseButton::Left) && keys.pressed(KeyCode::AltLeft)) {
         return;
     }
     let delta: Vec2 = motion.read().map(|m| m.delta).sum();
-    if delta == Vec2::ZERO { return; }
+    if delta == Vec2::ZERO {
+        return;
+    }
 
-    angles.yaw   -= delta.x * 0.005;
+    angles.yaw -= delta.x * 0.005;
     angles.pitch = (angles.pitch - delta.y * 0.005).clamp(-1.55, 1.55); // ±89 °
 }
 
 /* application ------------------------------------------------------- */
 /// Applies the queued yaw / pitch to the active [`WorldCamera`].
-pub fn apply_orbit(
-    angles: Res<OrbitAngles>,
-    mut cam_q: Query<&mut Transform, With<WorldCamera>>,
-) {
-    let Ok(mut tf) = cam_q.single_mut() else { return };
+pub fn apply_orbit(angles: Res<OrbitAngles>, mut cam_q: Query<&mut Transform, With<WorldCamera>>) {
+    let Ok(mut tf) = cam_q.single_mut() else {
+        return;
+    };
 
     let radius = tf.translation.length();
     tf.translation = Quat::from_euler(EulerRot::YXZ, angles.yaw, angles.pitch, 0.0)

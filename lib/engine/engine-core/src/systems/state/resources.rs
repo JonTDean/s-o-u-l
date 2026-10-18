@@ -25,7 +25,7 @@ impl FromWorld for RuntimeFlags {
         let settings = world.get_resource::<Settings>();
         let force_cpu_env = std::env::var_os("SOUL_CPU").is_some();
         Self {
-            gpu_enabled: settings.map_or(true, |s| s.gpu_compute) && !force_cpu_env,
+            gpu_enabled: settings.is_none_or(|s| s.gpu_compute) && !force_cpu_env,
         }
     }
 }

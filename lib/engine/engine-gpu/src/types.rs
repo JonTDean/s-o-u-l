@@ -1,6 +1,10 @@
 //! GPU‑side uniform / storage structs shared with WGSL.
 
-use bevy::render::render_resource::*;
+// Keep the public ShaderType implementation; Bevy 0.16 emits unused
+// compile-time field-check functions for this derive on current Rust.
+#![expect(dead_code, reason = "ShaderType generates compile-time field checks")]
+
+use bevy::render::render_resource::ShaderType;
 use bytemuck::{Pod, Zeroable};
 
 /// Parameters for **one** automaton slice in the texture atlas.
@@ -17,7 +21,7 @@ pub struct AutomatonParams {
     /// Depth of the automaton grid in texels.
     pub size_z: u32,
     /// Z‑layer inside the 3‑D atlas texture where this board lives.
-    pub layer:  u32,
+    pub layer: u32,
     /// Packed rule bits (e.g. Conway B/S or Lenia kernel index).
-    pub rule:   u32,
+    pub rule: u32,
 }

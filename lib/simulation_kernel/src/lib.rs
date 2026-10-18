@@ -5,10 +5,10 @@ use crate::core::{
     dim::Dimensionality,
 };
 
+pub mod atlas;
 pub mod core;
 pub mod grid;
 pub mod stepper;
-pub mod atlas;
 
 /// Trait implemented by every user-defined automaton rule.
 ///
@@ -20,9 +20,5 @@ pub trait AutomatonRule: Send + Sync + 'static {
     type D: Dimensionality;
 
     /// Computes the next state/memory for a cell.
-    fn next_state<'a>(
-        &self,
-        ctx:    CellCtx<'a, Self::D>,
-        params: &serde_json::Value,
-    ) -> CellOutcome;
+    fn next_state<'a>(&self, ctx: CellCtx<'a, Self::D>, params: &serde_json::Value) -> CellOutcome;
 }

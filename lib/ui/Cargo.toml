@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+engine-gpu = { path = "../engine/engine-gpu", optional = true }
 bytemuck            = { version = "1.23.1", features = ["derive"] }
 
 bevy                = { workspace = true }
@@ -20,3 +21,6 @@ tooling             = { path = "../tooling" }
 engine-common         = { path = "../engine/engine-common" }
 engine-core         = { path = "../engine/engine-core" }
 engine-render       = { path = "../engine/engine-render" }
+[features]
+default = ["gpu-compute"]
+gpu-compute = ["dep:engine-gpu"]

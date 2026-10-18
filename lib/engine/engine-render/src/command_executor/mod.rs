@@ -6,9 +6,7 @@ use bevy::prelude::*;
 use engine_common::controls::camera::WorldCamera;
 use engine_core::{
     automata::{AutomatonInfo, GpuGridSlice},
-    events::{
-        AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved
-    },
+    events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved},
     prelude::{AppState, AutomataRegistry, RuleRegistry},
 };
 use serde_json::Value;
@@ -36,11 +34,11 @@ impl Plugin for CommandExecutorPlugin {
                     .run_if(in_state(AppState::InGame)),
             )
             .add_systems(
-               Update,
-               focus_camera_on_new_auto
-                   .after(handle_commands)
-                   .in_set(MainSet::Input)
-                   .run_if(in_state(AppState::InGame)),
+                Update,
+                focus_camera_on_new_auto
+                    .after(handle_commands)
+                    .in_set(MainSet::Input)
+                    .run_if(in_state(AppState::InGame)),
             )
             .add_systems(OnEnter(AppState::MainMenu), clear_on_main_menu);
     }
@@ -76,11 +74,11 @@ fn handle_commands(
 
                 /* logical slice – offset always (0,0); layer filled in later */
                 let gpu_slice = GpuGridSlice {
-                    layer:  0,                       // real Z picked by atlas allocator
+                    layer: 0, // real Z picked by atlas allocator
                     offset: UVec2::ZERO,
-                    size:   UVec2::splat(SLICE_SIDE),
-                    depth:  1,                       // every fresh slice starts 1-deep
-                    rule:   id.clone(),              // rule id ("lenia", "life", …)
+                    size: UVec2::splat(SLICE_SIDE),
+                    depth: 1,         // every fresh slice starts 1-deep
+                    rule: id.clone(), // rule id ("lenia", "life", …)
                     rule_bits: 0,
                 };
 
@@ -136,4 +134,3 @@ pub fn focus_camera_on_new_auto(
     tf.translation.x = centre.x;
     tf.translation.y = centre.y;
 }
-

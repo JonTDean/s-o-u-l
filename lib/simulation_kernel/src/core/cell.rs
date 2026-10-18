@@ -6,14 +6,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::dim::Dimensionality;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum CellState {
+    #[default]
     Dead,
-    Alive(u8),           // energy in 1..=complexity
-}
-
-impl Default for CellState {
-    fn default() -> Self { CellState::Dead }
+    Alive(u8), // energy in 1..=complexity
 }
 
 impl From<u8> for CellState {
@@ -29,22 +26,25 @@ pub type CellMemory = serde_json::Value;
 /// Simulation cell (state + optional JSON memory).
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Cell {
-    pub state:  CellState,
+    pub state: CellState,
     pub memory: CellMemory,
 }
 
 /// Execution context passed to every rule invocation.
 pub struct CellCtx<'a, D: Dimensionality> {
-    pub self_coord:    D::Coord,
-    pub self_state:    CellState,
+    pub self_coord: D::Coord,
+    pub self_state: CellState,
     pub neighbourhood: &'a [CellState],
-    pub memory:        &'a CellMemory,
-    pub _marker:       PhantomData<D>,
+    pub memory: &'a CellMemory,
+    pub _marker: PhantomData<D>,
 }
 
 pub enum CellOutcome {
     Unchanged,
-    Next { state: CellState, memory: CellMemory },
+    Next {
+        state: CellState,
+        memory: CellMemory,
+    },
 }
 
 #[inline]

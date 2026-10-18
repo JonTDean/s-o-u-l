@@ -1,2 +1,2 @@
-pub mod spawner;
 pub mod plugin;
+pub mod spawner;

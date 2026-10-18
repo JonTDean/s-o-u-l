@@ -1,11 +1,15 @@
 use bevy::prelude::Resource;
-use simulation_kernel::{core::{
-    cell::{CellCtx, CellOutcome, CellState}, dim::Dim,
-}, AutomatonRule};
 use serde_json::Value;
+use simulation_kernel::{
+    AutomatonRule,
+    core::{
+        cell::{CellCtx, CellOutcome, CellState},
+        dim::Dim,
+    },
+};
 
 /// Hard‑coded rule table for Wolfram 110.
-const RULE_110: [u8; 8] = [0,1,1,0,1,1,1,0];
+const RULE_110: [u8; 8] = [0, 1, 1, 0, 1, 1, 1, 0];
 
 #[derive(Clone, Resource)]
 pub struct Rule110;
@@ -21,7 +25,7 @@ impl AutomatonRule for Rule110 {
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
         // Similar neighborhood interpretation as Rule30.
         let l = matches!(ctx.neighbourhood[3], CellState::Alive(_)) as u8;
-        let c = matches!(ctx.self_state,       CellState::Alive(_)) as u8; // centre
+        let c = matches!(ctx.self_state, CellState::Alive(_)) as u8; // centre
         let r = matches!(ctx.neighbourhood[5], CellState::Alive(_)) as u8;
         let idx = (l << 2) | (c << 1) | r;
         let next_state = if RULE_110[idx as usize] == 1 {
@@ -32,7 +36,10 @@ impl AutomatonRule for Rule110 {
         if next_state == ctx.self_state {
             CellOutcome::Unchanged
         } else {
-            CellOutcome::Next { state: next_state, memory: ctx.memory.clone() }
+            CellOutcome::Next {
+                state: next_state,
+                memory: ctx.memory.clone(),
+            }
         }
     }
 }

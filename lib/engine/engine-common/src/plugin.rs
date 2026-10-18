@@ -4,11 +4,15 @@
 //! `engine-common` so that downstream crates can wire everything up with a
 //! one-liner:
 //!
-//! ```rust
+//! ```no_run
+//! use bevy::prelude::*;
+//! use engine_core::{plugin::EngineCorePlugin, prelude::AppState};
 //! use engine_common::prelude::EngineCommonPlugin;
 //!
 //! App::new()
 //!     .add_plugins(DefaultPlugins)
+//!     .init_state::<AppState>()
+//!     .add_plugins(EngineCorePlugin)
 //!     .add_plugins(EngineCommonPlugin)   // ← this line
 //!     .run();
 //! ```
@@ -25,10 +29,7 @@
 
 use bevy::prelude::*;
 
-use crate::{
-    controls::camera::CameraPluginBundle,
-    scenes::SceneManagerPlugin,
-};
+use crate::{controls::camera::CameraPluginBundle, scenes::SceneManagerPlugin};
 
 /// Umbrella plug-in – installs every `engine-common` runtime feature.
 #[derive(Default)]
@@ -49,7 +50,7 @@ impl Plugin for EngineCommonPlugin {
 }
 
 // /* 2 ░ camera stack
-        //  * ── orthographic manager   (UI + world layers, metrics, etc.)
-        //     * ── perspective free-cam   (spawns on InGame → flies anywhere)
-        //  */
-        // app.add_plugins(CameraManagerPlugin);
+//  * ── orthographic manager   (UI + world layers, metrics, etc.)
+//     * ── perspective free-cam   (spawns on InGame → flies anywhere)
+//  */
+// app.add_plugins(CameraManagerPlugin);

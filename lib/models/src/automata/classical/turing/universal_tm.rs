@@ -1,7 +1,10 @@
 //! A simple example Turing machine (not truly universal, but illustrative).
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-pub enum Direction { Left, Right }
+pub enum Direction {
+    Left,
+    Right,
+}
 
 /// A single transition rule for a Turing machine.
 pub struct TMTransition {
@@ -86,8 +89,22 @@ pub fn example_tm_replace_a() -> TuringMachine {
     // In state 0:
     //  - on 'a': write 'X', stay in 0, move Right
     //  - on blank: write blank, go to accept state (1), move Left (head goes back one)
-    transitions.insert((0, 'a'), TMTransition { write: 'X', new_state: 0, direction: Direction::Right });
-    transitions.insert((0, ' ',), TMTransition { write: ' ', new_state: accept, direction: Direction::Left });
+    transitions.insert(
+        (0, 'a'),
+        TMTransition {
+            write: 'X',
+            new_state: 0,
+            direction: Direction::Right,
+        },
+    );
+    transitions.insert(
+        (0, ' '),
+        TMTransition {
+            write: ' ',
+            new_state: accept,
+            direction: Direction::Left,
+        },
+    );
     TuringMachine {
         tape: Vec::new(),
         head: 0,

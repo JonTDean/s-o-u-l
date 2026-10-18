@@ -31,10 +31,10 @@ pub struct AutomatonId(pub u32);
 #[derive(Event)]
 pub enum AutomataCommand {
     /// Spawn the default seed pattern that belongs to the rule `id`.
-    SeedPattern { 
+    SeedPattern {
         /// String of ID
-        id: String
-     },
+        id: String,
+    },
 
     /// Despawn **all** running automata.
     Clear,
@@ -44,7 +44,7 @@ pub enum AutomataCommand {
 ///
 /// * `id`     – logical identifier inside `AutomataRegistry` (CPU side)  
 /// * `entity` – concrete `Entity` that represents this automaton in the
-///              Bevy ECS (GPU slice allocator needs this)
+///   Bevy ECS (GPU slice allocator needs this)
 #[derive(Event)]
 pub struct AutomatonAdded {
     /// CPU-side identifier assigned by the [`AutomataRegistry`].

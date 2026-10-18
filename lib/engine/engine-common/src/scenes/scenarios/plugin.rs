@@ -2,10 +2,7 @@
 
 use bevy::prelude::*;
 
-use super::{
-    load::plugin::LoadScenarioScenePlugin,
-    new::plugin::NewScenarioScenePlugin,
-};
+use super::{load::plugin::LoadScenarioScenePlugin, new::plugin::NewScenarioScenePlugin};
 
 /// Registers both scenario creation flows.
 ///
@@ -15,9 +12,6 @@ pub struct ScenariosPlugin;
 
 impl Plugin for ScenariosPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-            NewScenarioScenePlugin,
-            LoadScenarioScenePlugin,
-        ));
+        app.add_plugins((NewScenarioScenePlugin, LoadScenarioScenePlugin));
     }
 }

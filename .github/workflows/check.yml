@@ -1,0 +1,25 @@
+name: Source checks
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_BUILD_JOBS: 2
+      CMAKE_BUILD_PARALLEL_LEVEL: 2
+      XDG_RUNTIME_DIR: /tmp/soul-runtime
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.94.1
+          components: rustfmt, clippy
+      - name: Install native dependencies and source tokenizer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libvulkan1 mesa-vulkan-drivers cmake ninja-build
+          python3 -m pip install -r tools/structure/requirements.txt
+          mkdir -m 700 "$XDG_RUNTIME_DIR"
+      - run: make check

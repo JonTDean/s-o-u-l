@@ -4,5 +4,5 @@
 //! simulation state (dense **and/or** sparse voxel grids) as well as
 //! utility functions for procedural generation used across the engine.
 
-pub mod voxel_world;
 pub mod generator;
+pub mod voxel_world;

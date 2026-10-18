@@ -24,14 +24,14 @@ pub fn add_all_plugins(app: &mut App) {
     app.add_plugins(EguiPlugin::default());
 
     /* 1 frame-time diagnostics */
-    app.add_plugins(FrameTimeDiagnosticsPlugin::default()); 
+    app.add_plugins(FrameTimeDiagnosticsPlugin::default());
 
     /* 2  dev / runtime state */
     app.add_plugins(StatePlugin);
 
     /* 3  common engine */
     app.add_plugins(EngineCommonPlugin);
-    
+
     /* 4  core engine */
     app.add_plugins(EngineCorePlugin);
 
@@ -44,4 +44,3 @@ pub fn add_all_plugins(app: &mut App) {
     /* 7  UI / HUD */
     app.add_plugins(OutputPlugin);
 }
-

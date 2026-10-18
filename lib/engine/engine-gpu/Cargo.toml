@@ -1,6 +1,6 @@
 # ------------------------------------------------------------
-# Mesh-shader fast-path is enabled by default.
-# Older GPUs fall back automatically at run-time.
+# Portable compute + indirect raster backend is the default.
+# mesh_shaders retains the unfinished experimental Vulkan implementation.
 # ------------------------------------------------------------
 [package]
 name    = "engine-gpu"
@@ -27,7 +27,7 @@ engine-core       = { path = "../engine-core" }
 simulation_kernel = { path = "../../simulation_kernel" }
 
 [features]
-default        = ["mesh_shaders"]
+default        = []
 mesh_shaders   = ["ash", "naga_oil"]     # optional deps become features automatically
 fallback_spirv = ["shaderc"]
 gpu-debug      = []

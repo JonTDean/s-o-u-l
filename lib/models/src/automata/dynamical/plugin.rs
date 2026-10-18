@@ -2,16 +2,15 @@
 
 use bevy::prelude::*;
 
-use crate::automata::dynamical::{lenia::plugin::LeniaPlugin, particle::plugin::ParticleAutomataPlugin};
+use crate::automata::dynamical::{
+    lenia::plugin::LeniaPlugin, particle::plugin::ParticleAutomataPlugin,
+};
 
 /// Dynamical automata master plugin.
 pub struct DynamicalAutomataPlugin;
 
 impl Plugin for DynamicalAutomataPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-            LeniaPlugin,
-            ParticleAutomataPlugin,
-        ));
+        app.add_plugins((LeniaPlugin, ParticleAutomataPlugin));
     }
 }

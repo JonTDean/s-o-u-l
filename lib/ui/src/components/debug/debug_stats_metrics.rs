@@ -9,19 +9,18 @@
 
 use bevy::diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin};
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts};
+use bevy_egui::{EguiContexts, egui};
 
 #[cfg(feature = "gpu-compute")]
 use engine_gpu::plugin::StepsThisFrame;
 
 /// Toggleable overlay; press **F4** to open / close.
 pub fn debug_stats_metrics(
-    mut egui_ctx:   EguiContexts<'_, '_>,
-    keys:           Res<ButtonInput<KeyCode>>,
-    diagnostics:    Res<DiagnosticsStore>,
+    mut egui_ctx: EguiContexts<'_, '_>,
+    keys: Res<ButtonInput<KeyCode>>,
+    diagnostics: Res<DiagnosticsStore>,
 
-    #[cfg(feature = "gpu-compute")]
-    step_info: Option<Res<StepsThisFrame>>,
+    #[cfg(feature = "gpu-compute")] step_info: Option<Res<StepsThisFrame>>,
 
     mut open: Local<bool>,
 ) {
@@ -37,13 +36,14 @@ pub fn debug_stats_metrics(
     // ── instantaneous values (update every frame) ──────────────────
     let fps = diagnostics
         .get(&FrameTimeDiagnosticsPlugin::FPS)
-        .and_then(|d| d.value())                    // ← was  smoothed()
+        .and_then(|d| d.value()) // ← was  smoothed()
         .unwrap_or_default();
 
     let frame_ms = diagnostics
         .get(&FrameTimeDiagnosticsPlugin::FRAME_TIME)
-        .and_then(|d| d.value())                    // ← was  smoothed()
-        .unwrap_or_default() * 1_000.0;
+        .and_then(|d| d.value()) // ← was  smoothed()
+        .unwrap_or_default()
+        * 1_000.0;
 
     egui::Window::new("Debug Stats")
         .anchor(egui::Align2::RIGHT_BOTTOM, [-10.0, -10.0])

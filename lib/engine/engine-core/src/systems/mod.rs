@@ -1,8 +1,8 @@
 //! Scheduling utilities and long-lived application systems.
 
+pub mod execution;
 pub mod registry;
-pub mod schedule;
+pub use execution::{schedule, simulation};
 pub mod state;
 
-/// Fixed‑step accumulator + SimulationStep event.
-pub mod simulation;
+// Fixed-step accumulation is exported through execution::simulation.

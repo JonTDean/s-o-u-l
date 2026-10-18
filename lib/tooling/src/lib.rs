@@ -1,4 +1,5 @@
+pub mod telemetry;
 pub mod tools;
-pub mod logging;
-pub mod monitoring;
+pub use telemetry::{logging, monitoring};
+
 pub mod debugging;

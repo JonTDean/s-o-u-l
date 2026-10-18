@@ -17,5 +17,4 @@ rayon       = { workspace = true }
 
 simulation_kernel   = { path = "../simulation_kernel" }
 engine-core         = { path = "../engine/engine-core" }
-engine-render         = { path = "../engine/engine-render" }
 

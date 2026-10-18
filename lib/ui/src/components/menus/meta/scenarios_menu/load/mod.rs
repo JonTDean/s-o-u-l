@@ -13,19 +13,24 @@ use std::path::PathBuf;
 /// UI-only state buffer.
 #[derive(Resource)]
 pub struct LoadScenarioMenuScreen {
-    files:     Vec<PathBuf>,
-    selected:  Option<usize>,
+    files: Vec<PathBuf>,
+    selected: Option<usize>,
 }
 
 impl LoadScenarioMenuScreen {
     pub fn new(files: Vec<PathBuf>) -> Self {
-        Self { files, selected: None }
+        Self {
+            files,
+            selected: None,
+        }
     }
 }
 
 impl MenuScreen for LoadScenarioMenuScreen {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
-        CentralPanel::default().frame(styles::fullscreen_bg()).show(ctx, |_| {});
+        CentralPanel::default()
+            .frame(styles::fullscreen_bg())
+            .show(ctx, |_| {});
 
         egui::Area::new("load_scenario_win".into())
             .anchor(Align2::CENTER_CENTER, [0.0, 0.0])
@@ -41,9 +46,10 @@ impl MenuScreen for LoadScenarioMenuScreen {
                                 ui.label("No saved scenarios found.");
                             } else {
                                 for (idx, path) in self.files.iter().enumerate() {
-                                    let label = path.file_stem()
-                                                    .and_then(|s| s.to_str())
-                                                    .unwrap_or("unknown");
+                                    let label = path
+                                        .file_stem()
+                                        .and_then(|s| s.to_str())
+                                        .unwrap_or("unknown");
                                     let selected = self.selected == Some(idx);
                                     if ui.selectable_label(selected, label).clicked() {
                                         self.selected = Some(idx);

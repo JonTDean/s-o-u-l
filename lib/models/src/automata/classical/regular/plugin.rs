@@ -1,14 +1,9 @@
 use bevy::prelude::*;
-use engine_core::{
-    events::AutomataCommand,
-    prelude::RuleRegistry,
-    world::voxel_world::VoxelWorld,
-};
+use engine_core::{events::AutomataCommand, prelude::RuleRegistry, world::voxel_world::VoxelWorld};
 
 use super::wolfram_1d::{
-    seed_rule30,
-    seed_rule110,
     rules::{rule30::Rule30, rule110::Rule110},
+    seed_rule30, seed_rule110,
 };
 
 /// Registers the Wolfram 1-D rules and seeds, and listens for
@@ -23,7 +18,7 @@ impl Plugin for RegularAutomataPlugin {
             .remove_resource::<RuleRegistry>()
             .unwrap_or_default();
 
-        reg.register_with_seed("wolfram:rule30",  Rule30::boxed(),  seed_rule30);
+        reg.register_with_seed("wolfram:rule30", Rule30::boxed(), seed_rule30);
         reg.register_with_seed("wolfram:rule110", Rule110::boxed(), seed_rule110);
 
         app.insert_resource(reg);
@@ -31,9 +26,8 @@ impl Plugin for RegularAutomataPlugin {
         /* 2 react to “seed” UI commands ---------------------------- */
         app.add_systems(
             Update,
-            Self::on_seed_event.run_if(
-                bevy::ecs::schedule::common_conditions::resource_exists::<VoxelWorld>,
-            ),
+            Self::on_seed_event
+                .run_if(bevy::ecs::schedule::common_conditions::resource_exists::<VoxelWorld>),
         );
     }
 }
@@ -42,9 +36,9 @@ impl RegularAutomataPlugin {
     /// When the UI asks to seed a pattern, spawn it inside the live
     /// `VoxelWorld` grid using the default seeder stored in `RuleRegistry`.
     fn on_seed_event(
-        mut events:   EventReader<AutomataCommand>,
-        world_opt:    Option<ResMut<VoxelWorld>>,
-        registry:     Res<RuleRegistry>,
+        mut events: EventReader<AutomataCommand>,
+        world_opt: Option<ResMut<VoxelWorld>>,
+        registry: Res<RuleRegistry>,
     ) {
         let Some(mut world) = world_opt else { return }; // wait until World2D exists
 

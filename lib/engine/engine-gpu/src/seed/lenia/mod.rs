@@ -7,19 +7,14 @@
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT
 //
 
-use bevy::{
-    render::{
-        render_asset::RenderAssets,
-        renderer::RenderQueue,
-        render_resource::{Extent3d, Origin3d, TexelCopyBufferLayout},
-        texture::GpuImage,
-    },
+use bevy::render::{
+    render_asset::RenderAssets,
+    render_resource::{Extent3d, Origin3d, TexelCopyBufferLayout},
+    renderer::RenderQueue,
+    texture::GpuImage,
 };
 
-use crate::{
-    graph::RenderGpuGridSlice,
-    plugin::GlobalVoxelAtlas,
-};
+use crate::{graph::RenderGpuGridSlice, plugin::GlobalVoxelAtlas};
 
 /// 𝛕-shaped Orbium seed (7 × 7) expressed as raw R8 intensities.
 ///
@@ -27,23 +22,21 @@ use crate::{
 /// *“Lenia — Biology of Artificial Life”* (Chan 2019)
 /// but axis-aligned so we can drop it in the atlas without rotation maths.
 const ORBIUM_7X7: [u8; 49] = [
-    0,  0,  32,  64,  32,  0,  0,
-    0,  32,  64, 128,  64, 32,  0,
-    32, 64, 128, 255, 128, 64, 32,
-    64,128, 255, 255, 255,128, 64,
-    32, 64, 128, 255, 128, 64, 32,
-    0,  32,  64, 128,  64, 32,  0,
-    0,   0,  32,  64,  32,  0,  0,
+    0, 0, 32, 64, 32, 0, 0, 0, 32, 64, 128, 64, 32, 0, 32, 64, 128, 255, 128, 64, 32, 64, 128, 255,
+    255, 255, 128, 64, 32, 64, 128, 255, 128, 64, 32, 0, 32, 64, 128, 64, 32, 0, 0, 0, 32, 64, 32,
+    0, 0,
 ];
 
 /// Upload the 7 × 7 Orbium kernel in the *centre* of `slice`.
 pub fn seed_orbium(
-    queue:      &RenderQueue,
-    images:     &RenderAssets<GpuImage>,
-    atlas:      &GlobalVoxelAtlas,
-    slice:      &RenderGpuGridSlice,
+    queue: &RenderQueue,
+    images: &RenderAssets<GpuImage>,
+    atlas: &GlobalVoxelAtlas,
+    slice: &RenderGpuGridSlice,
 ) {
-    let Some(tex) = images.get(&atlas.atlas) else { return };
+    let Some(tex) = images.get(&atlas.atlas) else {
+        return;
+    };
 
     let cx = slice.0.offset.x + slice.0.size.x / 2 - 3;
     let cy = slice.0.offset.y + slice.0.size.y / 2 - 3;

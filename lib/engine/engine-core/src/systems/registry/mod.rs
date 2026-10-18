@@ -13,16 +13,15 @@ use crate::{automata::AutomatonInfo, events::AutomatonId, world::voxel_world::Vo
 /* Rule registry                                                       */
 /* ──────────────────────────────────────────────────────────────────── */
 
+/// Shared immutable rule implementation.
+pub type RuleHandle = Arc<dyn AutomatonRule<D = Dim> + Send + Sync>;
+/// Optional CPU seed callback paired with a registered rule.
+pub type RegisteredRule = (RuleHandle, Option<fn(&mut GridBackend)>);
+
 /// Stores available rules along with optional CPU seeding callbacks.
 #[derive(Resource, Default)]
 pub struct RuleRegistry {
-    rules: HashMap<
-        String,
-        (
-            Arc<dyn AutomatonRule<D = Dim> + Send + Sync>,
-            Option<fn(&mut GridBackend)>,
-        ),
-    >,
+    rules: HashMap<String, RegisteredRule>,
 }
 
 impl RuleRegistry {
@@ -50,13 +49,7 @@ impl RuleRegistry {
     /* Lookup ---------------------------------------------------------- */
 
     /// Lookup a rule by its identifier.
-    pub fn get(
-        &self,
-        id: &str,
-    ) -> Option<&(
-        Arc<dyn AutomatonRule<D = Dim> + Send + Sync>,
-        Option<fn(&mut GridBackend)>,
-    )> {
+    pub fn get(&self, id: &str) -> Option<&RegisteredRule> {
         self.rules.get(id)
     }
 
@@ -69,10 +62,10 @@ impl RuleRegistry {
 
     /// Spawn the *default* pattern of a rule into an existing [`VoxelWorld`].
     pub fn spawn_default(&self, id: &str, world: &mut VoxelWorld) {
-        if let Some(&(_, seed_opt)) = self.get(id) {
-            if let Some(seed) = seed_opt {
-                seed(&mut world.backend);
-            }
+        if let Some(&(_, seed_opt)) = self.get(id)
+            && let Some(seed) = seed_opt
+        {
+            seed(&mut world.backend);
         }
     }
 }

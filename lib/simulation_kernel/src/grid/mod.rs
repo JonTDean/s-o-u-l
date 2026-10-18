@@ -1,16 +1,16 @@
 //! 3-D grid back-ends (dense & sparse).
-use glam::UVec3;
 use crate::core::cell::CellState;
+use glam::UVec3;
 
 pub mod dense;
-pub mod sparse;
 pub mod modify;
+pub mod sparse;
 
 use serde::{Deserialize, Serialize};
 
-pub use dense ::DenseGrid;
+pub use dense::DenseGrid;
+pub use modify::VoxelModify;
 pub use sparse::SparseGrid;
-pub use modify::VoxelModify; 
 
 /// Fallback edge-length when a sparse grid has no explicit size metadata.
 const DEFAULT_SIDE: u32 = 256;
@@ -18,7 +18,7 @@ const DEFAULT_SIDE: u32 = 256;
 /// Run-time grid selection.
 #[derive(Clone, Serialize, Deserialize)]
 pub enum GridBackend {
-    Dense (DenseGrid),
+    Dense(DenseGrid),
     Sparse(SparseGrid),
 }
 
@@ -27,7 +27,7 @@ impl GridBackend {
     #[inline]
     pub fn dims(&self) -> UVec3 {
         match self {
-            GridBackend::Dense(g)  => g.size,
+            GridBackend::Dense(g) => g.size,
             GridBackend::Sparse(_) => UVec3::new(DEFAULT_SIDE, DEFAULT_SIDE, 1),
         }
     }

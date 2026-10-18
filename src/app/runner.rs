@@ -12,21 +12,17 @@
 
 use bevy::{
     prelude::*,
-    window::WindowPlugin,
+    window::{WindowMode, WindowPlugin, WindowPosition},
 };
 
 use engine_core::systems::{
     schedule::MainSet,
+    simulation::{FixedStepConfig, SimAccumulator, SimulationStep, accumulate_and_step},
     state::AppState,
-    simulation::{FixedStepConfig, SimAccumulator, accumulate_and_step, SimulationStep},
 };
 use tooling::debugging::plugin::DebugPlugin;
 
-use crate::app::{
-    builder::RuntimeConfig,
-    plugin_registry::add_all_plugins,
-    schedule,
-};
+use crate::app::{builder::RuntimeConfig, plugin_registry::add_all_plugins, schedule};
 
 /// Public one-liner used by `main()`.
 pub fn run() {
@@ -43,9 +39,12 @@ pub fn build(cfg: RuntimeConfig) -> App {
     } else {
         app.add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title:      "S.O.U.L. – Swarm Orchestrator for Autonomous Learners".into(),
+                title: "S.O.U.L. – Swarm Orchestrator for Autonomous Learners".into(),
                 resolution: (1_280., 720.).into(),
-                resizable:  true,
+                resizable: true,
+                mode: WindowMode::Windowed,
+                position: WindowPosition::At(IVec2::new(80, 80)),
+                focused: false,
                 ..default()
             }),
             ..default()
@@ -56,7 +55,7 @@ pub fn build(cfg: RuntimeConfig) -> App {
     app.init_state::<AppState>()
         .add_systems(Startup, |mut next: ResMut<NextState<AppState>>| {
             next.set(AppState::MainMenu);
-        });           // default == MainMenu
+        }); // default == MainMenu
 
     // Fixed-step configuration + accumulator + event type
     let fixed_cfg = FixedStepConfig::from_hz(cfg.simulation_rate_hz, cfg.max_sim_steps_per_frame);
@@ -70,14 +69,15 @@ pub fn build(cfg: RuntimeConfig) -> App {
     // Jitter-free accumulator now runs in the deterministic tier.
     app.add_systems(
         FixedUpdate,
-        accumulate_and_step
-            .in_set(MainSet::Input)   // run before game-logic
+        accumulate_and_step.in_set(MainSet::Input), // run before game-logic
     );
-
 
     /* 4 ░ register every feature / renderer plug-in ------------------ */
     add_all_plugins(&mut app);
     app.add_plugins(DebugPlugin);
+    if crate::app::preview::enabled() {
+        crate::app::preview::install(&mut app);
+    }
 
     app
 }

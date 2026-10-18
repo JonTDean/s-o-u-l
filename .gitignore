@@ -1,2 +1,4 @@
 /target
 /tempora
+.agents/
+__pycache__/

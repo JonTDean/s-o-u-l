@@ -2,12 +2,10 @@
 
 use bevy::prelude::*;
 use bevy_egui::EguiPrimaryContextPass;
-use engine_core::prelude::AppState;
 use engine_common::scenes::scenarios::load::plugin::ScenarioManifest;
+use engine_core::prelude::AppState;
 
 use crate::components::menus::{menu_runner, meta::scenarios_menu::load::LoadScenarioMenuScreen};
-
-
 
 pub struct LoadScenarioMenuUiPlugin;
 

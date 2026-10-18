@@ -31,19 +31,16 @@ pub struct SceneManagerPlugin;
 
 impl Plugin for SceneManagerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-                MainMenuPlugin,
-                ScenariosPlugin,
-            ))
+        app.add_plugins((MainMenuPlugin, ScenariosPlugin))
             /* ------------------------ camera flips ------------------------ */
-            .add_systems(OnEnter(AppState::MainMenu),    hide_world_camera)
+            .add_systems(OnEnter(AppState::MainMenu), hide_world_camera)
             .add_systems(OnEnter(AppState::NewScenario), hide_world_camera)
-            .add_systems(OnEnter(AppState::LoadScenario),hide_world_camera)
-            .add_systems(OnEnter(AppState::Options),     hide_world_camera)
-            .add_systems(OnEnter(AppState::InGame),      show_world_camera)
-            .add_systems(OnEnter(AppState::Paused),      show_world_camera)
-            .add_systems(OnExit(AppState::InGame),       hide_world_camera)
-            .add_systems(OnExit(AppState::Paused),       hide_world_camera)
+            .add_systems(OnEnter(AppState::LoadScenario), hide_world_camera)
+            .add_systems(OnEnter(AppState::Options), hide_world_camera)
+            .add_systems(OnEnter(AppState::InGame), show_world_camera)
+            .add_systems(OnEnter(AppState::Paused), show_world_camera)
+            .add_systems(OnExit(AppState::InGame), hide_world_camera)
+            .add_systems(OnExit(AppState::Paused), hide_world_camera)
             /* ------------------------- routers --------------------------- */
             .add_systems(
                 Update,
@@ -62,14 +59,14 @@ impl Plugin for SceneManagerPlugin {
 fn show_world_camera(mut q: Query<(&mut Camera, &mut Visibility), With<WorldCamera>>) {
     if let Ok((mut cam, mut vis)) = q.single_mut() {
         cam.is_active = true;
-        *vis          = Visibility::Inherited;
+        *vis = Visibility::Inherited;
     }
 }
 
 fn hide_world_camera(mut q: Query<(&mut Camera, &mut Visibility), With<WorldCamera>>) {
     if let Ok((mut cam, mut vis)) = q.single_mut() {
         cam.is_active = false;
-        *vis          = Visibility::Hidden;
+        *vis = Visibility::Hidden;
     }
 }
 
@@ -77,24 +74,21 @@ fn hide_world_camera(mut q: Query<(&mut Camera, &mut Visibility), With<WorldCame
 /* Pause handling                                                      */
 /* =================================================================== */
 
-fn in_game_esc_to_pause(
-    keys: Res<ButtonInput<KeyCode>>,
-    mut next: ResMut<NextState<AppState>>,
-) {
+fn in_game_esc_to_pause(keys: Res<ButtonInput<KeyCode>>, mut next: ResMut<NextState<AppState>>) {
     if keys.just_pressed(KeyCode::Escape) {
         next.set(AppState::Paused);
     }
 }
 
 fn pause_menu_router(
-    mut cmd:  Commands,
+    mut cmd: Commands,
     mut next: ResMut<NextState<AppState>>,
-    action:   Option<Res<PauseAction>>,
+    action: Option<Res<PauseAction>>,
 ) {
     let Some(act) = action else { return };
     match *act {
-        PauseAction::Resume   => next.set(AppState::InGame),
-        PauseAction::Options  => next.set(AppState::Options),
+        PauseAction::Resume => next.set(AppState::InGame),
+        PauseAction::Options => next.set(AppState::Options),
         PauseAction::MainMenu => next.set(AppState::MainMenu),
     }
     cmd.remove_resource::<PauseAction>();

@@ -8,7 +8,7 @@ use std::collections::{HashSet, VecDeque};
 
 use engine_core::world::voxel_world::VoxelWorld;
 use simulation_kernel::{
-    core::dim::{Dim, Dimensionality},                    // for NEIGHBOUR_OFFSETS
+    core::dim::{Dim, Dimensionality}, // for NEIGHBOUR_OFFSETS
 };
 
 use super::swarm_metrics::live_cell_set;
@@ -29,7 +29,11 @@ impl ClusterStats {
     /// Autonomy: fraction of neighbour interactions that remain internal.
     pub fn autonomy(&self) -> f32 {
         let tot = self.internal_links + self.external_links;
-        if tot == 0 { 0.0 } else { self.internal_links as f32 / tot as f32 }
+        if tot == 0 {
+            0.0
+        } else {
+            self.internal_links as f32 / tot as f32
+        }
     }
 }
 
@@ -42,7 +46,9 @@ pub fn find_clusters(world: &VoxelWorld) -> Vec<ClusterStats> {
     let mut out = Vec::new();
 
     for &seed in &live {
-        if visited.contains(&seed) { continue; }
+        if visited.contains(&seed) {
+            continue;
+        }
 
         // BFS to gather one cluster
         let mut q = VecDeque::new();

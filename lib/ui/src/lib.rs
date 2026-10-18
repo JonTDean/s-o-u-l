@@ -1,5 +1,6 @@
 pub mod components;
-pub mod overlays;
-pub mod panels;
-pub mod styles;
+pub mod presentation;
+pub use presentation::{overlays, panels};
+
 pub mod plugin;
+pub mod styles;

@@ -6,18 +6,18 @@
 
 #![warn(missing_docs)]
 
-pub use plugin::GpuAutomataComputePlugin;
 pub use fixed_sim::FixedSimPlugin;
+pub use plugin::{GpuAutomataComputePlugin, VoxelRenderStatus};
+pub use render::pipelines::GpuPipelineCache;
 pub use types::AutomatonParams;
 
 /* internal */
-mod compute;
-mod graph;
-mod pipelines;
+mod render;
+use render::{compute, graph, pipelines};
+mod fixed_sim;
 pub mod plugin;
 mod seed;
 mod types;
-mod fixed_sim;
 
 #[cfg(feature = "mesh_shaders")]
-pub mod ash;
+pub use render::ash;

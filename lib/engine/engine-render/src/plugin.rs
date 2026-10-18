@@ -1,8 +1,8 @@
 //! engine/plugin.rs – root **engine** plug-in.
 
 use crate::render::{
-    interpolator::{update_alpha, RenderInterpolator},
-    materials::plugin::MaterialsPlugin, 
+    interpolator::{RenderInterpolator, update_alpha},
+    materials::plugin::MaterialsPlugin,
 };
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::MainSet};
@@ -31,17 +31,18 @@ impl Plugin for EngineRendererPlugin {
             let allow_gpu = app
                 .world()
                 .get_resource::<RuntimeFlags>()
-                .map_or(true, |f| f.gpu_enabled);
+                .is_none_or(|f| f.gpu_enabled);
 
             if allow_gpu {
-                app
-                .add_plugins(engine_gpu::FixedSimPlugin)
-                .add_plugins(GpuAutomataComputePlugin);
+                app.add_plugins(GpuAutomataComputePlugin);
             } else {
                 warn!("GPU compute suppressed by RuntimeFlags ⇒ CPU stepper remains active");
             }
         }
 
-        app.add_plugins(MaterialsPlugin);
+        app.add_plugins((
+            MaterialsPlugin,
+            crate::command_executor::CommandExecutorPlugin,
+        ));
     }
 }

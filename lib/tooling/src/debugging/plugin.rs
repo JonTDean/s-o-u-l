@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use engine_core::prelude::*;
 
-
 /// Seconds between two consecutive log lines.
 const LOG_INTERVAL: f64 = 30.0;
 
@@ -9,13 +8,7 @@ const LOG_INTERVAL: f64 = 30.0;
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-            Update,
-            (
-                dump_registry,
-                dump_camera.after(dump_registry),
-            ),
-        );
+        app.add_systems(Update, (dump_registry, dump_camera.after(dump_registry)));
     }
 }
 
@@ -23,9 +16,9 @@ impl Plugin for DebugPlugin {
 /* Registry logging – throttled                                     */
 /* ---------------------------------------------------------------- */
 fn dump_registry(
-    time:  Res<Time>,
-    mut last: Local<f64>,                     // per-system timestamp
-    reg:   Res<AutomataRegistry>,
+    time: Res<Time>,
+    mut last: Local<f64>, // per-system timestamp
+    reg: Res<AutomataRegistry>,
 ) {
     if time.elapsed_secs_f64() - *last < LOG_INTERVAL {
         return;
@@ -41,8 +34,8 @@ fn dump_registry(
 /* Active-camera logging – throttled                                */
 /* ---------------------------------------------------------------- */
 fn dump_camera(
-    time:  Res<Time>,
-    mut last: Local<f64>,                     // per-system timestamp
+    time: Res<Time>,
+    mut last: Local<f64>, // per-system timestamp
     cam_q: Query<(&Transform, &Projection, &Camera)>,
 ) {
     if time.elapsed_secs_f64() - *last < LOG_INTERVAL {
@@ -55,12 +48,15 @@ fn dump_camera(
             continue;
         }
         match proj {
-            Projection::Orthographic(o) =>
-                info!(target: "soul::cam", pos=?tf.translation.truncate(), scale=%o.scale),
-            Projection::Perspective(_) =>
-                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(perspective)"),
-            Projection::Custom(_) =>
-                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(custom)"),
+            Projection::Orthographic(o) => {
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), scale=%o.scale)
+            }
+            Projection::Perspective(_) => {
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(perspective)")
+            }
+            Projection::Custom(_) => {
+                info!(target: "soul::cam", pos=?tf.translation.truncate(), "(custom)")
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ use glam::{IVec3, UVec3};
 /// Immutable slice metadata.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct GridSlice {
-    pub offset: IVec3,   // centre-origin
-    pub size:   UVec3,   // (w, h, depth=1)
+    pub offset: IVec3, // centre-origin
+    pub size: UVec3,   // (w, h, depth=1)
 }
 
 #[derive(Debug, Clone)]
@@ -22,7 +22,10 @@ pub struct AtlasAllocator {
 impl AtlasAllocator {
     #[inline]
     pub fn new(size: UVec3) -> Self {
-        Self { size, free: vec![(IVec3::ZERO, size)] }
+        Self {
+            size,
+            free: vec![(IVec3::ZERO, size)],
+        }
     }
 
     /// First-fit, depth = 1.
@@ -59,11 +62,20 @@ impl AtlasAllocator {
             0,
         );
 
-        Some(GridSlice { offset: centred, size: want })
+        Some(GridSlice {
+            offset: centred,
+            size: want,
+        })
     }
 
-    #[inline] pub fn free(&mut self, slice: GridSlice) { self.free.push((slice.offset, slice.size)); }
-    #[inline] pub fn free_list(&self) -> &[(IVec3, UVec3)] { &self.free }
+    #[inline]
+    pub fn free(&mut self, slice: GridSlice) {
+        self.free.push((slice.offset, slice.size));
+    }
+    #[inline]
+    pub fn free_list(&self) -> &[(IVec3, UVec3)] {
+        &self.free
+    }
 }
 
 /* ------------------------------------------------------------- */

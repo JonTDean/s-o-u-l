@@ -1,17 +1,14 @@
+//! Execution order labels for the portable Core3D voxel graph.
 use bevy::render::render_graph::RenderLabel;
 
-/// Node labels used by the Core3D sub-graph.
+/// Fixed-tick automaton compute dispatch.
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
 pub struct AutomataStepLabel;
 
+/// Extract exposed voxel faces into the bounded vertex stream.
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
-pub struct DualContourLabel;
+pub struct VoxelSurfaceLabel;
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
-pub struct MeshPathLabel;
-
-#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
-pub struct MeshShaderLabel;
-
+/// Draw generated triangles into the current 3D camera view.
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, RenderLabel)]
 pub struct DrawVoxelLabel;

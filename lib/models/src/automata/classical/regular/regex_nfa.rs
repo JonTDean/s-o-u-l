@@ -50,7 +50,10 @@ impl NFA {
             }
         }
         // after consuming input, check if any state is accepting
-        current_states.intersection(&self.accept_states).next().is_some()
+        current_states
+            .intersection(&self.accept_states)
+            .next()
+            .is_some()
     }
 }
 
@@ -64,5 +67,9 @@ pub fn example_nfa() -> NFA {
     transitions.insert((0, Some('b')), vec![1]);
     let start = 0;
     let accept_states = vec![1].into_iter().collect();
-    NFA { transitions, start, accept_states }
+    NFA {
+        transitions,
+        start,
+        accept_states,
+    }
 }

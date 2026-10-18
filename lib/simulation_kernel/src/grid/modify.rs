@@ -4,12 +4,16 @@ use glam::IVec3;
 
 #[derive(Clone, Copy)]
 pub struct VoxelModify {
-    pub pos:   IVec3,
+    pub pos: IVec3,
     pub value: u8,
 }
 
 impl VoxelModify {
-    #[inline] pub fn new<P: Into<IVec3>>(pos: P, value: u8) -> Self {
-        Self { pos: pos.into(), value }
+    #[inline]
+    pub fn new<P: Into<IVec3>>(pos: P, value: u8) -> Self {
+        Self {
+            pos: pos.into(),
+            value,
+        }
     }
 }

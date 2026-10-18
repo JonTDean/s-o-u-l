@@ -8,7 +8,7 @@ use crate::core::cell::{Cell, CellState};
 #[derive(Clone, Serialize, Deserialize)]
 pub struct DenseGrid {
     pub voxels: Vec<Cell>,
-    pub size:   UVec3,          // (x, y, z)
+    pub size: UVec3, // (x, y, z)
 }
 
 impl DenseGrid {
@@ -24,7 +24,9 @@ impl DenseGrid {
             && (0..self.size.z as i32).contains(&p.z)
         {
             self.voxels.get(self.idx(p))
-        } else { None }
+        } else {
+            None
+        }
     }
 
     #[inline]
@@ -35,16 +37,18 @@ impl DenseGrid {
         {
             let idx = self.idx(p);
             self.voxels.get_mut(idx)
-        } else { None }
+        } else {
+            None
+        }
     }
 
     #[inline]
     pub fn iter(&self) -> impl Iterator<Item = (IVec3, &Cell)> + '_ {
         let size = self.size;
         self.voxels.iter().enumerate().map(move |(i, c)| {
-            let x =  i as u32              % size.x;
-            let y = (i as u32 / size.x)    % size.y;
-            let z =  i as u32 / (size.x * size.y);
+            let x = i as u32 % size.x;
+            let y = (i as u32 / size.x) % size.y;
+            let z = i as u32 / (size.x * size.y);
             (IVec3::new(x as i32, y as i32, z as i32), c)
         })
     }
@@ -59,6 +63,8 @@ impl DenseGrid {
 
     #[inline]
     pub fn set_state(&mut self, p: IVec3, s: CellState) {
-        if let Some(c) = self.get_mut(p) { c.state = s; }
+        if let Some(c) = self.get_mut(p) {
+            c.state = s;
+        }
     }
 }

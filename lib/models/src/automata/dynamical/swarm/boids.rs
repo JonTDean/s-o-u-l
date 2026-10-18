@@ -17,9 +17,17 @@ impl Boid {
 }
 
 /// Advances the boids simulation by one step using standard flocking rules.
-pub fn step_boids(boids: &mut [Boid], cohesion_weight: f32, alignment_weight: f32, separation_weight: f32, separation_distance: f32) {
+pub fn step_boids(
+    boids: &mut [Boid],
+    cohesion_weight: f32,
+    alignment_weight: f32,
+    separation_weight: f32,
+    separation_distance: f32,
+) {
     let n = boids.len();
-    if n == 0 { return; }
+    if n == 0 {
+        return;
+    }
     // Make a copy of current velocities to use in calculations
     let current_vel: Vec<Vec2> = boids.iter().map(|b| b.velocity).collect();
     for i in 0..n {
@@ -28,7 +36,9 @@ pub fn step_boids(boids: &mut [Boid], cohesion_weight: f32, alignment_weight: f3
         let mut count = 0;
         let mut separation = Vec2::ZERO;
         for j in 0..n {
-            if i == j { continue; }
+            if i == j {
+                continue;
+            }
             let diff = boids[j].position - boids[i].position;
             let dist_sq = diff.length_squared();
             let vision_range = 100.0; // neighborhood radius

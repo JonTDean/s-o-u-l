@@ -5,29 +5,29 @@ use rayon::prelude::*;
 use serde_json::Value;
 
 use crate::{
+    AutomatonRule,
     core::{
         cell::{CellCtx, CellOutcome, CellState},
         dim::{Dim, Dimensionality},
     },
     grid::DenseGrid,
-    AutomatonRule,
 };
 
 pub fn step_dense_dyn_parallel(
-    grid:   &mut DenseGrid,
-    rule:   &(dyn AutomatonRule<D = Dim> + Sync),
+    grid: &mut DenseGrid,
+    rule: &(dyn AutomatonRule<D = Dim> + Sync),
     params: &Value,
 ) {
-    let snapshot = grid.voxels.clone();   // read-only
-    let size     = grid.size;
+    let snapshot = grid.voxels.clone(); // read-only
+    let size = grid.size;
 
     grid.voxels
         .par_iter_mut()
         .enumerate()
         .for_each(|(idx, voxel)| {
-            let x =  idx as u32              % size.x;
-            let y = (idx as u32 / size.x)    % size.y;
-            let z =  idx as u32 / (size.x * size.y);
+            let x = idx as u32 % size.x;
+            let y = (idx as u32 / size.x) % size.y;
+            let z = idx as u32 / (size.x * size.y);
             let p = IVec3::new(x as i32, y as i32, z as i32);
 
             /* gather Moore-26 neighbourhood */
@@ -44,15 +44,15 @@ pub fn step_dense_dyn_parallel(
             }
 
             let ctx = CellCtx::<Dim> {
-                self_coord:    p,
-                self_state:    voxel.state,
+                self_coord: p,
+                self_state: voxel.state,
                 neighbourhood: &nbhd,
-                memory:        &voxel.memory,
-                _marker:       std::marker::PhantomData,
+                memory: &voxel.memory,
+                _marker: std::marker::PhantomData,
             };
 
             if let CellOutcome::Next { state, memory } = rule.next_state(ctx, params) {
-                voxel.state  = state;
+                voxel.state = state;
                 voxel.memory = memory;
             }
         });

@@ -1,23 +1,35 @@
 //! Continuous Lenia rule (quantised 0–255 levels, 3×3 Gaussian kernel).
 
 use glam::IVec3;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use simulation_kernel::{
+    AutomatonRule,
     core::{
         cell::{CellCtx, CellOutcome, CellState},
         dim::{Dim, Dimensionality},
     },
     grid::GridBackend,
-    AutomatonRule,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 pub mod plugin;
 
 /* ───────────────── parameters ───────────────── */
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub struct LeniaParams { pub mu: f32, pub sigma: f32, pub dt: f32 }
-impl Default for LeniaParams { fn default() -> Self { Self { mu: 0.30, sigma: 0.06, dt: 0.05 } } }
+pub struct LeniaParams {
+    pub mu: f32,
+    pub sigma: f32,
+    pub dt: f32,
+}
+impl Default for LeniaParams {
+    fn default() -> Self {
+        Self {
+            mu: 0.30,
+            sigma: 0.06,
+            dt: 0.05,
+        }
+    }
+}
 
 /* ───────── 3×3 Gaussian kernel (XY plane) ───────── */
 const KERNEL: [[f32; 3]; 3] = [
@@ -33,10 +45,19 @@ impl LeniaRule {
     pub fn boxed() -> std::sync::Arc<dyn AutomatonRule<D = Dim> + Send + Sync> {
         std::sync::Arc::new(Self)
     }
-    #[inline] fn rho(cs: CellState) -> f32 { matches!(cs, CellState::Alive(level) if level > 0)
-        .then(|| if let CellState::Alive(l) = cs { l } else { 0 } as f32 / 255.0).unwrap_or(0.0) }
-    #[inline] fn to_state(rho: f32) -> CellState {
-        if rho == 0.0 { CellState::Dead } else { CellState::Alive((rho * 255.0).round() as u8) }
+    #[inline]
+    fn rho(cs: CellState) -> f32 {
+        matches!(cs, CellState::Alive(level) if level > 0)
+            .then(|| if let CellState::Alive(l) = cs { l } else { 0 } as f32 / 255.0)
+            .unwrap_or(0.0)
+    }
+    #[inline]
+    fn to_state(rho: f32) -> CellState {
+        if rho == 0.0 {
+            CellState::Dead
+        } else {
+            CellState::Alive((rho * 255.0).round() as u8)
+        }
     }
 }
 
@@ -47,7 +68,11 @@ impl AutomatonRule for LeniaRule {
         let p: LeniaParams = serde_json::from_value(params.clone()).unwrap_or_default();
         /* 1 — convolution on XY plane (neighbours with z=0) */
         let mut u = Self::rho(ctx.self_state) * KERNEL[1][1];
-        for (i, off) in Dim::NEIGHBOUR_OFFSETS.iter().filter(|o| o.z == 0).enumerate() {
+        for (i, off) in Dim::NEIGHBOUR_OFFSETS
+            .iter()
+            .filter(|o| o.z == 0)
+            .enumerate()
+        {
             let dx = (off.x + 1) as usize;
             let dy = (off.y + 1) as usize;
             u += Self::rho(ctx.neighbourhood[i]) * KERNEL[dy][dx];
@@ -62,7 +87,10 @@ impl AutomatonRule for LeniaRule {
         if next_state == ctx.self_state {
             CellOutcome::Unchanged
         } else {
-            CellOutcome::Next { state: next_state, memory: ctx.memory.clone() }
+            CellOutcome::Next {
+                state: next_state,
+                memory: ctx.memory.clone(),
+            }
         }
     }
 }
@@ -81,7 +109,9 @@ pub fn seed_lenia(grid: &mut GridBackend) {
                 }
             }
         }
-        GridBackend::Sparse(s) => { s.set_state(IVec3::ZERO, CellState::Alive(180)); }
+        GridBackend::Sparse(s) => {
+            s.set_state(IVec3::ZERO, CellState::Alive(180));
+        }
     }
 }
 
@@ -92,8 +122,11 @@ pub fn seed_orbium(grid: &mut GridBackend) {
             for x in -12..=12 {
                 let r = ((x * x + y * y) as f32).sqrt();
                 let idx = g.idx(centre + IVec3::new(x, y, 0));
-                if (8.0..=10.0).contains(&r)       { g.voxels[idx].state = CellState::Alive(220); }
-                else if (6.5..=7.5).contains(&r)  { g.voxels[idx].state = CellState::Alive(160); }
+                if (8.0..=10.0).contains(&r) {
+                    g.voxels[idx].state = CellState::Alive(220);
+                } else if (6.5..=7.5).contains(&r) {
+                    g.voxels[idx].state = CellState::Alive(160);
+                }
             }
         }
     }

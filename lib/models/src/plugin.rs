@@ -18,6 +18,7 @@
 //!    only needs one line of code:
 //!
 //! ```no_run
+//! # let mut app = bevy::app::App::new();
 //! app.add_plugins(models::ComputationalIntelligencePlugin);
 //! ```
 //!
@@ -33,7 +34,7 @@
 
 use bevy::prelude::*;
 use engine_core::{
-    events::{AutomatonAdded, AutomatonRemoved},
+    events::{AutomataCommand, AutomatonAdded, AutomatonRemoved},
     systems::registry::{AutomataRegistry, RuleRegistry},
 };
 
@@ -68,14 +69,15 @@ impl Plugin for ComputationalIntelligencePlugin {
         //     accessing these resources finds a valid value.
         // ------------------------------------------------------------------
         app.init_resource::<RuleRegistry>()
-           .init_resource::<AutomataRegistry>();
+            .init_resource::<AutomataRegistry>();
 
         // ------------------------------------------------------------------
         // 2.  Global events — MUST be registered **before** any `EventReader`
         //     is instantiated (renderers, HUD overlays, …); otherwise Bevy
         //     aborts with *“Event not initialized”*.
         // ------------------------------------------------------------------
-        app.add_event::<AutomatonAdded>()
+        app.add_event::<AutomataCommand>()
+            .add_event::<AutomatonAdded>()
             .add_event::<AutomatonRemoved>();
 
         // ------------------------------------------------------------------
@@ -83,5 +85,20 @@ impl Plugin for ComputationalIntelligencePlugin {
         //     stepper, and anything we add in future roadmaps.
         // ------------------------------------------------------------------
         app.add_plugins(AutomataPlugin);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn model_registration_runs_without_a_renderer_or_window() {
+        let mut app = App::new();
+        app.add_plugins((MinimalPlugins, ComputationalIntelligencePlugin));
+        app.update();
+        let registry = app.world().resource::<RuleRegistry>();
+        assert!(registry.get("lenia").is_some());
+        assert!(registry.get("wolfram:rule30").is_some());
     }
 }

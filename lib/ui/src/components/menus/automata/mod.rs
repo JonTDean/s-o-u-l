@@ -2,4 +2,4 @@
 pub mod active_menu;
 pub mod spawn_menu;
 
-pub mod plugin;               // keep plugin separate
+pub mod plugin; // keep plugin separate

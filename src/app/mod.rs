@@ -12,6 +12,7 @@
 //! consistent startup path for the entire executable.
 
 pub mod builder;
+pub mod plugin_registry;
+mod preview;
 pub mod runner;
 pub mod schedule;
-pub mod plugin_registry;

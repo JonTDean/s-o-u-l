@@ -16,8 +16,8 @@ impl Plugin for StatePlugin {
         app.insert_resource(Settings::load())
             .init_resource::<RuntimeFlags>()
             .init_resource::<Session>()
-           // --- recurring systems -------------------------------------------
-           .add_systems(Update, tick_frame);
+            // --- recurring systems -------------------------------------------
+            .add_systems(Update, tick_frame);
     }
 }
 

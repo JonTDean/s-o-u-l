@@ -13,11 +13,10 @@ use bevy::{
     },
 };
 
-
 use super::input::{
-        apply_orbit, begin_drag, drag_pan, end_drag, gather_orbit_input, key_pan,
-        zoom_keyboard, zoom_scroll,
-    };
+    apply_orbit, begin_drag, drag_pan, end_drag, gather_orbit_input, key_pan, zoom_keyboard,
+    zoom_scroll,
+};
 
 /* ───────────────────────────── diagnostics ────────────────────────── */
 
@@ -34,38 +33,43 @@ pub struct ViewportRect {
 #[derive(Resource, Debug, Clone, Copy, Default)]
 pub struct CameraMetrics {
     /// World-space centre of the view.
-    pub centre:    Vec2,
+    pub centre: Vec2,
     /// Current orthographic scale (**world-units / pixel**).
-    pub zoom:      f32,
+    pub zoom: f32,
     /// Half-size of the viewport in world units.
     pub half_view: Vec2,
 }
 /* ───────────────────────── constants / helpers ────────────────────── */
 
 /// Render layer used exclusively for 2-D UI/HUD elements.
-pub const UI_LAYER:    u8 = 0;
+pub const UI_LAYER: u8 = 0;
 /// Render layer reserved for world geometry & game entities.
 pub const WORLD_LAYER: u8 = 1;
 
 /// Mask containing only [`UI_LAYER`].
-#[inline] pub fn layers_ui()    -> RenderLayers { RenderLayers::layer(UI_LAYER.into()) }
+#[inline]
+pub fn layers_ui() -> RenderLayers {
+    RenderLayers::layer(UI_LAYER.into())
+}
 /// Mask containing only [`WORLD_LAYER`].
-#[inline] pub fn layers_world() -> RenderLayers { RenderLayers::layer(WORLD_LAYER.into()) }
+#[inline]
+pub fn layers_world() -> RenderLayers {
+    RenderLayers::layer(WORLD_LAYER.into())
+}
 
 /// Linear keyboard-pan speed (**world-units · s⁻¹**).
-pub const KEY_PAN_SPEED:   f32 = 400.0;
+pub const KEY_PAN_SPEED: f32 = 400.0;
 /// Minimum orthographic scale (world-units per screen-pixel).
 pub const MIN_SCALE_CONST: f32 = 0.05;
 /// Maximum orthographic scale (world-units per screen-pixel).
-pub const MAX_SCALE:       f32 = 128.0;
+pub const MAX_SCALE: f32 = 128.0;
 /// Exponential zoom factor (≈ 10 % per wheel-tick).
-pub const ZOOM_FACTOR:     f32 = 1.1;
+pub const ZOOM_FACTOR: f32 = 1.1;
 
 /* ───────────────────── shared ECS types ──────────────────────────── */
 
-
 /// Struct for world camera component
-#[derive(Component)]           
+#[derive(Component)]
 
 pub struct WorldCamera;
 #[derive(Resource, Default)]
@@ -76,13 +80,19 @@ pub struct DragState(pub Option<Vec2>);
 #[derive(Resource, Clone, Copy)]
 pub struct ZoomInfo {
     /// Zoom level when the camera was spawned.
-    pub base:     f32,
+    pub base: f32,
     /// Current zoom level.
-    pub current:  f32,
+    pub current: f32,
 }
 
-impl Default for ZoomInfo { fn default() -> Self { Self { base: 1.0, current: 1.0 } } }
-
+impl Default for ZoomInfo {
+    fn default() -> Self {
+        Self {
+            base: 1.0,
+            current: 1.0,
+        }
+    }
+}
 
 /* ───────────────────────── internal system sets ───────────────────── */
 
@@ -95,7 +105,6 @@ pub enum CameraSet {
     Heavy,
 }
 
-
 /* ───────────────────────── helper systems ─────────────────────────── */
 
 /// Sync [`ZoomInfo::current`] with the active orthographic projection.
@@ -107,23 +116,28 @@ pub fn refresh_zoom_info(cam_q: Query<&Projection, With<WorldCamera>>, mut z: Re
 
 /// Cache camera metrics once per frame; used by gizmos, minimap, etc.
 pub fn update_camera_metrics(
-    windows:     Query<&Window>,
-    mut cam_q:   Query<(&Transform, &Projection, &mut ViewportRect), With<WorldCamera>>,
+    windows: Query<&Window>,
+    mut cam_q: Query<(&Transform, &Projection, &mut ViewportRect), With<WorldCamera>>,
     mut metrics: ResMut<CameraMetrics>,
 ) {
-    let (Ok(win), Ok((tf, proj, mut rect))) = (windows.single(), cam_q.single_mut()) else { return };
-
-    let ortho_scale = match proj {
-        Projection::Orthographic(o) => { metrics.zoom = o.scale; o.scale },
-        _                           => 1.0,
+    let (Ok(win), Ok((tf, proj, mut rect))) = (windows.single(), cam_q.single_mut()) else {
+        return;
     };
 
-    let half_view = Vec2::new(win.physical_width() as f32, win.physical_height() as f32)
-        * 0.5 * ortho_scale;
+    let ortho_scale = match proj {
+        Projection::Orthographic(o) => {
+            metrics.zoom = o.scale;
+            o.scale
+        }
+        _ => 1.0,
+    };
+
+    let half_view =
+        Vec2::new(win.physical_width() as f32, win.physical_height() as f32) * 0.5 * ortho_scale;
 
     *metrics = CameraMetrics {
         centre: tf.translation.truncate(),
-        zoom:   ortho_scale,
+        zoom: ortho_scale,
         half_view,
     };
 
@@ -138,12 +152,12 @@ pub fn update_camera_metrics(
 /// * Called once during `Startup`.
 /// * Safe even if another plugin (egui, a debug overlay, etc.) already added
 ///   its own 2-D camera – we simply re-use that one instead of spawning ours.\
-/// 
+///
 /// args:
 ///     existing_ui: Query<Entity, With<Camera2d>>,  /// All cameras that *already* exist when we run.
 pub fn spawn_cameras(
     mut cmd: Commands,
-    mut z:   ResMut<ZoomInfo>,
+    mut z: ResMut<ZoomInfo>,
     existing_ui: Query<Entity, With<Camera2d>>,
 ) {
     z.base = 1.0;
@@ -152,9 +166,14 @@ pub fn spawn_cameras(
     // ── UI camera ─────────────────────────────────────────────────────
     if existing_ui.iter().next().is_none() {
         cmd.spawn((
-            Camera2d::default(),
+            Camera2d,
+            Msaa::Off,
             // Use a *unique* order so we never clash with other UI cameras.
-            Camera { order: 50, clear_color: ClearColorConfig::None, ..default() },
+            Camera {
+                order: 50,
+                clear_color: ClearColorConfig::None,
+                ..default()
+            },
             layers_ui(),
         ));
     }
@@ -166,9 +185,15 @@ pub fn spawn_cameras(
     ortho.scaling_mode = ScalingMode::WindowSize;
     cmd.spawn((
         Camera3d::default(),
+        Msaa::Off,
         Projection::Orthographic(ortho),
         Transform::from_xyz(0.0, 0.0, 1_000.0).looking_at(Vec3::ZERO, Vec3::Y),
-        Camera { order: 2, is_active: false, clear_color: ClearColorConfig::None, ..default() },
+        Camera {
+            order: 2,
+            is_active: false,
+            clear_color: ClearColorConfig::None,
+            ..default()
+        },
         WorldCamera,
         Visibility::Hidden,
         ViewportRect::default(),
@@ -184,16 +209,15 @@ pub fn spawn_cameras(
 pub fn fit_or_clamp_camera(
     world_min: Vec3,
     world_max: Vec3,
-    win:       &Window,
+    win: &Window,
     _centre_in: Vec3,
     mut scale: f32,
 ) -> (Vec3, f32) {
     let mut centre = (world_min + world_max) * 0.5;
 
     /* 1 ░ pick a scale that fits once */
-    let needed = ((world_max - world_min)
-        / Vec3::new(win.width(), win.height(), 0.0))
-        .max_element();
+    let needed =
+        ((world_max - world_min) / Vec3::new(win.width(), win.height(), 0.0)).max_element();
     scale = scale.max(needed).clamp(MIN_SCALE_CONST, MAX_SCALE);
 
     /* 2 ░ viewport extents in world units */
@@ -202,12 +226,14 @@ pub fn fit_or_clamp_camera(
     /* 3 ░ clamp **only if** the world is wider/higher than the viewport */
     let world_size = world_max - world_min;
     if half_view.x * 2.0 <= world_size.x {
-        centre.x = centre.x.clamp(world_min.x + half_view.x,
-                                   world_max.x - half_view.x);
+        centre.x = centre
+            .x
+            .clamp(world_min.x + half_view.x, world_max.x - half_view.x);
     }
     if half_view.y * 2.0 <= world_size.y {
-        centre.y = centre.y.clamp(world_min.y + half_view.y,
-                                   world_max.y - half_view.y);
+        centre.y = centre
+            .y
+            .clamp(world_min.y + half_view.y, world_max.y - half_view.y);
     }
     (centre, scale)
 }

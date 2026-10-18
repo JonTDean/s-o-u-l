@@ -10,7 +10,7 @@ use bevy::prelude::*;
 /// Bare-bones Bevy app good enough for the sim-loop unit-tests.
 pub fn build_test_app() -> App {
     let mut app = App::new();
-    app.add_plugins(bevy::MinimalPlugins);        // no window/audio needed
+    app.add_plugins(bevy::MinimalPlugins); // no window/audio needed
     app
 }
 

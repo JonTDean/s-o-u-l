@@ -6,26 +6,22 @@ use glam::IVec3;
 use serde_json::Value;
 
 use crate::{
+    AutomatonRule,
     core::{
         cell::{CellCtx, CellOutcome, CellState},
         dim::{Dim, Dimensionality},
     },
     grid::DenseGrid,
-    AutomatonRule,
 };
 
-pub fn step_dense<R: AutomatonRule<D = Dim>>(
-    grid:   &mut DenseGrid,
-    rule:   &R,
-    params: &Value,
-) {
+pub fn step_dense<R: AutomatonRule<D = Dim>>(grid: &mut DenseGrid, rule: &R, params: &Value) {
     let snapshot = grid.voxels.clone();
     let mut next = snapshot.clone();
 
     for z in 0..grid.size.z as i32 {
         for y in 0..grid.size.y as i32 {
             for x in 0..grid.size.x as i32 {
-                let p   = IVec3::new(x, y, z);
+                let p = IVec3::new(x, y, z);
                 let idx = grid.idx(p);
 
                 /* gather Moore-26 neighbourhood */
@@ -49,7 +45,7 @@ pub fn step_dense<R: AutomatonRule<D = Dim>>(
                 };
 
                 if let CellOutcome::Next { state, memory } = rule.next_state(ctx, params) {
-                    next[idx].state  = state;
+                    next[idx].state = state;
                     next[idx].memory = memory;
                 }
             }

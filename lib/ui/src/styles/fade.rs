@@ -8,9 +8,9 @@
 //! The systems are data‑parallel and need no external synchronisation.
 
 use bevy::{
+    color::Alpha,
     prelude::*,
     ui::{BackgroundColor, GlobalZIndex, Node, Val},
-    color::Alpha
 };
 use engine_core::prelude::AppState;
 
@@ -24,17 +24,21 @@ pub struct FadeTo {
 
 /* ───────────────────────── Internals ─────────────────────────── */
 
-#[derive(Component)] struct FadeOverlay;
+#[derive(Component)]
+struct FadeOverlay;
 
 #[derive(Resource)]
 struct FadeData {
-    timer:  Timer,
-    phase:  Phase,
+    timer: Timer,
+    phase: Phase,
     target: Option<AppState>,
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
-enum Phase { Out, In }
+enum Phase {
+    Out,
+    In,
+}
 
 /* ───────────────────────── Plugin ────────────────────────────── */
 
@@ -42,16 +46,16 @@ pub struct FadePlugin;
 impl Plugin for FadePlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<FadeTo>()
-           .add_systems(Update, (spawn_overlay, animate_overlay));
+            .add_systems(Update, (spawn_overlay, animate_overlay));
     }
 }
 
 /* ───────────── phase 0 – overlay creation ───────────────────── */
 
 fn spawn_overlay(
-    mut cmd:        Commands,
-    mut requests:   EventReader<FadeTo>,
-    overlay_q:      Query<Entity, With<FadeOverlay>>,
+    mut cmd: Commands,
+    mut requests: EventReader<FadeTo>,
+    overlay_q: Query<Entity, With<FadeOverlay>>,
 ) {
     for FadeTo { target } in requests.read() {
         if overlay_q.is_empty() {
@@ -59,7 +63,7 @@ fn spawn_overlay(
             cmd.spawn((
                 FadeOverlay,
                 Node {
-                    width:  Val::Percent(100.0),
+                    width: Val::Percent(100.0),
                     height: Val::Percent(100.0),
                     ..default()
                 },
@@ -69,8 +73,8 @@ fn spawn_overlay(
         }
 
         cmd.insert_resource(FadeData {
-            timer:  Timer::from_seconds(0.35, TimerMode::Repeating),
-            phase:  Phase::Out,
+            timer: Timer::from_seconds(0.35, TimerMode::Repeating),
+            phase: Phase::Out,
             target: Some(*target),
         });
     }
@@ -79,11 +83,11 @@ fn spawn_overlay(
 /* ───────────── phase 1 & 2 – animate & cleanup ──────────────── */
 
 fn animate_overlay(
-    mut cmd:       Commands,
-    time:          Res<Time>,
-    fade:      Option<ResMut<FadeData>>,
+    mut cmd: Commands,
+    time: Res<Time>,
+    fade: Option<ResMut<FadeData>>,
     mut overlay_q: Query<(Entity, &mut BackgroundColor), With<FadeOverlay>>,
-    mut next:      ResMut<NextState<AppState>>,
+    mut next: ResMut<NextState<AppState>>,
 ) {
     let Some(mut fade) = fade else { return };
 
@@ -92,10 +96,10 @@ fn animate_overlay(
 
     for (_, mut bg) in &mut overlay_q {
         let alpha = match fade.phase {
-            Phase::Out =>  t,
-            Phase::In  => 1.0 - t,
+            Phase::Out => t,
+            Phase::In => 1.0 - t,
         };
-        bg.0.set_alpha(alpha);      // new helper name
+        bg.0.set_alpha(alpha); // new helper name
     }
 
     if fade.timer.finished() {
@@ -103,12 +107,13 @@ fn animate_overlay(
         match fade.phase {
             Phase::Out => {
                 if let Some(target) = fade.target.take() {
-                    next.set(target);          // swap state while black
+                    next.set(target); // swap state while black
                 }
                 fade.phase = Phase::In;
             }
             Phase::In => {
-                for (e, _) in &overlay_q {     // `despawn()` is recursive now
+                for (e, _) in &overlay_q {
+                    // `despawn()` is recursive now
                     cmd.entity(e).despawn();
                 }
                 cmd.remove_resource::<FadeData>();

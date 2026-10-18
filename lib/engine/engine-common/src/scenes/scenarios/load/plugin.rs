@@ -8,26 +8,20 @@ use engine_core::prelude::AppState;
 use std::path::PathBuf;
 
 /// Immutable manifest of discovered save files.
-#[derive(Resource, Clone, Debug)]
+#[derive(Resource, Clone, Debug, Default)]
 pub struct ScenarioManifest {
     /// Absolute paths to `*.soul.save` scenario files.
     pub files: Vec<PathBuf>,
 }
 
-impl Default for ScenarioManifest {
-    fn default() -> Self { Self { files: Vec::new() } }
-}
-
 /// Recursively enumerates `*.soul.save` files inside the user data directory.
 fn scan_manifest() -> Vec<PathBuf> {
-    if let Some(base) = data_dir()
-        .map(|d| d.join("phanestead").join("saves"))
-    {
+    if let Some(base) = data_dir().map(|d| d.join("phanestead").join("saves")) {
         std::fs::read_dir(base)
             .map(|iter| {
                 iter.flatten()
                     .map(|e| e.path())
-                    .filter(|p| p.extension().map_or(false, |e| e == "soul.save"))
+                    .filter(|p| p.extension().is_some_and(|e| e == "soul.save"))
                     .collect()
             })
             .unwrap_or_default()
@@ -41,15 +35,13 @@ pub struct LoadScenarioScenePlugin;
 
 impl Plugin for LoadScenarioScenePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-            OnEnter(AppState::LoadScenario),
-            |mut cmd: Commands| {
-                cmd.insert_resource(ScenarioManifest { files: scan_manifest() });
-            },
-        )
-        .add_systems(
-            OnExit(AppState::LoadScenario),
-            |mut cmd: Commands| cmd.remove_resource::<ScenarioManifest>(),
-        );
+        app.add_systems(OnEnter(AppState::LoadScenario), |mut cmd: Commands| {
+            cmd.insert_resource(ScenarioManifest {
+                files: scan_manifest(),
+            });
+        })
+        .add_systems(OnExit(AppState::LoadScenario), |mut cmd: Commands| {
+            cmd.remove_resource::<ScenarioManifest>()
+        });
     }
 }

@@ -11,10 +11,7 @@
 
 use bevy::app::{App, Plugin};
 
-use crate::prelude::{
-    AutomataRegistry,
-    RuleRegistry,
-};
+use crate::prelude::{AutomataRegistry, RuleRegistry};
 
 /// Adds global registries and other cross-cutting resources.
 ///
