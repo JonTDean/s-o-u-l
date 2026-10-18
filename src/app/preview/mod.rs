@@ -10,6 +10,7 @@ pub(super) fn enabled() -> bool {
 
 pub(super) fn install(app: &mut App) {
     if lenia::enabled() {
+        lenia::install(app);
         app.add_systems(PostStartup, lenia::setup);
     } else {
         app.add_systems(PostStartup, scene::setup);

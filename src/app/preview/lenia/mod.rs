@@ -1,6 +1,11 @@
 //! Deterministic launch into the real workbench spawn and control flow.
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::AppState};
+mod verification;
+
+pub(super) fn install(app: &mut App) {
+    verification::install(app);
+}
 
 pub(super) fn enabled() -> bool {
     std::env::args().any(|argument| argument == "--lenia-demo")
