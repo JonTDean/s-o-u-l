@@ -1,5 +1,5 @@
 use super::{GpuParams, LeniaBuffers, LeniaPipelines};
-use bevy::render::{render_resource::*, renderer::RenderQueue};
+use bevy::render::render_resource::*;
 use simulation_kernel::core::lenia::LeniaParams;
 
 impl LeniaBuffers {
@@ -7,7 +7,7 @@ impl LeniaBuffers {
     pub fn advance(
         &mut self,
         encoder: &mut wgpu::CommandEncoder,
-        queue: &RenderQueue,
+        queue: &wgpu::Queue,
         pipelines: &LeniaPipelines,
         steps: u32,
         params: LeniaParams,
@@ -51,7 +51,7 @@ impl LeniaBuffers {
             });
             pass.set_pipeline(&pipelines.pack);
             pass.set_bind_group(0, &self.binds[self.current], &[]);
-            pass.dispatch_workgroups((self.packed.size() as u32 / 4).div_ceil(64), 1, 1);
+            pass.dispatch_workgroups((self.stride / 4).div_ceil(64), self.size[1], self.size[2]);
         }
         encoder.copy_buffer_to_texture(
             wgpu::TexelCopyBufferInfo {

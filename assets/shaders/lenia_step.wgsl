@@ -37,14 +37,14 @@ fn evolve(@builtin(global_invocation_id) id: vec3<u32>) {
 @compute @workgroup_size(64)
 fn pack(@builtin(global_invocation_id) id: vec3<u32>) {
     let words_per_row = params.size.w / 4u;
-    if id.x >= words_per_row * params.size.y * params.size.z { return; }
+    if id.x >= words_per_row || id.y >= params.size.y || id.z >= params.size.z { return; }
     let x = (id.x % words_per_row) * 4u;
-    let row = id.x / words_per_row;
+    let row = id.z * params.size.y + id.y;
     var word = 0u;
     for (var byte = 0u; byte < 4u; byte += 1u) {
         if x + byte < params.size.x {
             word |= previous[row * params.size.x + x + byte] << (byte * 8u);
         }
     }
-    packed[id.x] = word;
+    packed[row * words_per_row + id.x] = word;
 }
