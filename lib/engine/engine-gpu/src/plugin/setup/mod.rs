@@ -32,23 +32,28 @@ pub(super) fn extract_steps_this_frame(
 }
 
 pub(super) fn register_graph(app: &mut SubApp) {
-    app.add_render_graph_node::<crate::graph::ComputeAutomataNode>(Core3d, AutomataStepLabel)
-        .add_render_graph_node::<VoxelSurfaceNode>(Core3d, VoxelSurfaceLabel)
-        .add_render_graph_node::<ViewNodeRunner<super::drawing::voxel_draw_node::VoxelDrawNode>>(
-            Core3d,
+    app.add_render_graph_node::<crate::compute::lenia::runtime::LeniaStepNode>(
+        Core3d,
+        LeniaStepLabel,
+    )
+    .add_render_graph_node::<crate::graph::ComputeAutomataNode>(Core3d, AutomataStepLabel)
+    .add_render_graph_node::<VoxelSurfaceNode>(Core3d, VoxelSurfaceLabel)
+    .add_render_graph_node::<ViewNodeRunner<super::drawing::voxel_draw_node::VoxelDrawNode>>(
+        Core3d,
+        DrawVoxelLabel,
+    )
+    .add_render_graph_edges(
+        Core3d,
+        (
+            Node3d::StartMainPass,
+            LeniaStepLabel,
+            AutomataStepLabel,
+            VoxelSurfaceLabel,
+            Node3d::MainOpaquePass,
             DrawVoxelLabel,
-        )
-        .add_render_graph_edges(
-            Core3d,
-            (
-                Node3d::StartMainPass,
-                AutomataStepLabel,
-                VoxelSurfaceLabel,
-                Node3d::MainOpaquePass,
-                DrawVoxelLabel,
-                Node3d::MainTransparentPass,
-            ),
-        );
+            Node3d::MainTransparentPass,
+        ),
+    );
 }
 
 #[cfg(feature = "gpu-debug")]

@@ -11,9 +11,10 @@ impl Node for LeniaStepNode {
     fn run(
         &self,
         _: &mut RenderGraphContext,
-        _: &mut RenderContext,
-        _: &World,
+        context: &mut RenderContext,
+        world: &World,
     ) -> Result<(), NodeRunError> {
+        super::execute::run(context, world);
         Ok(())
     }
 }

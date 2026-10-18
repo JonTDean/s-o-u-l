@@ -1,6 +1,7 @@
 //! Render-world ownership and extraction for live Lenia simulations.
 use bevy::{prelude::*, render::Extract};
 use engine_core::automata::{GpuGridSlice, lenia::LeniaSimulation};
+mod execute;
 mod node;
 mod state;
 pub(crate) use node::LeniaStepNode;
