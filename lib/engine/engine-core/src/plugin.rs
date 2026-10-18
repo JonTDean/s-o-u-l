@@ -32,6 +32,7 @@ impl Plugin for EngineCorePlugin {
             // Both registries derive `Default`, so construction is free of
             // panics and allocation-free until something is registered.
             .init_resource::<AutomataRegistry>()
-            .init_resource::<RuleRegistry>();
+            .init_resource::<RuleRegistry>()
+            .add_plugins(crate::automata::lenia::LeniaControlPlugin);
     }
 }

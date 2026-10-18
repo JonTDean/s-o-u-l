@@ -15,6 +15,7 @@ use engine_core::systems::simulation::SimulationStep;
 
 pub(super) mod allocation;
 pub(super) mod seeding;
+pub(super) mod ticks;
 
 pub(super) fn count_sim_steps_main(
     mut events: EventReader<SimulationStep>,
