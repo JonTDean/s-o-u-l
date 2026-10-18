@@ -2,6 +2,8 @@
 use bevy::prelude::*;
 use simulation_kernel::core::lenia::{LeniaParams, LeniaSeed};
 mod commands;
+#[cfg(test)]
+mod tests;
 pub use commands::{LeniaAction, LeniaCommand, LeniaControlPlugin};
 
 /// Desired simulation state; tick requests survive slow rendering and extraction.
