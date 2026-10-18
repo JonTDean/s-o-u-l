@@ -70,37 +70,21 @@ impl AutomatonRule for LeniaRule {
 
 /* ─────────────── seed helpers ─────────────── */
 pub fn seed_lenia(grid: &mut GridBackend) {
-    match grid {
-        GridBackend::Dense(g) => {
-            let centre = IVec3::new(g.size.x as i32 / 2, g.size.y as i32 / 2, 0);
-            for y in -7..=7 {
-                for x in -7..=7 {
-                    if x * x + y * y <= 49 {
-                        let idx = g.idx(centre + IVec3::new(x, y, 0));
-                        g.voxels[idx].state = CellState::Alive(180);
-                    }
-                }
-            }
-        }
-        GridBackend::Sparse(s) => {
-            s.set_state(IVec3::ZERO, CellState::Alive(180));
-        }
-    }
+    seed_pattern(grid, simulation_kernel::core::lenia::LeniaSeed::Blob);
 }
 
 pub fn seed_orbium(grid: &mut GridBackend) {
-    if let GridBackend::Dense(g) = grid {
-        let centre = IVec3::new(g.size.x as i32 / 2, g.size.y as i32 / 2, 0);
-        for y in -12..=12 {
-            for x in -12..=12 {
-                let r = ((x * x + y * y) as f32).sqrt();
-                let idx = g.idx(centre + IVec3::new(x, y, 0));
-                if (8.0..=10.0).contains(&r) {
-                    g.voxels[idx].state = CellState::Alive(220);
-                } else if (6.5..=7.5).contains(&r) {
-                    g.voxels[idx].state = CellState::Alive(160);
-                }
+    seed_pattern(grid, simulation_kernel::core::lenia::LeniaSeed::Ring);
+}
+
+fn seed_pattern(grid: &mut GridBackend, pattern: simulation_kernel::core::lenia::LeniaSeed) {
+    match grid {
+        GridBackend::Dense(g) => {
+            let cells = simulation_kernel::core::lenia::seed(g.size.to_array(), pattern);
+            for (cell, density) in g.voxels.iter_mut().zip(cells) {
+                cell.state = CellState::from(density);
             }
         }
+        GridBackend::Sparse(s) => s.set_state(IVec3::ZERO, CellState::Alive(180)),
     }
 }
