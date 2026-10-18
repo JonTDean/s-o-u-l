@@ -25,6 +25,7 @@ pub struct LeniaSnapshot {
 
 #[derive(Default)]
 pub(crate) struct ProbeState {
+    pub active: usize,
     pub requested: HashSet<Entity>,
     pub results: HashMap<Entity, Result<LeniaSnapshot, String>>,
 }
@@ -34,6 +35,11 @@ pub(crate) struct ProbeState {
 pub struct LeniaProbe(pub(crate) Arc<Mutex<ProbeState>>);
 
 impl LeniaProbe {
+    /// Number of live GPU state slots after the latest render synchronization.
+    pub fn active_instances(&self) -> usize {
+        self.0.lock().expect("Lenia probe lock").active
+    }
+
     /// Request one asynchronous readback of this instance on its next draw.
     pub fn request(&self, owner: Entity) {
         self.0

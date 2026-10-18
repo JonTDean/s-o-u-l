@@ -27,6 +27,12 @@ pub(super) fn run(context: &mut RenderContext, world: &World) {
         .lock()
         .expect("Lenia state lock");
     synchronize(&mut slots, live, device, pipelines);
+    world
+        .resource::<crate::LeniaProbe>()
+        .0
+        .lock()
+        .expect("Lenia probe lock")
+        .active = slots.len();
     for (entity, slice, sim) in &live.0 {
         let Some(slot) = slots.get_mut(entity) else {
             continue;
