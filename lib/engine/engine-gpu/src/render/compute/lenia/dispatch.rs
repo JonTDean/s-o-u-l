@@ -1,0 +1,78 @@
+use super::{GpuParams, LeniaBuffers, LeniaPipelines};
+use bevy::render::{render_resource::*, renderer::RenderQueue};
+use simulation_kernel::core::lenia::LeniaParams;
+
+impl LeniaBuffers {
+    /// Each dispatch reads a complete previous tick and swaps before the next.
+    pub fn advance(
+        &mut self,
+        encoder: &mut wgpu::CommandEncoder,
+        queue: &RenderQueue,
+        pipelines: &LeniaPipelines,
+        steps: u32,
+        params: LeniaParams,
+    ) -> Result<(), &'static str> {
+        let params = params.validate()?;
+        queue.write_buffer(
+            &self.params,
+            0,
+            bytemuck::bytes_of(&GpuParams::new(self.size, self.stride, params)),
+        );
+        for _ in 0..steps {
+            let mut pass = encoder.begin_compute_pass(&ComputePassDescriptor {
+                label: Some("lenia.evolve"),
+                timestamp_writes: None,
+            });
+            pass.set_pipeline(&pipelines.evolve);
+            pass.set_bind_group(0, &self.binds[self.current], &[]);
+            pass.dispatch_workgroups(
+                self.size[0].div_ceil(8),
+                self.size[1].div_ceil(8),
+                self.size[2],
+            );
+            self.current = 1 - self.current;
+            self.tick += 1;
+        }
+        Ok(())
+    }
+
+    /// Pack the current state, then copy only this slice into the render atlas.
+    pub fn present(
+        &self,
+        encoder: &mut wgpu::CommandEncoder,
+        pipelines: &LeniaPipelines,
+        texture: &Texture,
+        origin: Origin3d,
+    ) {
+        {
+            let mut pass = encoder.begin_compute_pass(&ComputePassDescriptor {
+                label: Some("lenia.pack"),
+                timestamp_writes: None,
+            });
+            pass.set_pipeline(&pipelines.pack);
+            pass.set_bind_group(0, &self.binds[self.current], &[]);
+            pass.dispatch_workgroups((self.packed.size() as u32 / 4).div_ceil(64), 1, 1);
+        }
+        encoder.copy_buffer_to_texture(
+            wgpu::TexelCopyBufferInfo {
+                buffer: &self.packed,
+                layout: TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(self.stride),
+                    rows_per_image: Some(self.size[1]),
+                },
+            },
+            wgpu::TexelCopyTextureInfo {
+                texture,
+                mip_level: 0,
+                origin,
+                aspect: TextureAspect::All,
+            },
+            Extent3d {
+                width: self.size[0],
+                height: self.size[1],
+                depth_or_array_layers: self.size[2],
+            },
+        );
+    }
+}
