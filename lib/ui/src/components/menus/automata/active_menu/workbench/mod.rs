@@ -4,6 +4,7 @@ use bevy_egui::{EguiContexts, egui};
 use models::workbench::{plugin::Workbench, session::Model};
 
 mod canvas;
+pub mod comparison;
 mod experiment;
 mod koch;
 pub mod persistence;
@@ -24,7 +25,8 @@ pub fn show(
     egui::Window::new("Automata workbench")
         .default_pos([320.0, 80.0])
         .default_width(560.0)
-        .max_height(570.0)
+        .max_height(800.0)
+        .vscroll(true)
         .resizable(true)
         .show(ctx, |ui| {
             let mut selected = bench.selected.min(bench.sessions.len() - 1);

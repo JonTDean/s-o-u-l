@@ -16,6 +16,7 @@ impl Plugin for AutomataMenusPlugin {
         app.add_plugins((
             super::lenia::LeniaWorkbenchPlugin,
             super::active_menu::workbench::persistence::ProjectPlugin,
+            super::active_menu::workbench::comparison::ComparisonPlugin,
         ));
         app.add_systems(
             EguiPrimaryContextPass,
