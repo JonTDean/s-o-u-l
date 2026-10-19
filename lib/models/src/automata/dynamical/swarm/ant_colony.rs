@@ -3,6 +3,7 @@
 use glam::IVec3;
 use rand::Rng;
 
+#[derive(Clone, Debug)]
 pub struct Ant {
     pub pos: IVec3,
     pub carrying_food: bool,
@@ -17,6 +18,11 @@ pub struct AntColony {
 
 impl AntColony {
     pub fn step(&mut self) {
+        self.step_with_rng(&mut rand::rng());
+    }
+
+    /// Inject randomness so reset and numerical verification can reproduce a run.
+    pub fn step_with_rng(&mut self, rng: &mut impl Rng) {
         /* evaporate pheromones */
         for v in self.pheromone.values_mut() {
             *v *= 0.99;
@@ -24,6 +30,8 @@ impl AntColony {
                 *v = 0.0;
             }
         }
+
+        self.pheromone.retain(|_, value| *value > 0.0);
 
         /* neighbour offsets in XY plane */
         const DIRS: [IVec3; 8] = [
@@ -59,8 +67,7 @@ impl AntColony {
                         best_dir = Some(off);
                     }
                 }
-                let chosen =
-                    best_dir.unwrap_or_else(|| DIRS[rand::rng().random_range(0..DIRS.len())]);
+                let chosen = best_dir.unwrap_or_else(|| DIRS[rng.random_range(0..DIRS.len())]);
                 ant.pos += chosen;
                 if self.food_sources.contains(&ant.pos) {
                     ant.carrying_food = true;
