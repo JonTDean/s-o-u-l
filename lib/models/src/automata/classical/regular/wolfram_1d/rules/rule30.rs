@@ -24,9 +24,9 @@ impl AutomatonRule for Rule30 {
     type D = Dim;
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
         // Interpret 3 neighbors in a horizontal line: left (W), center (self), right (E).
-        let l = matches!(ctx.neighbourhood[3], CellState::Alive(_)) as u8;
+        let l = matches!(ctx.neighbourhood[12], CellState::Alive(_)) as u8;
         let c = matches!(ctx.self_state, CellState::Alive(_)) as u8; // centre
-        let r = matches!(ctx.neighbourhood[5], CellState::Alive(_)) as u8;
+        let r = matches!(ctx.neighbourhood[13], CellState::Alive(_)) as u8;
         let idx = (l << 2) | (c << 1) | r;
         let next_state = if RULE_30[idx as usize] == 1 {
             CellState::Alive(255)

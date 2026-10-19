@@ -4,10 +4,12 @@
 /// All `a`'s must come before `b`'s and the counts must match.
 pub fn is_a_n_b_n(input: &str) -> bool {
     let mut stack: Vec<char> = Vec::new();
+    let mut reading_b = false;
     for ch in input.chars() {
-        if ch == 'a' {
+        if ch == 'a' && !reading_b {
             stack.push('A');
         } else if ch == 'b' {
+            reading_b = true;
             // Pop an A for each b
             if stack.pop() != Some('A') {
                 return false;

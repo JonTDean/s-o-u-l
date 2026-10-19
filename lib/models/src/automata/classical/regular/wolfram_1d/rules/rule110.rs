@@ -23,10 +23,10 @@ impl Rule110 {
 impl AutomatonRule for Rule110 {
     type D = Dim;
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
-        // Similar neighborhood interpretation as Rule30.
-        let l = matches!(ctx.neighbourhood[3], CellState::Alive(_)) as u8;
+        // Moore-26 offsets 12 and 13 are (-1,0,0) and (1,0,0).
+        let l = matches!(ctx.neighbourhood[12], CellState::Alive(_)) as u8;
         let c = matches!(ctx.self_state, CellState::Alive(_)) as u8; // centre
-        let r = matches!(ctx.neighbourhood[5], CellState::Alive(_)) as u8;
+        let r = matches!(ctx.neighbourhood[13], CellState::Alive(_)) as u8;
         let idx = (l << 2) | (c << 1) | r;
         let next_state = if RULE_110[idx as usize] == 1 {
             CellState::Alive(255)
