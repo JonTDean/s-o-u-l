@@ -7,7 +7,16 @@ pub fn serialize<K: Serialize, V: Serialize, S: Serializer>(
     map: &HashMap<K, V>,
     serializer: S,
 ) -> Result<S::Ok, S::Error> {
-    map.iter().collect::<Vec<_>>().serialize(serializer)
+    let mut rows = map
+        .iter()
+        .map(|(key, value)| serde_json::to_string(key).map(|order| (order, key, value)))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(serde::ser::Error::custom)?;
+    rows.sort_by(|a, b| a.0.cmp(&b.0));
+    rows.into_iter()
+        .map(|(_, key, value)| (key, value))
+        .collect::<Vec<_>>()
+        .serialize(serializer)
 }
 
 /// Reject duplicate rows rather than silently replacing stored state.

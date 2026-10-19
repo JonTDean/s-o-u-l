@@ -52,3 +52,6 @@ impl Project {
         bench.error = None;
     }
 }
+
+#[cfg(test)]
+mod tests;
