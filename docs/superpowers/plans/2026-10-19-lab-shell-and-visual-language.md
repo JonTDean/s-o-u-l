@@ -10,6 +10,26 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-19-lab-shell-and-visual-language-design.md`
 
+## Revision for `main` (read before any task)
+
+The tasks below were drafted against a stale branch. Spec §8 records the
+rebase onto `main`; these deltas override the task text where they conflict.
+
+| Task | Change |
+| --- | --- |
+| 1 | Drop `TimeClock` (CPU sessions already pace themselves with `Session::elapse`). Replace `Rate` with `pub const RATE_PRESETS: [f32; 4] = [1.0, 10.0, 30.0, 60.0]`; `ChannelSettings { rate_hz: f32, colour: Srgb }`; `ChannelAction::SetRate(f32)`. `Srgb` derives `Serialize`/`Deserialize`. Add `ChannelId::UNASSIGNED` and `impl Default for ChannelId` (= unassigned). |
+| 2 | Unchanged. |
+| 3 | Replaced: move `workbench/{experiment,project}` under `workbench/operations/` with `pub use operations::{experiment, project};`, and turn `catalog.rs` into `catalog/mod.rs`. `evolution/` already groups the model families. |
+| 4 | `Session` gains `#[serde(skip)] channel`, `#[serde(skip)] epoch`, `#[serde(skip)] note: Option<String>`; `Settings` gains `#[serde(default = ...)] colour: Srgb`. Router lives in `workbench/operations/channels/`; `SetRate` writes `settings.rate_hz` clamped to 1–60; ticking stays `session.elapse`. Add `ConfigureSession { id, settings: Box<Settings>, reset }` event and an id-reconcile system (adopt `UNASSIGNED`, release vanished). Tests adapt (`rate_hz`). |
+| 5 | As written; module path `workbench/operations/channels/metrics.rs`. |
+| 6 | `RestoreLenia` also allocates `(ChannelId, ChannelSettings::new(60.0), StepClock)`; `StepClock::due` takes `rate_hz.round() as u32`. |
+| 7 | Sampler skips request/take while `Res<ReadbackBusy>` is true (new `engine_core::automata::lenia::ReadbackBusy(pub bool)`); project save sets it while pending. |
+| 9 | Specimens live in `workbench/catalog/specimens.rs` (+ `tests.rs`). |
+| 13 | `LabState.drawer: Option<Drawer>` with `Drawer::{Library, Compare, Project}` replaces `drawer_open`. Drawers live in `lab/chrome/drawers/{mod.rs,library.rs,compare.rs,project.rs}`; `lab/library.rs` is not created. The rail gets Compare (`≡`) and Project (`§`) entries. |
+| 14 | Inspector adds `parameters` (restyled experiment fields + Apply live / Apply and reset / Defaults → `ConfigureSession`), the session `note`, and a `measured` line from `experiment::metrics::describe`. |
+| 16 | Comparison and persistence code moves into the Compare/Project drawers; `Files`, `Pending`, `Comparison` keep their names under `ui::lab::chrome::drawers`. Update `src/app/preview/experiment/checkpoint.rs` imports. |
+| 17 | Also run `make verify-experiment` (both drivers) and keep its evidence current. |
+
 ## Global Constraints
 
 - Structural governance (`structural-governance.toml`): every governed directory holds 0–3 child directories and 1–4 `.rs`/`.wgsl`/`.py`/`.ps1` files; no source file above **200** non-comment source lines; run `python3 tools/structure/audit.py` after every task.
