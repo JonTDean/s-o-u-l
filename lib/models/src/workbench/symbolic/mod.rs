@@ -2,3 +2,5 @@
 pub mod bounded;
 pub mod machine;
 pub mod recognizers;
+#[cfg(test)]
+mod tests;
