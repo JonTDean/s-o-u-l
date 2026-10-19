@@ -23,9 +23,20 @@ impl AntColony {
 
     /// Inject randomness so reset and numerical verification can reproduce a run.
     pub fn step_with_rng(&mut self, rng: &mut impl Rng) {
+        self.step_configured(rng, 0.01, 1.0, 0.0);
+    }
+
+    /// Apply evaporation, deposition and exploration to a reproducible tick.
+    pub fn step_configured(
+        &mut self,
+        rng: &mut impl Rng,
+        evaporation: f32,
+        deposit: f32,
+        exploration: f32,
+    ) {
         /* evaporate pheromones */
         for v in self.pheromone.values_mut() {
-            *v *= 0.99;
+            *v *= 1.0 - evaporation;
             if *v < 0.001 {
                 *v = 0.0;
             }
@@ -51,8 +62,8 @@ impl AntColony {
                 ant.pos += dir;
                 self.pheromone
                     .entry(ant.pos)
-                    .and_modify(|v| *v += 1.0)
-                    .or_insert(1.0);
+                    .and_modify(|v| *v += deposit)
+                    .or_insert(deposit);
                 if ant.pos == self.home {
                     ant.carrying_food = false;
                 }
@@ -66,6 +77,9 @@ impl AntColony {
                         best_pher = pher;
                         best_dir = Some(off);
                     }
+                }
+                if exploration > 0.0 && rng.random_bool(exploration as f64) {
+                    best_dir = None;
                 }
                 let chosen = best_dir.unwrap_or_else(|| DIRS[rng.random_range(0..DIRS.len())]);
                 ant.pos += chosen;

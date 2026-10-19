@@ -3,8 +3,10 @@ use crate::automata::dynamical::swarm::{
     ant_colony::{Ant, AntColony},
     boids::{Boid, step_boids},
 };
+use crate::workbench::{catalog::Kind, experiment::config::Settings};
 use glam::{IVec3, Vec2};
-use rand::{SeedableRng, rngs::StdRng};
+use rand::SeedableRng;
+use rand_chacha::ChaCha8Rng;
 
 /// A bounded flock with a snapshot steering update.
 pub struct Flock {
@@ -27,7 +29,18 @@ impl Default for Flock {
 impl Flock {
     /// Advance one synchronous arena tick and enforce the finite domain.
     pub fn step(&mut self) {
-        step_boids(&mut self.boids, 0.002, 0.08, 0.1, 4.0);
+        self.step_with_settings(&Settings::for_kind(Kind::Boids));
+    }
+
+    /// Apply flocking weights without replacing positions or velocities.
+    pub fn step_with_settings(&mut self, settings: &Settings) {
+        step_boids(
+            &mut self.boids,
+            settings.cohesion,
+            settings.alignment,
+            settings.separation,
+            settings.separation_distance,
+        );
         for boid in &mut self.boids {
             boid.position.x = boid.position.x.rem_euclid(64.0);
             boid.position.y = boid.position.y.rem_euclid(64.0);
@@ -39,7 +52,7 @@ impl Flock {
 pub struct Foraging {
     pub colony: AntColony,
     pub deliveries: u64,
-    rng: StdRng,
+    rng: ChaCha8Rng,
 }
 impl Default for Foraging {
     fn default() -> Self {
@@ -57,15 +70,25 @@ impl Default for Foraging {
                 pheromone: Default::default(),
             },
             deliveries: 0,
-            rng: StdRng::seed_from_u64(0x534f554c),
+            rng: ChaCha8Rng::seed_from_u64(0x534f554c),
         }
     }
 }
 impl Foraging {
     /// Advance one synchronous arena tick and enforce the finite domain.
     pub fn step(&mut self) {
+        self.step_with_settings(&Settings::for_kind(Kind::Ants));
+    }
+
+    /// Apply ant parameters while retaining trails, deliveries and RNG state.
+    pub fn step_with_settings(&mut self, settings: &Settings) {
         let carrying: Vec<_> = self.colony.ants.iter().map(|a| a.carrying_food).collect();
-        self.colony.step_with_rng(&mut self.rng);
+        self.colony.step_configured(
+            &mut self.rng,
+            settings.evaporation,
+            settings.deposit,
+            settings.exploration,
+        );
         for (ant, carried) in self.colony.ants.iter_mut().zip(carrying) {
             ant.pos = ant.pos.clamp(IVec3::ZERO, IVec3::new(63, 63, 0));
             if carried && !ant.carrying_food && ant.pos == self.colony.home {
