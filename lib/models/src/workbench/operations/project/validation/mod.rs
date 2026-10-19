@@ -1,5 +1,5 @@
 //! Validation of loaded model invariants before replacement.
-use super::super::{
+use crate::workbench::{
     catalog::Kind,
     session::{Model, Session},
 };

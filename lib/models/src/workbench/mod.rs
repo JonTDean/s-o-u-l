@@ -2,7 +2,7 @@
 pub mod evolution;
 pub use evolution::{agents, grid, symbolic};
 pub mod catalog;
-pub mod experiment;
+pub mod operations;
+pub use operations::{experiment, project};
 pub mod plugin;
-pub mod project;
 pub mod session;

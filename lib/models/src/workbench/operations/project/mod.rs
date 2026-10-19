@@ -2,7 +2,7 @@
 pub mod maps;
 mod storage;
 mod validation;
-use super::{plugin::Workbench, session::Session};
+use crate::workbench::{plugin::Workbench, session::Session};
 use engine_core::automata::lenia::SavedLenia;
 pub use storage::{read, write};
 #[derive(serde::Serialize, serde::Deserialize)]
