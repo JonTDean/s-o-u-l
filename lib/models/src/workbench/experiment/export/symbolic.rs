@@ -36,7 +36,10 @@ pub(super) fn draw(image: &mut RgbaImage, machine: &Symbolic) {
     }
 }
 fn glyph(symbol: char) -> [u8; 7] {
-    match symbol.to_ascii_uppercase() {
+    match symbol {
+        'a' => [0, 0, 14, 1, 15, 17, 15],
+        'b' => [16, 16, 30, 17, 17, 17, 30],
+        'c' => [0, 0, 14, 17, 16, 17, 14],
         'A' => [14, 17, 17, 31, 17, 17, 17],
         'B' => [30, 17, 17, 30, 17, 17, 30],
         'C' => [14, 17, 16, 16, 16, 17, 14],
