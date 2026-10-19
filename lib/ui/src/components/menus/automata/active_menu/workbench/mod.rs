@@ -4,11 +4,16 @@ use bevy_egui::{EguiContexts, egui};
 use models::workbench::{plugin::Workbench, session::Model};
 
 mod canvas;
+mod experiment;
 mod koch;
 mod symbols;
 
 /// Draw the selected CPU instance and apply its shared lifecycle operations.
-pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
+pub fn show(
+    mut contexts: EguiContexts,
+    mut bench: ResMut<Workbench>,
+    mut editor: Local<experiment::Editor>,
+) {
     let Ok(ctx) = contexts.ctx_mut() else {
         return;
     };
@@ -71,13 +76,14 @@ pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
                 ui.label("Initial input (apply with Reset):");
                 ui.add(egui::TextEdit::singleline(&mut session.input).char_limit(256));
             }
+            experiment::settings(ui, selected, session, &mut editor);
             ui.label(format!("Tick {}", session.ticks));
             ui.label(if session.halted() {
                 "Halted"
             } else if session.paused {
                 "Paused"
             } else {
-                "Running · 10 steps/s"
+                "Running"
             });
             if let Model::Symbolic(machine) = &session.model {
                 if session.ticks >= 10000 && !machine.halted() {
