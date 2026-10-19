@@ -4,7 +4,7 @@ use bevy_egui::egui;
 use models::workbench::{catalog::Kind, experiment::config::Settings, session::Session};
 
 #[derive(Default)]
-pub(super) struct Editor {
+pub struct Editor {
     selected: Option<(usize, Kind)>,
     original: Option<Settings>,
     draft: Option<Settings>,
