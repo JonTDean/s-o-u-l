@@ -7,6 +7,7 @@ mod canvas;
 mod koch;
 mod symbols;
 
+/// Draw the selected CPU instance and apply its shared lifecycle operations.
 pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
     let Ok(ctx) = contexts.ctx_mut() else {
         return;

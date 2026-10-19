@@ -12,6 +12,7 @@ pub struct Workbench {
     elapsed: f32,
 }
 impl Workbench {
+    /// Add a paused instance unless the eight-session capacity is exhausted.
     pub fn spawn(&mut self, kind: Kind) {
         if self.sessions.len() >= 8 {
             self.error =
@@ -22,6 +23,7 @@ impl Workbench {
         self.selected = self.sessions.len() - 1;
         self.error = None;
     }
+    /// Release all instances, selection, errors and accumulated wall time.
     pub fn clear(&mut self) {
         self.sessions.clear();
         self.selected = 0;
@@ -30,6 +32,7 @@ impl Workbench {
     }
 }
 
+/// Installs production spawn/clear routing and the ten-hertz CPU update loop.
 pub struct WorkbenchPlugin;
 impl Plugin for WorkbenchPlugin {
     fn build(&self, app: &mut App) {

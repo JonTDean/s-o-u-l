@@ -25,6 +25,7 @@ impl Default for Flock {
     }
 }
 impl Flock {
+    /// Advance one synchronous arena tick and enforce the finite domain.
     pub fn step(&mut self) {
         step_boids(&mut self.boids, 0.002, 0.08, 0.1, 4.0);
         for boid in &mut self.boids {
@@ -61,6 +62,7 @@ impl Default for Foraging {
     }
 }
 impl Foraging {
+    /// Advance one synchronous arena tick and enforce the finite domain.
     pub fn step(&mut self) {
         let carrying: Vec<_> = self.colony.ants.iter().map(|a| a.carrying_food).collect();
         self.colony.step_with_rng(&mut self.rng);

@@ -20,6 +20,7 @@ pub enum Symbolic {
     Koch { word: String, limited: bool },
 }
 impl Symbolic {
+    /// Construct a symbolic catalog entry with an independent input tape.
     pub fn new(kind: Kind, input: &str) -> Self {
         match kind {
             Kind::Nfa => Self::Finite(Finite::new(input)),
@@ -39,6 +40,7 @@ impl Symbolic {
             _ => unreachable!("symbolic kind required"),
         }
     }
+    /// Perform one transition or parallel rewrite, checking growth before allocation.
     pub fn step(&mut self) {
         match self {
             Self::Finite(machine) => machine.step(),

@@ -23,6 +23,7 @@ pub struct Session {
     pub paused: bool,
 }
 impl Session {
+    /// Construct the selected model at its deterministic initial state.
     pub fn new(kind: Kind) -> Self {
         let input = kind.input().to_string();
         Self {
@@ -53,6 +54,7 @@ impl Session {
         self.paused = true;
         Ok(())
     }
+    /// Terminal language states and explicit execution bounds stop automatic ticks.
     pub fn halted(&self) -> bool {
         matches!(&self.model, Model::Symbolic(machine) if machine.halted() || self.ticks >= 10000)
     }
@@ -73,11 +75,13 @@ impl Session {
             self.paused = true;
         }
     }
+    /// Honor a manual step only while paused.
     pub fn single_step(&mut self) {
         if self.paused {
             self.step();
         }
     }
+    /// Advance a running session without affecting paused instances.
     pub fn advance(&mut self) {
         if !self.paused {
             self.step();

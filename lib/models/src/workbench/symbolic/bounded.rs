@@ -8,6 +8,7 @@ pub struct Bounded {
     phase: u8,
 }
 impl Bounded {
+    /// Allocate exactly the input tape; reject invalid alphabets or block ordering.
     pub fn new(input: &str) -> Self {
         let tape: Vec<char> = input.chars().collect();
         let ordered = !tape.is_empty()
@@ -21,6 +22,7 @@ impl Bounded {
         }
     }
 
+    /// Perform one bounded scan or mark without changing the tape length.
     pub fn step(&mut self) {
         if self.result.is_some() {
             return;

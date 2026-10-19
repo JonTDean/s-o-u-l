@@ -10,6 +10,7 @@ pub struct Finite {
     machine: NFA,
 }
 impl Finite {
+    /// Start the a*b machine with its epsilon-closed initial state set.
     pub fn new(input: &str) -> Self {
         let machine = example_nfa();
         Self {
@@ -20,6 +21,7 @@ impl Finite {
             machine,
         }
     }
+    /// Consume at most one input symbol and preserve a terminal result.
     pub fn step(&mut self) {
         if self.result.is_some() {
             return;
@@ -47,6 +49,7 @@ pub struct Pushdown {
     reading_b: bool,
 }
 impl Pushdown {
+    /// Select strict parentheses or ordered a^n b^n recognition.
     pub fn new(input: &str, parentheses: bool) -> Self {
         Self {
             input: input.chars().collect(),
@@ -57,6 +60,7 @@ impl Pushdown {
             reading_b: false,
         }
     }
+    /// Consume at most one input symbol and preserve a terminal result.
     pub fn step(&mut self) {
         if self.result.is_some() {
             return;

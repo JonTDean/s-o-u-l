@@ -1,7 +1,7 @@
 //! Examples of linear-bounded automata (LBA) for context-sensitive languages.
 
 /// Checks whether a string is in the language L = { a^n b^n c^n | n > 0 } (equal numbers of a, b, c in order).
-/// This simulates an LBA marking process: each iteration finds an `a`, a subsequent `b`, and a subsequent `c` and marks them.
+/// This compact predicate cross-checks the workbench's incremental bounded-tape machine.
 pub fn is_a_n_b_n_c_n(s: &str) -> bool {
     // A bounded tape recognizes ordered nonempty blocks, not interleaved triples.
     let bytes = s.as_bytes();
