@@ -2,7 +2,7 @@
 
 use bevy::prelude::Vec2;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Boid {
     pub position: Vec2,
     pub velocity: Vec2,

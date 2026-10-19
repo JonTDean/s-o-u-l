@@ -1,7 +1,7 @@
 //! Stable identifiers and human-readable contracts for executable families.
 
 /// Every non-Lenia model supported by the CPU workbench.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Kind {
     Rule30,
     Rule110,

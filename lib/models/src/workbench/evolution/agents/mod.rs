@@ -9,6 +9,7 @@ use rand::SeedableRng;
 use rand_chacha::ChaCha8Rng;
 
 /// A bounded flock with a snapshot steering update.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Flock {
     pub boids: Vec<Boid>,
 }
@@ -49,6 +50,7 @@ impl Flock {
 }
 
 /// Seeded foraging arena with persistent food sites and evaporating trails.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Foraging {
     pub colony: AntColony,
     pub deliveries: u64,

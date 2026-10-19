@@ -8,6 +8,7 @@ use super::{
 };
 
 /// State representation follows the model rather than coercing tapes into cells.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub enum Model {
     Grid(GridSession),
     Symbolic(Symbolic),
@@ -16,6 +17,7 @@ pub enum Model {
 }
 
 /// One paused-by-default simulation with a reproducible initial condition.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Session {
     pub kind: Kind,
     pub input: String,

@@ -4,4 +4,5 @@ pub use evolution::{agents, grid, symbolic};
 pub mod catalog;
 pub mod experiment;
 pub mod plugin;
+pub mod project;
 pub mod session;

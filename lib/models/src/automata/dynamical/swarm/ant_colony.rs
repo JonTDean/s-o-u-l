@@ -3,16 +3,18 @@
 use glam::IVec3;
 use rand::Rng;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Ant {
     pub pos: IVec3,
     pub carrying_food: bool,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct AntColony {
     pub ants: Vec<Ant>,
     pub home: IVec3,
     pub food_sources: Vec<IVec3>,
+    #[serde(with = "crate::workbench::project::maps")]
     pub pheromone: std::collections::HashMap<IVec3, f32>,
 }
 
