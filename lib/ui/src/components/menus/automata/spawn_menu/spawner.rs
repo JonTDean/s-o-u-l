@@ -103,7 +103,10 @@ pub fn spawner(
                     .show(ui, |ui| {
                         for id in ids {
                             if ui
-                                .button(Kind::parse(id).map_or(id.as_str(), Kind::title))
+                                .button(
+                                    Kind::parse(id)
+                                        .map_or_else(|| id.clone(), |kind| kind.title().to_owned()),
+                                )
                                 .clicked()
                             {
                                 tx.write(AutomataCommand::SeedPattern { id: id.clone() });
