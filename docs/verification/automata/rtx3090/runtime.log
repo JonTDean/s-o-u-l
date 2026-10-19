@@ -1,0 +1,37 @@
+env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_AUTOMATA_VERIFY="${SOUL_AUTOMATA_VERIFY:-/tmp/soul-automata-verification}" cargo run -- --automata-demo
+   Compiling models v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l/lib/models)
+   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l/lib/ui)
+   Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 4.00s
+     Running `target/debug/swarm_orchestrator_for_autonomous_learners --automata-demo`
+2026-10-19T10:52:38.227810Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+2026-10-19T10:52:38.441151Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
+2026-10-19T10:52:38.714808Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-19T10:52:38.763515Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-19T10:52:38.763577Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-19T10:52:38.767515Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
+2026-10-19T10:52:39.271745Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/wolfram-rule30.png
+2026-10-19T10:52:39.273523Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: wolfram:rule30 tick 32
+2026-10-19T10:52:39.519385Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/wolfram-rule110.png
+2026-10-19T10:52:39.521133Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: wolfram:rule110 tick 32
+2026-10-19T10:52:39.776257Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/life-conway.png
+2026-10-19T10:52:39.777975Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: life:conway tick 4
+2026-10-19T10:52:40.026822Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/particle-hpp.png
+2026-10-19T10:52:40.028419Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: particle:hpp tick 12
+2026-10-19T10:52:40.277971Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/regular-nfa.png
+2026-10-19T10:52:40.279745Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: regular:nfa tick 4
+2026-10-19T10:52:40.526114Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/context-free-anbn.png
+2026-10-19T10:52:40.527719Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: context-free:anbn tick 6
+2026-10-19T10:52:40.776465Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/context-free-parentheses.png
+2026-10-19T10:52:40.778143Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: context-free:parentheses tick 6
+2026-10-19T10:52:41.026562Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/context-free-koch.png
+2026-10-19T10:52:41.028310Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: context-free:koch tick 3
+2026-10-19T10:52:41.284116Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/context-sensitive-anbncn.png
+2026-10-19T10:52:41.286275Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: context-sensitive:anbncn tick 52
+2026-10-19T10:52:41.534428Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/turing-replace-a.png
+2026-10-19T10:52:41.536312Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: turing:replace-a tick 5
+2026-10-19T10:52:41.784797Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/swarm-boids.png
+2026-10-19T10:52:41.789469Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: swarm:boids tick 64
+2026-10-19T10:52:42.034921Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/automata/rtx3090/swarm-ants.png
+2026-10-19T10:52:42.036646Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_FAMILY_VERIFIED: swarm:ants tick 500
+2026-10-19T10:52:42.038922Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::automata::flow: AUTOMATA_RUNTIME_VERIFIED: all 12 families passed

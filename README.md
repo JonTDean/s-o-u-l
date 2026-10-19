@@ -42,6 +42,21 @@ output directory. Qualification exits after spawn, step, pause, parameter edit,
 reset, seed change, resume, clear, and respawn have matched the CPU reference.
 See the [Lenia evidence](docs/verification/lenia/README.md) for captured results.
 
+Open the complete family catalog with a populated Rule 30 history:
+
+```sh
+make automata
+make verify-automata
+```
+
+The Automata workbench provides isolated CPU sessions for Rule 30/110, Conway
+Life, HPP, finite/stack/bounded-tape/Turing machines, Koch rewriting, boids and
+ants. Select a family in the spawner, then resume, single-step, reset or remove
+its session. Symbolic input is editable before Reset. Up to eight CPU sessions
+can coexist, with separate clocks and state. Clear all affects CPU and Lenia
+sessions. See the [family contracts](docs/kanban/automata-families.md) and
+[qualification evidence](docs/verification/automata/README.md).
+
 The normal application starts at the main menu. To inspect a deterministic
 16 × 16 × 16 voxel volume without navigating the scenario menus:
 
@@ -150,3 +165,9 @@ structural violations across 261 source files in all 14 roots (largest: 144 SLOC
 GPU checks and the complete Lenia workbench qualification passed on RTX 3090 and
 Mesa software Vulkan. CI selects Python 3.13 and Rust 1.94.1 for consistency with
 the verified local tools. See the [qualification record](docs/verification/lenia/README.md).
+
+The 2026-10-19 family expansion passes 41 native tests, 9 documentation tests and
+20 governance tests across 287 files in the same 14 roots; the largest source
+file remains 144 SLOC. The [family evidence](docs/verification/automata/README.md)
+records the current catalog and native qualification separately from GPU-003
+and the earlier Lenia milestone.

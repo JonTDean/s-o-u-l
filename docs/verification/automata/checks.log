@@ -1,0 +1,184 @@
+python3 -m unittest discover -s tools/structure/tests -t tools/structure
+....................
+----------------------------------------------------------------------
+Ran 20 tests in 0.134s
+
+OK
+python3 tools/structure/audit.py
+Structural governance: 0 violation(s).
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+    Checking ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l/lib/ui)
+    Checking swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.90s
+RUSTDOCFLAGS="${RUSTDOCFLAGS:-} -C rpath=yes" cargo test --workspace --all-features
+   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l/lib/ui)
+   Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.02s
+     Running unittests src/lib.rs (target/debug/deps/engine_common-60d8e8542649e540)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_core-1018765729ba2b36)
+
+running 1 test
+test automata::lenia::tests::lenia_controls_pause_step_reset_parameters_and_ignore_stale_entities ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_gpu-d844c0d2318218dc)
+
+running 13 tests
+test render::compute::voxel::tests::active_shaders_validate ... ok
+test plugin::setup::ticks::tests::lenia_fixed_ticks_respect_both_pause_layers ... ok
+test render::compute::lenia::tests::evolution::gpu_lenia_matches_cpu_for_odd_and_even_tick_batches ... ok
+test render::compute::voxel::tests::surfaces::empty_region_emits_no_vertices ... ok
+test render::compute::voxel::tests::surfaces::one_voxel_has_six_outward_faces_at_the_requested_world_transform ... ok
+test render::compute::lenia::tests::evolution::packing::gpu_lenia_publishes_odd_width_rows_at_nonzero_atlas_origin ... ok
+test render::compute::voxel::tests::surfaces::adjacent_voxels_cull_their_shared_face ... ok
+test render::compute::lenia::tests::evolution::isolation::gpu_lenia_slices_keep_independent_parameters_state_and_atlas_regions ... ok
+test render::compute::voxel::tests::surfaces::overflow_clamps_indirect_draw_to_whole_faces ... ok
+test render::compute::lenia::tests::evolution::transition::gpu_lenia_parameter_changes_apply_to_subsequent_ticks_without_reseeding ... ok
+test render::compute::voxel::tests::surfaces::preview_volume_matches_a_cpu_exposed_face_oracle ... ok
+test render::compute::lenia::tests::evolution::ownership::gpu_lenia_reset_removal_and_entity_reuse_discard_prior_state ... ok
+test render::compute::voxel::tests::surfaces::subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.64s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_render-bf02df2e5f4c0286)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/models-126450c81e7393c7)
+
+running 16 tests
+test automata::dynamical::lenia::tests::invalid_growth_parameters_leave_model_state_unchanged ... ok
+test workbench::agents::tests::a_carrying_ant_returns_home_and_evaporation_removes_exhausted_trails ... ok
+test workbench::grid::tests::elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions ... ok
+test workbench::grid::gas_tests::hpp_particles_keep_direction_and_head_on_collisions_turn_perpendicularly ... ok
+test workbench::symbolic::tests::languages::bounded_tape_never_allocates_outside_its_input ... ok
+test workbench::symbolic::tests::languages::pushdown_stack_tracks_nesting_and_rejects_nonparenthesis_symbols ... ok
+test workbench::symbolic::tests::machines::lsystem_rewrites_in_parallel_and_stops_before_exceeding_its_bound ... ok
+test workbench::symbolic::tests::machines::nfa_epsilon_cycles_and_branching_remain_closed ... ok
+test workbench::symbolic::tests::machines::turing_rewrites_halts_rejects_and_extends_both_tape_ends ... ok
+test workbench::agents::tests::flock_update_is_order_independent_and_respects_speed_and_arena_bounds ... ok
+test workbench::symbolic::tests::languages::bounded_languages_match_exhaustive_short_words_and_reject_unicode ... ok
+test plugin::tests::model_registration_runs_without_a_renderer_or_window ... ok
+test workbench::grid::tests::life_blinker_period_and_glider_displacement_are_correct ... ok
+test automata::dynamical::lenia::tests::serial_and_parallel_models_match_reference_over_many_ticks ... ok
+test workbench::agents::tests::ant_rng_reset_replays_food_deliveries_and_bounded_trails ... ok
+test workbench::grid::tests::cellular_histories_and_parallel_updates_preserve_snapshot_semantics ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running unittests src/lib.rs (target/debug/deps/simulation_kernel-b1359e2d5edf352c)
+
+running 6 tests
+test core::lenia::tests::boundaries_are_zero_and_z_planes_are_independent ... ok
+test core::lenia::tests::every_xy_neighbor_uses_its_original_offset ... ok
+test core::lenia::tests::growth_clamps_quantizes_and_preserves_zero_dt ... ok
+test core::lenia::tests::numerical::fixtures_are_safe_for_small_shapes_and_distinct ... ok
+test core::lenia::tests::parameters_and_shape_fail_closed ... ok
+test core::lenia::tests::numerical::seeded_multitick_reference_matches_independent_numerics ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/debug/deps/swarm_orchestrator_for_autonomous_learners-ab89ca3eee2987fe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/tests-a89e1e5e5cb2cd52)
+
+running 5 tests
+test families::capacity_and_invalid_inputs_do_not_mutate_other_sessions ... ok
+test sim_loop::spiral_guard_caps_work_and_discards_excess_lag ... ok
+test sim_loop::accumulator_emits_correct_steps ... ok
+test families::every_family_plugin_registers_and_native_spawn_clear_commands_execute ... ok
+test families::all_families_pause_step_reset_and_hold_terminal_states ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/tooling-1da32cfe2ec6a53b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/ui-e91bf061862026e4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_common
+
+running 4 tests
+test lib/engine/engine-common/src/controls/camera/plugin_bundle.rs - controls::camera::plugin_bundle::CameraPluginBundle (line 13) - compile ... ok
+test lib/engine/engine-common/src/lib.rs - (line 7) - compile ... ok
+test lib/engine/engine-common/src/plugin.rs - plugin (line 7) - compile ... ok
+test lib/engine/engine-common/src/prelude.rs - prelude (line 3) ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.76s; merged doctests compilation took 0.75s
+   Doc-tests engine_core
+
+running 1 test
+test lib/engine/engine-core/src/systems/execution/simulation/mod.rs - systems::execution::simulation (line 16) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+all doctests ran in 0.61s; merged doctests compilation took 0.58s
+   Doc-tests engine_gpu
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_render
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests models
+
+running 4 tests
+test lib/models/src/plugin.rs - plugin::ComputationalIntelligencePlugin (line 52) - compile ... ok
+test lib/models/src/plugin.rs - plugin (line 20) - compile ... ok
+test lib/models/src/prelude.rs - prelude (line 3) ... ok
+test lib/models/src/lib.rs - (line 5) ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+all doctests ran in 0.49s; merged doctests compilation took 0.46s
+   Doc-tests simulation_kernel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests tests
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests tooling
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ui
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

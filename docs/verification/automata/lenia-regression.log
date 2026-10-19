@@ -1,0 +1,26 @@
+env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_LENIA_VERIFY="${SOUL_LENIA_VERIFY:-/tmp/soul-lenia-verification}" cargo run -- --lenia-demo
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.33s
+     Running `target/debug/swarm_orchestrator_for_autonomous_learners --lenia-demo`
+2026-10-19T10:51:29.201372Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+2026-10-19T10:51:29.372736Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
+2026-10-19T10:51:29.613461Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-19T10:51:29.662432Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-19T10:51:29.662482Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-19T10:51:29.666664Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
+2026-10-19T10:51:29.981536Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 0 verified: epoch 0, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-19T10:51:30.017344Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-0.png
+2026-10-19T10:51:30.036667Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 1 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-19T10:51:30.248145Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 2 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-19T10:51:30.296330Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 3 verified: epoch 0, tick 2, 2636 live cells, checksum 59b0f5c1511db19d
+2026-10-19T10:51:30.339509Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-3.png
+2026-10-19T10:51:30.355346Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 4 verified: epoch 1, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-19T10:51:30.401288Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 5 verified: epoch 2, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-19T10:51:30.591233Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 6 verified: epoch 2, tick 8, 1844 live cells, checksum 0d0306d0b6be0e35
+2026-10-19T10:51:30.619197Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-6.png
+2026-10-19T10:51:30.633114Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 7 verified: epoch 3, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-19T10:51:30.658626Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-7.png
+2026-10-19T10:51:30.664939Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia clear verified: no live ECS owners or GPU slots
+2026-10-19T10:51:30.691530Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-8.png
+2026-10-19T10:51:30.703520Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 9 verified: epoch 0, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-19T10:51:30.735153Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-after-families/lenia-phase-9.png
+2026-10-19T10:51:30.736969Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::actions: LENIA_RUNTIME_VERIFIED: all workbench phases passed

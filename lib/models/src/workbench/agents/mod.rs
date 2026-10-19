@@ -1,4 +1,4 @@
-//! Reproducible finite agent arenas; boids wrap and ants reflect at boundaries.
+//! Reproducible finite agent arenas; boids wrap and ants clamp at boundaries.
 use crate::automata::dynamical::swarm::{
     ant_colony::{Ant, AntColony},
     boids::{Boid, step_boids},

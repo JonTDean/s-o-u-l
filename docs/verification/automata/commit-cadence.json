@@ -1,0 +1,186 @@
+{
+  "base": "84cf014",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "7272c6d960ba5aabf8413f43cb7c59b456b484ac",
+      "changed_sloc": 48,
+      "subject": "fix: correct elementary neighbors and reject unordered formal languages"
+    },
+    {
+      "commit": "0caf70ef38cd837879da1c5029e0b8b009c35731",
+      "changed_sloc": 33,
+      "subject": "fix: preserve particle velocities and synchronous flock steering"
+    },
+    {
+      "commit": "24c0ec0384f88992f1992df657bf6fd47725209a",
+      "changed_sloc": 49,
+      "subject": "feat: add Conway Life with a deterministic glider seed"
+    },
+    {
+      "commit": "9a15cdd0061e4d764f137a8a29ef2c27fdfb0218",
+      "changed_sloc": 78,
+      "subject": "feat: define executable automata family catalog"
+    },
+    {
+      "commit": "0af70bf1fd83c5cc7994ecc40e6f813544ae7835",
+      "changed_sloc": 84,
+      "subject": "feat: run cellular families with bounded grids and scrolling history"
+    },
+    {
+      "commit": "e4534e0d2deeb91f83534bfb235ce7e995d592cf",
+      "changed_sloc": 16,
+      "subject": "feat: expose epsilon-closed finite automaton transitions"
+    },
+    {
+      "commit": "86bec0f3d920472e802bfc1d2d733c9e3406879b",
+      "changed_sloc": 94,
+      "subject": "feat: add inspectable finite and pushdown machine sessions"
+    },
+    {
+      "commit": "ed3ade552b70ed950eaeabdf7ab9e8887b828167",
+      "changed_sloc": 60,
+      "subject": "feat: implement bounded tape marking and robust Turing tape extension"
+    },
+    {
+      "commit": "4f05125c499cd0f3bf7c6536aa4d8a25791acb65",
+      "changed_sloc": 77,
+      "subject": "feat: unify symbolic execution and bound grammar expansion"
+    },
+    {
+      "commit": "f74578831fa0b02c07a67987ce4bdd40fc1bcd2b",
+      "changed_sloc": 7,
+      "subject": "feat: make ant foraging reproducible with injected randomness"
+    },
+    {
+      "commit": "7d080e03b6c11b35eb962203d2210268174fcd24",
+      "changed_sloc": 73,
+      "subject": "feat: add deterministic bounded boid and ant arenas"
+    },
+    {
+      "commit": "42f0376d64dd360a0439cb700026f721bb7a8834",
+      "changed_sloc": 80,
+      "subject": "feat: provide isolated pause step and reset controls for every family"
+    },
+    {
+      "commit": "89d4eec924bf4db0f64e116e90894b8dfb18b52c",
+      "changed_sloc": 77,
+      "subject": "feat: route non-Lenia spawn commands into bounded CPU sessions"
+    },
+    {
+      "commit": "2efc1f50dfc4353eabf55ed33f12ce6efa0be1a6",
+      "changed_sloc": 78,
+      "subject": "feat: expose independent family session lifecycle controls"
+    },
+    {
+      "commit": "6ed446fdb61d5840c5f3b7c97b734fa2c99ccb59",
+      "changed_sloc": 91,
+      "subject": "feat: render cellular history and agent arenas in the workbench"
+    },
+    {
+      "commit": "74e21611a173fd3de0c9dc8265e14e2449f22ade",
+      "changed_sloc": 71,
+      "subject": "feat: show finite states stacks and bounded machine tapes"
+    },
+    {
+      "commit": "d983b6780266f9f6d025da4e8f47d175ffb9a5f8",
+      "changed_sloc": 39,
+      "subject": "feat: register executable examples through every automata family plugin"
+    },
+    {
+      "commit": "107435e94fdc170bf5b9dd52c16b71def9153b9f",
+      "changed_sloc": 57,
+      "subject": "feat: expose all registered families and visualize grammar growth"
+    },
+    {
+      "commit": "d0f6eb47840c0c4e86901a3fe1f4aa57ef5eb1d9",
+      "changed_sloc": 75,
+      "subject": "test: qualify elementary truth tables and Conway pattern motion"
+    },
+    {
+      "commit": "dfab128c87432084383915d4686eb024cfe59ec5",
+      "changed_sloc": 28,
+      "subject": "test: verify cellular snapshot parity and bounded history"
+    },
+    {
+      "commit": "6bcab14c1c914ab808b14c199f2f87f53f319d09",
+      "changed_sloc": 48,
+      "subject": "test: verify HPP propagation and all sixteen collision states"
+    },
+    {
+      "commit": "2ebbfb618648b5310bc2604744f17d34c2322034",
+      "changed_sloc": 86,
+      "subject": "test: exhaustively qualify bounded language recognition"
+    },
+    {
+      "commit": "4f25f6c139b8e366c3fa2b9c72dd1a2620c4ccea",
+      "changed_sloc": 68,
+      "subject": "test: cover epsilon cycles Turing boundaries and grammar resource limits"
+    },
+    {
+      "commit": "fb57dd46fd58636570912c121488db27f4a9ef8a",
+      "changed_sloc": 5,
+      "subject": "fix: own catalog button labels across UI closures"
+    },
+    {
+      "commit": "b15e021be02f0ff19248a543673d357b72367300",
+      "changed_sloc": 54,
+      "subject": "test: verify synchronous flocking and reproducible bounded foraging"
+    },
+    {
+      "commit": "5b34a88d4fe6522616d93d2f41ec9bd7b8fdb24d",
+      "changed_sloc": 75,
+      "subject": "test: qualify every family through native commands and lifecycle controls"
+    },
+    {
+      "commit": "62e62904f416c0d8d1237fe471f8cea77fcb6e79",
+      "changed_sloc": 46,
+      "subject": "feat: launch the multi-family automata lab directly"
+    },
+    {
+      "commit": "a513886a043cbaf0be19ed45655fe94dcf95921d",
+      "changed_sloc": 74,
+      "subject": "test: add fresh native family capture and qualification state"
+    },
+    {
+      "commit": "3c33fb9e762dafbfa957a334e760b77b46c5e2d6",
+      "changed_sloc": 2,
+      "subject": "fix: correct Rule 110 outputs for binary neighborhoods 011 and 100"
+    },
+    {
+      "commit": "d7ddd178d0e0de4f3a60bc939f51323f767a0daa",
+      "changed_sloc": 88,
+      "subject": "test: qualify native spawn step pause reset capture and clear for every family"
+    },
+    {
+      "commit": "bde56ad795cab3af934f74592fcada149852bbf0",
+      "changed_sloc": 7,
+      "subject": "fix: keep session variants compact and completed qualification idempotent"
+    },
+    {
+      "commit": "a17347e66f86b2c479a65d7f9b7aa49191faa6ca",
+      "changed_sloc": 4,
+      "subject": "fix: isolate interactive example initialization from native qualification"
+    },
+    {
+      "commit": "ffdeccb5d17639ad6d3dcff6f83986e4bef25222",
+      "changed_sloc": 32,
+      "subject": "fix: show active CPU sessions and readable machine state labels"
+    },
+    {
+      "commit": "de580b11fc8723ccfa212d6b40879e274116eb31",
+      "changed_sloc": 85,
+      "subject": "fix: label the mixed simulation catalog without misleading backend status"
+    },
+    {
+      "commit": "82557cc1e2ce2c3f50deea14f92e23aca9e6e24a",
+      "changed_sloc": 0,
+      "subject": "docs: document automata transition and resource-bound contracts"
+    },
+    {
+      "commit": "2cb81c371ba139c6a21112e171c2383de5c78589",
+      "changed_sloc": 5,
+      "subject": "fix: keep full tick counters visible in compact family panels"
+    }
+  ]
+}
