@@ -13,7 +13,9 @@ pub(super) fn enabled() -> bool {
 
 pub(super) fn install(app: &mut App) {
     verification::install(app);
-    app.add_systems(Update, prepare_example);
+    if std::env::var_os("SOUL_AUTOMATA_VERIFY").is_none() {
+        app.add_systems(Update, prepare_example);
+    }
 }
 
 pub(super) fn setup(
