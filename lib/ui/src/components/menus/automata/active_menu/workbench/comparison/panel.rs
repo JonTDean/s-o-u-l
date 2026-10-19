@@ -32,7 +32,7 @@ pub(super) fn show(
                                     ui.selectable_value(
                                         selection,
                                         index,
-                                        format!("{} · {}", index + 1, session.kind.title()),
+                                        format!("{} · {}", index + 1, session.title()),
                                     );
                                 }
                             });
@@ -47,7 +47,7 @@ pub(super) fn show(
                 ui.columns(2, |columns| {
                     for (column, index) in columns.iter_mut().zip([state.left, state.right]) {
                         let s = &bench.sessions[index];
-                        column.label(s.kind.title());
+                        column.label(s.title());
                         column.label(format!(
                             "Tick {} · {}",
                             s.ticks,

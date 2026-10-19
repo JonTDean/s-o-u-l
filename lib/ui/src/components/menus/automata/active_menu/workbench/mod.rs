@@ -34,14 +34,14 @@ pub fn show(
                 .selected_text(format!(
                     "{} · {}",
                     selected + 1,
-                    bench.sessions[selected].kind.title()
+                    bench.sessions[selected].title()
                 ))
                 .show_ui(ui, |ui| {
                     for (index, session) in bench.sessions.iter().enumerate() {
                         ui.selectable_value(
                             &mut selected,
                             index,
-                            format!("{} · {}", index + 1, session.kind.title()),
+                            format!("{} · {}", index + 1, session.title()),
                         );
                     }
                 });

@@ -8,7 +8,7 @@ pub struct Finite {
     pub input: Vec<char>,
     pub cursor: usize,
     pub result: Option<bool>,
-    machine: NFA,
+    pub(crate) machine: NFA,
 }
 impl Finite {
     /// Start the a*b machine with its epsilon-closed initial state set.
@@ -47,7 +47,7 @@ pub struct Pushdown {
     pub cursor: usize,
     pub stack: Vec<char>,
     pub result: Option<bool>,
-    parentheses: bool,
+    pub(crate) parentheses: bool,
     reading_b: bool,
 }
 impl Pushdown {

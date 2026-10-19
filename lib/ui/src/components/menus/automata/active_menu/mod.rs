@@ -56,7 +56,7 @@ pub fn show_active_automata(
                 if ui
                     .selectable_label(
                         index == selected,
-                        format!("{} · {}", index + 1, session.kind.title()),
+                        format!("{} · {}", index + 1, session.title()),
                     )
                     .clicked()
                 {

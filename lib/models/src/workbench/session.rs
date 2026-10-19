@@ -28,6 +28,28 @@ pub struct Session {
     pub elapsed: f32,
 }
 impl Session {
+    /// Describe the active rules, including live edits to catalog defaults.
+    pub fn title(&self) -> String {
+        match self.kind {
+            Kind::Rule30 | Kind::Rule110 => {
+                format!("Rule {} · space-time", self.settings.elementary)
+            }
+            Kind::Life => {
+                let digits = |mask: u16| {
+                    (0..=8)
+                        .filter(|n| mask & (1 << n) != 0)
+                        .map(|n| char::from_digit(n, 10).unwrap())
+                        .collect::<String>()
+                };
+                format!(
+                    "Life · B{}/S{}",
+                    digits(self.settings.birth),
+                    digits(self.settings.survival)
+                )
+            }
+            _ => self.kind.title().into(),
+        }
+    }
     /// Construct the selected model at its deterministic initial state.
     pub fn new(kind: Kind) -> Self {
         let input = kind.input().to_string();

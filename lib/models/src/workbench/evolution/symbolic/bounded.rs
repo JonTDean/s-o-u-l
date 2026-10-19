@@ -6,7 +6,7 @@ pub struct Bounded {
     pub tape: Vec<char>,
     pub head: usize,
     pub result: Option<bool>,
-    phase: u8,
+    pub(crate) phase: u8,
 }
 impl Bounded {
     /// Allocate exactly the input tape; reject invalid alphabets or block ordering.
