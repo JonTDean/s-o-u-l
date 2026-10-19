@@ -11,6 +11,7 @@ use engine_core::{
 };
 use serde_json::Value;
 use std::sync::Arc;
+mod restore;
 
 /* ───────────────────────────── constants ───────────────────────────── */
 
@@ -65,6 +66,15 @@ fn handle_commands(
 ) {
     for event in cmd_reader.read() {
         match *event {
+            AutomataCommand::RestoreLenia(ref saved) => {
+                restore::restore(
+                    saved,
+                    &mut registry,
+                    &rules,
+                    &mut commands,
+                    &mut added_writer,
+                );
+            }
             /* ─── spawn default pattern ─────────────────────────── */
             AutomataCommand::SeedPattern { ref id } => {
                 // CPU and symbolic families have their own inspectable sessions.
