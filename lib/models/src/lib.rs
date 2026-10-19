@@ -16,3 +16,5 @@ pub mod prelude;
 
 /// Root entry point for registering the automaton families and rule metadata.
 pub use plugin::ComputationalIntelligencePlugin;
+
+pub mod workbench;
