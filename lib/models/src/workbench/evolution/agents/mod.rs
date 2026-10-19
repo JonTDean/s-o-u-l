@@ -103,3 +103,5 @@ impl Foraging {
 
 #[cfg(test)]
 mod tests;
+
+mod configuration;

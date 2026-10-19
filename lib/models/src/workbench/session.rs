@@ -1,4 +1,5 @@
 //! Independent execution state and shared controls used by UI and tests.
+use super::experiment::config::Settings;
 use super::{
     agents::{Flock, Foraging},
     catalog::Kind,
@@ -21,26 +22,31 @@ pub struct Session {
     pub model: Model,
     pub ticks: u64,
     pub paused: bool,
+    pub settings: Settings,
+    pub elapsed: f32,
 }
 impl Session {
     /// Construct the selected model at its deterministic initial state.
     pub fn new(kind: Kind) -> Self {
         let input = kind.input().to_string();
+        let settings = Settings::for_kind(kind);
         Self {
             kind,
-            model: Self::initial(kind, &input),
+            model: Self::initial(kind, &input, &settings),
             input,
             ticks: 0,
             paused: true,
+            settings,
+            elapsed: 0.0,
         }
     }
-    fn initial(kind: Kind, input: &str) -> Model {
+    fn initial(kind: Kind, input: &str, settings: &Settings) -> Model {
         match kind {
             Kind::Rule30 | Kind::Rule110 | Kind::Life | Kind::Hpp => {
-                Model::Grid(GridSession::new(kind))
+                Model::Grid(GridSession::configured(kind, settings))
             }
-            Kind::Boids => Model::Boids(Flock::default()),
-            Kind::Ants => Model::Ants(Box::default()),
+            Kind::Boids => Model::Boids(Flock::configured(settings)),
+            Kind::Ants => Model::Ants(Box::new(Foraging::configured(settings))),
             _ => Model::Symbolic(Symbolic::new(kind, input)),
         }
     }
@@ -49,8 +55,9 @@ impl Session {
         if self.input.chars().count() > 256 {
             return Err("Input is limited to 256 symbols");
         }
-        self.model = Self::initial(self.kind, &self.input);
+        self.model = Self::initial(self.kind, &self.input, &self.settings);
         self.ticks = 0;
+        self.elapsed = 0.0;
         self.paused = true;
         Ok(())
     }
@@ -65,10 +72,10 @@ impl Session {
             return;
         }
         match &mut self.model {
-            Model::Grid(grid) => grid.step(),
+            Model::Grid(grid) => grid.step_with_settings(&self.settings),
             Model::Symbolic(machine) => machine.step(),
-            Model::Boids(flock) => flock.step(),
-            Model::Ants(arena) => arena.step(),
+            Model::Boids(flock) => flock.step_with_settings(&self.settings),
+            Model::Ants(arena) => arena.step_with_settings(&self.settings),
         }
         self.ticks += 1;
         if self.halted() {
