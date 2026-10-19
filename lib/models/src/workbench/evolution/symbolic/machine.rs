@@ -12,6 +12,7 @@ use crate::{
 use std::collections::HashMap;
 
 /// Executable symbolic state; resource exhaustion is distinct from rejection.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub enum Symbolic {
     Finite(Finite),
     Pushdown(Pushdown),

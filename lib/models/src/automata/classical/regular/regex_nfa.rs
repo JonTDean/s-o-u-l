@@ -2,8 +2,9 @@
 
 use std::collections::{HashMap, HashSet};
 
-#[derive(Debug)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct NFA {
+    #[serde(with = "crate::workbench::project::maps")]
     pub transitions: HashMap<(usize, Option<char>), Vec<usize>>,
     pub start: usize,
     pub accept_states: HashSet<usize>,

@@ -2,6 +2,7 @@ use crate::automata::classical::regular::regex_nfa::{NFA, example_nfa};
 use std::collections::HashSet;
 
 /// Incremental NFA execution, retaining all epsilon-closed active states.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Finite {
     pub states: HashSet<usize>,
     pub input: Vec<char>,
@@ -40,6 +41,7 @@ impl Finite {
 }
 
 /// Stack machine for ordered a^n b^n or strict balanced parentheses.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Pushdown {
     pub input: Vec<char>,
     pub cursor: usize,

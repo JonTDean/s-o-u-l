@@ -1,6 +1,7 @@
 //! Linear-bounded marking machine for nonempty ordered a^n b^n c^n.
 
 /// Each transition moves or marks within the original input tape.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Bounded {
     pub tape: Vec<char>,
     pub head: usize,
