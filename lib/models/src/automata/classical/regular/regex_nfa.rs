@@ -27,6 +27,26 @@ impl NFA {
         closure
     }
 
+    /// Initial active states, including epsilon transitions.
+    pub fn initial_states(&self) -> HashSet<usize> {
+        self.epsilon_closure(&HashSet::from([self.start]))
+    }
+
+    /// One consumed symbol followed by epsilon closure.
+    pub fn advance(&self, states: &HashSet<usize>, symbol: char) -> HashSet<usize> {
+        let next = states
+            .iter()
+            .flat_map(|state| {
+                self.transitions
+                    .get(&(*state, Some(symbol)))
+                    .into_iter()
+                    .flatten()
+                    .copied()
+            })
+            .collect();
+        self.epsilon_closure(&next)
+    }
+
     /// Simulates the NFA on the input string. Returns true if it accepts.
     pub fn is_match(&self, input: &str) -> bool {
         // current set of possible states (start with epsilon-closure of start)
