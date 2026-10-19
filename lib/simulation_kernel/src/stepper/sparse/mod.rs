@@ -37,3 +37,6 @@ fn update<R: AutomatonRule<D = Dim> + ?Sized>(
         .collect();
     grid.map = next;
 }
+
+#[cfg(test)]
+mod tests;
