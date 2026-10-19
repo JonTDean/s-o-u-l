@@ -17,6 +17,7 @@ impl Plugin for AutomataMenusPlugin {
         app.add_systems(
             EguiPrimaryContextPass,
             (
+                super::active_menu::workbench::show.run_if(in_state(AppState::InGame)),
                 // HUD list
                 show_active_automata.run_if(in_state(AppState::InGame)),
                 // Spawn-pattern panel

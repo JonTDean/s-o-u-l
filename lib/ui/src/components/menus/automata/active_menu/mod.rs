@@ -77,3 +77,5 @@ pub fn show_active_automata(
             }
         });
 }
+
+pub mod workbench;
