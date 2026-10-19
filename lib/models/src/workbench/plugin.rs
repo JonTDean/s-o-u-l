@@ -9,7 +9,6 @@ pub struct Workbench {
     pub sessions: Vec<Session>,
     pub selected: usize,
     pub error: Option<String>,
-    elapsed: f32,
 }
 impl Workbench {
     /// Add a paused instance unless the eight-session capacity is exhausted.
@@ -28,7 +27,6 @@ impl Workbench {
         self.sessions.clear();
         self.selected = 0;
         self.error = None;
-        self.elapsed = 0.0;
     }
 }
 
@@ -65,11 +63,8 @@ fn update(
     if state.as_ref().is_some_and(|s| *s.get() != AppState::InGame) {
         return;
     }
-    bench.elapsed += time.map_or(0.0, |time| time.delta_secs()).min(0.5);
-    while bench.elapsed >= 0.1 {
-        for session in &mut bench.sessions {
-            session.advance();
-        }
-        bench.elapsed -= 0.1;
+    let seconds = time.map_or(0.0, |time| time.delta_secs());
+    for session in &mut bench.sessions {
+        session.elapse(seconds);
     }
 }

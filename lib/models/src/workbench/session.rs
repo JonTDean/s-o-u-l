@@ -52,6 +52,7 @@ impl Session {
     }
     /// Reset keeps the selected input and pauses. Oversized input changes nothing.
     pub fn reset(&mut self) -> Result<(), &'static str> {
+        self.settings.validate(self.kind)?;
         if self.input.chars().count() > 256 {
             return Err("Input is limited to 256 symbols");
         }
@@ -61,6 +62,35 @@ impl Session {
         self.paused = true;
         Ok(())
     }
+    /// Validate atomically; seed and population edits require explicit reset.
+    pub fn configure(&mut self, settings: Settings, reset: bool) -> Result<(), &'static str> {
+        settings.validate(self.kind)?;
+        if !reset && !self.settings.same_initial_conditions(&settings) {
+            return Err("Seed and population changes require Apply and reset");
+        }
+        if reset && self.input.chars().count() > 256 {
+            return Err("Input is limited to 256 symbols");
+        }
+        self.settings = settings;
+        if reset {
+            self.reset()?;
+        }
+        Ok(())
+    }
+
+    /// Preserve sub-tick clock state; cap catch-up work after a stalled frame.
+    pub fn elapse(&mut self, seconds: f32) {
+        if self.paused || !seconds.is_finite() || seconds <= 0.0 {
+            return;
+        }
+        self.elapsed += seconds.min(0.5);
+        let interval = 1.0 / self.settings.rate_hz;
+        while self.elapsed >= interval && !self.halted() {
+            self.step();
+            self.elapsed -= interval;
+        }
+    }
+
     /// Terminal language states and explicit execution bounds stop automatic ticks.
     pub fn halted(&self) -> bool {
         matches!(&self.model, Model::Symbolic(machine) if machine.halted() || self.ticks >= 10000)
