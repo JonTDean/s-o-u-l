@@ -13,6 +13,11 @@ impl Plugin for ParticleAutomataPlugin {
             .remove_resource::<RuleRegistry>()
             .unwrap_or_default();
         reg.register_with_seed("particle:hpp", HPPRule::boxed(), seed_hpp);
+        reg.register_with_seed(
+            "life:conway",
+            std::sync::Arc::new(super::life::Life),
+            super::life::seed_life,
+        );
         app.insert_resource(reg);
     }
 }
