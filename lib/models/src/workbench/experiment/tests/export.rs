@@ -4,7 +4,6 @@ use crate::workbench::{
     plugin::Workbench,
     project::Project,
 };
-use image::AnimationDecoder;
 #[test]
 fn export_decodes_and_preserves_live_state() {
     let mut bench = Workbench::default();
@@ -26,15 +25,17 @@ fn export_decodes_and_preserves_live_state() {
     assert_eq!((png.width(), png.height()), (512, 256));
     let file =
         std::io::BufReader::new(std::fs::File::open(directory.join("animation.gif")).unwrap());
-    let frames = image::codecs::gif::GifDecoder::new(file)
-        .unwrap()
-        .into_frames()
-        .collect_frames()
-        .unwrap();
+    let mut options = gif::DecodeOptions::new();
+    options.set_color_output(gif::ColorOutput::RGBA);
+    let mut decoder = options.read_info(file).unwrap();
+    let mut frames = Vec::new();
+    while let Some(frame) = decoder.read_next_frame().unwrap() {
+        frames.push(frame.clone());
+    }
     assert_eq!(frames.len(), 4);
-    assert_eq!(frames[0].buffer().dimensions(), (512, 256));
-    assert_ne!(frames[0].buffer(), frames[1].buffer());
-    assert_eq!(frames[0].delay().numer_denom_ms(), (100, 1));
+    assert_eq!((frames[0].width, frames[0].height), (512, 256));
+    assert_ne!(frames[0].buffer, frames[1].buffer);
+    assert_eq!(frames[0].delay, 10);
     let saved = crate::workbench::project::read(&directory.join("project.json")).unwrap();
     assert_eq!(saved.sessions[0].ticks, 1);
     let manifest: serde_json::Value =

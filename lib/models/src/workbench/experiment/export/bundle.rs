@@ -1,10 +1,7 @@
 //! Publish a complete export directory only after every artifact is written.
 use super::render;
 use crate::workbench::project::{self, Project};
-use image::{
-    Delay, Frame,
-    codecs::gif::{GifEncoder, Repeat},
-};
+use gif::{Encoder, Frame, Repeat};
 use std::{fs, path::Path};
 pub fn write_bundle(
     project: &Project,
@@ -13,8 +10,13 @@ pub fn write_bundle(
     milliseconds: u32,
 ) -> Result<(), String> {
     project.validate()?;
-    if !(1..=120).contains(&frames) || !(10..=1000).contains(&milliseconds) {
-        return Err("Export requires 1..120 frames and 10..1000 ms/frame".into());
+    if !(1..=120).contains(&frames)
+        || !(10..=1000).contains(&milliseconds)
+        || !milliseconds.is_multiple_of(10)
+    {
+        return Err(
+            "Export requires 1..120 frames and 10..1000 ms/frame in multiples of 10".into(),
+        );
     }
     if destination.exists() {
         return Err("Export folder already exists; choose a new folder".into());
@@ -42,19 +44,16 @@ fn generate(
         .save(directory.join("snapshot.png"))
         .map_err(|e| e.to_string())?;
     let file = fs::File::create(directory.join("animation.gif")).map_err(|e| e.to_string())?;
-    let mut encoder = GifEncoder::new_with_speed(file, 10);
+    let width = render(project).width() as u16;
+    let mut encoder = Encoder::new(file, width, 256, &[]).map_err(|e| e.to_string())?;
     encoder
         .set_repeat(Repeat::Infinite)
         .map_err(|e| e.to_string())?;
     for frame in 0..frames {
-        encoder
-            .encode_frame(Frame::from_parts(
-                render(&copy),
-                0,
-                0,
-                Delay::from_numer_denom_ms(milliseconds, 1),
-            ))
-            .map_err(|e| e.to_string())?;
+        let mut pixels = render(&copy).into_raw();
+        let mut encoded = Frame::from_rgba_speed(width, 256, &mut pixels, 10);
+        encoded.delay = (milliseconds / 10) as u16;
+        encoder.write_frame(&encoded).map_err(|e| e.to_string())?;
         if frame + 1 < frames {
             for session in &mut copy.sessions {
                 session.step();
