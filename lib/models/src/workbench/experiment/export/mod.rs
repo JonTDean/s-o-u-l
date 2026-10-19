@@ -2,3 +2,5 @@
 mod raster;
 mod symbolic;
 pub use raster::render;
+mod bundle;
+pub use bundle::write_bundle;
