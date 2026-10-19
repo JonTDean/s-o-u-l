@@ -3,6 +3,8 @@ use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
 use models::workbench::{plugin::Workbench, session::Model};
 
+mod canvas;
+
 pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
     let Ok(ctx) = contexts.ctx_mut() else {
         return;
@@ -74,5 +76,8 @@ pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
             } else {
                 "Running · 10 steps/s"
             });
+            if !matches!(session.model, Model::Symbolic(_)) {
+                canvas::draw(ui, &session.model);
+            }
         });
 }
