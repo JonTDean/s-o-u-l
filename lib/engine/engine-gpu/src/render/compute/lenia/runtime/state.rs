@@ -50,9 +50,13 @@ pub(crate) fn synchronize(
             continue;
         }
         slots.remove(entity);
-        let cells = simulation_kernel::core::lenia::seed(size, sim.seed);
+        let cells = sim.restored.as_ref().map_or_else(
+            || simulation_kernel::core::lenia::seed(size, sim.seed),
+            |saved| saved.densities.clone(),
+        );
         match LeniaBuffers::new(device, pipelines, size, &cells) {
-            Ok(buffers) => {
+            Ok(mut buffers) => {
+                buffers.tick = sim.restored.as_ref().map_or(0, |saved| saved.tick);
                 slots.insert(
                     *entity,
                     Slot {

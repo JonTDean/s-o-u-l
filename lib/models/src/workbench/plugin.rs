@@ -53,6 +53,7 @@ fn update(
     for command in commands.read() {
         match command {
             AutomataCommand::Clear => bench.clear(),
+            AutomataCommand::RestoreLenia(_) => {}
             AutomataCommand::SeedPattern { id } => {
                 if let Some(kind) = Kind::parse(id) {
                     bench.spawn(kind);
