@@ -1,0 +1,23 @@
+{
+  "final_cpu_ticks": [
+    19,
+    19
+  ],
+  "final_lenia_ticks": [
+    11
+  ],
+  "frames": 8,
+  "initial_cpu_ticks": [
+    12,
+    12
+  ],
+  "initial_lenia_ticks": [
+    4
+  ],
+  "layout": "256px panels: CPU session order followed by Lenia maximum XY projections",
+  "lenia_evolution": "quantized CPU reference from completed GPU checkpoint",
+  "milliseconds_per_frame": 100,
+  "sampling": "initial state then one transition per frame; halted symbolic sessions remain fixed",
+  "symbolic_view": "first 256 tape cells, head underline; full state in project.json",
+  "version": 1
+}

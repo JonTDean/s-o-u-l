@@ -1,0 +1,11 @@
+   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-experiments/lib/ui)
+   Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-experiments)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 3.71s
+     Running `/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/swarm_orchestrator_for_autonomous_learners --experiment-demo`
+2026-10-19T11:39:32.224848Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+2026-10-19T11:39:32.409656Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
+2026-10-19T11:39:32.657954Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-19T11:39:32.709685Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-19T11:39:32.709737Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-19T11:39:32.713689Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
+2026-10-19T11:39:34.307267Z  INFO bevy_render::view::window::screenshot: Screenshot saved to docs/verification/experiments/rtx3090/experiment.png

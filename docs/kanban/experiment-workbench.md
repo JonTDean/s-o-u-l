@@ -19,3 +19,11 @@ Verification includes `make check`, native controls and captures on monitor 1,
 project/export round trips, sparse parity and benchmarks. Existing family and
 Lenia qualifications remain regression gates. Preserve the original checkout's
 unrelated `.gitignore` edit and do not push without an explicit request.
+
+## Completed
+
+All four items passed workspace checks and native qualification on RTX 3090 and
+Mesa at source revision `1e4d128`. See
+[the delivery evidence](../verification/experiments/README.md) for project/export
+round trips, GPU continuation, sparse measurements and source governance.
+Dense remains the default based on the measured finite-domain results.

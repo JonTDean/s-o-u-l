@@ -1,0 +1,46 @@
+{
+  "rtx3090": {
+    "window_size": [
+      1760,
+      960
+    ],
+    "png_size": [
+      768,
+      256
+    ],
+    "gif_frames": 8,
+    "frame_hashes": [
+      "bff00a44bde1df5b7f16b9ff78128f95a32883d30d353bc40649d74fe2fc2846",
+      "26af4dd0ad9ebeef3137b3c74736765d18a8c3644aa6f190610b0eb300e1d8e3",
+      "2590ddf6ba62d518a2fb285d0638e35da6af698b5a01e8f46ba4d76e444c1915",
+      "8a3753d176fb7cea6499a60720c038e8245fd66fec59faa206c89d5b8db6c511",
+      "8bdc02568d40f3ee1c02b25b58139be86d4a184a8d824cc9082215c3d858eb25",
+      "9fdfa3c93b404f7cb53a7ff505d6e0e289f61e748967fffdcd6e6b01d1c592db",
+      "9f31be584d449d40235f8ca4188999029f20c3a33534db12ba8180591d16359a",
+      "7ecaed4c4a9c645c32c0d651ed85d0c40ab67034106a9d4e6a2f2887d0f5fb9a"
+    ],
+    "project_sha256": "fadb67a23fcaa42c2063434c8ece5ac454403aa0241d13256f373fd46bd12902"
+  },
+  "mesa": {
+    "window_size": [
+      1760,
+      960
+    ],
+    "png_size": [
+      768,
+      256
+    ],
+    "gif_frames": 8,
+    "frame_hashes": [
+      "bff00a44bde1df5b7f16b9ff78128f95a32883d30d353bc40649d74fe2fc2846",
+      "26af4dd0ad9ebeef3137b3c74736765d18a8c3644aa6f190610b0eb300e1d8e3",
+      "2590ddf6ba62d518a2fb285d0638e35da6af698b5a01e8f46ba4d76e444c1915",
+      "8a3753d176fb7cea6499a60720c038e8245fd66fec59faa206c89d5b8db6c511",
+      "8bdc02568d40f3ee1c02b25b58139be86d4a184a8d824cc9082215c3d858eb25",
+      "9fdfa3c93b404f7cb53a7ff505d6e0e289f61e748967fffdcd6e6b01d1c592db",
+      "9f31be584d449d40235f8ca4188999029f20c3a33534db12ba8180591d16359a",
+      "7ecaed4c4a9c645c32c0d651ed85d0c40ab67034106a9d4e6a2f2887d0f5fb9a"
+    ],
+    "project_sha256": "fadb67a23fcaa42c2063434c8ece5ac454403aa0241d13256f373fd46bd12902"
+  }
+}
