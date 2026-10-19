@@ -1,7 +1,7 @@
 //! Bounded cellular sessions; elementary rules retain a scrolling time history.
 use crate::automata::dynamical::particle::{
     hpp::{E, HPPRule, W},
-    life::{Life, seed_life},
+    life::seed_life,
 };
 use crate::workbench::catalog::Kind;
 use glam::{IVec3, UVec3};
