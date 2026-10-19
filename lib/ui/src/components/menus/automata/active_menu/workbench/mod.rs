@@ -6,6 +6,7 @@ use models::workbench::{plugin::Workbench, session::Model};
 mod canvas;
 mod experiment;
 mod koch;
+pub mod persistence;
 mod symbols;
 
 /// Draw the selected CPU instance and apply its shared lifecycle operations.
