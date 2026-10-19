@@ -75,3 +75,6 @@ impl Foraging {
             .retain(|p, _| (0..64).contains(&p.x) && (0..64).contains(&p.y));
     }
 }
+
+#[cfg(test)]
+mod tests;
