@@ -13,7 +13,7 @@ pub(super) fn show(
     egui::Window::new("Compare and export")
         .default_pos([910.0, 80.0])
         .default_width(700.0)
-        .default_open(false)
+        .default_open(std::env::args().any(|a| a == "--experiment-demo"))
         .vscroll(true)
         .max_height(800.0)
         .show(ctx, |ui| {
