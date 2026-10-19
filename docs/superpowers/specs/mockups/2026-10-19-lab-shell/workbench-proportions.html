@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libertinus+Mono&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<h2>Revised proportions: the viewer is the majority of the screen</h2>
+<p class="subtitle">Like Blender or Figma: a 32 px rail, an inspector of about 260 px (15% at 1080p) that you can drag to resize or collapse, and a viewport that gets about 83% of the width. Also new: the specimen colour control and a citation with DOI in the footnote.</p>
+
+<style>
+  .app { --bg:#0d0f10; --p1:#121415; --p2:#191c1d; --p3:#232728; --ink:#c9c4b4; --hi:#ece6d4; --dim:#7b766a; --amber:#ffb547; --amberbg:#2a2416; --green:#7bd88f; --red:#ff6b5b; --blue:#6fb7ff;
+    --serif:"Libertinus Serif",Georgia,serif; --sans:"Libertinus Sans",system-ui,sans-serif; --mono:"Libertinus Mono",ui-monospace,monospace;
+    background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:10px; border-radius:6px; overflow:hidden; position:relative; }
+  .app sup { color:var(--amber); font-family:var(--mono); font-size:7px; }
+  .it { font-family:var(--serif); font-style:italic; color:var(--dim); }
+  .val { font-family:var(--mono); color:var(--amber); }
+  .big { font-size:18px; line-height:1; }
+  .lamp { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+  .run { background:var(--green); box-shadow:0 0 5px var(--green); } .pause { background:var(--amber); } .halt { background:var(--red); }
+  .pill { display:inline-block; background:var(--p2); padding:3px 10px; border-radius:10px; margin-right:3px; }
+  .pill.pri { background:var(--amber); color:#17130a; font-weight:700; } .pill.off { color:#4d4b44; }
+  .sect { display:grid; grid-template-columns:44px 1fr; gap:8px; margin-bottom:10px; }
+  .mar { font-family:var(--serif); font-style:italic; color:var(--dim); font-size:9.5px; text-align:right; padding-top:1px; }
+  .mar.act { color:var(--amber); }
+  .note { font-family:var(--serif); font-size:9px; color:var(--dim); line-height:1.35; }
+  .note a { color:var(--amber); text-decoration:none; font-family:var(--mono); font-size:8px; }
+  .sw { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:3px; vertical-align:middle; }
+  .sw.on { box-shadow:0 0 0 2px var(--bg), 0 0 0 3px var(--hi); }
+  .choice span { font-family:var(--serif); margin-right:8px; color:var(--dim); } .choice span.on { color:var(--amber); }
+
+  .full { aspect-ratio:16/9; display:grid; grid-template-columns:22px 1fr 16%; grid-template-rows:24px 1fr 34px; }
+  .rail { grid-row:1/4; background:var(--p1); display:flex; flex-direction:column; align-items:center; gap:10px; padding-top:8px; font-family:var(--serif); color:var(--dim); font-size:11px; }
+  .rail .on { color:var(--amber); }
+  .tabs { grid-column:2/4; display:flex; align-items:end; gap:16px; padding:0 12px; font-family:var(--serif); font-size:11px; background:var(--p1); }
+  .tab { color:var(--dim); padding-bottom:5px; } .tab.on { color:var(--hi); box-shadow:0 2px 0 var(--amber); }
+  .stage { position:relative; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#121516 0%,#0b0c0d 75%); }
+  .stage svg { height:90%; width:auto; }
+  .stage .cap { position:absolute; left:14px; bottom:10px; font-family:var(--serif); font-size:10px; color:var(--dim); }
+  .stage .cap b { color:var(--hi); font-weight:600; }
+  .stage .ov { position:absolute; right:12px; top:10px; font-family:var(--mono); font-size:9px; color:var(--dim); text-align:right; }
+  .insp { background:var(--p1); padding:10px 10px 0 2px; position:relative; }
+  .insp::before { content:""; position:absolute; left:0; top:45%; width:2px; height:24px; background:var(--p3); border-radius:1px; }
+  .trans { grid-column:2/4; display:flex; align-items:center; gap:10px; padding:0 12px; background:var(--p1); }
+  .trace { flex:1; height:22px; position:relative; } .trace svg { width:100%; height:100%; }
+  .trace .lab { position:absolute; left:0; top:-3px; font-family:var(--serif); font-style:italic; font-size:8.5px; color:var(--dim); }
+  .rate span { font-family:var(--mono); color:var(--dim); margin-left:6px; } .rate span.on { color:var(--amber); }
+
+  .zoom { background:#0d0f10; color:#c9c4b4; border-radius:6px; padding:18px; font-size:12px; }
+  .zoom .sect { grid-template-columns:70px 1fr; gap:12px; margin-bottom:14px; }
+  .zoom .mar { font-size:12px; }
+  .zoom .sw { width:18px; height:18px; margin-right:5px; }
+  .zoom .note { font-size:11.5px; }
+  .zoom .note a { font-size:10.5px; }
+  .ramp { height:10px; border-radius:5px; margin-top:6px; width:180px; }
+</style>
+
+<div class="cards" style="grid-template-columns:1fr">
+  <div class="card" data-choice="layout-v2" onclick="toggleSelect(this)">
+    <div class="card-image app full">
+      <div class="rail"><span class="on">❦</span><span>¶</span><span>≡</span><span>⁂</span></div>
+      <div class="tabs"><span class="tab on"><span class="lamp run"></span>Conway's Life</span><span class="tab"><span class="lamp pause"></span>Lenia</span><span class="tab"><span class="lamp halt"></span>Busy beaver</span><span class="tab" style="color:var(--amber)">+</span></div>
+      <div class="stage"><svg class="life" viewBox="0 0 64 40"></svg>
+        <div class="ov">64 × 64 · toroidal · CPU<br>zoom 100% · (0, 0)</div>
+        <div class="cap"><b>Fig. 1.</b> <span class="it">The R-pentomino at generation 184; it stabilises at 1103.</span></div></div>
+      <div class="insp">
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">000184</span> <span class="it">tick</span><br><span class="val big">212</span> <span class="it">alive</span></div></div>
+        <div class="sect"><div class="mar">rule</div><div><span class="it">B</span><span class="val">3</span> <span class="it">S</span><span class="val">23</span><sup>1</sup></div></div>
+        <div class="sect"><div class="mar">seed</div><div class="choice"><span class="on">R-pent.</span><span>glider</span></div></div>
+        <div class="sect"><div class="mar">colour</div><div><span class="sw on" style="background:#ffb547"></span><span class="sw" style="background:#ece6d4"></span><span class="sw" style="background:#7bd88f"></span><span class="sw" style="background:#6fb7ff"></span><span class="sw" style="background:#ff6b5b"></span><span class="it">+</span></div></div>
+        <div class="sect"><div class="mar"></div><div class="note"><sup>1</sup> Born with three neighbours; survives with two or three.<br>Gardner, <i>Sci. Am.</i> 223 (1970). <a>doi ↗</a></div></div>
+      </div>
+      <div class="trans"><span class="pill pri">❚❚ Pause</span><span class="pill off">Step</span><span class="pill">Reset</span>
+        <div class="trace"><span class="lab">population</span><svg class="spark" viewBox="0 0 100 10" preserveAspectRatio="none"></svg></div>
+        <div class="rate"><span class="it">steps/s</span><span>1</span><span class="on">10</span><span>30</span><span>60</span></div></div>
+    </div>
+    <div class="card-body"><h3>Workbench at real proportions</h3><p>Rail 32 px · inspector ~260 px (drag the grip on its left edge; collapse with <b>N</b>, as in Blender) · tabs and transport kept thin. The stage overlay (top-right) shows grid size, backend, zoom and cursor, replacing today's bottom-right zoom/pos text.</p></div>
+  </div>
+</div>
+
+<div class="split" style="margin-top:18px">
+  <div class="mockup"><div class="mockup-header">Inspector close-up: colour + citation</div><div class="mockup-body zoom">
+    <div class="sect"><div class="mar act">colour</div><div>
+      <span class="sw on" style="background:#ffb547"></span><span class="sw" style="background:#ece6d4"></span><span class="sw" style="background:#7bd88f"></span><span class="sw" style="background:#6fb7ff"></span><span class="sw" style="background:#ff6b5b"></span><span class="it" style="font-size:13px">custom…</span>
+      <div class="ramp" style="background:linear-gradient(90deg,#1a1408,#7a5520,#ffb547,#ffe2b0)"></div>
+      <div class="note" style="margin-top:4px">Lenia and HPP map density onto this ramp; binary families use the top colour.</div>
+    </div></div>
+    <div class="sect"><div class="mar"></div><div class="note"><sup style="color:#ffb547">1</sup> A dead cell with exactly three live neighbours is born; a live cell with two or three survives.<br><br>M. Gardner, "Mathematical Games: The fantastic combinations of John Conway's new solitaire game 'life'", <i>Scientific American</i> 223(4), 120–123 (1970).<br><a>doi:10.1038/scientificamerican1070-120 ↗</a></div></div>
+  </div></div>
+  <div class="mockup"><div class="mockup-header">How these behave</div><div class="mockup-body" style="font-size:14px;line-height:1.6">
+    <ul style="margin:0;padding-left:18px">
+      <li><b>Colour</b> is set per channel: five palette swatches plus a custom picker. Default is amber.</li>
+      <li>Continuous families (Lenia, HPP density) get a <b>ramp</b> generated from the chosen colour. The Lenia voxel shader takes it as a uniform; that is renderer work in this sub-project.</li>
+      <li><b>Citation:</b> every specimen ships a caption, a one-line explanation and a reference with a DOI. Clicking the DOI opens it in the system browser.</li>
+      <li>Presenter mode uses the caption as its subtitle.</li>
+    </ul>
+  </div></div>
+</div>
+
+<script>
+  let s = 7; const rnd = () => (s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const alive = new Set();
+  for (let y = 12; y < 28; y++) for (let x = 24; x < 42; x++) if (rnd() < 0.3) alive.add(x + "," + y);
+  [[2,1],[3,2],[1,3],[2,3],[3,3]].forEach(([x, y]) => alive.add(x + 10 + "," + (y + 5)));
+  let cells = ""; for (let y = 0; y < 40; y++) for (let x = 0; x < 64; x++)
+    cells += alive.has(x + "," + y) ? `<rect x="${x + .12}" y="${y + .12}" width=".76" height=".76" rx=".12" fill="#ffb547"/>` : `<circle cx="${x + .5}" cy="${y + .5}" r=".06" fill="#2c2b27"/>`;
+  document.querySelectorAll("svg.life").forEach(svg => svg.innerHTML = cells);
+  let pts = ""; for (let i = 0; i <= 100; i += 2) pts += `${i},${(8.5 - 4 * (1 - Math.exp(-i / 18)) - 1.5 * Math.sin(i / 6) * rnd()).toFixed(2)} `;
+  document.querySelectorAll("svg.spark").forEach(svg => svg.innerHTML = `<polyline points="${pts}" fill="none" stroke="#ffb547" stroke-width="1.1" vector-effect="non-scaling-stroke"/>`);
+</script>

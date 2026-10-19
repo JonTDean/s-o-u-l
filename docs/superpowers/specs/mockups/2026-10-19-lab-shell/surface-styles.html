@@ -1,0 +1,187 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libertinus+Mono&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<h2>Surface style, round 2: typography-led and borderless</h2>
+<p class="subtitle">All set in Libertinus with the Instrument palette. S3 is repeated first for comparison; S4–S8 are new. Same content in each: library section, channel tabs, readout, parameters, transport.</p>
+
+<style>
+  .k { --bg:#0d0f10; --p1:#131516; --p2:#191c1d; --p3:#212526; --ink:#c9c4b4; --hi:#ece6d4; --dim:#7b766a; --faint:#3b3a35; --amber:#ffb547; --amberbg:#2a2416; --green:#7bd88f; --red:#ff6b5b;
+    --serif:"Libertinus Serif",Georgia,serif; --sans:"Libertinus Sans",system-ui,sans-serif; --mono:"Libertinus Mono",ui-monospace,monospace;
+    background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:12px; border-radius:6px; padding:16px; display:grid; grid-template-columns:40% 1fr; gap:18px; min-height:250px; }
+  .k b { font-weight:400; }
+  .lamp { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .run { background:var(--green); box-shadow:0 0 6px var(--green); } .pause { background:var(--amber); } .halt { background:var(--red); }
+  .mono { font-family:var(--mono); }
+  .val { font-family:var(--mono); color:var(--amber); }
+  .big { font-size:22px; }
+  .it { font-family:var(--serif); font-style:italic; color:var(--dim); }
+  .t { flex:1; height:3px; background:var(--p3); border-radius:2px; position:relative; }
+  .t i { position:absolute; inset:0 auto 0 0; width:var(--v); background:var(--amber); border-radius:2px; }
+  .t i::after { content:""; position:absolute; right:-5px; top:-4px; width:10px; height:10px; border-radius:50%; background:var(--hi); }
+  .slider { display:flex; align-items:center; gap:10px; margin:6px 0; }
+  .pill { display:inline-block; background:var(--p2); padding:4px 12px; border-radius:12px; margin-right:4px; }
+  .pill.pri { background:var(--amber); color:#17130a; font-weight:700; }
+
+  /* S3 — Journal plate (reference) */
+  .s3 .plate { padding:2px 0 0 12px; position:relative; } .s3 .plate + .plate { margin-top:14px; }
+  .s3 .plate::before { content:""; position:absolute; left:0; top:4px; bottom:0; width:3px; background:var(--p3); border-radius:2px; }
+  .s3 .plate.act::before { background:var(--amber); }
+  .s3 .sec { font-family:var(--serif); font-size:14px; color:var(--hi); margin:0 0 6px; } .s3 .sec em { color:var(--dim); font-style:normal; font-family:var(--mono); font-size:10px; margin-right:6px; }
+  .s3 .item { padding:2px 0; } .s3 .item.sel { color:var(--amber); } .s3 .item.sel::before { content:"▸ "; }
+  .s3 .item small { margin-left:4px; }
+  .s3 .tabs { display:flex; gap:14px; margin-bottom:12px; font-family:var(--serif); font-size:13px; }
+  .s3 .tab { color:var(--dim); padding-bottom:3px; } .s3 .tab.on { color:var(--amber); box-shadow:0 2px 0 var(--amber); }
+
+  /* S4 — Marginalia (Tufte) */
+  .s4 .sect { display:grid; grid-template-columns:62px 1fr; gap:10px; margin-bottom:14px; }
+  .s4 .mar { font-family:var(--serif); font-style:italic; color:var(--dim); font-size:11px; text-align:right; padding-top:2px; line-height:1.25; }
+  .s4 .mar.act { color:var(--amber); }
+  .s4 .item { padding:1px 0; } .s4 .item.sel { color:var(--amber); }
+  .s4 .item small { margin-left:5px; }
+  .s4 .tabs { display:flex; gap:16px; font-family:var(--serif); font-size:13px; margin:0 0 14px 72px; }
+  .s4 .tab { color:var(--dim); } .s4 .tab.on { color:var(--hi); } .s4 .tab.on sup { color:var(--amber); }
+  .s4 .note { font-family:var(--serif); font-size:10.5px; color:var(--dim); line-height:1.35; }
+  .s4 .note sup, .s4 sup { color:var(--amber); font-family:var(--mono); }
+
+  /* S5 — Ledger */
+  .s5 .head { font-family:var(--serif); font-variant:small-caps; letter-spacing:.06em; font-size:13px; color:var(--hi); margin:0 0 4px; }
+  .s5 .row { display:flex; justify-content:space-between; padding:4px 8px; }
+  .s5 .row:nth-child(even) { background:var(--p1); }
+  .s5 .row.sel { background:var(--amberbg); color:var(--amber); }
+  .s5 .blk + .blk { margin-top:12px; }
+  .s5 .tabs { display:flex; margin-bottom:12px; }
+  .s5 .tab { padding:4px 12px; color:var(--dim); font-family:var(--serif); } .s5 .tab:nth-child(odd) { background:var(--p1); }
+  .s5 .tab.on { background:var(--amberbg); color:var(--amber); }
+
+  /* S6 — Registration marks */
+  .s6 .frame { position:relative; padding:10px 12px; margin-bottom:12px; }
+  .s6 .frame::before, .s6 .frame::after { content:""; position:absolute; width:9px; height:9px; border-color:var(--faint); border-style:solid; }
+  .s6 .frame::before { left:0; top:0; border-width:2px 0 0 2px; } .s6 .frame::after { right:0; bottom:0; border-width:0 2px 2px 0; }
+  .s6 .frame.act::before, .s6 .frame.act::after { border-color:var(--amber); }
+  .s6 .cap { font-family:var(--mono); font-size:9px; letter-spacing:.12em; color:var(--dim); text-transform:uppercase; margin-bottom:5px; }
+  .s6 .cap span { color:var(--amber); }
+  .s6 .item { padding:2px 0; } .s6 .item.sel { color:var(--amber); } .s6 .item small { margin-left:5px; }
+  .s6 .tabs { display:flex; gap:12px; margin:0 12px 6px; font-family:var(--mono); font-size:11px; }
+  .s6 .tab { color:var(--dim); } .s6 .tab.on { color:var(--amber); } .s6 .tab.on::before { content:"["; } .s6 .tab.on::after { content:"]"; }
+
+  /* S7 — Monograph (small caps + dot leaders) */
+  .s7 .hd { font-family:var(--serif); font-variant:small-caps; letter-spacing:.08em; text-align:center; color:var(--hi); font-size:14px; margin:0 0 6px; }
+  .s7 .hd::before, .s7 .hd::after { content:" · "; color:var(--amber); }
+  .s7 .lead { display:flex; gap:6px; padding:2px 0; font-family:var(--serif); }
+  .s7 .lead::after { content:""; order:2; flex:1; border-bottom:2px dotted var(--faint); transform:translateY(-4px); }
+  .s7 .lead > :last-child { order:3; } .s7 .lead.sel { color:var(--amber); }
+  .s7 .blk + .blk { margin-top:12px; }
+  .s7 .tabs { text-align:center; font-family:var(--serif); font-variant:small-caps; letter-spacing:.06em; margin-bottom:10px; color:var(--dim); }
+  .s7 .tabs .on { color:var(--amber); }
+
+  /* S8 — Specimen label */
+  .s8 .lbl { display:inline-block; background:var(--hi); color:#0d0f10; font-family:var(--sans); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:9px; padding:2px 7px; margin-bottom:6px; }
+  .s8 .lbl.act { background:var(--amber); }
+  .s8 .blk + .blk { margin-top:14px; }
+  .s8 .item { padding:2px 0; font-family:var(--serif); font-size:13px; } .s8 .item.sel { color:var(--amber); }
+  .s8 .item small { margin-left:5px; font-size:11px; }
+  .s8 .no { font-family:var(--mono); color:var(--dim); font-size:10px; margin-right:6px; }
+  .s8 .tabs { display:flex; gap:6px; margin-bottom:12px; }
+  .s8 .tab { font-family:var(--sans); font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; background:var(--p2); color:var(--dim); }
+  .s8 .tab.on { background:var(--amber); color:#17130a; font-weight:700; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="s3-journal" onclick="toggleSelect(this)">
+    <div class="card-image k s3">
+      <div>
+        <div class="plate act"><div class="sec"><em>§1</em>Cellular</div><div class="item">Rule 30<small class="it">elementary, chaotic</small></div><div class="item sel">Conway's Life<small class="it">B3/S23</small></div><div class="item">Lenia<small class="it">continuous, GPU</small></div></div>
+        <div class="plate"><div class="sec"><em>§2</em>Machines</div><div class="item">Busy beaver<small class="it">3-state Turing</small></div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="tab on"><span class="lamp run"></span>Life</span><span class="tab"><span class="lamp pause"></span>Lenia</span><span class="tab"><span class="lamp halt"></span>Busy beaver</span></div>
+        <div class="plate act"><div class="sec"><em>§3.1</em>Readout</div><span class="it">tick</span> <span class="val big">000184</span> &nbsp; <span class="it">population</span> <span class="val big">212</span></div>
+        <div class="plate" style="margin-top:12px"><div class="sec"><em>§3.2</em>Parameters</div><div class="slider"><span class="it">growth μ</span><div class="t" style="--v:27%"><i></i></div><span class="val">0.270</span></div></div>
+        <div style="margin-top:10px"><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S3 · Journal plate <span style="color:#888">(reference)</span></h3><p>Numbered serif sections with an accent spine on the active section.</p></div>
+  </div>
+
+  <div class="card" data-choice="s4-marginalia" onclick="toggleSelect(this)">
+    <div class="card-image k s4">
+      <div>
+        <div class="sect"><div class="mar act">Cellular</div><div><div class="item">Rule 30<small class="it">chaotic</small></div><div class="item sel">Conway's Life<sup>1</sup></div><div class="item">Lenia<small class="it">GPU</small></div></div></div>
+        <div class="sect"><div class="mar">Machines</div><div><div class="item">Busy beaver<small class="it">3-state</small></div></div></div>
+        <div class="sect"><div class="mar"></div><div class="note"><sup>1</sup> Born with three neighbours; survives with two or three. Conway, 1970.</div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="tab on"><span class="lamp run"></span>Life<sup>i</sup></span><span class="tab"><span class="lamp pause"></span>Lenia</span><span class="tab"><span class="lamp halt"></span>Busy beaver</span></div>
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">000184</span> <span class="it">tick</span><br><span class="val big">212</span> <span class="it">alive</span></div></div>
+        <div class="sect"><div class="mar">growth</div><div><div class="slider"><span class="it">μ</span><div class="t" style="--v:27%"><i></i></div><span class="val">0.270</span></div><div class="slider"><span class="it">σ</span><div class="t" style="--v:53%"><i></i></div><span class="val">0.080</span></div></div></div>
+        <div class="sect"><div class="mar"></div><div><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S4 · Marginalia</h3><p>Tufte-style: section names sit in an italic left margin and content hangs beside them. Notes use superscript references, which suit guided mode. Very quiet; whitespace does all the grouping.</p></div>
+  </div>
+
+  <div class="card" data-choice="s5-ledger" onclick="toggleSelect(this)">
+    <div class="card-image k s5">
+      <div>
+        <div class="blk"><div class="head">Cellular</div><div class="row"><span>Rule 30</span><span class="it">chaotic</span></div><div class="row sel"><span>Conway's Life</span><span>B3/S23</span></div><div class="row"><span>HPP gas</span><span class="it">collisions</span></div><div class="row"><span>Lenia</span><span class="it">GPU</span></div></div>
+        <div class="blk"><div class="head">Machines</div><div class="row"><span>Busy beaver</span><span class="it">3-state</span></div><div class="row"><span>NFA · ends 01</span><span class="it">regular</span></div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="tab on"><span class="lamp run"></span>Life</span><span class="tab"><span class="lamp pause"></span>Lenia</span><span class="tab"><span class="lamp halt"></span>Busy beaver</span></div>
+        <div class="blk"><div class="head">Readout</div><div class="row"><span class="it">tick</span><span class="val big">000184</span></div><div class="row"><span class="it">population</span><span class="val big">212</span></div></div>
+        <div class="blk"><div class="head">Parameters</div><div class="row"><span class="it">growth μ</span><span class="val">0.270</span></div><div class="row"><span class="it">growth σ</span><span class="val">0.080</span></div></div>
+        <div style="margin-top:10px"><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S5 · Ledger</h3><p>A data-table feel: alternating tonal rows (zebra) and small-caps headings, with values right-aligned like a lab logbook. Dense and scannable, best for experiment readouts later.</p></div>
+  </div>
+
+  <div class="card" data-choice="s6-registration" onclick="toggleSelect(this)">
+    <div class="card-image k s6">
+      <div>
+        <div class="frame act"><div class="cap"><span>A</span> · Cellular</div><div class="item">Rule 30<small class="it">chaotic</small></div><div class="item sel">Conway's Life<small class="it">B3/S23</small></div><div class="item">Lenia<small class="it">GPU</small></div></div>
+        <div class="frame"><div class="cap"><span>B</span> · Machines</div><div class="item">Busy beaver<small class="it">3-state</small></div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="tab on"><span class="lamp run"></span>CH1 Life</span><span class="tab"><span class="lamp pause"></span>CH2 Lenia</span><span class="tab"><span class="lamp halt"></span>CH3</span></div>
+        <div class="frame act"><div class="cap"><span>C</span> · Readout</div><span class="val big">000184</span> <span class="it">tick</span> &nbsp; <span class="val big">212</span> <span class="it">alive</span></div>
+        <div class="frame"><div class="cap"><span>D</span> · Parameters</div><div class="slider"><span class="it">growth μ</span><div class="t" style="--v:27%"><i></i></div><span class="val">0.270</span></div></div>
+        <div style="margin:0 12px"><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S6 · Registration marks</h3><p>Sections are framed only by corner brackets, like crop marks on a plate or a camera viewfinder; the active section's corners turn amber. Lettered mono captions. Keeps the "instrument" edge without full outlines.</p></div>
+  </div>
+
+  <div class="card" data-choice="s7-monograph" onclick="toggleSelect(this)">
+    <div class="card-image k s7">
+      <div>
+        <div class="blk"><div class="hd">Cellular</div><div class="lead"><span>Rule 30</span><span class="it">i</span></div><div class="lead sel"><span>Conway's Life</span><span>ii</span></div><div class="lead"><span>Lenia</span><span class="it">iii</span></div></div>
+        <div class="blk"><div class="hd">Machines</div><div class="lead"><span>Busy beaver</span><span class="it">iv</span></div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="on"><span class="lamp run"></span>Life</span> &nbsp;·&nbsp; <span><span class="lamp pause"></span>Lenia</span> &nbsp;·&nbsp; <span><span class="lamp halt"></span>Busy beaver</span></div>
+        <div class="blk"><div class="hd">Readout</div><div class="lead"><span class="it">Tick</span><span class="val big">000184</span></div><div class="lead"><span class="it">Population</span><span class="val big">212</span></div></div>
+        <div class="blk"><div class="hd">Growth</div><div class="lead"><span class="it">μ</span><span class="val">0.270</span></div><div class="lead"><span class="it">σ</span><span class="val">0.080</span></div></div>
+        <div style="margin-top:10px;text-align:center"><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S7 · Monograph</h3><p>Like a book's table of contents: centred small-caps headings with amber ornaments, and dot leaders from each label to its value. The most bookish; parameter edits would open inline when a value is clicked.</p></div>
+  </div>
+
+  <div class="card" data-choice="s8-specimen" onclick="toggleSelect(this)">
+    <div class="card-image k s8">
+      <div>
+        <div class="blk"><div class="lbl act">Cellular</div><div class="item"><span class="no">01</span>Rule 30<small class="it">chaotic</small></div><div class="item sel"><span class="no">02</span>Conway's Life<small class="it">B3/S23</small></div><div class="item"><span class="no">03</span>Lenia<small class="it">GPU</small></div></div>
+        <div class="blk"><div class="lbl">Machines</div><div class="item"><span class="no">04</span>Busy beaver<small class="it">3-state</small></div></div>
+      </div>
+      <div>
+        <div class="tabs"><span class="tab on">CH1 Life</span><span class="tab"><span class="lamp pause"></span>CH2 Lenia</span><span class="tab"><span class="lamp halt"></span>CH3</span></div>
+        <div class="blk"><div class="lbl act">Readout</div><div><span class="val big">000184</span> <span class="it">tick</span> &nbsp; <span class="val big">212</span> <span class="it">alive</span></div></div>
+        <div class="blk"><div class="lbl">Parameters</div><div class="slider"><span class="it">growth μ</span><div class="t" style="--v:27%"><i></i></div><span class="val">0.270</span></div></div>
+        <div style="margin-top:10px"><span class="pill pri">❚❚ Pause</span><span class="pill">Step</span><span class="pill">Reset</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>S8 · Specimen label</h3><p>Museum or herbarium labelling: solid inverse label blocks head each section (amber when active), and specimens carry catalogue numbers. The boldest of the set; it stays readable from the back of a room.</p></div>
+  </div>
+
+</div>
