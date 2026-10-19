@@ -1,5 +1,4 @@
 //! Bounded cellular sessions; elementary rules retain a scrolling time history.
-use super::catalog::Kind;
 use crate::automata::{
     classical::regular::wolfram_1d::rules::{rule30::Rule30, rule110::Rule110},
     dynamical::particle::{
@@ -7,6 +6,7 @@ use crate::automata::{
         life::{Life, seed_life},
     },
 };
+use crate::workbench::catalog::Kind;
 use glam::{IVec3, UVec3};
 use simulation_kernel::{
     AutomatonRule,
