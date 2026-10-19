@@ -33,7 +33,7 @@ pub(super) fn session(s: &Session) -> Result<(), String> {
                         && b.velocity.is_finite()
                         && b.position.cmpge(glam::Vec2::ZERO).all()
                         && b.position.cmplt(glam::Vec2::splat(64.0)).all()
-                        && b.velocity.length() <= 2.001
+                        && b.velocity.length() <= 5.001
                 })
         }
         (Model::Ants(a), Kind::Ants) => {
