@@ -92,4 +92,6 @@ impl GridSession {
 }
 
 #[cfg(test)]
+mod gas_tests;
+#[cfg(test)]
 mod tests;
