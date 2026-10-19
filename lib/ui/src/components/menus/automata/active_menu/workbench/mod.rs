@@ -66,12 +66,12 @@ pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
                 if ui.button("Reset").clicked() {
                     let _ = session.reset();
                 }
-                ui.label(format!("Tick {}", session.ticks));
             });
             if matches!(session.model, Model::Symbolic(_)) {
                 ui.label("Initial input (apply with Reset):");
                 ui.add(egui::TextEdit::singleline(&mut session.input).char_limit(256));
             }
+            ui.label(format!("Tick {}", session.ticks));
             ui.label(if session.halted() {
                 "Halted"
             } else if session.paused {

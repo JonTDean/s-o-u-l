@@ -81,7 +81,8 @@ pub fn show_active_automata(
             /* 2 ░ debug helper – seed 3 × 3 square                              */
             /* ----------------------------------------------------------------- */
             ui.separator();
-            if ui.button("📐 Debug • mark centre").clicked()
+            if !automata.list().is_empty()
+                && ui.button("📐 Debug • mark centre").clicked()
                 && let Some(id) = sel.0
                 && let Some(info) = automata.get(id)
             {
