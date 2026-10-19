@@ -37,6 +37,7 @@ pub(super) fn draw(ui: &mut egui::Ui, machine: &Symbolic) {
             tape(ui, &m.tape, m.head);
         }
         Symbolic::Koch { word, .. } => {
+            super::koch::draw(ui, word);
             ui.label(format!("{} symbols · F → F+F--F+F", word.chars().count()));
             egui::ScrollArea::vertical()
                 .max_height(120.0)

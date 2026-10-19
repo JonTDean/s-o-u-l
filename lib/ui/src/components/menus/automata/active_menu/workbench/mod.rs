@@ -4,6 +4,7 @@ use bevy_egui::{EguiContexts, egui};
 use models::workbench::{plugin::Workbench, session::Model};
 
 mod canvas;
+mod koch;
 mod symbols;
 
 pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {

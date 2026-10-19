@@ -18,6 +18,10 @@ use engine_core::{
     systems::state::resources::RuntimeFlags,
 };
 
+use models::workbench::{
+    catalog::{Catalog, Kind},
+    plugin::Workbench,
+};
 use rayon::prelude::*;
 
 /* ===================================================================== */
@@ -32,6 +36,8 @@ use rayon::prelude::*;
 /// automatically appear here without further wiring.
 #[allow(clippy::needless_pass_by_value)]
 pub fn spawner(
+    catalog: Res<Catalog>,
+    bench: Res<Workbench>,
     rules: Res<RuleRegistry>, // ← global rule catalogue
     flags: Res<RuntimeFlags>, // ← CPU vs GPU hint
     mut ui: EguiContexts,     // ← egui context provider
@@ -50,7 +56,9 @@ pub fn spawner(
         // but we parallelise anyway to stay scalable.
         let mut ids: Vec<String> = rules.ids().par_bridge().map(|s| s.clone()).collect();
 
+        ids.extend(catalog.0.iter().map(|kind| kind.id().to_owned()));
         ids.par_sort_unstable();
+        ids.dedup();
 
         // Group by prefix (text before first ':').  Using `BTreeMap` keeps
         // families in alphabetical order which is nice for humans.
@@ -68,7 +76,7 @@ pub fn spawner(
     /* 2 ░ Render egui window                                            */
     /* ----------------------------------------------------------------- */
     egui::Window::new(format!(
-        "Spawner – GPU {}",
+        "Automata · GPU {}",
         if flags.gpu_enabled { "ON" } else { "OFF" }
     ))
     .anchor(egui::Align2::RIGHT_TOP, [-10.0, 10.0])
@@ -79,7 +87,10 @@ pub fn spawner(
             return;
         }
 
-        ui.label("Spawn an automaton pattern:");
+        ui.label("Choose a family and example:");
+        if let Some(error) = &bench.error {
+            ui.colored_label(egui::Color32::LIGHT_RED, error);
+        }
         ui.separator();
 
         /* -------------------------------------------------------------- */
@@ -91,7 +102,10 @@ pub fn spawner(
                     .min_col_width(128.0)
                     .show(ui, |ui| {
                         for id in ids {
-                            if ui.button(format!("➕ {id}")).clicked() {
+                            if ui
+                                .button(Kind::parse(id).map_or(id.as_str(), Kind::title))
+                                .clicked()
+                            {
                                 tx.write(AutomataCommand::SeedPattern { id: id.clone() });
                             }
                             ui.end_row();
