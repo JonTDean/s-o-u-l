@@ -40,3 +40,6 @@ fn update<R: AutomatonRule<D = Dim> + ?Sized>(
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod benchmark;
