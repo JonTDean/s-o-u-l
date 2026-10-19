@@ -79,7 +79,11 @@ pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
                 "Running · 10 steps/s"
             });
             if let Model::Symbolic(machine) = &session.model {
-                symbols::draw(ui, machine);
+                if session.ticks >= 10000 && !machine.halted() {
+                    ui.label("Transition limit reached (10,000). Reset to restart.");
+                } else {
+                    symbols::draw(ui, machine);
+                }
             } else {
                 canvas::draw(ui, &session.model);
             }

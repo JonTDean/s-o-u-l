@@ -27,6 +27,7 @@ fn friendly_name(id: &str) -> &str {
 
 pub fn show_active_automata(
     automata: Res<AutomataRegistry>,
+    mut bench: ResMut<models::workbench::plugin::Workbench>,
     mut egui_ctx: EguiContexts<'_, '_>,
     mut sel: ResMut<MinimapSelection>,
     mut debug_tx: EventWriter<DebugSeedSquare>,
@@ -44,11 +45,25 @@ pub fn show_active_automata(
         .anchor(egui::Align2::LEFT_TOP, [10.0, 10.0])
         .show(ctx, |ui| {
             ui.heading("Active automata:");
-            if automata.list().is_empty() {
+            if automata.list().is_empty() && bench.sessions.is_empty() {
                 ui.label("(none)");
                 sel.0 = None;
                 return;
             }
+
+            let mut selected = bench.selected;
+            for (index, session) in bench.sessions.iter().enumerate() {
+                if ui
+                    .selectable_label(
+                        index == selected,
+                        format!("{} · {}", index + 1, session.kind.title()),
+                    )
+                    .clicked()
+                {
+                    selected = index;
+                }
+            }
+            bench.selected = selected;
 
             /* ----------------------------------------------------------------- */
             /* 1 ░ selection list                                                */

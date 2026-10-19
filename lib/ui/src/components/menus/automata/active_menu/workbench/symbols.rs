@@ -20,7 +20,7 @@ pub(super) fn draw(ui: &mut egui::Ui, machine: &Symbolic) {
         }
         Symbolic::Pushdown(m) => {
             ui.label(format!(
-                "Stack (bottom → top): {}",
+                "Stack (bottom -> top): {}",
                 m.stack.iter().collect::<String>()
             ));
             tape(ui, &m.input, m.cursor);
@@ -38,7 +38,7 @@ pub(super) fn draw(ui: &mut egui::Ui, machine: &Symbolic) {
         }
         Symbolic::Koch { word, .. } => {
             super::koch::draw(ui, word);
-            ui.label(format!("{} symbols · F → F+F--F+F", word.chars().count()));
+            ui.label(format!("{} symbols · F -> F+F--F+F", word.chars().count()));
             egui::ScrollArea::vertical()
                 .max_height(120.0)
                 .show(ui, |ui| {
