@@ -11,6 +11,10 @@ pub struct DynamicalAutomataPlugin;
 
 impl Plugin for DynamicalAutomataPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((LeniaPlugin, ParticleAutomataPlugin));
+        app.add_plugins((
+            LeniaPlugin,
+            ParticleAutomataPlugin,
+            super::swarm::SwarmPlugin,
+        ));
     }
 }

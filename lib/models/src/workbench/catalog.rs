@@ -88,3 +88,18 @@ impl Kind {
         }
     }
 }
+
+/// Families publish their runnable examples through their own plugins.
+#[derive(bevy::prelude::Resource, Default)]
+pub struct Catalog(pub Vec<Kind>);
+
+/// Idempotent registration for family plugins and renderer-free tests.
+pub fn register(app: &mut bevy::prelude::App, kinds: &[Kind]) {
+    app.init_resource::<Catalog>();
+    let mut catalog = app.world_mut().resource_mut::<Catalog>();
+    for kind in kinds {
+        if !catalog.0.contains(kind) {
+            catalog.0.push(*kind);
+        }
+    }
+}

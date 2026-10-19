@@ -5,10 +5,10 @@ use bevy::prelude::*;
 pub struct ContextSensitiveAutomataPlugin;
 
 impl Plugin for ContextSensitiveAutomataPlugin {
-    fn build(&self, _app: &mut App) {
-        // TODO: add LBA rules
+    fn build(&self, app: &mut App) {
+        use crate::workbench::catalog::{Kind, register};
+        register(app, &[Kind::Lba]);
     }
 }
 
-/* ───── sub‑modules (stubs) ───── */
 pub mod lba_examples;

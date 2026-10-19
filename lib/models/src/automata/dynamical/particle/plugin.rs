@@ -8,6 +8,8 @@ use engine_core::prelude::RuleRegistry;
 pub struct ParticleAutomataPlugin;
 impl Plugin for ParticleAutomataPlugin {
     fn build(&self, app: &mut App) {
+        use crate::workbench::catalog::{Kind, register};
+        register(app, &[Kind::Hpp, Kind::Life]);
         let mut reg = app
             .world_mut()
             .remove_resource::<RuleRegistry>()

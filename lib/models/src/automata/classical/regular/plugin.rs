@@ -12,6 +12,8 @@ pub struct RegularAutomataPlugin;
 
 impl Plugin for RegularAutomataPlugin {
     fn build(&self, app: &mut App) {
+        use crate::workbench::catalog::{Kind, register};
+        register(app, &[Kind::Rule30, Kind::Rule110, Kind::Nfa]);
         /* 1 rule registry ------------------------------------------ */
         let mut reg = app
             .world_mut()

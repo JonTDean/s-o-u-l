@@ -5,8 +5,9 @@ use bevy::prelude::*;
 pub struct TuringAutomataPlugin;
 
 impl Plugin for TuringAutomataPlugin {
-    fn build(&self, _app: &mut App) {
-        // TODO: register Universal TM, tag‑systems, etc.
+    fn build(&self, app: &mut App) {
+        use crate::workbench::catalog::{Kind, register};
+        register(app, &[Kind::Turing]);
     }
 }
 
