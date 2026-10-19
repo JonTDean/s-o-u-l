@@ -44,17 +44,6 @@ impl AutomatonRule for HPPRule {
     fn next_state(&self, ctx: CellCtx<Self::D>, _params: &Value) -> CellOutcome {
         /* 1 — gather incoming (XY plane only) */
         let mut incoming = 0;
-        if Self::bits(
-            ctx.neighbourhood
-                .iter()
-                .find(|&&o| o == CellState::Dead)
-                .copied()
-                .unwrap_or(CellState::Dead),
-        ) & S
-            != 0
-        {
-            incoming |= N;
-        }
         // Use explicit offsets for clarity
         let nb = ctx.neighbourhood;
         if Self::bits(
@@ -65,7 +54,7 @@ impl AutomatonRule for HPPRule {
         ) & S
             != 0
         {
-            incoming |= N;
+            incoming |= S;
         }
         if Self::bits(
             nb[Dim::NEIGHBOUR_OFFSETS
@@ -75,7 +64,7 @@ impl AutomatonRule for HPPRule {
         ) & N
             != 0
         {
-            incoming |= S;
+            incoming |= N;
         }
         if Self::bits(
             nb[Dim::NEIGHBOUR_OFFSETS
@@ -85,7 +74,7 @@ impl AutomatonRule for HPPRule {
         ) & W
             != 0
         {
-            incoming |= E;
+            incoming |= W;
         }
         if Self::bits(
             nb[Dim::NEIGHBOUR_OFFSETS
@@ -95,7 +84,7 @@ impl AutomatonRule for HPPRule {
         ) & E
             != 0
         {
-            incoming |= W;
+            incoming |= E;
         }
 
         /* 2 — collisions */

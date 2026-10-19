@@ -2,6 +2,7 @@
 
 use bevy::prelude::Vec2;
 
+#[derive(Clone, Debug)]
 pub struct Boid {
     pub position: Vec2,
     pub velocity: Vec2,
@@ -31,6 +32,8 @@ pub fn step_boids(
     // Make a copy of current velocities to use in calculations
     let current_vel: Vec<Vec2> = boids.iter().map(|b| b.velocity).collect();
     for i in 0..n {
+        let velocity = current_vel[i];
+        let mut steering = Vec2::ZERO;
         let mut center = Vec2::ZERO;
         let mut avg_vel = Vec2::ZERO;
         let mut count = 0;
@@ -56,12 +59,12 @@ pub fn step_boids(
             center /= count as f32;
             avg_vel /= count as f32;
             // Cohesion: steer towards center of neighbors
-            boids[i].velocity += (center - boids[i].position) * cohesion_weight;
+            steering += (center - boids[i].position) * cohesion_weight;
             // Alignment: adjust velocity towards average velocity of neighbors
-            boids[i].velocity += (avg_vel - boids[i].velocity) * alignment_weight;
+            steering += (avg_vel - velocity) * alignment_weight;
         }
         // Separation: avoid crowding
-        boids[i].velocity += separation * separation_weight;
+        boids[i].velocity = velocity + steering + separation * separation_weight;
         // Limit speed to a maximum
         let max_speed = 5.0;
         if boids[i].velocity.length() > max_speed {

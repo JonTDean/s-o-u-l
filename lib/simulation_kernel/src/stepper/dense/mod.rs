@@ -14,7 +14,11 @@ use crate::{
     grid::DenseGrid,
 };
 
-pub fn step_dense<R: AutomatonRule<D = Dim>>(grid: &mut DenseGrid, rule: &R, params: &Value) {
+pub fn step_dense<R: AutomatonRule<D = Dim> + ?Sized>(
+    grid: &mut DenseGrid,
+    rule: &R,
+    params: &Value,
+) {
     let snapshot = grid.voxels.clone();
     let mut next = snapshot.clone();
 
