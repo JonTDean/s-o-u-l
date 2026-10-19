@@ -3,11 +3,15 @@ use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::AppState};
 use models::workbench::{catalog::Kind, plugin::Workbench};
 
+mod capture;
+mod verification;
+
 pub(super) fn enabled() -> bool {
     std::env::args().any(|argument| argument == "--automata-demo")
 }
 
 pub(super) fn install(app: &mut App) {
+    verification::install(app);
     app.add_systems(Update, prepare_example);
 }
 
