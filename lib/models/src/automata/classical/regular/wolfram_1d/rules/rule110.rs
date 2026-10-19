@@ -9,7 +9,7 @@ use simulation_kernel::{
 };
 
 /// Hard‑coded rule table for Wolfram 110.
-const RULE_110: [u8; 8] = [0, 1, 1, 0, 1, 1, 1, 0];
+const RULE_110: [u8; 8] = [0, 1, 1, 1, 0, 1, 1, 0];
 
 #[derive(Clone, Resource)]
 pub struct Rule110;
