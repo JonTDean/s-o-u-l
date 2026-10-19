@@ -26,6 +26,7 @@ pub(super) fn install(app: &mut App) {
         std::fs::remove_file(output.join("SUCCESS")).expect("remove stale success");
     }
     std::fs::write(output.join("sessions.csv"), "kind,ticks,status\n").expect("evidence header");
+    app.add_systems(Last, super::flow::update);
     app.insert_resource(Verification {
         output,
         index: 0,

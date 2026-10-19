@@ -4,6 +4,7 @@ use engine_core::{events::AutomataCommand, prelude::AppState};
 use models::workbench::{catalog::Kind, plugin::Workbench};
 
 mod capture;
+mod flow;
 mod verification;
 
 pub(super) fn enabled() -> bool {
