@@ -13,10 +13,7 @@
 
 use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
-use engine_core::{
-    events::AutomataCommand, systems::registry::RuleRegistry,
-    systems::state::resources::RuntimeFlags,
-};
+use engine_core::{events::AutomataCommand, systems::registry::RuleRegistry};
 
 use models::workbench::{
     catalog::{Catalog, Kind},
@@ -39,7 +36,6 @@ pub fn spawner(
     catalog: Res<Catalog>,
     bench: Res<Workbench>,
     rules: Res<RuleRegistry>, // ← global rule catalogue
-    flags: Res<RuntimeFlags>, // ← CPU vs GPU hint
     mut ui: EguiContexts,     // ← egui context provider
     mut tx: EventWriter<AutomataCommand>,
 ) {
@@ -75,50 +71,49 @@ pub fn spawner(
     /* ----------------------------------------------------------------- */
     /* 2 ░ Render egui window                                            */
     /* ----------------------------------------------------------------- */
-    egui::Window::new(format!(
-        "Automata · GPU {}",
-        if flags.gpu_enabled { "ON" } else { "OFF" }
-    ))
-    .anchor(egui::Align2::RIGHT_TOP, [-10.0, 10.0])
-    .resizable(false)
-    .show(ctx, |ui| {
-        if grouped.is_empty() {
-            ui.colored_label(egui::Color32::LIGHT_RED, "No automata rules registered.");
-            return;
-        }
+    egui::Window::new("Automata")
+        .anchor(egui::Align2::RIGHT_TOP, [-10.0, 10.0])
+        .resizable(false)
+        .show(ctx, |ui| {
+            if grouped.is_empty() {
+                ui.colored_label(egui::Color32::LIGHT_RED, "No automata rules registered.");
+                return;
+            }
 
-        ui.label("Choose a family and example:");
-        if let Some(error) = &bench.error {
-            ui.colored_label(egui::Color32::LIGHT_RED, error);
-        }
-        ui.separator();
+            ui.label("Choose a family and example:");
+            if let Some(error) = &bench.error {
+                ui.colored_label(egui::Color32::LIGHT_RED, error);
+            }
+            ui.separator();
 
-        /* -------------------------------------------------------------- */
-        /* 2.A ░ Family sections                                         */
-        /* -------------------------------------------------------------- */
-        for (family, ids) in &grouped {
-            ui.collapsing(family, |ui| {
-                egui::Grid::new(format!("grid_{family}"))
-                    .min_col_width(128.0)
-                    .show(ui, |ui| {
-                        for id in ids {
-                            if ui
-                                .button(
-                                    Kind::parse(id)
-                                        .map_or_else(|| id.clone(), |kind| kind.title().to_owned()),
-                                )
-                                .clicked()
-                            {
-                                tx.write(AutomataCommand::SeedPattern { id: id.clone() });
+            /* -------------------------------------------------------------- */
+            /* 2.A ░ Family sections                                         */
+            /* -------------------------------------------------------------- */
+            for (family, ids) in &grouped {
+                ui.collapsing(family, |ui| {
+                    egui::Grid::new(format!("grid_{family}"))
+                        .min_col_width(128.0)
+                        .show(ui, |ui| {
+                            for id in ids {
+                                if ui
+                                    .button(
+                                        Kind::parse(id).map_or_else(
+                                            || id.clone(),
+                                            |kind| kind.title().to_owned(),
+                                        ),
+                                    )
+                                    .clicked()
+                                {
+                                    tx.write(AutomataCommand::SeedPattern { id: id.clone() });
+                                }
+                                ui.end_row();
                             }
-                            ui.end_row();
-                        }
-                    });
-            });
-        }
-        ui.separator();
-        if ui.button("Clear all automata").clicked() {
-            tx.write(AutomataCommand::Clear);
-        }
-    });
+                        });
+                });
+            }
+            ui.separator();
+            if ui.button("Clear all automata").clicked() {
+                tx.write(AutomataCommand::Clear);
+            }
+        });
 }
