@@ -20,7 +20,7 @@ use crate::workbench::experiment::config::Settings;
 pub struct GridSession {
     pub grid: DenseGrid,
     pub history: VecDeque<Vec<u8>>,
-    kind: Kind,
+    pub(crate) kind: Kind,
 }
 impl GridSession {
     /// Initializes a single-cell elementary seed, Life glider, or colliding gas.
