@@ -11,11 +11,12 @@ pub(super) fn show(
         return;
     };
     egui::Window::new("Compare and export")
-        .default_pos([910.0, 80.0])
+        .default_pos([910.0, 320.0])
         .default_width(700.0)
+        .default_height(600.0)
         .default_open(std::env::args().any(|a| a == "--experiment-demo"))
         .vscroll(true)
-        .max_height(800.0)
+        .max_height(620.0)
         .show(ctx, |ui| {
             if !bench.sessions.is_empty() {
                 let last = bench.sessions.len() - 1;
