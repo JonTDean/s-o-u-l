@@ -29,3 +29,13 @@ automata:
 
 verify-automata:
 	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_AUTOMATA_VERIFY="$${SOUL_AUTOMATA_VERIFY:-/tmp/soul-automata-verification}" cargo run -- --automata-demo
+
+# Fresh output directories prevent stale evidence from qualifying a rerun.
+experiment:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan cargo run -- --experiment-demo
+
+verify-experiment:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_EXPERIMENT_VERIFY="$${SOUL_EXPERIMENT_VERIFY:-/tmp/soul-experiment-verification}" cargo run -- --experiment-demo
+
+benchmark-sparse:
+	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo test -p simulation_kernel --release sparse_benchmark -- --ignored --nocapture

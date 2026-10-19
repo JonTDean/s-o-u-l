@@ -16,3 +16,19 @@ fn malformed_projects_fail_before_mutation() {
     }
     assert!(p.validate().is_err());
 }
+
+#[test]
+fn file_roundtrip_and_unknown_fields() {
+    let mut bench = Workbench::default();
+    bench.spawn(Kind::Ants);
+    let p = Project::capture(&bench, Vec::new()).unwrap();
+    let path = std::env::temp_dir().join(format!("soul-project-test-{}.json", std::process::id()));
+    super::super::write(&path, &p).unwrap();
+    let loaded = super::super::read(&path).unwrap();
+    assert_eq!(loaded.sessions.len(), 1);
+    let mut value = serde_json::to_value(&p).unwrap();
+    value["sessions"][0]["unknown"] = serde_json::json!(true);
+    std::fs::write(&path, serde_json::to_vec(&value).unwrap()).unwrap();
+    assert!(super::super::read(&path).is_err());
+    std::fs::remove_file(path).unwrap();
+}

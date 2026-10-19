@@ -2,6 +2,7 @@
 
 /// Each transition moves or marks within the original input tape.
 #[derive(serde::Serialize, serde::Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Bounded {
     pub tape: Vec<char>,
     pub head: usize,

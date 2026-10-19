@@ -17,6 +17,7 @@ use crate::workbench::experiment::config::Settings;
 
 /// A finite grid with dead boundaries and snapshot update semantics.
 #[derive(serde::Serialize, serde::Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GridSession {
     pub grid: DenseGrid,
     pub history: VecDeque<Vec<u8>>,

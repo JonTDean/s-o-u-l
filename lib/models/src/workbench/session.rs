@@ -18,6 +18,7 @@ pub enum Model {
 
 /// One paused-by-default simulation with a reproducible initial condition.
 #[derive(serde::Serialize, serde::Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Session {
     pub kind: Kind,
     pub input: String,
