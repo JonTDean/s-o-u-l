@@ -4771,6 +4771,7 @@ dependencies = [
  "bevy_ecs",
  "engine-core",
  "engine-gpu",
+ "models",
  "simulation_kernel",
 ]
 

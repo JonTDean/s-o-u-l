@@ -1,15 +1,21 @@
 //! Reproducible 3D voxel preview with an optional window-only screenshot.
 use bevy::prelude::*;
+mod automata;
 mod capture;
 mod lenia;
 mod scene;
 
 pub(super) fn enabled() -> bool {
-    std::env::args().any(|argument| argument == "--voxel-demo") || lenia::enabled()
+    std::env::args().any(|argument| argument == "--voxel-demo")
+        || lenia::enabled()
+        || automata::enabled()
 }
 
 pub(super) fn install(app: &mut App) {
-    if lenia::enabled() {
+    if automata::enabled() {
+        automata::install(app);
+        app.add_systems(PostStartup, automata::setup);
+    } else if lenia::enabled() {
         lenia::install(app);
         app.add_systems(PostStartup, lenia::setup);
     } else {
