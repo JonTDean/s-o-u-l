@@ -2,4 +2,5 @@
 pub mod agents;
 pub mod catalog;
 pub mod grid;
+pub mod session;
 pub mod symbolic;
