@@ -67,6 +67,10 @@ fn handle_commands(
         match *event {
             /* ─── spawn default pattern ─────────────────────────── */
             AutomataCommand::SeedPattern { ref id } => {
+                // CPU and symbolic families have their own inspectable sessions.
+                if id != "lenia" && id != "lenia:orbium" {
+                    continue;
+                }
                 let Some((rule, _)) = rules.get(id.as_str()) else {
                     warn!("Unknown automaton pattern “{id}” – ignored");
                     continue;
