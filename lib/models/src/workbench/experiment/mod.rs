@@ -4,3 +4,6 @@ mod validation;
 
 pub mod export;
 pub mod metrics;
+
+#[cfg(test)]
+mod tests;

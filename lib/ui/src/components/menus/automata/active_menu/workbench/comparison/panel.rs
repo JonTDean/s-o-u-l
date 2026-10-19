@@ -22,6 +22,7 @@ pub(super) fn show(
                 state.left = state.left.min(last);
                 state.right = state.right.min(last);
                 ui.horizontal(|ui| {
+                    let state = &mut *state;
                     for (id, selection) in [("Left", &mut state.left), ("Right", &mut state.right)]
                     {
                         egui::ComboBox::from_id_salt(id)
