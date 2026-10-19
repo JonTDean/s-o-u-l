@@ -1,4 +1,5 @@
 use super::*;
+use simulation_kernel::stepper::dense::parallel::step_dense_dyn_parallel;
 
 #[test]
 fn elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions() {
@@ -75,5 +76,34 @@ fn life_blinker_period_and_glider_displacement_are_correct() {
             session.grid.get(p + IVec3::new(1, 1, 0)).unwrap().state,
             CellState::Alive(255)
         );
+    }
+}
+
+#[test]
+fn cellular_histories_and_parallel_updates_preserve_snapshot_semantics() {
+    for kind in [Kind::Rule30, Kind::Rule110, Kind::Life, Kind::Hpp] {
+        let mut session = GridSession::new(kind);
+        let mut parallel = session.grid.clone();
+        let rule: &(dyn AutomatonRule<D = Dim> + Sync) = match kind {
+            Kind::Rule30 => &Rule30,
+            Kind::Rule110 => &Rule110,
+            Kind::Life => &Life,
+            _ => &HPPRule,
+        };
+        for _ in 0..80 {
+            session.step();
+            step_dense_dyn_parallel(&mut parallel, rule, &serde_json::Value::Null);
+            assert!(
+                session
+                    .grid
+                    .voxels
+                    .iter()
+                    .zip(&parallel.voxels)
+                    .all(|(a, b)| a.state == b.state)
+            );
+        }
+        if matches!(kind, Kind::Rule30 | Kind::Rule110) {
+            assert_eq!(session.history.len(), 64);
+        }
     }
 }
