@@ -1,52 +1,34 @@
-//! Rayon parallel sparse voxel stepper.
-
-use glam::IVec3;
+//! Rayon sparse updates share exactly the serial candidate and boundary contract.
+use super::frontier;
+use crate::{AutomatonRule, core::dim::Dim, grid::SparseGrid};
+use glam::UVec3;
 use rayon::prelude::*;
 use serde_json::Value;
-use std::collections::HashMap;
-
-use crate::{
-    AutomatonRule,
-    core::{
-        cell::{Cell, CellCtx, CellOutcome, CellState},
-        dim::{Dim, Dimensionality},
-    },
-    grid::SparseGrid,
-};
 
 pub fn step_sparse_dyn_parallel(
     grid: &mut SparseGrid,
     rule: &(dyn AutomatonRule<D = Dim> + Sync),
     params: &Value,
 ) {
-    let snapshot: HashMap<IVec3, Cell> = grid.map.clone();
-    let updates: Vec<(IVec3, CellState, serde_json::Value)> = snapshot
-        .par_iter()
-        .filter_map(|(&p, cell)| {
-            let mut nbhd = [CellState::Dead; 26];
-            for (i, off) in Dim::NEIGHBOUR_OFFSETS.iter().enumerate() {
-                nbhd[i] = snapshot
-                    .get(&(p + *off))
-                    .map_or(CellState::Dead, |c| c.state);
-            }
+    update(grid, rule, params, None);
+}
 
-            let ctx = CellCtx::<Dim> {
-                self_coord: p,
-                self_state: cell.state,
-                neighbourhood: &nbhd,
-                memory: &cell.memory,
-                _marker: std::marker::PhantomData,
-            };
-
-            match rule.next_state(ctx, params) {
-                CellOutcome::Next { state, memory } => Some((p, state, memory)),
-                _ => None,
-            }
-        })
+pub fn step_sparse_bounded_parallel(
+    grid: &mut SparseGrid,
+    rule: &(dyn AutomatonRule<D = Dim> + Sync),
+    params: &Value,
+    size: UVec3,
+) {
+    update(grid, rule, params, Some(size));
+}
+fn update(
+    grid: &mut SparseGrid,
+    rule: &(dyn AutomatonRule<D = Dim> + Sync),
+    params: &Value,
+    bounds: Option<UVec3>,
+) {
+    grid.map = frontier::candidates(grid, bounds)
+        .into_par_iter()
+        .filter_map(|p| frontier::evaluate(grid, p, rule, params, bounds).map(|cell| (p, cell)))
         .collect();
-
-    for (p, state, memory) in updates {
-        grid.map.entry(p).or_default().state = state;
-        grid.map.entry(p).or_default().memory = memory;
-    }
 }
