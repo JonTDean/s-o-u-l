@@ -2,3 +2,5 @@
 /tempora
 .agents/
 __pycache__/
+ 
+.superpowers/

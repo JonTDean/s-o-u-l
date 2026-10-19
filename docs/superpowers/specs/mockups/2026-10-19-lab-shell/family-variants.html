@@ -1,0 +1,183 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libertinus+Mono&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&family=Libertinus+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<h2>The lab in S4 Marginalia: full screen, then each family type</h2>
+<p class="subtitle">L2 layout, Instrument palette, Libertinus, no outlines. Click any panel that looks right; tell me in the terminal what to change.</p>
+
+<style>
+  .app { --bg:#0d0f10; --p1:#121415; --p2:#191c1d; --p3:#232728; --ink:#c9c4b4; --hi:#ece6d4; --dim:#7b766a; --faint:#34332e; --amber:#ffb547; --amberbg:#2a2416; --green:#7bd88f; --red:#ff6b5b; --blue:#6fb7ff;
+    --serif:"Libertinus Serif",Georgia,serif; --sans:"Libertinus Sans",system-ui,sans-serif; --mono:"Libertinus Mono",ui-monospace,monospace;
+    background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:12px; border-radius:6px; overflow:hidden; position:relative; }
+  .app sup { color:var(--amber); font-family:var(--mono); font-size:8px; }
+  .it { font-family:var(--serif); font-style:italic; color:var(--dim); }
+  .val { font-family:var(--mono); color:var(--amber); }
+  .big { font-size:24px; line-height:1; }
+  .lamp { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .run { background:var(--green); box-shadow:0 0 6px var(--green); } .pause { background:var(--amber); } .halt { background:var(--red); }
+  .pill { display:inline-block; background:var(--p2); padding:4px 12px; border-radius:12px; margin-right:4px; font-size:12px; }
+  .pill.pri { background:var(--amber); color:#17130a; font-weight:700; }
+  .pill.off { color:#4d4b44; }
+  .sect { display:grid; grid-template-columns:64px 1fr; gap:12px; margin-bottom:14px; }
+  .mar { font-family:var(--serif); font-style:italic; color:var(--dim); font-size:11.5px; text-align:right; padding-top:2px; line-height:1.25; }
+  .mar.act { color:var(--amber); }
+  .note { font-family:var(--serif); font-size:11px; color:var(--dim); line-height:1.4; }
+  .slider { display:flex; align-items:center; gap:10px; margin:5px 0; }
+  .t { flex:1; height:3px; background:var(--p3); border-radius:2px; position:relative; }
+  .t i { position:absolute; inset:0 auto 0 0; width:var(--v); background:var(--amber); border-radius:2px; }
+  .t i::after { content:""; position:absolute; right:-5px; top:-4px; width:10px; height:10px; border-radius:50%; background:var(--hi); }
+  .choice span { font-family:var(--serif); margin-right:12px; color:var(--dim); } .choice span.on { color:var(--amber); }
+  .choice span.on::before { content:"● "; font-size:8px; vertical-align:2px; } .choice span:not(.on)::before { content:"○ "; font-size:8px; vertical-align:2px; }
+
+  /* full screen */
+  .full { aspect-ratio:16/9; display:grid; grid-template-columns:34px 1fr 30%; grid-template-rows:34px 1fr 54px; }
+  .rail { grid-row:1/4; background:var(--p1); display:flex; flex-direction:column; align-items:center; gap:14px; padding-top:12px; font-family:var(--serif); color:var(--dim); font-size:14px; }
+  .rail .on { color:var(--amber); }
+  .tabs { grid-column:2/4; display:flex; align-items:end; gap:20px; padding:0 18px; font-family:var(--serif); font-size:13.5px; background:var(--p1); }
+  .tab { color:var(--dim); padding-bottom:8px; } .tab.on { color:var(--hi); box-shadow:0 2px 0 var(--amber); }
+  .tab .x { color:#4d4b44; margin-left:6px; font-size:11px; }
+  .stage { position:relative; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#121516 0%,#0b0c0d 75%); }
+  .stage svg.grid { height:82%; width:auto; }
+  .stage .cap { position:absolute; left:18px; bottom:12px; font-family:var(--serif); font-size:11.5px; color:var(--dim); max-width:60%; }
+  .stage .cap b { color:var(--hi); font-weight:600; font-style:normal; }
+  .insp { grid-row:2/3; background:var(--p1); padding:16px 18px 0 6px; overflow:hidden; }
+  .trans { grid-column:2/4; display:flex; align-items:center; gap:14px; padding:0 18px; background:var(--p1); }
+  .trace { flex:1; height:30px; position:relative; }
+  .trace svg { width:100%; height:100%; }
+  .trace .lab { position:absolute; left:0; top:-2px; font-family:var(--serif); font-style:italic; font-size:10px; color:var(--dim); }
+  .rate span { font-family:var(--mono); color:var(--dim); margin-left:8px; } .rate span.on { color:var(--amber); }
+  .drawer { position:absolute; left:34px; top:0; bottom:54px; width:26%; background:#121415f5; padding:16px 12px 0 4px; box-shadow:12px 0 24px #000a; }
+  .drawer .item { padding:1px 0; } .drawer .item.sel { color:var(--amber); } .drawer .item small { margin-left:5px; }
+  .drawer .gpu { font-family:var(--mono); color:var(--blue); font-size:9px; margin-left:4px; }
+  .filter { margin:0 0 14px 76px; font-family:var(--serif); font-style:italic; color:var(--dim); }
+  .filter::after { content:""; display:block; height:2px; background:var(--p3); margin-top:4px; border-radius:1px; }
+
+  /* variants */
+  .var { display:grid; grid-template-columns:1fr 46%; aspect-ratio:16/10; }
+  .var .insp { grid-row:auto; padding-top:16px; }
+  .tape { display:flex; gap:3px; justify-content:center; }
+  .tape span { width:24px; height:30px; background:var(--p2); border-radius:3px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:15px; color:var(--ink); }
+  .tape span.one { color:var(--amber); }
+  .tape span.head { background:var(--amberbg); box-shadow:0 0 0 2px var(--amber); }
+  .headmark { text-align:center; color:var(--amber); font-family:var(--serif); font-style:italic; font-size:11px; margin-top:6px; }
+  .tbl { font-family:var(--mono); font-size:11px; border-spacing:0; }
+  .tbl td { padding:2px 8px 2px 0; color:var(--ink); } .tbl tr.now td { color:var(--amber); }
+  .tbl th { font-family:var(--serif); font-style:italic; font-weight:400; color:var(--dim); text-align:left; padding-right:8px; }
+  .legend { font-size:13px; line-height:1.6; margin-top:10px; }
+</style>
+
+<!-- ============ FULL SCREEN ============ -->
+<div class="cards" style="grid-template-columns:1fr">
+  <div class="card" data-choice="full-workbench" onclick="toggleSelect(this)">
+    <div class="card-image app full">
+      <div class="rail"><span class="on" title="Library">❦</span><span title="Guided">¶</span><span title="Log">≡</span><span title="Settings">⁂</span></div>
+      <div class="tabs"><span class="tab on"><span class="lamp run"></span>Conway's Life<span class="x">×</span></span><span class="tab"><span class="lamp pause"></span>Lenia<span class="x">×</span></span><span class="tab"><span class="lamp halt"></span>Busy beaver<span class="x">×</span></span><span class="tab" style="color:var(--amber)">+ specimen</span></div>
+      <div class="stage"><svg class="grid life" viewBox="0 0 40 40"></svg><div class="cap"><b>Fig. 1.</b> <span class="it">The R-pentomino at generation 184, still chaotic; it stabilises at 1103.</span></div></div>
+      <div class="insp">
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">000184</span> <span class="it">tick</span><br><span class="val big">212</span> <span class="it">alive</span></div></div>
+        <div class="sect"><div class="mar">rule</div><div><span class="it">born</span> <span class="val">3</span> &nbsp; <span class="it">survives</span> <span class="val">2, 3</span><sup>1</sup></div></div>
+        <div class="sect"><div class="mar">seed</div><div class="choice"><span class="on">R-pentomino</span><span>glider</span></div><div class="note" style="margin-top:4px">applies on reset</div></div>
+        <div class="sect"><div class="mar">grid</div><div><span class="val">64 × 64</span> <span class="it">· toroidal · CPU</span></div></div>
+        <div class="sect"><div class="mar"></div><div class="note"><sup>1</sup> A dead cell with exactly three live neighbours is born; a live cell with two or three survives. Conway, 1970.</div></div>
+      </div>
+      <div class="trans"><span class="pill pri">❚❚ Pause</span><span class="pill off">Step</span><span class="pill">Reset</span>
+        <div class="trace"><span class="lab">population, last 200 ticks</span><svg class="spark" viewBox="0 0 100 10" preserveAspectRatio="none"></svg></div>
+        <div class="rate"><span class="it">steps/s</span><span>1</span><span class="on">10</span><span>30</span><span>60</span></div></div>
+    </div>
+    <div class="card-body"><h3>Workbench: Conway's Life selected</h3><p>Margin labels sit in the inspector; a figure caption anchors the stage; channel tabs use serif names, a status lamp and an amber underline. The rail glyphs are typographic ornaments (❦ library · ¶ guided · ≡ log · ⁂ settings).</p></div>
+  </div>
+
+  <div class="card" data-choice="full-drawer" onclick="toggleSelect(this)">
+    <div class="card-image app full">
+      <div class="rail"><span class="on">❦</span><span>¶</span><span>≡</span><span>⁂</span></div>
+      <div class="tabs"><span class="tab on"><span class="lamp run"></span>Conway's Life</span><span class="tab"><span class="lamp pause"></span>Lenia</span><span class="tab"><span class="lamp halt"></span>Busy beaver</span></div>
+      <div class="stage" style="filter:brightness(.55)"><svg class="grid life" viewBox="0 0 40 40"></svg></div>
+      <div class="insp" style="filter:brightness(.55)"></div>
+      <div class="trans" style="filter:brightness(.55)"></div>
+      <div class="drawer">
+        <div class="filter">filter specimens…</div>
+        <div class="sect"><div class="mar act">cellular</div><div><div class="item">Rule 30<small class="it">elementary, chaotic</small></div><div class="item">Rule 110<small class="it">universal</small></div><div class="item sel">Conway's Life<small class="it">B3/S23</small></div><div class="item">HPP gas<small class="it">lattice gas</small></div><div class="item">Lenia<span class="gpu">GPU</span><small class="it">continuous</small></div></div></div>
+        <div class="sect"><div class="mar">machines</div><div><div class="item">NFA<small class="it">ends in 01</small></div><div class="item">Pushdown<small class="it">aⁿbⁿ</small></div><div class="item">Busy beaver<small class="it">3-state Turing</small></div></div></div>
+        <div class="sect"><div class="mar">grammars</div><div><div class="item">Koch curve<small class="it">L-system</small></div></div></div>
+        <div class="sect"><div class="mar">agents</div><div><div class="item">Boids<small class="it">flocking</small></div><div class="item">Ants<small class="it">foraging</small></div></div></div>
+        <div class="sect"><div class="mar">channels</div><div><span class="val">3</span><span class="it"> of 8 open</span> &nbsp; <span class="pill" style="padding:2px 10px">clear all</span></div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>Library drawer open</h3><p>The drawer slides over the stage and dims it; clicking a specimen opens a new channel and closes the drawer. GPU-backed entries carry a small blue tag; everything else runs on the CPU.</p></div>
+  </div>
+</div>
+
+<!-- ============ FAMILY VARIANTS ============ -->
+<h3 style="margin-top:24px">Stage + inspector by model type</h3>
+<div class="cards">
+  <div class="card" data-choice="var-machine" onclick="toggleSelect(this)">
+    <div class="card-image app var">
+      <div class="stage" style="flex-direction:column">
+        <div class="tape"><span>0</span><span class="one">1</span><span class="one">1</span><span class="one head">1</span><span>0</span><span class="one">1</span><span>0</span></div>
+        <div class="headmark">↑ head · state <span class="val">B</span></div>
+        <div class="cap"><b>Fig. 2.</b> <span class="it">Tape after 9 transitions.</span></div>
+      </div>
+      <div class="insp">
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">9</span> <span class="it">steps</span><br><span class="val">B</span> <span class="it">state</span> · <span class="val">4</span> <span class="it">ones</span></div></div>
+        <div class="sect"><div class="mar">table</div><div><table class="tbl"><tr><th></th><th>0</th><th>1</th></tr><tr><td>A</td><td>1RB</td><td>1LC</td></tr><tr class="now"><td>B</td><td>1LA</td><td>1RB</td></tr><tr><td>C</td><td>1LB</td><td>1RH</td></tr></table></div></div>
+        <div class="sect"><div class="mar">input</div><div><span class="val">∅</span> <span class="note">applies on reset · ≤ 256</span></div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>Symbolic machine (Turing / NFA / PDA)</h3><p>The stage shows the tape or stack as large cells with the head marked; the inspector shows the transition table with the current row lit. When the machine halts, the lamp goes red and the margin reads <i>halted · accepted</i>.</p></div>
+  </div>
+
+  <div class="card" data-choice="var-agents" onclick="toggleSelect(this)">
+    <div class="card-image app var">
+      <div class="stage"><svg class="boids" viewBox="0 0 100 70" style="width:90%;height:auto"></svg><div class="cap"><b>Fig. 3.</b> <span class="it">48 boids, alignment dominant.</span></div></div>
+      <div class="insp">
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">0.91</span> <span class="it">order</span><br><span class="val">48</span> <span class="it">agents</span> · <span class="val">312</span> <span class="it">tick</span></div></div>
+        <div class="sect"><div class="mar">arena</div><div><span class="val">100 × 70</span> <span class="it">· wraps · seed 7</span></div></div>
+        <div class="sect"><div class="mar"></div><div class="note">Each boid steers by separation, alignment and cohesion with neighbours in its radius<sup>1</sup>.</div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>Agents (Boids / Ants)</h3><p>The stage draws agents as amber headings, plus pheromone fields for ants. The headline readout is family-specific: order parameter for boids, food collected for ants.</p></div>
+  </div>
+
+  <div class="card" data-choice="var-lenia" onclick="toggleSelect(this)">
+    <div class="card-image app var">
+      <div class="stage"><svg viewBox="0 0 100 80" style="width:80%;height:auto" class="vox"></svg><div class="cap"><b>Fig. 4.</b> <span class="it">Density volume, voxel surface.</span> <span class="val" style="font-size:9px;color:var(--blue)">GPU</span></div></div>
+      <div class="insp">
+        <div class="sect"><div class="mar act">readout</div><div><span class="val big">000002</span> <span class="it">tick</span><br><span class="it">paused · instance 12</span></div></div>
+        <div class="sect"><div class="mar">growth</div><div><div class="slider"><span class="it">μ</span><div class="t" style="--v:27%"><i></i></div><span class="val">0.270</span></div><div class="slider"><span class="it">σ</span><div class="t" style="--v:53%"><i></i></div><span class="val">0.080</span></div><div class="slider"><span class="it">Δt</span><div class="t" style="--v:4%"><i></i></div><span class="val">0.020</span></div><div class="note">restore defaults</div></div></div>
+        <div class="sect"><div class="mar">seed</div><div class="choice"><span class="on">blob</span><span>ring</span></div></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>Lenia (GPU)</h3><p>Same tabs, transport and margin inspector as the CPU families: the separate "Lenia workbench" window goes away. Sliders send the existing <code>LeniaCommand</code>s.</p></div>
+  </div>
+
+  <div class="card" data-choice="presenter" onclick="toggleSelect(this)">
+    <div class="card-image app var" style="grid-template-columns:1fr">
+      <div class="stage"><svg class="grid life" viewBox="0 0 40 40" style="height:88%"></svg>
+        <div style="position:absolute;top:16px;right:20px;text-align:right"><div class="val" style="font-size:38px;line-height:1">000184</div><div class="it">tick</div><div class="val" style="font-size:26px;margin-top:6px">212</div><div class="it">alive</div></div>
+        <div style="position:absolute;left:22px;bottom:18px"><div class="it" style="font-size:12px">Specimen ii · cellular</div><div style="font-family:var(--serif);font-size:24px;color:var(--hi)">Conway's Game of Life</div></div>
+        <div style="position:absolute;bottom:18px;right:20px;opacity:.5"><span class="pill pri">❚❚</span><span class="pill">→</span><span class="pill">↺</span></div>
+      </div>
+    </div>
+    <div class="card-body"><h3>Presenter mode (P)</h3><p>The approved behaviour, restyled: serif title bottom-left, large mono readouts top-right, and a transport that fades in on mouse movement.</p></div>
+  </div>
+</div>
+
+<div class="legend"><b>Open questions for this screen:</b> (1) Keep the <b>speed selector</b> (new behaviour; CPU families are fixed at 10 Hz today)? (2) Keep the <b>population trace</b> in the transport? (3) Should each specimen ship with a <b>figure caption and footnote text</b>? Each entry would need short authored copy; this overlaps with Guided mode.</div>
+
+<script>
+  let s = 7; const rnd = () => (s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const alive = new Set();
+  for (let y = 12; y < 28; y++) for (let x = 12; x < 28; x++) if (rnd() < 0.3) alive.add(x + "," + y);
+  [[2,1],[3,2],[1,3],[2,3],[3,3]].forEach(([x, y]) => alive.add(x + 3 + "," + (y + 3)));
+  let cells = ""; for (let y = 0; y < 40; y++) for (let x = 0; x < 40; x++) {
+    cells += alive.has(x + "," + y) ? `<rect x="${x + .12}" y="${y + .12}" width=".76" height=".76" rx=".12" fill="#ffb547"/>` : `<circle cx="${x + .5}" cy="${y + .5}" r=".06" fill="#2c2b27"/>`;
+  }
+  document.querySelectorAll("svg.life").forEach(svg => svg.innerHTML = cells);
+  let pts = ""; for (let i = 0; i <= 100; i += 2) pts += `${i},${(8.5 - 4 * (1 - Math.exp(-i / 18)) - 1.5 * Math.sin(i / 6) * rnd()).toFixed(2)} `;
+  document.querySelectorAll("svg.spark").forEach(svg => svg.innerHTML = `<polyline points="${pts}" fill="none" stroke="#ffb547" stroke-width="1.2" vector-effect="non-scaling-stroke"/>`);
+  let b = ""; for (let i = 0; i < 48; i++) { const cx = 20 + rnd() * 60 + (i % 3) * 4, cy = 12 + rnd() * 46, a = -25 + rnd() * 30;
+    b += `<path d="M0,-2.4 L1.3,1.6 L0,0.8 L-1.3,1.6Z" fill="#ffb547" transform="translate(${cx.toFixed(1)},${cy.toFixed(1)}) rotate(${(a + 90).toFixed(0)})"/>`; }
+  document.querySelectorAll("svg.boids").forEach(svg => svg.innerHTML = b);
+  let v = ""; const R = 8; for (let z = -R; z <= R; z += 2) for (let y = -R; y <= R; y += 2) for (let x = -R; x <= R; x += 2) {
+    if (x * x + y * y + z * z > R * R) continue; const px = 50 + (x - z) * 2.1, py = 40 + (x + z) * 1.05 - y * 2.2, sh = 0.45 + 0.55 * ((y + R) / (2 * R));
+    v += `<g transform="translate(${px.toFixed(1)},${py.toFixed(1)})"><path d="M0,-2.2 L2.1,-1.1 L0,0 L-2.1,-1.1Z" fill="rgb(${(94 * sh + 40) | 0},${(230 * sh) | 0},${(212 * sh) | 0})"/><path d="M-2.1,-1.1 L0,0 L0,2.2 L-2.1,1.1Z" fill="rgb(${(60 * sh) | 0},${(150 * sh) | 0},${(140 * sh) | 0})"/><path d="M2.1,-1.1 L0,0 L0,2.2 L2.1,1.1Z" fill="rgb(${(45 * sh) | 0},${(115 * sh) | 0},${(108 * sh) | 0})"/></g>`; }
+  document.querySelectorAll("svg.vox").forEach(svg => svg.innerHTML = v);
+</script>
