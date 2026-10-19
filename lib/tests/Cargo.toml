@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+models = { path = "../models" }
 bevy        = { workspace = true }
 bevy_ecs    = { workspace = true }
 
