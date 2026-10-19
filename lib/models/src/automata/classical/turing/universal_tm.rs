@@ -13,7 +13,7 @@ pub struct TMTransition {
     pub direction: Direction,
 }
 
-/// A deterministic Turing machine with a single tape (semi-infinite to the right).
+/// A deterministic Turing machine with a tape that can grow on either side.
 pub struct TuringMachine {
     pub tape: Vec<char>,
     pub head: usize,
@@ -40,8 +40,9 @@ impl TuringMachine {
             if self.head < self.tape.len() {
                 self.tape[self.head] = trans.write;
             } else {
-                // extend tape if head is at new cell
-                self.tape.push(trans.write);
+                // Public callers may place the head beyond the current allocation.
+                self.tape.resize(self.head + 1, ' ');
+                self.tape[self.head] = trans.write;
             }
             // Move head
             match trans.direction {
