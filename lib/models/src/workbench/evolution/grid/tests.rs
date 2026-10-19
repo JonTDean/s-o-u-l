@@ -1,4 +1,5 @@
 use super::*;
+use crate::automata::classical::regular::wolfram_1d::rules::{rule30::Rule30, rule110::Rule110};
 use simulation_kernel::stepper::dense::parallel::step_dense_dyn_parallel;
 
 #[test]

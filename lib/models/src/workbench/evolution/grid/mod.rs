@@ -1,10 +1,7 @@
 //! Bounded cellular sessions; elementary rules retain a scrolling time history.
-use crate::automata::{
-    classical::regular::wolfram_1d::rules::{rule30::Rule30, rule110::Rule110},
-    dynamical::particle::{
-        hpp::{E, HPPRule, W},
-        life::{Life, seed_life},
-    },
+use crate::automata::dynamical::particle::{
+    hpp::{E, HPPRule, W},
+    life::{Life, seed_life},
 };
 use crate::workbench::catalog::Kind;
 use glam::{IVec3, UVec3};
@@ -15,6 +12,8 @@ use simulation_kernel::{
     stepper::dense::step_dense,
 };
 use std::collections::VecDeque;
+mod configuration;
+use crate::workbench::experiment::config::Settings;
 
 /// A finite grid with dead boundaries and snapshot update semantics.
 pub struct GridSession {
@@ -58,12 +57,16 @@ impl GridSession {
 
     /// Advances from a complete prior grid, then retains at most 64 time rows.
     pub fn step(&mut self) {
-        let rule: &dyn AutomatonRule<D = Dim> = match self.kind {
-            Kind::Rule30 => &Rule30,
-            Kind::Rule110 => &Rule110,
-            Kind::Life => &Life,
-            Kind::Hpp => &HPPRule,
-            _ => unreachable!(),
+        self.step_with_settings(&Settings::for_kind(self.kind));
+    }
+
+    /// Apply validated live rule settings to the next snapshot update.
+    pub fn step_with_settings(&mut self, settings: &Settings) {
+        let configured = configuration::rules::CellularRule::new(self.kind, settings);
+        let rule: &dyn AutomatonRule<D = Dim> = if self.kind == Kind::Hpp {
+            &HPPRule
+        } else {
+            &configured
         };
         step_dense(&mut self.grid, rule, &serde_json::Value::Null);
         self.record();
