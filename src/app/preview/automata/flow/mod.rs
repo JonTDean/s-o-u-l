@@ -6,6 +6,9 @@ use std::io::Write;
 
 pub(super) fn update(world: &mut World) {
     world.resource_scope(|world, mut check: Mut<Verification>| {
+        if check.index >= Kind::ALL.len() {
+            return;
+        }
         check.frames += 1;
         assert!(check.frames < 6000, "native family verification timed out");
         let kind = Kind::ALL[check.index];

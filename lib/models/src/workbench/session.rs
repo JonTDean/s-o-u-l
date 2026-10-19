@@ -11,7 +11,7 @@ pub enum Model {
     Grid(GridSession),
     Symbolic(Symbolic),
     Boids(Flock),
-    Ants(Foraging),
+    Ants(Box<Foraging>),
 }
 
 /// One paused-by-default simulation with a reproducible initial condition.
@@ -39,7 +39,7 @@ impl Session {
                 Model::Grid(GridSession::new(kind))
             }
             Kind::Boids => Model::Boids(Flock::default()),
-            Kind::Ants => Model::Ants(Foraging::default()),
+            Kind::Ants => Model::Ants(Box::default()),
             _ => Model::Symbolic(Symbolic::new(kind, input)),
         }
     }
