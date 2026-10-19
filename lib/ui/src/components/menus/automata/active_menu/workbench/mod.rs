@@ -4,6 +4,7 @@ use bevy_egui::{EguiContexts, egui};
 use models::workbench::{plugin::Workbench, session::Model};
 
 mod canvas;
+mod symbols;
 
 pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
     let Ok(ctx) = contexts.ctx_mut() else {
@@ -76,7 +77,9 @@ pub fn show(mut contexts: EguiContexts, mut bench: ResMut<Workbench>) {
             } else {
                 "Running · 10 steps/s"
             });
-            if !matches!(session.model, Model::Symbolic(_)) {
+            if let Model::Symbolic(machine) = &session.model {
+                symbols::draw(ui, machine);
+            } else {
                 canvas::draw(ui, &session.model);
             }
         });
