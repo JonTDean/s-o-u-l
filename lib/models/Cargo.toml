@@ -7,6 +7,7 @@ edition = "2024"
 gpu-compute = []
 
 [dependencies]
+image = { version = "0.25.6", default-features = false, features = ["png", "gif"] }
 rand_chacha = { version = "0.9.0", features = ["serde"] }
 glam        = { workspace = true }
 bevy        = { workspace = true } 
