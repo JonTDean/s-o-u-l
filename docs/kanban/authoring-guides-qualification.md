@@ -22,3 +22,10 @@ Acceptance: exact persisted starting states and invalid-import rejection; comple
 scenario-to-comparison/export journey; numerical organism/reference agreement;
 actual voxel entity lifecycle and visible native rendering; workspace/governance
 checks; benchmark execution; portable CI definitions and available runner results.
+
+Completion: all five scope items are implemented. Local workspace checks, RTX/Mesa
+end-to-end authoring, all family/Lenia regressions, 27 local/hosted benchmarks and
+hosted Linux/Windows/macOS builds and rendered boots pass. See the
+[acceptance evidence](../verification/authoring/README.md) and
+[remaining roadmap](v0-0-2.md). General new rule definitions remain separate from
+the completed specimen-authoring scope.

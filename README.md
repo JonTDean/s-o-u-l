@@ -54,7 +54,7 @@ make preview         # static 16³ voxel rendering fixture
 ```
 
 Windows request (80, 80) on the first monitor: 1280 × 720 normally and
-1760 × 960 for scripted lab previews. The Make targets
+1760 × 960 for `--experiment-demo`. The Make targets
 force X11/Xwayland so the compositor honours that placement. To use software
 Vulkan, prefix a target with
 `VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json`.
@@ -266,8 +266,7 @@ Design specs and implementation plans live in [`docs/superpowers`](docs/superpow
 
 The lab shell, editable worlds, comparison/export, named specimen library,
 three guided experiments, voxel machine views, published Orbium and stepper
-benchmarks are implemented. Cross-platform build and boot qualification is
-tracked in the [authoring evidence](docs/verification/authoring/README.md).
+benchmarks are implemented. Linux, Windows and macOS build and boot qualification passes; see the [authoring evidence](docs/verification/authoring/README.md).
 
 Remaining product work:
 

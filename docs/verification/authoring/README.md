@@ -69,8 +69,31 @@ Criterion results. macOS exposed an old shaderc CMake minimum incompatibility;
 `CMAKE_POLICY_VERSION_MINIMUM=3.5` explicitly opts into compatible CMake 4 policy.
 The experimental Vulkan interop module is now compiled only on native Vulkan
 targets supported by wgpu; macOS uses the portable Metal renderer.
-Runner results and exact commits are recorded in `hosted.json` when complete.
-A workflow definition alone does not establish platform runtime qualification.
+[Final hosted results](hosted.json) qualify the same product source (`c21b634`):
+
+| Platform | Result | Renderer | Native capture |
+| --- | --- | --- | --- |
+| Ubuntu 24.04 | Full workspace CPU/GPU tests, build and boot pass | Mesa llvmpipe / Vulkan | [Capture](hosted/linux/boot.png) / [job](hosted/linux/job.json) |
+| macOS 15 arm64 | CPU/persistence tests, build and boot pass | Apple Paravirtual device / Metal | [Capture](hosted/macos/boot.png) / [job](hosted/macos/job.json) |
+| Windows 2022 | CPU/persistence tests, build and boot pass | Microsoft Basic Render Driver / DX12 | [Capture](hosted/windows/boot.png) / [job](hosted/windows/job.json) |
+
+Every platform passes governance/formatting and strict all-target/all-feature Clippy.
+The Linux numerical suite includes the 21 GPU oracle and surface tests; Windows
+and macOS qualification covers CPU contracts and native rendering, not those
+Vulkan-specific numerical tests. All three boot captures were visually inspected.
+
+Linux's first boot attempt exposed missing `libxkbcommon-x11.so.0`; the workflow
+now installs `libxkbcommon-x11-0`. A targeted rerun passes. Its source commit
+`d621f89` differs from the Windows/macOS source only in CI/docs. The final Linux
+source-check run also passes. `hosted.json` records individual successful jobs and
+superseded failures; it does not mislabel the earlier combined run as green.
+
+The workflow runs automatically on main and supports a complete or selected
+platform via workflow dispatch. Linux tests share the full workspace feature graph
+to avoid repeated dependency compilation. The launch command can still compile a
+different feature graph; the final Linux launch step spent nine minutes compiling
+and then captured the running app in four seconds. The independent local
+[Xvfb/Mesa boot](xvfb-boot/SUCCESS) also passes.
 
 ## Limits and observed retries
 

@@ -271,6 +271,36 @@
       "commit": "c21b634e89779eacafd4c29546648429093be4eb",
       "changed_sloc": 6,
       "subject": "fix: limit experimental Vulkan interop to supported wgpu target platforms"
+    },
+    {
+      "commit": "e1e2e71afcbd015f856825e701ff61fa8bea8b1e",
+      "changed_sloc": 0,
+      "subject": "docs: retain final portable source native acceptance and refreshed commit audit"
+    },
+    {
+      "commit": "18c29b0836bcbe4f3120a882d6301e65a5de7be8",
+      "changed_sloc": 0,
+      "subject": "docs: retain all 27 hosted Criterion baseline estimates"
+    },
+    {
+      "commit": "f5371534eda47ea6a243384bfbd574c53b59e40a",
+      "changed_sloc": 0,
+      "subject": "docs: clarify platform graphics requirements and preview window dimensions"
+    },
+    {
+      "commit": "0c3c59542384ca7bae958e4ac3e4b2c52f221c29",
+      "changed_sloc": 0,
+      "subject": "ci: install the X11 keyboard runtime and allow targeted platform qualification"
+    },
+    {
+      "commit": "d621f89dfcac841275d8f72dc7c4065314955242",
+      "changed_sloc": 0,
+      "subject": "ci: reuse the checked workspace feature graph for Linux CPU and GPU tests"
+    },
+    {
+      "commit": "4276ce97771681028b6b6a0a7a02d1d902969536",
+      "changed_sloc": 0,
+      "subject": "docs: retain successful hosted Linux Vulkan and macOS Metal boot qualification"
     }
   ]
 }
