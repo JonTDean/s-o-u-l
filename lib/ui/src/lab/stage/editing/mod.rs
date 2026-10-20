@@ -83,3 +83,5 @@ pub fn line(a: [i32; 2], b: [i32; 2]) -> Vec<[i32; 2]> {
         })
         .collect()
 }
+#[cfg(test)]
+mod tests;
