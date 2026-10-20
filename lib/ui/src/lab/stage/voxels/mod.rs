@@ -33,7 +33,10 @@ pub fn sync(mut commands: Commands, bench: Res<Workbench>, channels: Res<Channel
     let model = bench.sessions.iter().find(|s| Some(s.channel) == channels.selected).map(|s| &s.model);
     let cells = match model { Some(Model::Symbolic(m)) => layout::cells(m), _ => Vec::new() };
     for mut camera in &mut cameras {
-        camera.viewport = windows.single().ok().and_then(|w| physical_viewport(&rect, w.physical_size()));
+        camera.viewport = windows
+            .single()
+            .ok()
+            .and_then(|w| physical_viewport(&rect, w.physical_size()));
         camera.is_active = !cells.is_empty() && rect.managed && camera.viewport.is_some();
     }
     if *previous == cells {
