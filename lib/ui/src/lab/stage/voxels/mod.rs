@@ -1,6 +1,7 @@
 //! Dedicated stage camera and ECS voxel presentation for simple symbolic automata.
 pub mod layout;
 use bevy::{prelude::*, render::view::RenderLayers, window::PrimaryWindow};
+use engine_common::controls::camera::manager::stage::{StageRect, physical_viewport};
 use engine_core::automata::channel::Channels;
 use models::workbench::{plugin::Workbench, session::Model, symbolic::machine::Symbolic};
 #[derive(Component)]
