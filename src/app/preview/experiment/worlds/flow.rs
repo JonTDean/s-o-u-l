@@ -59,8 +59,10 @@ fn run(world: &mut World, v: &mut Verification) {
             v.old_owner = Some(owners[0].0);
             v.phase = 4;
         }
-        4 if checkpoint::load(world, v) => {
-            v.phase = 5;
+        4 => {
+            if checkpoint::load(world, v) {
+                v.phase = 5;
+            }
         }
         5 if Some(owners[0].0) != v.old_owner
             && owners.iter().all(|(_, _, s)| s.target_tick == 4) =>
