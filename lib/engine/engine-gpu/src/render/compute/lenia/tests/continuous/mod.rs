@@ -62,7 +62,9 @@ fn continuous_gpu_matches_independent_oracle_and_restored_continuation() {
                         .iter()
                         .zip(&expected)
                         .enumerate()
-                        .max_by(|(_, (a, b)), (_, (c, d))| (a - b).abs().total_cmp(&(c - d).abs()))
+                        .max_by(|(_, (a, b)), (_, (c, d))| {
+                            (**a - **b).abs().total_cmp(&(**c - **d).abs())
+                        })
                         .unwrap();
                     assert!(
                         error < 0.00001,
