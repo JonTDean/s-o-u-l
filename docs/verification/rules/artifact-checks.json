@@ -1,0 +1,75 @@
+{
+  "rtx": {
+    "energy.png": {
+      "size": [
+        1760,
+        960
+      ],
+      "frames": 1
+    },
+    "composition.png": {
+      "size": [
+        1760,
+        960
+      ],
+      "frames": 1
+    },
+    "animation/snapshot.png": {
+      "size": [
+        768,
+        256
+      ],
+      "frames": 1
+    },
+    "animation/animation.gif": {
+      "size": [
+        768,
+        256
+      ],
+      "frames": 3
+    },
+    "checkpoint_ticks": [
+      4,
+      4,
+      4
+    ],
+    "comparison_cells": 1024
+  },
+  "mesa": {
+    "energy.png": {
+      "size": [
+        1760,
+        960
+      ],
+      "frames": 1
+    },
+    "composition.png": {
+      "size": [
+        1760,
+        960
+      ],
+      "frames": 1
+    },
+    "animation/snapshot.png": {
+      "size": [
+        768,
+        256
+      ],
+      "frames": 1
+    },
+    "animation/animation.gif": {
+      "size": [
+        768,
+        256
+      ],
+      "frames": 3
+    },
+    "checkpoint_ticks": [
+      4,
+      4,
+      4
+    ],
+    "comparison_cells": 1024
+  },
+  "identical_cpu_artifacts_across_renderers": true
+}

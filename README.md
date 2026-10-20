@@ -196,13 +196,14 @@ make verify-automata    # all 12 CPU families, screenshots and image checks
 make verify-lenia       # GPU Lenia against the CPU reference, lifecycle and channels
 make verify-experiment  # parameters, comparison, project round-trip, export
 make verify-authoring   # saved specimens, guided experiments, voxel machines, Orbium
+make verify-rules       # authored rules, composition, energy and exact continuation
 make verify-boot        # native window, rendered screenshot and clean exit
 make benchmark-steppers # 27 Criterion stepper cases
 ```
 
 Each `verify-*` target writes evidence to `/tmp/soul-*-verification`. Override
 the path with `SOUL_AUTOMATA_VERIFY`, `SOUL_LENIA_VERIFY` or
-`SOUL_EXPERIMENT_VERIFY`, `SOUL_AUTHORING_VERIFY` or `SOUL_BOOT_VERIFY`. The harness refuses a directory that already holds a
+`SOUL_EXPERIMENT_VERIFY`, `SOUL_AUTHORING_VERIFY`, `SOUL_RULES_VERIFY` or `SOUL_BOOT_VERIFY`. The harness refuses a directory that already holds a
 success marker. The runs drive the production command path, including a
 `ChannelCommand` pass for every family. Every screenshot must show specimen
 pixels inside the published stage rectangle with no panel overlapping it.
@@ -213,6 +214,7 @@ pixels inside the published stage rectangle with no panel overlapping it.
 | GPU Lenia | [Record](docs/verification/lenia/README.md) |
 | Experiments | [Record](docs/verification/experiments/README.md) |
 | Authoring, guides, voxel machines and published Orbium | [Record](docs/verification/authoring/README.md) |
+| Authored rules, composition and energy | [Record](docs/verification/rules/README.md) |
 | Static voxel baseline | [Before](docs/verification/voxel-before.png) / [after](docs/verification/voxel-after.png) |
 
 The GPU tests need a Vulkan adapter; CI installs Mesa for software execution.
@@ -268,15 +270,16 @@ The lab shell, editable worlds, comparison/export, named specimen library,
 three guided experiments, voxel machine views, published Orbium and stepper
 benchmarks are implemented. Linux, Windows and macOS build and boot qualification passes; see the [authoring evidence](docs/verification/authoring/README.md).
 
-Remaining product work:
+Binary neighborhood rule authoring, deterministic two-rule composition and an
+editable two-pool energy model are now implemented and verified locally on Linux.
+Run `make rules` for three paused examples, or follow the
+[authoring guide](docs/guides/authored-rules.md). Exact scope and validation are in
+[the verification record](docs/verification/rules/README.md).
 
-1. **General rule authoring.** Define and validate new rules beyond the existing
-   family parameter editors; persist and share those definitions.
-2. **Layer compositing.** Specify and implement how two rule layers interact.
-3. **Dean's multi-energy rule.** Agree birth, survival, energy transfer and decay
-   semantics before implementing and qualifying it.
-4. **2-D sprite renderer decision.** The older roadmap still lists a sprite view;
-   decide whether it is useful alongside the requested voxel presentation.
+The separate sprite renderer is deferred; existing voxel presentation and cellular
+analysis views remain the chosen direction. The v0-0-2 workbench backlog is closed
+with this explicit deferral. New platform qualification is still required before
+claiming this source revision verified on Windows/macOS.
 
 The experimental ash mesh-shader renderer remains a separate, unqualified path.
 See the current [kanban](docs/kanban/v0-0-2.md); the larger

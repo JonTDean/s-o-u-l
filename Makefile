@@ -48,3 +48,10 @@ verify-boot:
 
 benchmark-steppers:
 	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo bench -p simulation_kernel --bench steppers -- --noplot
+
+.PHONY: rules verify-rules
+rules:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan cargo run --all-features -- --rules-demo
+
+verify-rules:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_RULES_VERIFY="$${SOUL_RULES_VERIFY:-/tmp/soul-rules-verification}" cargo run --all-features -- --experiment-demo
