@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: qualification-${{ github.ref }}
+  group: qualification-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   native:
