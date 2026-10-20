@@ -10,7 +10,7 @@ use bevy::prelude::*;
 use bevy_egui::egui::{self, Ui};
 use engine_core::{
     automata::{
-        channel::{ChannelAction, ChannelCommand, Status},
+        channel::{ChannelAction, ChannelCommand, ChannelId, Status},
         lenia::{LeniaSimulation, ReadbackBusy},
     },
     events::AutomataCommand,
@@ -59,6 +59,8 @@ pub struct Pending {
     pub path: std::path::PathBuf,
     /// Start time for the 15 s timeout.
     pub started: std::time::Instant,
+    /// Create a new single-channel library entry.
+    pub specimen: bool,
 }
 
 /// Drawer buttons that need world access.
@@ -66,6 +68,8 @@ pub struct Pending {
 pub enum Request {
     /// Save every paused channel.
     Save,
+    /// Save only the selected paused channel as a named specimen.
+    Specimen(ChannelId),
     /// Replace every channel with the saved project.
     Load,
 }
@@ -102,7 +106,7 @@ pub fn body(ui: &mut Ui, files: &mut Files, data: &LabData, fx: &mut Effects) {
 pub fn persist(
     mut files: ResMut<Files>,
     mut bench: ResMut<Workbench>,
-    sims: Query<(Entity, &LeniaSimulation)>,
+    sims: Query<(Entity, &LeniaSimulation, &ChannelId)>,
     mut commands: EventWriter<AutomataCommand>,
     #[cfg(feature = "gpu-compute")] probe: Res<engine_gpu::LeniaProbe>,
 ) {
@@ -113,10 +117,14 @@ pub fn persist(
     #[cfg(feature = "gpu-compute")]
     capture::poll(&mut files, &probe, &sims);
     match files.request.take() {
-        Some(Request::Save) => save(
+        Some(request @ (Request::Save | Request::Specimen(_))) => save(
             &mut files,
             &bench,
             &sims,
+            match request {
+                Request::Specimen(id) => Some(id),
+                _ => None,
+            },
             #[cfg(feature = "gpu-compute")]
             &probe,
         ),
@@ -138,18 +146,41 @@ pub fn persist(
 fn save(
     files: &mut Files,
     bench: &Workbench,
-    sims: &Query<(Entity, &LeniaSimulation)>,
+    sims: &Query<(Entity, &LeniaSimulation, &ChannelId)>,
+    selected: Option<ChannelId>,
     #[cfg(feature = "gpu-compute")] probe: &engine_gpu::LeniaProbe,
 ) {
-    let project = match Project::capture(bench, Vec::new()) {
+    let mut project = match Project::capture(bench, Vec::new()) {
         Err(e) => return files.status = e,
         Ok(project) => project,
     };
-    let mut owners: Vec<_> = sims.iter().map(|(e, s)| (e, s.clone())).collect();
+    if let Some(id) = selected {
+        project.sessions = bench
+            .sessions
+            .iter()
+            .position(|s| s.channel == id)
+            .map(|index| project.sessions.remove(index))
+            .into_iter()
+            .collect();
+        project.selected = 0;
+    }
+    let mut owners: Vec<_> = sims
+        .iter()
+        .filter(|(_, _, id)| selected.is_none_or(|selected| selected == **id))
+        .map(|(e, s, _)| (e, s.clone()))
+        .collect();
+    if selected.is_some() && project.sessions.is_empty() && owners.is_empty() {
+        files.status = "Selected channel was removed".into();
+        return;
+    }
     owners.sort_by_key(|(e, _)| e.to_bits());
     if owners.is_empty() {
-        files.status = project::write(std::path::Path::new(&files.path), &project)
-            .map_or_else(|e| e, |_| "Project saved".into());
+        files.status = if selected.is_some() {
+            project::library::create(std::path::Path::new(&files.path), &project)
+        } else {
+            project::write(std::path::Path::new(&files.path), &project)
+        }
+        .map_or_else(|e| e, |_| "Project saved".into());
         return;
     }
     #[cfg(feature = "gpu-compute")]
@@ -165,6 +196,7 @@ fn save(
             owners,
             path,
             started,
+            specimen: selected.is_some(),
         });
         files.status = "Waiting for completed GPU state…".into();
     }

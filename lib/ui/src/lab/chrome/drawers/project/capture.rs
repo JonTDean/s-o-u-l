@@ -5,7 +5,7 @@ use engine_gpu::LeniaProbe;
 pub(super) fn poll(
     files: &mut Files,
     probe: &LeniaProbe,
-    sims: &Query<(Entity, &LeniaSimulation)>,
+    sims: &Query<(Entity, &LeniaSimulation, &ChannelId)>,
 ) {
     let Some(mut pending) = files.save.take() else {
         return;
@@ -16,7 +16,7 @@ pub(super) fn poll(
     }
     let mut waiting = Vec::new();
     for (entity, expected) in pending.owners {
-        let Ok((_, current)) = sims.get(entity) else {
+        let Ok((_, current, _)) = sims.get(entity) else {
             files.status = "Save cancelled: instance removed".into();
             return;
         };
@@ -57,7 +57,12 @@ pub(super) fn poll(
     }
     pending.owners = waiting;
     if pending.owners.is_empty() {
-        files.status = match models::workbench::project::write(&pending.path, &pending.project) {
+        let result = if pending.specimen {
+            project::library::create(&pending.path, &pending.project)
+        } else {
+            project::write(&pending.path, &pending.project)
+        };
+        files.status = match result {
             Ok(()) => format!("Saved {}", pending.path.display()),
             Err(e) => e,
         };
