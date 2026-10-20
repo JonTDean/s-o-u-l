@@ -2305,6 +2305,7 @@ dependencies = [
  "libloading",
  "naga 24.0.0",
  "naga_oil 0.18.0",
+ "serde_json",
  "shaderc",
  "simulation_kernel",
  "wgpu",
