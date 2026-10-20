@@ -49,13 +49,15 @@ pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
                     editor.status = "Built-in rule prepared; press Apply below".into();
                 }
             });
-            ui.add(
-                egui::TextEdit::multiline(&mut editor.text)
-                    .code_editor()
-                    .desired_rows(10)
-                    .desired_width(f32::INFINITY)
-                    .char_limit(storage::MAX_BYTES),
-            );
+            egui::ScrollArea::both().max_height(220.0).show(ui, |ui| {
+                ui.add(
+                    egui::TextEdit::multiline(&mut editor.text)
+                        .code_editor()
+                        .desired_rows(10)
+                        .desired_width(240.0)
+                        .char_limit(storage::MAX_BYTES),
+                );
+            });
             layers::draw(ui, editor);
             transfer::draw(ui, editor);
             if ui.button("Validate and prepare rule").clicked() {

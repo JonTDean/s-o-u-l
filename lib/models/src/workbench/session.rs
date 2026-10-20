@@ -124,6 +124,9 @@ impl Session {
         if reset && self.input.chars().count() > 256 {
             return Err("Input is limited to 256 symbols");
         }
+        if !reset && self.settings.program != settings.program {
+            self.epoch += 1;
+        }
         self.settings = settings;
         if reset {
             self.reset()?;
