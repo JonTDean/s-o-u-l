@@ -1,3 +1,4 @@
+pub mod world;
 use crate::workbench::catalog::Kind;
 use engine_core::automata::channel::Srgb;
 use serde::{Deserialize, Serialize};
@@ -16,6 +17,8 @@ pub enum Pattern {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Settings {
+    #[serde(default)]
+    pub world: world::World,
     pub rate_hz: f32,
     pub pattern: Pattern,
     pub random_seed: u64,
@@ -38,6 +41,7 @@ impl Settings {
     /// Preserve the qualified fixture's defaults for each family.
     pub fn for_kind(kind: Kind) -> Self {
         Self {
+            world: world::World::default(),
             rate_hz: 10.0,
             pattern: Pattern::Default,
             random_seed: 0x534f554c,
@@ -57,7 +61,8 @@ impl Settings {
     }
     /// Initial conditions are stable until reset, unlike live rule parameters.
     pub fn same_initial_conditions(&self, other: &Self) -> bool {
-        self.pattern == other.pattern
+        self.world == other.world
+            && self.pattern == other.pattern
             && self.random_seed == other.random_seed
             && self.agent_count == other.agent_count
     }

@@ -9,7 +9,7 @@ use simulation_kernel::{
     AutomatonRule,
     core::{cell::CellState, dim::Dim},
     grid::{DenseGrid, GridBackend},
-    stepper::dense::step_dense,
+    stepper::dense::step_dense_boundary,
 };
 use std::collections::VecDeque;
 mod configuration;
@@ -70,7 +70,12 @@ impl GridSession {
         } else {
             &configured
         };
-        step_dense(&mut self.grid, rule, &serde_json::Value::Null);
+        step_dense_boundary(
+            &mut self.grid,
+            rule,
+            &serde_json::Value::Null,
+            settings.world.boundary,
+        );
         self.record();
     }
 
