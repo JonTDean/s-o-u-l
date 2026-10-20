@@ -43,6 +43,7 @@ pub fn show(
         egui::Area::new("lab.title".into())
             .anchor(Align2::LEFT_BOTTOM, [22.0, -18.0])
             .show(ctx, |ui| {
+                ui.set_min_width(360.0);
                 let n = data.specimens.figure(&row.kind).unwrap_or(0);
                 let heading = format!("Specimen {n} · {}", specimen.group.label());
                 ui.label(serif_italic(heading).size(size::BODY + 1.0));
