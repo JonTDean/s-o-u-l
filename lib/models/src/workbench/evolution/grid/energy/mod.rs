@@ -57,3 +57,6 @@ impl GridSession {
         self.energy = Some(next);
     }
 }
+
+#[cfg(test)]
+mod tests;
