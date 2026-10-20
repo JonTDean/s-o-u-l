@@ -10,6 +10,7 @@ use models::workbench::{
 };
 use std::collections::HashMap;
 mod authored;
+mod energy;
 mod fields;
 mod world;
 
@@ -91,10 +92,11 @@ pub fn show(
         fields::draw(ui, session.kind, edited);
         if session.kind == models::workbench::catalog::Kind::Life {
             authored::draw(ui, edited, &mut entry.editor);
+            energy::draw(ui, edited);
         }
         note(
             ui,
-            "Rate and rule apply live; seed and population need a reset.",
+            "Rate and rule apply live; seed, population and energy need a reset.",
             false,
         );
         ui.horizontal_wrapped(|ui| {
