@@ -60,10 +60,11 @@ jobs:
       - name: Strict portable compilation
         run: cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
       - name: CPU contracts and persistence
+        if: runner.os != 'Linux'
         run: cargo test --locked --workspace --all-features --exclude engine-gpu
-      - name: Linux Vulkan numerical qualification
+      - name: Linux workspace CPU and Vulkan numerical qualification
         if: runner.os == 'Linux'
-        run: cargo test --locked -p engine-gpu --all-features
+        run: cargo test --locked --workspace --all-features
       - name: Build native application
         run: cargo build --locked --workspace --all-features
       - name: Linux window and rendering smoke
