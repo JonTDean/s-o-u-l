@@ -33,3 +33,20 @@ impl Stamp {
         Self { id, epoch:s.epoch,tick:s.target_tick,params:Some(s.params),kernel:s.kernel }
     }
 }
+fn begin(
+    state: &mut super::Comparison, step:bool,
+    lookup:impl Fn(ChannelId)->Result<Stamp,String>,
+    commands:&mut bevy::prelude::EventWriter<engine_core::automata::channel::ChannelCommand>,
+) -> Result<(),String> {
+    use engine_core::automata::channel::{ChannelAction,ChannelCommand};
+    let (left,right)=state.left.zip(state.right).ok_or("Choose two channels")?;
+    if left==right {return Err("Choose two different channels".into())}
+    let mut expected=[lookup(left)?,lookup(right)?];
+    if step {
+        for stamp in &mut expected {stamp.tick=stamp.tick.checked_add(1).ok_or("Tick limit reached")?;}
+        for id in [left,right] {commands.write(ChannelCommand{id,action:ChannelAction::Step});}
+    }
+    state.capture.pending=Some(Pending {expected,started:std::time::Instant::now()});
+    state.status="Waiting for both completed states…".into();
+    Ok(())
+}
