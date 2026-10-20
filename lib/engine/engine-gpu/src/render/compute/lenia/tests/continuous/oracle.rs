@@ -1,9 +1,6 @@
-use simulation_kernel::core::{
-    boundary::Boundary,
-    lenia::{
-        LeniaParams,
-        continuous::{self, Kernel, Shape},
-    },
+use simulation_kernel::core::lenia::{
+    LeniaParams,
+    continuous::{self, Kernel},
 };
 #[test]
 fn normalized_periodic_field_and_z_coupling() {

@@ -19,7 +19,11 @@ pub(super) fn show(ui: &mut Ui, state: &mut Comparison, data: &LabData) {
 fn quoted(s: &str) -> String {
     format!("\"{}\"", s.replace('"', "\"\""))
 }
-fn write(state: &Comparison, data: &LabData) -> Result<(), String> {
+pub fn write(
+    state: &Comparison,
+    channels: &engine_core::automata::channel::Channels,
+    metrics_data: &engine_core::automata::channel::metrics::Metrics,
+) -> Result<(), String> {
     let pair = state
         .left
         .zip(state.right)
@@ -27,8 +31,8 @@ fn write(state: &Comparison, data: &LabData) -> Result<(), String> {
         .ok_or("Choose two different channels")?;
     let mut metrics = String::from("channel,kind,metric,unit,epoch,tick,value\n");
     for id in [pair.0, pair.1] {
-        let row = data.channels.get(id).ok_or("Compared channel closed")?;
-        if let Some(metric) = data.metrics.get(id) {
+        let row = channels.get(id).ok_or("Compared channel closed")?;
+        if let Some(metric) = metrics_data.get(id) {
             for sample in metric.trace.samples() {
                 writeln!(
                     metrics,
