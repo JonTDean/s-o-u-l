@@ -21,6 +21,8 @@ const PATTERNS: [(Pattern, &str); 5] = [
 pub(super) fn draw(ui: &mut Ui, kind: Kind, settings: &mut Settings) {
     slider(ui, "steps/s", &mut settings.rate_hz, 1.0..=60.0, false);
     if matches!(kind, Kind::Rule30 | Kind::Rule110 | Kind::Life | Kind::Hpp) {
+        super::world::draw(ui, settings, kind);
+        let before = settings.pattern;
         let valid: Vec<(Pattern, &str)> = PATTERNS
             .into_iter()
             .filter(|(pattern, _)| {
@@ -30,6 +32,9 @@ pub(super) fn draw(ui: &mut Ui, kind: Kind, settings: &mut Settings) {
             })
             .collect();
         ui.horizontal_wrapped(|ui| choice(ui, &mut settings.pattern, &valid));
+        if before != settings.pattern {
+            settings.world.seed = None;
+        }
     }
     labelled(ui, "seed", |ui| {
         ui.add(egui::DragValue::new(&mut settings.random_seed))

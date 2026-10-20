@@ -24,6 +24,14 @@ pub enum ChannelAction {
     SetInput(String),
     /// Enable or disable an opt-in metric source (Lenia GPU mass readback).
     SampleMetric(bool),
+    /// Paint a paused cellular field; the first batch starts one undoable stroke.
+    Paint {
+        points: Vec<[i32; 2]>,
+        value: u8,
+        start: bool,
+    },
+    /// Undo (`false`) or redo (`true`) a cellular stroke.
+    UndoPaint(bool),
     /// Lenia-specific parameter and seed actions.
     Lenia(LeniaAction),
 }

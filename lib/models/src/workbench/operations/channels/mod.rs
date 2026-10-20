@@ -77,6 +77,14 @@ pub(in crate::workbench) fn route(
         match &command.action {
             ChannelAction::Pause(paused) if !session.halted() => session.paused = *paused,
             ChannelAction::Step => session.single_step(),
+            ChannelAction::Paint {
+                points,
+                value,
+                start,
+            } => session.note = session.paint(points, *value, *start).err().map(Into::into),
+            ChannelAction::UndoPaint(redo) => {
+                session.note = session.undo_paint(*redo).err().map(Into::into)
+            }
             ChannelAction::Reset => session.note = session.reset().err().map(Into::into),
             ChannelAction::SetRate(rate) => session.settings.rate_hz = rate.clamp(1.0, 60.0),
             ChannelAction::SetColour(colour) => session.settings.colour = *colour,

@@ -10,6 +10,7 @@ use models::workbench::{
 };
 use std::collections::HashMap;
 mod fields;
+mod world;
 
 /// An edited copy of a session's settings and the settings it was taken from.
 #[derive(Clone, Debug)]
