@@ -37,13 +37,26 @@ pub fn show(
         if continuous {
             ui.horizontal(|ui| {
                 ui.label("radius");
-                ui.add(egui::DragValue::new(&mut kernel.radius).range(1..=4));
+                if kernel.shape == Shape::Orbium {
+                    ui.label("13 · periodic XY");
+                } else {
+                    ui.add(egui::DragValue::new(&mut kernel.radius).range(1..=4));
+                }
             });
             choice(
                 ui,
                 &mut kernel.shape,
-                &[(Shape::Gaussian, "Gaussian"), (Shape::Shell, "shell")],
+                &[
+                    (Shape::Gaussian, "Gaussian XYZ"),
+                    (Shape::Shell, "shell XYZ"),
+                    (Shape::Orbium, "Orbium XY"),
+                ],
             );
+            if kernel.shape == Shape::Orbium {
+                kernel = simulation_kernel::core::lenia::continuous::orbium::KERNEL;
+            } else {
+                kernel.radius = kernel.radius.min(4);
+            }
             choice(
                 ui,
                 &mut kernel.boundary,
@@ -56,7 +69,7 @@ pub fn show(
         }
         note(
             ui,
-            "Model and kernel changes reset the field. XYZ retains float density and couples all axes.",
+            "Model changes reset. Gaussian/shell couple XYZ; Orbium uses polynomial XY. Select the Orbium seed to restore published parameters.",
             false,
         );
     });
@@ -74,7 +87,11 @@ pub fn show(
     });
     margin_section(ui, "seed", false, |ui| {
         let mut seed = sim.seed;
-        let options = [(LeniaSeed::Blob, "blob"), (LeniaSeed::Ring, "ring")];
+        let options = [
+            (LeniaSeed::Blob, "blob"),
+            (LeniaSeed::Ring, "ring"),
+            (LeniaSeed::Orbium, "published Orbium"),
+        ];
         if choice(ui, &mut seed, &options) {
             send(fx, ChannelAction::Lenia(LeniaAction::Seed(seed)));
         }

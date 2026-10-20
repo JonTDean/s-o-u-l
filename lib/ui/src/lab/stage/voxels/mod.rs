@@ -24,6 +24,14 @@ pub fn setup(
         unlit: true,
         ..default()
     });
+    commands.spawn((
+        DirectionalLight {
+            illuminance: 8000.0,
+            ..default()
+        },
+        Transform::from_xyz(-10.0, 25.0, 30.0).looking_at(Vec3::ZERO, Vec3::Y),
+        RenderLayers::layer(20),
+    ));
     commands.insert_resource(Meshes {
         cube: meshes.add(Cuboid::new(2.3, 2.3, 2.3)),
         materials: default(),
