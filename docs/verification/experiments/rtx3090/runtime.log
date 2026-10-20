@@ -1,11 +1,26 @@
-   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-experiments/lib/ui)
-   Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-experiments)
-    Finished `dev` profile [optimized + debuginfo] target(s) in 3.71s
+env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_EXPERIMENT_VERIFY="${SOUL_EXPERIMENT_VERIFY:-/tmp/soul-experiment-verification}" cargo run -- --experiment-demo
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.36s
      Running `/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/swarm_orchestrator_for_autonomous_learners --experiment-demo`
-2026-10-19T11:39:32.224848Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
-2026-10-19T11:39:32.409656Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
-2026-10-19T11:39:32.657954Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
-2026-10-19T11:39:32.709685Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
-2026-10-19T11:39:32.709737Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
-2026-10-19T11:39:32.713689Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
-2026-10-19T11:39:34.307267Z  INFO bevy_render::view::window::screenshot: Screenshot saved to docs/verification/experiments/rtx3090/experiment.png
+2026-10-20T12:57:30.394973Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
+snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
+ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+2026-10-20T12:57:30.939972Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-20T12:57:30.989439Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T12:57:30.989488Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-20T12:57:31.877745Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-experiment-verification/experiment.png

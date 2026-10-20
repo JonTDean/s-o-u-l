@@ -16426,7 +16426,12 @@
         "agent_count": 24,
         "evaporation": 0.01,
         "deposit": 1.0,
-        "exploration": 0.0
+        "exploration": 0.0,
+        "colour": [
+          255,
+          181,
+          71
+        ]
       },
       "elapsed": 0.0
     },
@@ -17587,7 +17592,12 @@
         "agent_count": 24,
         "evaporation": 0.01,
         "deposit": 1.0,
-        "exploration": 0.0
+        "exploration": 0.0,
+        "colour": [
+          255,
+          181,
+          71
+        ]
       },
       "elapsed": 0.0
     }

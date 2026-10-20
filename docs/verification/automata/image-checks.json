@@ -1,146 +1,338 @@
 [
   {
-    "image": "mesa/context-free-anbn.png",
-    "width": 1280,
     "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "mesa/context-free-koch.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 2702
-  },
-  {
-    "image": "mesa/context-free-parentheses.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "mesa/context-sensitive-anbncn.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 304
-  },
-  {
-    "image": "mesa/life-conway.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 163
-  },
-  {
-    "image": "mesa/particle-hpp.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 1626
-  },
-  {
-    "image": "mesa/regular-nfa.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "mesa/swarm-ants.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 484
-  },
-  {
-    "image": "mesa/swarm-boids.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 1021
-  },
-  {
-    "image": "mesa/turing-replace-a.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 314
-  },
-  {
-    "image": "mesa/wolfram-rule110.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 11038
-  },
-  {
-    "image": "mesa/wolfram-rule30.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 18856
-  },
-  {
-    "image": "rtx3090/context-free-anbn.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "rtx3090/context-free-koch.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 2704
-  },
-  {
-    "image": "rtx3090/context-free-parentheses.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "rtx3090/context-sensitive-anbncn.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 304
-  },
-  {
-    "image": "rtx3090/life-conway.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 163
-  },
-  {
-    "image": "rtx3090/particle-hpp.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 1626
-  },
-  {
-    "image": "rtx3090/regular-nfa.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 320
-  },
-  {
-    "image": "rtx3090/swarm-ants.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 484
-  },
-  {
-    "image": "rtx3090/swarm-boids.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 1021
-  },
-  {
-    "image": "rtx3090/turing-replace-a.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 314
-  },
-  {
-    "image": "rtx3090/wolfram-rule110.png",
-    "width": 1280,
-    "height": 720,
-    "colored_state_pixels": 11038
-  },
-  {
     "image": "rtx3090/wolfram-rule30.png",
-    "width": 1280,
+    "panels_clear": true,
+    "signal_pixels": 34663,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 37051,
+    "width": 1280
+  },
+  {
     "height": 720,
-    "colored_state_pixels": 18856
+    "image": "rtx3090/wolfram-rule110.png",
+    "panels_clear": true,
+    "signal_pixels": 20191,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 21591,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/life-conway.png",
+    "panels_clear": true,
+    "signal_pixels": 300,
+    "stage": [
+      32,
+      28,
+      949,
+      652
+    ],
+    "warm_pixels": 320,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/particle-hpp.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3008,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/regular-nfa.png",
+    "panels_clear": true,
+    "signal_pixels": 1300,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 1743,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/context-free-anbn.png",
+    "panels_clear": true,
+    "signal_pixels": 1688,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 2383,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/context-free-parentheses.png",
+    "panels_clear": true,
+    "signal_pixels": 620,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 640,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/context-free-koch.png",
+    "panels_clear": true,
+    "signal_pixels": 1698,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3891,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/context-sensitive-anbncn.png",
+    "panels_clear": true,
+    "signal_pixels": 2157,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3096,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/turing-replace-a.png",
+    "panels_clear": true,
+    "signal_pixels": 1325,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 1805,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/swarm-boids.png",
+    "panels_clear": true,
+    "signal_pixels": 1697,
+    "stage": [
+      32,
+      28,
+      970,
+      652
+    ],
+    "warm_pixels": 2447,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "rtx3090/swarm-ants.png",
+    "panels_clear": true,
+    "signal_pixels": 176,
+    "stage": [
+      32,
+      28,
+      973,
+      652
+    ],
+    "warm_pixels": 313,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/wolfram-rule30.png",
+    "panels_clear": true,
+    "signal_pixels": 34663,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 37051,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/wolfram-rule110.png",
+    "panels_clear": true,
+    "signal_pixels": 20191,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 21591,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/life-conway.png",
+    "panels_clear": true,
+    "signal_pixels": 300,
+    "stage": [
+      32,
+      28,
+      949,
+      652
+    ],
+    "warm_pixels": 320,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/particle-hpp.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3008,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/regular-nfa.png",
+    "panels_clear": true,
+    "signal_pixels": 1300,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 1743,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/context-free-anbn.png",
+    "panels_clear": true,
+    "signal_pixels": 1688,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 2383,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/context-free-parentheses.png",
+    "panels_clear": true,
+    "signal_pixels": 620,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 640,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/context-free-koch.png",
+    "panels_clear": true,
+    "signal_pixels": 1697,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3896,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/context-sensitive-anbncn.png",
+    "panels_clear": true,
+    "signal_pixels": 2156,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3096,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/turing-replace-a.png",
+    "panels_clear": true,
+    "signal_pixels": 1324,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 1805,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/swarm-boids.png",
+    "panels_clear": true,
+    "signal_pixels": 1695,
+    "stage": [
+      32,
+      28,
+      970,
+      652
+    ],
+    "warm_pixels": 2450,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "mesa/swarm-ants.png",
+    "panels_clear": true,
+    "signal_pixels": 175,
+    "stage": [
+      32,
+      28,
+      973,
+      652
+    ],
+    "warm_pixels": 313,
+    "width": 1280
   }
 ]

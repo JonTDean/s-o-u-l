@@ -16,9 +16,18 @@ SOUL_LENIA_VERIFY=/tmp/lenia-regression make verify-lenia
 ```
 
 The interactive lab opens windowed at 1280×720 with Rule 30 paused at tick 32.
-Choose another family in the spawner. The active list and session selector switch
-between independent instances. Resume, single-step, reset and remove operate on
-the selected instance; Clear all releases both CPU and Lenia instances.
+Open another specimen from the library drawer (L); channel tabs switch between
+independent instances. Run/Pause, Step, Reset and close (×) operate on the
+selected channel; *clear all* in the library releases both CPU and Lenia channels.
+
+Each family also runs a **channel-command pass**: after the direct session checks
+the harness sends `Reset` and `Step` as `ChannelCommand`s and requires the
+published row to read tick 1, paused, before restoring the capture fixture.
+[Image measurements](image-checks.json) record nonzero signal/warm pixels inside
+the published stage rectangle for every capture, with no panel overlapping the
+stage (`panels_clear`). Screenshots, runtime logs, session ledgers and image
+checks were recaptured with the lab shell on 2026-10-20 on both drivers; the test
+counts under *Qualification* are from the original 2026-10-19 run.
 
 ## Qualification
 

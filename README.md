@@ -19,10 +19,9 @@ Start the verified Lenia workbench, paused with a deterministic blob:
 make lenia
 ```
 
-Use Pause/Resume, Single step, Reset, Blob/Ring, growth parameter sliders, and
-Restore growth defaults in the Lenia panel. The spawner also supports clearing
-all automata and spawning new instances. Each instance owns its state and clock.
-The window opens on monitor 1 at (80, 80), sized 1280 × 720.
+The window opens on monitor 1 at (80, 80), sized 1280 × 720, in the lab
+described below. Lenia's inspector holds growth sliders (μ, σ, Δt), restore
+defaults, Blob/Ring seeds and opt-in GPU mass sampling.
 
 This variant stores density in 0..255 and evolves independent XY planes using a
 finite 3×3 Gaussian kernel with zero boundaries. GPU buffers swap every tick;
@@ -49,13 +48,52 @@ make automata
 make verify-automata
 ```
 
-The Automata workbench provides isolated CPU sessions for Rule 30/110, Conway
-Life, HPP, finite/stack/bounded-tape/Turing machines, Koch rewriting, boids and
-ants. Select a family in the spawner, then resume, single-step, reset or remove
-its session. Symbolic input is editable before Reset. Up to eight CPU sessions
-can coexist, with separate clocks and state. Clear all affects CPU and Lenia
-sessions. See the [family contracts](docs/kanban/automata-families.md) and
+The catalog provides isolated CPU sessions for Rule 30/110, Conway Life, HPP,
+finite/stack/bounded-tape/Turing machines, Koch rewriting, boids and ants, plus
+GPU Lenia. The LBA never grows its input tape, and the Turing example is a small
+transition table, not a universal machine. See the
+[family contracts](docs/kanban/automata-families.md) and
 [qualification evidence](docs/verification/automata/README.md).
+
+## Lab
+
+Every specimen runs as a *channel* in one automata lab:
+
+- **Rail** (left, 32 px): the library, compare (≡) and project (§) drawers, and
+  settings (⁂) with presenter mode and the GPU debug marker.
+- **Library drawer**: specimens grouped as cellular, machines, grammars and
+  agents, with a filter. Click one to open it as a channel; up to eight channels
+  (CPU and GPU together) can be open.
+- **Channel tabs**: serif specimen names with status lamps (green running, amber
+  paused, red halted), close (×) and add (+).
+- **Stage**: the selected channel, painted in its colour, with a figure caption
+  and an arena/zoom/cursor readout. CPU stages zoom with the wheel, pan by
+  dragging and reset on double-click; GPU Lenia renders through the 3-D camera.
+- **Inspector** (right, 220–420 px, drag to resize): tick and headline metric,
+  experiment parameters (Apply live, Apply and reset, Defaults), machine state,
+  symbolic input, arena, channel colour (swatches or any sRGB), and a footnote
+  citing the specimen's source with a DOI link.
+- **Transport** (bottom): Run/Pause, Step, Reset, the metric trace, and
+  1/10/30/60 steps/s.
+
+| Key | Action |
+| --- | --- |
+| Space | Run or pause the selected channel (left to the free camera when it is on) |
+| `.` | Step once while paused |
+| R | Reset |
+| 1–8 | Select a tab |
+| P | Presenter mode: full-window stage, HUD readouts and a fading transport |
+| N | Collapse or show the inspector |
+| L | Library |
+| Esc | Close the drawer or leave presenter; otherwise open the pause menu |
+
+Arrow keys, WASD and Z/X stay with the camera. Lenia mass is sampled from GPU
+readbacks only after you opt in (inspector, *sample*), at 4 Hz, and pauses while
+a project save holds the readback mailbox.
+
+| Before | After |
+| --- | --- |
+| ![Legacy floating windows](docs/verification/automata/before-lab.png) | ![The lab with Conway's Game of Life](docs/verification/automata/rtx3090/life-conway.png) |
 
 The normal application starts at the main menu. To inspect a deterministic
 16 × 16 × 16 voxel volume without navigating the scenario menus:
