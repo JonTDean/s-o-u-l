@@ -45,8 +45,14 @@ pub fn sync(mut commands: Commands, bench: Res<Workbench>, channels: Res<Channel
         commands.spawn((SymbolVoxel, Mesh3d(assets.cube.clone()), MeshMaterial3d(material),
             Transform::from_translation(cell.position), RenderLayers::layer(20)));
         if cell.head {
-            commands.spawn((SymbolVoxel, Mesh3d(assets.cube.clone()), MeshMaterial3d(assets.head.clone()),
-                Transform::from_translation(cell.position + Vec3::Y * 3.0).with_scale(Vec3::new(1.0, 0.2, 1.0)), RenderLayers::layer(20)));
+            commands.spawn((
+                SymbolVoxel,
+                Mesh3d(assets.cube.clone()),
+                MeshMaterial3d(assets.head.clone()),
+                Transform::from_translation(cell.position + Vec3::Y * 3.0)
+                    .with_scale(Vec3::new(1.0, 0.2, 1.0)),
+                RenderLayers::layer(20),
+            ));
         }
     }
     *previous = cells;
