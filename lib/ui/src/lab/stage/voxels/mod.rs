@@ -39,11 +39,24 @@ pub fn sync(mut commands: Commands, bench: Res<Workbench>, channels: Res<Channel
     if *previous == cells { return; }
     for entity in &entities { commands.entity(entity).despawn(); }
     for cell in &cells {
-        let material = assets.materials.entry(cell.symbol).or_insert_with(|| materials.add(StandardMaterial {
-            base_color: layout::palette(cell.symbol).0, perceptual_roughness: 0.75, ..default()
-        })).clone();
-        commands.spawn((SymbolVoxel, Mesh3d(assets.cube.clone()), MeshMaterial3d(material),
-            Transform::from_translation(cell.position), RenderLayers::layer(20)));
+        let material = assets
+            .materials
+            .entry(cell.symbol)
+            .or_insert_with(|| {
+                materials.add(StandardMaterial {
+                    base_color: layout::palette(cell.symbol).0,
+                    perceptual_roughness: 0.75,
+                    ..default()
+                })
+            })
+            .clone();
+        commands.spawn((
+            SymbolVoxel,
+            Mesh3d(assets.cube.clone()),
+            MeshMaterial3d(material),
+            Transform::from_translation(cell.position),
+            RenderLayers::layer(20),
+        ));
         if cell.head {
             commands.spawn((
                 SymbolVoxel,
