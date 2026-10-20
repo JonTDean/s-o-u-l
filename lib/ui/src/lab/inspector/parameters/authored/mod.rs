@@ -26,6 +26,7 @@ impl Editor {
 }
 pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
     egui::CollapsingHeader::new("Authored rules and layers")
+        .id_salt(("authored-rules", settings.program.is_some()))
         .default_open(settings.program.is_some())
         .show(ui, |ui| {
             ui.label("Binary 3×3 rules. First matching transition wins.");

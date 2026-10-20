@@ -16,7 +16,7 @@ pub(super) struct Verification {
     captured: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 pub(super) fn enabled() -> bool {
-    std::env::args().any(|a| a == "--experiment-demo")
+    std::env::args().any(|a| a == "--experiment-demo" || a == "--rules-demo")
 }
 pub(super) fn install(app: &mut App) {
     worlds::install(app);
@@ -43,8 +43,14 @@ pub(super) fn setup(
     mut commands: Commands,
     mut next: ResMut<NextState<AppState>>,
     mut events: EventWriter<AutomataCommand>,
+    mut files: ResMut<ui::lab::chrome::drawers::Files>,
 ) {
     next.set(AppState::InGame);
+    if std::env::args().any(|a| a == "--rules-demo") {
+        files.load = Some(authoring::rules::demo());
+        super::scene::camera(&mut commands, Vec3::new(128.0, 128.0, 16.0));
+        return;
+    }
     events.write(AutomataCommand::SeedPattern { id: "lenia".into() });
     if worlds::enabled() {
         events.write(AutomataCommand::SeedPattern { id: "lenia".into() });

@@ -19,3 +19,12 @@ pub(super) fn install(app: &mut App) {
     })
     .add_systems(Last, flow::update);
 }
+
+/// Three paused, editable examples for the visible rules demo.
+pub(in crate::app::preview::experiment) fn demo() -> project::Project {
+    let mut project = fixtures::project();
+    for (i, session) in project.sessions.iter_mut().enumerate() {
+        session.configure(fixtures::settings(i), true).unwrap();
+    }
+    project
+}

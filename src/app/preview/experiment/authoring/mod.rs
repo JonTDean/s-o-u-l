@@ -15,7 +15,7 @@ use ui::lab::{
 mod cpu;
 mod flow;
 mod gpu;
-mod rules;
+pub(super) mod rules;
 #[derive(Resource)]
 struct Verification {
     output: std::path::PathBuf,
