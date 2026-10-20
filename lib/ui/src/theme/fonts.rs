@@ -41,6 +41,14 @@ pub fn family(name: &str) -> FontFamily {
     FontFamily::Name(name.into())
 }
 
+/// Whether this pass can lay out the named Libertinus families.
+///
+/// `Context::set_fonts` takes effect at the start of the next pass, so UI that uses the
+/// named families must wait for this rather than for the install system.
+pub fn ready(ctx: &bevy_egui::egui::Context) -> bool {
+    ctx.fonts(|fonts| fonts.families().contains(&family(SERIF)))
+}
+
 /// egui's defaults with Libertinus first in every family; defaults remain as glyph fallbacks.
 pub fn definitions() -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
@@ -92,6 +100,21 @@ mod tests {
             );
         }
         assert!(defs.families[&FontFamily::Monospace][0].starts_with("libertinus"));
+    }
+
+    #[test]
+    fn named_families_are_ready_only_from_the_pass_after_install() {
+        let ctx = Context::default();
+        let mut seen = Vec::new();
+        for _ in 0..2 {
+            let _ = ctx.run(RawInput::default(), |ctx| {
+                if seen.is_empty() {
+                    ctx.set_fonts(definitions());
+                }
+                seen.push(ready(ctx));
+            });
+        }
+        assert_eq!(seen, [false, true], "set_fonts applies at the next pass");
     }
 
     #[test]

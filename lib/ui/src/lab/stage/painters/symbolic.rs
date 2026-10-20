@@ -38,19 +38,50 @@ pub fn koch_extent(word: &str) -> Vec2 {
     (max - min).max(vec2(1.0, 1.0))
 }
 
+/// Visible tape cells at most.
+const MAX_CELLS: usize = 20;
+/// Content width floor so short tapes keep readable cell sizes.
+const MIN_CELLS: usize = 12;
+
+/// The tape (or input) and head position; `None` for the Koch turtle.
+fn tape(machine: &Symbolic) -> Option<(&[char], usize)> {
+    match machine {
+        Symbolic::Finite(m) => Some((&m.input, m.cursor)),
+        Symbolic::Pushdown(m) => Some((&m.input, m.cursor)),
+        Symbolic::Bounded(m) => Some((&m.tape, m.head)),
+        Symbolic::Turing(m) => Some((&m.tape, m.head)),
+        Symbolic::Koch { .. } => None,
+    }
+}
+
+/// Content size: the visible tape window (6 rows for tape, stack and margins), or the Koch path.
+pub fn extent(machine: &Symbolic) -> Vec2 {
+    match (machine, tape(machine)) {
+        (Symbolic::Koch { word, .. }, _) => koch_extent(word),
+        (_, Some((cells, head))) => vec2(
+            tape_window(cells.len(), head, MAX_CELLS)
+                .len()
+                .max(MIN_CELLS) as f32,
+            6.0,
+        ),
+        (_, None) => vec2(MAX_CELLS as f32, 6.0),
+    }
+}
+
 /// Paint a symbolic machine.
 pub fn paint(painter: &Painter, fit: &Fit, machine: &Symbolic, colour: Srgb) {
-    let (tape, head): (&[char], usize) = match machine {
-        Symbolic::Finite(m) => (&m.input, m.cursor),
-        Symbolic::Pushdown(m) => (&m.input, m.cursor),
-        Symbolic::Bounded(m) => (&m.tape, m.head),
-        Symbolic::Turing(m) => (&m.tape, m.head),
-        Symbolic::Koch { word, .. } => return koch(painter, fit, word, colour),
+    let Some((tape, head)) = tape(machine) else {
+        if let Symbolic::Koch { word, .. } = machine {
+            koch(painter, fit, word, colour);
+        }
+        return;
     };
-    let window = tape_window(tape.len(), head, 20);
+    let window = tape_window(tape.len(), head, MAX_CELLS);
     let start = window.start;
+    // Short windows sit centred in the MIN_CELLS-wide content.
+    let inset = MIN_CELLS.saturating_sub(window.len()) as f32 / 2.0;
     for (slot, index) in window.enumerate() {
-        let min = fit.to_screen(vec2(slot as f32, 2.0));
+        let min = fit.to_screen(vec2(inset + slot as f32, 2.0));
         let rect = Rect::from_min_size(min, vec2(fit.scale * 0.9, fit.scale * 1.2));
         let at_head = index == head;
         painter.rect_filled(rect, 3.0, if at_head { SIGNAL_BG } else { RAISED });
@@ -72,7 +103,10 @@ pub fn paint(painter: &Painter, fit: &Fit, machine: &Symbolic, colour: Srgb) {
     if let Symbolic::Pushdown(m) = machine {
         // Top of stack first, hanging under the head.
         for (depth, symbol) in m.stack.iter().rev().enumerate().take(4) {
-            let at = vec2((head - start) as f32 + 0.45, 3.6 + depth as f32 * 0.6);
+            let at = vec2(
+                inset + (head - start) as f32 + 0.45,
+                3.6 + depth as f32 * 0.6,
+            );
             let font = FontId::monospace(fit.scale * 0.45);
             painter.text(fit.to_screen(at), Align2::CENTER_TOP, symbol, font, INK_DIM);
         }
@@ -89,6 +123,19 @@ fn koch(painter: &Painter, fit: &Fit, word: &str, colour: Srgb) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn tapes_are_sized_to_their_visible_window() {
+        use models::workbench::catalog::Kind;
+        let short = Symbolic::new(Kind::Turing, "aaaa");
+        assert_eq!(
+            extent(&short),
+            vec2(12.0, 6.0),
+            "short tapes keep a 12-cell floor"
+        );
+        let long = Symbolic::new(Kind::Nfa, &"a".repeat(40));
+        assert_eq!(extent(&long).x, 20.0);
+    }
 
     #[test]
     fn tape_window_keeps_the_head_visible() {

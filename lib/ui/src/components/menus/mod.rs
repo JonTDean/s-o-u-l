@@ -2,7 +2,6 @@ use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
 use engine_core::prelude::AppState;
 
-pub mod automata;
 pub mod meta;
 
 pub mod plugin;

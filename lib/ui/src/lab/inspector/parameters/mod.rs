@@ -78,7 +78,7 @@ pub fn show(
             "Rate and rule apply live; seed and population need a reset.",
             false,
         );
-        ui.horizontal(|ui| {
+        ui.horizontal_wrapped(|ui| {
             for (label, action) in [
                 ("Apply live", Action::ApplyLive),
                 ("Apply and reset", Action::ApplyReset),

@@ -130,7 +130,7 @@ fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: 
 fn colour(ui: &mut Ui, row: &ChannelRow, fx: &mut Effects) {
     let id = row.id;
     margin_section(ui, "colour", false, |ui| {
-        ui.horizontal(|ui| {
+        ui.horizontal_wrapped(|ui| {
             for swatch in SWATCHES {
                 let (rect, response) =
                     ui.allocate_exact_size(egui::vec2(14.0, 14.0), Sense::click());

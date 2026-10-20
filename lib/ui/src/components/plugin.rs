@@ -1,15 +1,12 @@
 use bevy::prelude::*;
 
-use crate::components::{
-    banners::plugin::BannersPlugin, debug::plugin::DebugComponentsPlugin,
-    menus::plugin::MenusPlugin,
-};
+use crate::components::{debug::plugin::DebugComponentsPlugin, menus::plugin::MenusPlugin};
 
-/// Bundles every in-game egui overlay plus debug gizmos.
+/// Meta menus (main, options, scenarios, pause) and debug overlays.
 pub struct ComponentsPlugin;
 
 impl Plugin for ComponentsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((BannersPlugin, DebugComponentsPlugin, MenusPlugin));
+        app.add_plugins((DebugComponentsPlugin, MenusPlugin));
     }
 }

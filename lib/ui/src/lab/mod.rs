@@ -80,8 +80,17 @@ pub struct LabPlugin;
 
 impl Plugin for LabPlugin {
     fn build(&self, app: &mut App) {
+        use chrome::drawers::{Comparison, Files, project};
         app.init_resource::<state::LabState>()
+            .init_resource::<Files>()
+            .init_resource::<Comparison>()
+            .init_resource::<engine_core::automata::lenia::ReadbackBusy>()
             .add_systems(PreUpdate, swallow_escape.after(bevy::input::InputSystem))
+            .add_systems(Update, project::claim_mailbox)
+            .add_systems(
+                EguiPrimaryContextPass,
+                project::persist.run_if(in_state(AppState::InGame)),
+            )
             .add_systems(
                 EguiPrimaryContextPass,
                 draw.after(crate::theme::ThemeSet)
@@ -97,6 +106,28 @@ pub fn swallow_escape(lab: Res<state::LabState>, mut keys: ResMut<ButtonInput<Ke
     }
 }
 
+/// Keys pressed this frame and whether a text field has keyboard focus.
+///
+/// `ctx.input` holds the context lock, so the focus query must run outside its closure;
+/// calling back into `ctx` from inside deadlocks the egui pass.
+pub fn frame_input(ctx: &egui::Context) -> (Vec<egui::Key>, bool) {
+    let keys = ctx.input(|i| {
+        i.events
+            .iter()
+            .filter_map(|e| match e {
+                egui::Event::Key {
+                    key,
+                    pressed: true,
+                    repeat: false,
+                    ..
+                } => Some(*key),
+                _ => None,
+            })
+            .collect::<Vec<_>>()
+    });
+    (keys, ctx.wants_keyboard_input())
+}
+
 #[allow(clippy::too_many_arguments)]
 fn draw(
     mut contexts: EguiContexts,
@@ -108,25 +139,16 @@ fn draw(
     mut automata: EventWriter<AutomataCommand>,
     mut debug: EventWriter<DebugSeedSquare>,
     mut configure: EventWriter<ConfigureSession>,
+    mut drawers: chrome::drawers::DrawerState,
 ) {
     let Ok(ctx) = contexts.ctx_mut() else { return };
+    // The theme's fonts bind one pass after install; drawing earlier panics in epaint.
+    if !crate::theme::fonts::ready(ctx) {
+        return;
+    }
     let mut fx = Effects::default();
-    let (keys, typing) = ctx.input(|i| {
-        let keys: Vec<egui::Key> = i
-            .events
-            .iter()
-            .filter_map(|e| match e {
-                egui::Event::Key {
-                    key,
-                    pressed: true,
-                    repeat: false,
-                    ..
-                } => Some(*key),
-                _ => None,
-            })
-            .collect();
-        (keys, ctx.wants_keyboard_input())
-    });
+    let (keys, typing) = frame_input(ctx);
+    lab.settle_launch_library(!data.channels.rows.is_empty());
     let freecam = !data.freecam.is_empty();
     for shortcut in shortcuts::collect(&keys, typing) {
         shortcuts::apply(shortcut, &mut lab, &data.channels, freecam, &mut fx);
@@ -140,7 +162,7 @@ fn draw(
             chrome::transport::show(ctx, &data, &mut fx);
             inspector::show(ctx, &mut lab, &data, &mut fx);
             *stage_rect = stage::show(ctx, &mut lab, &data, &mut fx, typing);
-            chrome::drawers::show(ctx, &mut lab, &data, &mut fx);
+            chrome::drawers::show(ctx, &mut lab, &data, &mut drawers, &mut fx);
         }
         state::LabMode::Presenter => {
             *stage_rect = stage::presenter::show(ctx, &mut lab, &data, &mut fx, typing)

@@ -45,9 +45,5 @@ pub(super) fn setup(
     for id in ["life:conway", "wolfram:rule30"] {
         events.write(AutomataCommand::SeedPattern { id: id.into() });
     }
-    super::scene::camera(
-        &mut commands,
-        Vec3::new(128.0, 128.0, 16.0),
-        "S.O.U.L. / Experiment workbench",
-    );
+    super::scene::camera(&mut commands, Vec3::new(128.0, 128.0, 16.0));
 }

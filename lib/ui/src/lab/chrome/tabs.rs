@@ -70,6 +70,7 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                 let add = ui.add(egui::Label::new(plus).sense(Sense::click()));
                 if add.on_hover_text("Open a specimen (L)").clicked() {
                     lab.drawer = Some(Drawer::Library);
+                    lab.launch_library = false;
                 }
             });
         });

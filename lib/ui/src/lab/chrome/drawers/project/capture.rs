@@ -5,7 +5,7 @@ use engine_gpu::LeniaProbe;
 pub(super) fn poll(
     files: &mut Files,
     probe: &LeniaProbe,
-    sims: &Query<(Entity, &mut LeniaSimulation)>,
+    sims: &Query<(Entity, &LeniaSimulation)>,
 ) {
     let Some(mut pending) = files.save.take() else {
         return;

@@ -2,7 +2,7 @@
 use super::view::Fit;
 use bevy_egui::egui::{Color32, Painter, Vec2, vec2};
 use engine_core::automata::channel::Srgb;
-use models::workbench::{catalog::Kind, session::Model, symbolic::machine::Symbolic};
+use models::workbench::{catalog::Kind, session::Model};
 pub mod agents;
 pub mod grid;
 pub mod symbolic;
@@ -26,8 +26,7 @@ pub fn content_size(model: &Model) -> Vec2 {
     match model {
         Model::Grid(g) if g.grid.size.y == 1 => vec2(g.grid.size.x as f32, 64.0),
         Model::Grid(g) => vec2(g.grid.size.x as f32, g.grid.size.y as f32),
-        Model::Symbolic(Symbolic::Koch { word, .. }) => symbolic::koch_extent(word),
-        Model::Symbolic(_) => vec2(20.0, 6.0),
+        Model::Symbolic(m) => symbolic::extent(m),
         Model::Boids(_) | Model::Ants(_) => vec2(64.0, 64.0),
     }
 }

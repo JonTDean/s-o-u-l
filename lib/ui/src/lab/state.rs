@@ -50,6 +50,8 @@ pub struct LabState {
     pub params: HashMap<ChannelId, Draft>,
     /// Message and remaining seconds.
     pub toast: Option<(String, f32)>,
+    /// The open library is the launch default, not a viewer's choice.
+    pub launch_library: bool,
 }
 
 impl Default for LabState {
@@ -66,6 +68,7 @@ impl Default for LabState {
             views: HashMap::new(),
             params: HashMap::new(),
             toast: None,
+            launch_library: true,
         }
     }
 }
@@ -83,11 +86,22 @@ impl LabState {
 
     /// Open `drawer`, or close it when it is already the open one.
     pub fn toggle_drawer(&mut self, drawer: Drawer) {
+        self.launch_library = false;
         self.drawer = if self.drawer == Some(drawer) {
             None
         } else {
             Some(drawer)
         };
+    }
+
+    /// Close the launch library once channels exist (a demo or loaded project took the stage).
+    pub fn settle_launch_library(&mut self, has_channels: bool) {
+        if self.launch_library && has_channels {
+            self.launch_library = false;
+            if self.drawer == Some(Drawer::Library) {
+                self.drawer = None;
+            }
+        }
     }
 
     /// Track pointer idleness for the presenter transport.
@@ -131,6 +145,26 @@ mod tests {
         assert_eq!(lab.transport_alpha(), 0.0);
         lab.note_pointer(true, 0.016);
         assert_eq!(lab.transport_alpha(), 1.0);
+    }
+
+    #[test]
+    fn launch_library_steps_aside_once_a_channel_opens() {
+        let mut lab = LabState::default();
+        lab.settle_launch_library(false);
+        assert_eq!(
+            lab.drawer,
+            Some(Drawer::Library),
+            "empty lab keeps the library"
+        );
+        lab.settle_launch_library(true);
+        assert_eq!(lab.drawer, None, "a demo or loaded channel takes the stage");
+        lab.toggle_drawer(Drawer::Library);
+        lab.settle_launch_library(true);
+        assert_eq!(
+            lab.drawer,
+            Some(Drawer::Library),
+            "a library the user opened stays"
+        );
     }
 
     #[test]

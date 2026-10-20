@@ -5,7 +5,7 @@ use models::workbench::{
     plugin::Workbench,
     project::{self, Project},
 };
-use ui::components::menus::automata::active_menu::workbench::persistence::{Files, Pending};
+use ui::lab::chrome::drawers::{Files, Pending};
 pub(super) fn save(world: &mut World, v: &Verification, owner: Entity, sim: LeniaSimulation) {
     let project = Project::capture(world.resource::<Workbench>(), Vec::new()).unwrap();
     let mut files = world.resource_mut::<Files>();

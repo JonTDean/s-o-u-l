@@ -1,28 +1,12 @@
-//! Output-layer root plug-in – bundles menus, HUD overlays and the CPU
-//! active-grid renderer.
-
-use crate::{components::plugin::ComponentsPlugin, theme::ThemePlugin};
+//! Output-layer root: theme, lab shell, menus and debug overlays.
+use crate::{components::plugin::ComponentsPlugin, lab::LabPlugin, theme::ThemePlugin};
 use bevy::prelude::*;
 
-/// Adds every “output” feature: menus, HUD, file-export, renderers …
+/// Adds every output feature.
 pub struct OutputPlugin;
 
-/*
-    Layer Diagram
-        ┌────────────────────────────┐
-        │   ui::OutputPlugin         │   ← egui menus, HUD, fade, etc.
-        │   ├─ ui::components::*     │
-        │   └─ engine_render::ActiveAutomataRenderPlugin (re-export) ─┐
-        └────────────────────────────┘                                │
-                                                                      │ public API
-        ┌─────────────────────────────────────────────────────────────▼────────────┐
-        │           engine_render::EngineRenderPlugin                              │
-        │   ├─ render::camera::CameraPlugin      (world + UI cameras)              │
-        │   └─ render::voxel_grid::VoxelGridPlugin  (GPU atlas helper)             │
-        └──────────────────────────────────────────────────────────────────────────┘
-*/
 impl Plugin for OutputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((ThemePlugin, ComponentsPlugin));
+        app.add_plugins((ThemePlugin, ComponentsPlugin, LabPlugin));
     }
 }

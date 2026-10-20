@@ -122,3 +122,39 @@ fn toggles() {
     apply(Shortcut::Library, &mut lab, &c, false, &mut fx);
     assert_eq!(lab.drawer, Some(Drawer::Library));
 }
+
+#[test]
+fn frame_input_reads_keys_without_relocking_the_context() {
+    use bevy_egui::egui::{Context, Event, Modifiers, RawInput};
+    let ctx = Context::default();
+    let key = |key| Event::Key {
+        key,
+        physical_key: None,
+        pressed: true,
+        repeat: false,
+        modifiers: Modifiers::NONE,
+    };
+    let input = RawInput {
+        events: vec![key(Key::Space), key(Key::R)],
+        ..Default::default()
+    };
+    let mut read = None;
+    let _ = ctx.run(input, |ctx| read = Some(super::frame_input(ctx)));
+    assert_eq!(read, Some((vec![Key::Space, Key::R], false)));
+}
+
+#[test]
+fn legacy_ui_modules_are_gone() {
+    let root = concat!(env!("CARGO_MANIFEST_DIR"), "/src");
+    for gone in [
+        "presentation",
+        "styles",
+        "components/banners",
+        "components/menus/automata",
+    ] {
+        assert!(
+            !std::path::Path::new(root).join(gone).exists(),
+            "{gone} should be removed"
+        );
+    }
+}
