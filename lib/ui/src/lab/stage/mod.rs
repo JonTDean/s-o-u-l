@@ -4,6 +4,7 @@ use crate::theme::tokens::BG;
 use bevy_egui::egui::{self, Frame, Sense};
 use engine_common::controls::camera::manager::stage::StageRect;
 use engine_core::automata::channel::Backend;
+pub mod editing;
 pub mod overlay;
 pub mod painters;
 pub mod presenter;
@@ -14,12 +15,12 @@ pub fn show(
     ctx: &egui::Context,
     lab: &mut LabState,
     data: &LabData,
-    _fx: &mut Effects,
+    fx: &mut Effects,
     typing: bool,
 ) -> StageRect {
     egui::CentralPanel::default()
         .frame(Frame::NONE)
-        .show(ctx, |ui| paint(ui, lab, data, typing, true))
+        .show(ctx, |ui| paint(ui, lab, data, typing, true, fx))
         .inner
 }
 
@@ -32,6 +33,7 @@ pub(crate) fn paint(
     data: &LabData,
     typing: bool,
     chrome: bool,
+    fx: &mut Effects,
 ) -> StageRect {
     let rect = ui.max_rect();
     let response = ui.interact(rect, ui.id().with("stage"), Sense::click_and_drag());
@@ -52,7 +54,7 @@ pub(crate) fn paint(
                     view.zoom_by((scroll / 200.0).exp());
                 }
             }
-            if response.dragged() {
+            if response.dragged() && lab.editor.tool == editing::Tool::Navigate {
                 view.pan += response.drag_delta();
             }
             if response.double_clicked() {
@@ -65,6 +67,14 @@ pub(crate) fn paint(
             let colour = session.settings.colour;
             painters::paint(&painter, &fit, &session.model, session.kind, colour);
             cursor = response.hover_pos().and_then(|p| fit.to_cell(p));
+            lab.editor.gesture(
+                ui,
+                &response,
+                &fit,
+                session,
+                fx,
+                chrome && !typing && lab.drawer.is_none(),
+            );
         }
         None if row.is_none() => overlay::empty(ui.painter(), rect),
         None => {}

@@ -21,7 +21,7 @@ pub fn show(
 ) -> StageRect {
     let rect = egui::CentralPanel::default()
         .frame(Frame::NONE)
-        .show(ctx, |ui| paint(ui, lab, data, typing, false))
+        .show(ctx, |ui| paint(ui, lab, data, typing, false, fx))
         .inner;
     let Some(row) = data.channels.selected_row() else {
         return rect;

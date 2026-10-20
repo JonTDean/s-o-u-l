@@ -28,6 +28,8 @@ pub enum Drawer {
 /// UI-only state; nothing here affects simulation.
 #[derive(Resource, Debug)]
 pub struct LabState {
+    /// Stage authoring tool and in-progress stroke.
+    pub editor: super::stage::editing::Editor,
     /// Workbench or presenter.
     pub mode: LabMode,
     /// Open rail drawer, if any.
@@ -57,6 +59,7 @@ pub struct LabState {
 impl Default for LabState {
     fn default() -> Self {
         Self {
+            editor: Default::default(),
             mode: LabMode::Workbench,
             drawer: Some(Drawer::Library), // the library opens on first launch
             settings_open: false,

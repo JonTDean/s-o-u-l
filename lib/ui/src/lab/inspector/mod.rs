@@ -96,6 +96,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
 fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Effects) {
     let id = session.channel;
     parameters::show(ui, session, &mut lab.params, fx);
+    super::stage::editing::show(ui, &mut lab.editor, session, fx);
     if let Model::Symbolic(machine) = &session.model {
         margin_section(ui, "machine", false, |ui| {
             for (key, value) in machine::summary(machine) {
