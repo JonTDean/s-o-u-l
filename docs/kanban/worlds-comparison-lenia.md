@@ -23,7 +23,7 @@ All 14 existing roots remain governed (0..3 child directories, 1..4 source files
 workspace checks, native RTX/Mesa verification, decoded exports, project migration,
 comparison/continuation oracles, updated roadmap and a clean merged tree.
 
-Completed at qualified source `51ef54f`: all three implementation items and the
+Completed at qualified source `1632357`: all three implementation items and the
 Claude UI review/integration pass. [Final verification](../verification/worlds/README.md)
 records workspace checks, native RTX/Mesa runs, exports, window placement and
 commit/structural audits. The final delivery merges to local main; no remote publish.

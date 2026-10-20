@@ -65,7 +65,7 @@ PNG/GIF export and screenshots through production systems.
 
 ## Qualification results (2026-10-20)
 
-Qualified source: `51ef54f`. The later README rewrite on main (`8ba323a`) was
+Qualified source: `1632357`. The later README rewrite on main (`8ba323a`) was
 merged and preserved. Later commits record documentation and evidence only.
 
 - [Workspace checks](checks.log): 163 native tests, 9 doctests and 20 governance
