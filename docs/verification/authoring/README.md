@@ -110,3 +110,14 @@ corruption. No cause was established. A debugger run, repeated native runs, a fo
 benchmark repeat, the complete benchmark rerun and the complete check rerun passed.
 These retries are not evidence of a diagnosed fix. Final logs retain successful
 runs; normal ALSA default-device startup warnings remain unrelated to the render gate.
+
+## Main integration
+
+The feature branch was fast-forwarded into local main at `4757eb8` after the
+platform gates passed. A fresh `cargo build --workspace --all-features` from the
+main checkout succeeds ([build log](main-build.log)). The main executable then
+published three experiment channels, rendered its native window, saved the
+[boot capture](main-boot/boot.png), and exited successfully. Its
+[window record](main-boot/window-bounds.json) confirms 1760×960 at (81,116), inside
+monitor 1. Subsequent commits only retain this integration evidence and roadmap.
+Remote main was not pushed; the feature branch supplied the hosted qualification.
