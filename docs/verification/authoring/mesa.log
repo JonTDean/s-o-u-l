@@ -1,5 +1,5 @@
-2026-10-20T15:20:05.750566Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
-2026-10-20T15:20:05.750591Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevyengine.org/learn/errors/b0006/
+2026-10-20T15:30:48.873824Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+2026-10-20T15:30:48.873849Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevyengine.org/learn/errors/b0006/
 ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
 ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
 ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
@@ -18,9 +18,9 @@ snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' t
 snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
 ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
 ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
-2026-10-20T15:20:06.228280Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
-2026-10-20T15:20:06.259739Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
-2026-10-20T15:20:06.259785Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
-2026-10-20T15:20:09.456012Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-final/authoring-library.png
-2026-10-20T15:20:09.878105Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-final/symbolic-voxels.png
-2026-10-20T15:20:10.861503Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-final/published-orbium.png
+2026-10-20T15:30:49.414757Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-20T15:30:49.445842Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T15:30:49.445899Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-20T15:30:52.682523Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-portable/authoring-library.png
+2026-10-20T15:30:53.081934Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-portable/symbolic-voxels.png
+2026-10-20T15:30:54.039721Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-mesa-portable/published-orbium.png

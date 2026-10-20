@@ -1,4 +1,4 @@
-2026-10-20T15:16:53.898821Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+2026-10-20T15:30:11.403965Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
 ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
 ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
 ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
@@ -17,9 +17,9 @@ snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' t
 snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
 ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
 ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
-2026-10-20T15:16:54.424520Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
-2026-10-20T15:16:54.476599Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
-2026-10-20T15:16:54.476670Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
-2026-10-20T15:16:56.280398Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-final/authoring-library.png
-2026-10-20T15:16:56.494150Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-final/symbolic-voxels.png
-2026-10-20T15:16:57.240896Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-final/published-orbium.png
+2026-10-20T15:30:11.963629Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-20T15:30:12.013314Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T15:30:12.013394Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-20T15:30:13.847393Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-portable/authoring-library.png
+2026-10-20T15:30:14.067304Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-portable/symbolic-voxels.png
+2026-10-20T15:30:14.820844Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-authoring-rtx-portable/published-orbium.png

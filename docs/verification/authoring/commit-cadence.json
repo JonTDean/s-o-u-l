@@ -256,6 +256,21 @@
       "commit": "ce69c3745a0e547ced90464e706e98b9c687e230",
       "changed_sloc": 0,
       "subject": "docs: retain authoring acceptance evidence and refresh the remaining roadmap"
+    },
+    {
+      "commit": "edc57235688d74be58e66700c674d398c5c6b750",
+      "changed_sloc": 0,
+      "subject": "docs: retain final checks and compact numerical evidence fixtures"
+    },
+    {
+      "commit": "4a7d9d502a1d0663e36bb1831a424123b4407dc1",
+      "changed_sloc": 0,
+      "subject": "docs: record all governed root measurements for the authoring milestone"
+    },
+    {
+      "commit": "c21b634e89779eacafd4c29546648429093be4eb",
+      "changed_sloc": 6,
+      "subject": "fix: limit experimental Vulkan interop to supported wgpu target platforms"
     }
   ]
 }

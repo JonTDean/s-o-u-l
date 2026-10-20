@@ -1,7 +1,7 @@
 # Authoring, guided experiments, voxel machines and Orbium
 
 Verified on 2026-10-20. Baseline local main: `cdf6f59`.
-Native source checkpoint: `091fb82`; product source is unchanged by subsequent
+Native source checkpoint: `c21b634`; product source is unchanged by subsequent
 verification documentation. All 15 roots in `structural-governance.toml` retain
 0–3 direct children, 1–4 direct source files and at most 200 non-comment SLOC,
 without exemptions. [Commit cadence](commit-cadence.json) records source checkpoints.
@@ -52,7 +52,7 @@ and two-frame GIFs with 100 ms frame times. Native Orbium maximum absolute error
 at tick 10 is 0.0000051095 on RTX and 0.0000057949 on Mesa (limit 0.002).
 Unit tests also compare CPU and GPU states through tick 100.
 
-Both captured windows were 1760×960 at (81,116), inside monitor 1's 1920×1080
+Captured windows were 1760×960 at (0,0) on RTX and (81,116) on Mesa, inside monitor 1's 1920×1080
 extent. Monitor 2 was reserved. [Library](rtx3090/authoring-library.png),
 [voxel machines](rtx3090/symbolic-voxels.png), and
 [published Orbium](rtx3090/published-orbium.png) were visually inspected.
@@ -66,6 +66,8 @@ CPU/persistence tests, Linux Vulkan oracle tests, native builds and screenshot-b
 window boot checks on Ubuntu 24.04, Windows 2022 and macOS 15. It also uploads
 Criterion results. macOS exposed an old shaderc CMake minimum incompatibility;
 `CMAKE_POLICY_VERSION_MINIMUM=3.5` explicitly opts into compatible CMake 4 policy.
+The experimental Vulkan interop module is now compiled only on native Vulkan
+targets supported by wgpu; macOS uses the portable Metal renderer.
 Runner results and exact commits are recorded in `hosted.json` when complete.
 A workflow definition alone does not establish platform runtime qualification.
 
