@@ -48,16 +48,6 @@ pub fn cells(machine: &Symbolic) -> Vec<Cell> {
     cells
 }
 pub fn palette(symbol: char) -> (Color, &'static str) {
-    let (rgb, name) = match symbol {
-        'a' => ([0.88, 0.64, 0.27], "amber"),
-        'b' => ([0.26, 0.66, 0.91], "blue"),
-        'c' => ([0.40, 0.80, 0.52], "green"),
-        'A' => ([0.89, 0.40, 0.34], "red"),
-        'X' => ([0.73, 0.42, 0.87], "purple"),
-        '(' => ([0.30, 0.82, 0.77], "teal"),
-        ')' => ([0.93, 0.48, 0.69], "pink"),
-        ' ' => ([0.24, 0.24, 0.28], "blank / charcoal"),
-        _ => ([0.65, 0.70, 0.78], "silver"),
-    };
-    (Color::srgb(rgb[0], rgb[1], rgb[2]), name)
+    let (rgb, name) = models::workbench::symbolic::presentation::colour(symbol);
+    (Color::srgb_u8(rgb[0], rgb[1], rgb[2]), name)
 }
