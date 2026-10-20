@@ -4,6 +4,12 @@ impl Settings {
     /// Reject nonfinite, incompatible or excessive settings without mutation.
     pub fn validate(&self, kind: Kind) -> Result<(), &'static str> {
         self.world.validate(kind)?;
+        if let Some(program) = &self.program {
+            if kind != Kind::Life {
+                return Err("Authored XY rules require a Life cellular channel");
+            }
+            program.validate()?;
+        }
         let bounded = |value: f32, low, high| value.is_finite() && (low..=high).contains(&value);
         if !bounded(self.rate_hz, 1.0, 60.0) || self.birth > 511 || self.survival > 511 {
             return Err("Rate must be 1..60; Life masks must contain only neighbor counts 0..8");

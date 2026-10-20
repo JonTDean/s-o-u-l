@@ -19,6 +19,8 @@ pub enum Pattern {
 #[serde(deny_unknown_fields)]
 pub struct Settings {
     #[serde(default)]
+    pub program: Option<authored::composition::Program>,
+    #[serde(default)]
     pub world: world::World,
     pub rate_hz: f32,
     pub pattern: Pattern,
@@ -43,6 +45,7 @@ impl Settings {
     pub fn for_kind(kind: Kind) -> Self {
         Self {
             world: world::World::default(),
+            program: None,
             rate_hz: 10.0,
             pattern: Pattern::Default,
             random_seed: 0x534f554c,
