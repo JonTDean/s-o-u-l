@@ -19,7 +19,7 @@ fn normalized_periodic_field_and_z_coupling() {
     let mut initial = vec![0.0; 343];
     initial[3 * 49 + 3 * 7 + 3] = 1.0;
     let p = LeniaParams {
-        mu: 0.02,
+        mu: 0.051,
         sigma: 0.01,
         dt: 0.1,
     };

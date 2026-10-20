@@ -58,9 +58,15 @@ fn continuous_gpu_matches_independent_oracle_and_restored_continuation() {
                         .zip(&expected)
                         .map(|(a, b)| (a - b).abs())
                         .fold(0.0, f32::max);
+                    let worst = actual
+                        .iter()
+                        .zip(&expected)
+                        .enumerate()
+                        .max_by(|(_, (a, b)), (_, (c, d))| (a - b).abs().total_cmp(&(c - d).abs()))
+                        .unwrap();
                     assert!(
                         error < 0.00001,
-                        "{kernel:?} tick {} max error {error}",
+                        "{kernel:?} tick {} max error {error} worst {worst:?}",
                         state.tick
                     );
                     assert!(
