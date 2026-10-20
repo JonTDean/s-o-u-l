@@ -31,3 +31,6 @@ default        = []
 mesh_shaders   = ["ash", "naga_oil"]     # optional deps become features automatically
 fallback_spirv = ["shaderc"]
 gpu-debug      = []
+
+[dev-dependencies]
+serde_json = { workspace = true }

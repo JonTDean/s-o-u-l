@@ -121,3 +121,6 @@ pub fn sync(
     }
     *previous = cells;
 }
+
+#[cfg(test)]
+mod tests;
