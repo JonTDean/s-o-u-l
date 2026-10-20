@@ -27,7 +27,8 @@ without exemptions. [Commit cadence](commit-cadence.json) records source checkpo
   the NumPy FFT reference; its 1,000-tick mass/centroid ledger documents survival.
 - Criterion covers 24 dense/sparse serial/parallel Life combinations and three
   Lenia reference steppers. [Estimates](benchmark-estimates.json) retain 27 cases,
-  confidence intervals, four-thread setting and hardware. Grid setup is excluded
+  confidence intervals, four-thread setting and hardware. The [hosted baseline](hosted-benchmark-estimates.json)
+retains all 27 cases from the final-source Ubuntu run. Grid setup is excluded
   from Life step timings; Lenia measures its allocating reference-step API.
 
 ## Local acceptance

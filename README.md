@@ -42,7 +42,7 @@ and present them, and every specimen cites its source.
 ## Quick start
 
 **Requirements:** stable Rust (CI pins 1.94.1), Python 3.11 or newer, a Vulkan
-driver, and Bevy's native build dependencies (on Debian/Ubuntu:
+driver on Linux (macOS uses Metal), and Bevy's native build dependencies (on Debian/Ubuntu:
 `libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev cmake ninja-build`).
 
 ```sh
@@ -53,7 +53,8 @@ make experiment      # Lenia, Life and Rule 30 with comparison and projects
 make preview         # static 16³ voxel rendering fixture
 ```
 
-Windows open at (80, 80) on the first monitor, at 1280 × 720. The Make targets
+Windows request (80, 80) on the first monitor: 1280 × 720 normally and
+1760 × 960 for scripted lab previews. The Make targets
 force X11/Xwayland so the compositor honours that placement. To use software
 Vulkan, prefix a target with
 `VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json`.
