@@ -13,11 +13,31 @@ pub fn render(project: &Project) -> RgbaImage {
                 } else {
                     g.bytes()
                 };
+                let width = g.grid.size.x;
+                let height = if g.grid.size.y == 1 {
+                    64
+                } else {
+                    g.grid.size.y
+                };
+                let mut source = RgbaImage::from_pixel(width, height, Rgba([8, 15, 22, 255]));
                 for (i, v) in bytes.iter().enumerate() {
                     if *v != 0 {
-                        dot(&mut panel, (i % 64) as f32, (i / 64) as f32, INK);
+                        source.put_pixel(i as u32 % width, i as u32 / width, INK);
                     }
                 }
+                let scale = 256.0 / width.max(height) as f32;
+                let fitted = image::imageops::resize(
+                    &source,
+                    (width as f32 * scale) as u32,
+                    (height as f32 * scale) as u32,
+                    image::imageops::FilterType::Nearest,
+                );
+                image::imageops::replace(
+                    &mut panel,
+                    &fitted,
+                    (256 - fitted.width()) as i64 / 2,
+                    (256 - fitted.height()) as i64 / 2,
+                );
             }
             Model::Boids(f) => {
                 for b in &f.boids {
