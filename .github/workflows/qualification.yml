@@ -1,0 +1,87 @@
+name: Platform qualification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feature/authoring-guides-qualification]
+permissions:
+  contents: read
+concurrency:
+  group: qualification-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    env:
+      CARGO_BUILD_JOBS: 2
+      CMAKE_BUILD_PARALLEL_LEVEL: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
+      RUST_MIN_STACK: 67108864
+      RUSTDOCFLAGS: -C rpath=yes
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.94.1
+          components: rustfmt, clippy
+      - name: Linux native dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libvulkan1 mesa-vulkan-drivers cmake ninja-build xvfb
+      - name: Governance and formatting
+        run: |
+          python -m pip install -r tools/structure/requirements.txt
+          python -m unittest discover -s tools/structure/tests -t tools/structure
+          python tools/structure/audit.py
+          cargo fmt --all -- --check
+      - name: Strict portable compilation
+        run: cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+      - name: CPU contracts and persistence
+        run: cargo test --locked --workspace --all-features --exclude engine-gpu
+      - name: Linux Vulkan numerical qualification
+        if: runner.os == 'Linux'
+        run: cargo test --locked -p engine-gpu --all-features
+      - name: Build native application
+        run: cargo build --locked --workspace --all-features
+      - name: Linux window and rendering smoke
+        if: runner.os == 'Linux'
+        env:
+          SOUL_BOOT_VERIFY: native-boot
+          WGPU_BACKEND: vulkan
+        run: xvfb-run -a cargo run --locked --all-features -- --automata-demo
+      - name: Windows and macOS window and rendering smoke
+        if: runner.os != 'Linux'
+        env:
+          SOUL_BOOT_VERIFY: native-boot
+        run: cargo run --locked --all-features -- --automata-demo
+      - name: Require completed native capture
+        run: python -c "from pathlib import Path; assert Path('native-boot/SUCCESS').is_file(); assert Path('native-boot/boot.png').stat().st_size > 1000"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: native-${{ matrix.os }}-${{ github.sha }}
+          path: native-boot
+          if-no-files-found: warn
+  benchmarks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.94.1
+      - run: cargo bench --locked -p simulation_kernel --bench steppers -- --noplot
+        env:
+          RAYON_NUM_THREADS: 4
+      - uses: actions/upload-artifact@v7
+        with:
+          name: criterion-${{ github.sha }}
+          path: target/criterion
