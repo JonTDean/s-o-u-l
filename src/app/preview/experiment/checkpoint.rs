@@ -11,6 +11,7 @@ pub(super) fn save(world: &mut World, v: &Verification, owner: Entity, sim: Leni
     let mut files = world.resource_mut::<Files>();
     files.path = v.output.join("project.json").to_string_lossy().into_owned();
     files.save = Some(Pending {
+        specimen: false,
         project,
         owners: vec![(owner, sim)],
         path: files.path.clone().into(),

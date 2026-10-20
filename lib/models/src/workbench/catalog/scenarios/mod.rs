@@ -34,8 +34,9 @@ impl Scenario {
                     settings.world.width = 16;
                     settings.world.height = 16;
                     settings.world.boundary = boundary;
+                    settings.world.seed = Some(vec![0; 256]);
                     session.configure(settings, true)?;
-                    session.paint(&[(0, 0), (1, 0), (15, 0)], 1, true)?;
+                    session.paint(&[[0, 0], [1, 0], [15, 0]], 255, true)?;
                 }
             }
             Self::Languages => {
