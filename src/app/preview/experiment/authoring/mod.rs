@@ -15,6 +15,7 @@ use ui::lab::{
 mod cpu;
 mod flow;
 mod gpu;
+mod rules;
 #[derive(Resource)]
 struct Verification {
     output: std::path::PathBuf,
@@ -25,6 +26,7 @@ struct Verification {
     expected: Option<serde_json::Value>,
 }
 pub(super) fn install(app: &mut App) {
+    rules::install(app);
     let Some(output) = std::env::var_os("SOUL_AUTHORING_VERIFY") else {
         return;
     };
