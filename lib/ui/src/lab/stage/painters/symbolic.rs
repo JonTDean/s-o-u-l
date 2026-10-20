@@ -1,7 +1,7 @@
 //! Tapes and stacks as large cells with the head marked; Koch as a turtle path.
 use super::Fit;
 use crate::theme::tokens::*;
-use bevy_egui::egui::{Align2, FontId, Painter, Rect, Shape, Stroke, StrokeKind, Vec2, vec2};
+use bevy_egui::egui::{Color32, Painter, Rect, Shape, Stroke, StrokeKind, Vec2, vec2};
 use engine_core::automata::channel::Srgb;
 use models::workbench::symbolic::machine::Symbolic;
 use std::ops::Range;
@@ -89,16 +89,11 @@ pub fn paint(painter: &Painter, fit: &Fit, machine: &Symbolic, colour: Srgb) {
             let stroke = Stroke::new(2.0, color(colour));
             painter.rect_stroke(rect, 3.0, stroke, StrokeKind::Outside);
         }
-        let glyph = tape
-            .get(index)
-            .map_or('␣', |c| if *c == ' ' { '␣' } else { *c });
-        let ink = if glyph.is_alphanumeric() {
-            color(colour)
-        } else {
-            INK
-        };
-        let font = FontId::monospace(fit.scale * 0.6);
-        painter.text(rect.center(), Align2::CENTER_CENTER, glyph, font, ink);
+        cube(
+            painter,
+            rect.shrink(fit.scale * 0.12),
+            tape.get(index).copied().unwrap_or(' '),
+        );
     }
     if let Symbolic::Pushdown(m) = machine {
         // Top of stack first, hanging under the head.
@@ -107,10 +102,38 @@ pub fn paint(painter: &Painter, fit: &Fit, machine: &Symbolic, colour: Srgb) {
                 inset + (head - start) as f32 + 0.45,
                 3.6 + depth as f32 * 0.6,
             );
-            let font = FontId::monospace(fit.scale * 0.45);
-            painter.text(fit.to_screen(at), Align2::CENTER_TOP, symbol, font, INK_DIM);
+            let rect = Rect::from_min_size(fit.to_screen(at), Vec2::splat(fit.scale * 0.45));
+            cube(painter, rect, *symbol);
         }
     }
+}
+
+fn cube(painter: &Painter, rect: Rect, symbol: char) {
+    let (rgb, _) = models::workbench::symbolic::presentation::colour(symbol);
+    let base = Color32::from_rgb(rgb[0], rgb[1], rgb[2]);
+    let d = rect.width().min(rect.height()) * 0.2;
+    let front = Rect::from_min_max(rect.min + vec2(0.0, d), rect.max - vec2(d, 0.0));
+    painter.rect_filled(front, 0.0, base);
+    painter.add(Shape::convex_polygon(
+        vec![
+            front.left_top(),
+            front.left_top() + vec2(d, -d),
+            front.right_top() + vec2(d, -d),
+            front.right_top(),
+        ],
+        base.gamma_multiply(1.2),
+        Stroke::NONE,
+    ));
+    painter.add(Shape::convex_polygon(
+        vec![
+            front.right_top(),
+            front.right_top() + vec2(d, -d),
+            front.right_bottom() + vec2(d, -d),
+            front.right_bottom(),
+        ],
+        base.gamma_multiply(0.7),
+        Stroke::NONE,
+    ));
 }
 
 fn koch(painter: &Painter, fit: &Fit, word: &str, colour: Srgb) {
