@@ -5,7 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_BUILD_JOBS: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
+      RUST_MIN_STACK: 67108864
       CMAKE_BUILD_PARALLEL_LEVEL: 2
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
       XDG_RUNTIME_DIR: /tmp/soul-runtime
     steps:
       - uses: actions/checkout@v7
@@ -16,6 +20,13 @@ jobs:
         with:
           toolchain: 1.94.1
           components: rustfmt, clippy
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-soul-rust1941-debug0-${{ hashFiles('**/Cargo.lock') }}
       - name: Install native dependencies and source tokenizer
         run: |
           sudo apt-get update
