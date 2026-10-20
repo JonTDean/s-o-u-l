@@ -6,6 +6,7 @@ use super::{
     grid::GridSession,
     symbolic::machine::Symbolic,
 };
+use engine_core::automata::channel::{ChannelId, Status};
 
 /// State representation follows the model rather than coercing tapes into cells.
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -27,6 +28,15 @@ pub struct Session {
     pub paused: bool,
     pub settings: Settings,
     pub elapsed: f32,
+    /// Channel handle assigned by the workbench; never persisted.
+    #[serde(skip)]
+    pub channel: ChannelId,
+    /// Reset generation for metric traces; never persisted.
+    #[serde(skip)]
+    pub epoch: u64,
+    /// Latest refused configure/reset, shown by the inspector.
+    #[serde(skip)]
+    pub note: Option<String>,
 }
 impl Session {
     /// Describe the active rules, including live edits to catalog defaults.
@@ -63,6 +73,9 @@ impl Session {
             paused: true,
             settings,
             elapsed: 0.0,
+            channel: ChannelId::UNASSIGNED,
+            epoch: 0,
+            note: None,
         }
     }
     fn initial(kind: Kind, input: &str, settings: &Settings) -> Model {
@@ -85,6 +98,7 @@ impl Session {
         self.ticks = 0;
         self.elapsed = 0.0;
         self.paused = true;
+        self.epoch += 1;
         Ok(())
     }
     /// Validate atomically; seed and population edits require explicit reset.
@@ -135,6 +149,16 @@ impl Session {
         self.ticks += 1;
         if self.halted() {
             self.paused = true;
+        }
+    }
+    /// Lamp state for the channel row.
+    pub fn status(&self) -> Status {
+        if self.halted() {
+            Status::Halted
+        } else if self.paused {
+            Status::Paused
+        } else {
+            Status::Running
         }
     }
     /// Honor a manual step only while paused.

@@ -1,4 +1,5 @@
 use crate::workbench::catalog::Kind;
+use engine_core::automata::channel::Srgb;
 use serde::{Deserialize, Serialize};
 
 /// Initial condition; changing it requires an explicit reset.
@@ -29,6 +30,9 @@ pub struct Settings {
     pub evaporation: f32,
     pub deposit: f32,
     pub exploration: f32,
+    /// Specimen colour; older project files without it load as amber.
+    #[serde(default)]
+    pub colour: Srgb,
 }
 impl Settings {
     /// Preserve the qualified fixture's defaults for each family.
@@ -48,6 +52,7 @@ impl Settings {
             evaporation: 0.01,
             deposit: 1.0,
             exploration: 0.0,
+            colour: Srgb::default(),
         }
     }
     /// Initial conditions are stable until reset, unlike live rule parameters.
