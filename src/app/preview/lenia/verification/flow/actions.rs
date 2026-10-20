@@ -1,6 +1,9 @@
 use super::*;
 use engine_core::{
-    automata::lenia::{LeniaAction, LeniaCommand},
+    automata::{
+        channel::{Backend, ChannelAction, ChannelCommand, ChannelIds, Channels, SWATCHES, Status},
+        lenia::{LeniaAction, LeniaCommand},
+    },
     events::AutomataCommand,
 };
 use simulation_kernel::core::lenia::{LeniaSeed, seed, step};
@@ -55,18 +58,73 @@ pub(super) fn advance(world: &mut World, v: &mut Verification, entity: Entity) {
             v.epoch = 0;
             v.params = LeniaParams::default();
         }
-        9 => {
-            std::fs::write(
-                v.output.join("SUCCESS"),
-                "CPU/GPU parity, controls, reset, clear, and respawn verified\n",
-            )
-            .unwrap();
-            info!("LENIA_RUNTIME_VERIFIED: all workbench phases passed");
-            world.send_event(AppExit::Success);
-        }
+        // Phase 10 is the channel-command pass; it writes SUCCESS when it finishes.
+        9 => v.channel_pass = (0, v.frame),
         _ => unreachable!(),
     }
     v.phase += 1;
     v.pending = false;
     v.validated = false;
+}
+
+/// Step, rate, colour and removal of the respawned instance through the channel contract.
+pub(super) fn channel_pass(world: &mut World, v: &mut Verification) {
+    let (step, since) = v.channel_pass;
+    if v.frame < since + 2 {
+        return; // let routed commands land and rows republish
+    }
+    let gpu = |world: &World| {
+        let rows = &world.resource::<Channels>().rows;
+        rows.iter().find(|r| r.backend == Backend::Gpu).cloned()
+    };
+    let target = |world: &mut World| {
+        let mut sims = world.query::<&LeniaSimulation>();
+        sims.iter(world).next().map(|s| s.target_tick)
+    };
+    match step {
+        0 => {
+            let row = gpu(world).expect("respawned Lenia channel");
+            assert_eq!(row.status, Status::Paused, "respawn is paused");
+            v.channel_tick = target(world).expect("Lenia owner");
+            for action in [
+                ChannelAction::Step,
+                ChannelAction::SetRate(10.0),
+                ChannelAction::SetColour(SWATCHES[3]),
+            ] {
+                world.send_event(ChannelCommand { id: row.id, action });
+            }
+        }
+        1 => {
+            let row = gpu(world).expect("Lenia channel");
+            assert_eq!(
+                target(world),
+                Some(v.channel_tick + 1),
+                "channel Step advanced once"
+            );
+            assert_eq!(row.settings.rate_hz, 10.0, "row rate updated");
+            assert_eq!(row.settings.colour, SWATCHES[3], "row colour updated");
+            world.send_event(ChannelCommand {
+                id: row.id,
+                action: ChannelAction::Remove,
+            });
+        }
+        _ => {
+            assert!(gpu(world).is_none(), "removed channel left its row");
+            assert_eq!(
+                world.resource::<ChannelIds>().open(),
+                0,
+                "removal released the id"
+            );
+            std::fs::write(
+                v.output.join("SUCCESS"),
+                "CPU/GPU parity, controls, reset, clear, respawn and channel commands verified\n",
+            )
+            .unwrap();
+            info!("LENIA_CHANNEL_VERIFIED: step, rate, colour and removal through ChannelCommand");
+            info!("LENIA_RUNTIME_VERIFIED: all workbench phases passed");
+            world.send_event(AppExit::Success);
+            v.phase = 11;
+        }
+    }
+    v.channel_pass = (step + 1, v.frame);
 }

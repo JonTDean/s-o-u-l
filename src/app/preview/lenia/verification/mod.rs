@@ -22,6 +22,10 @@ struct Verification {
     tick: u64,
     epoch: u64,
     params: LeniaParams,
+    /// Channel pass step and the frame it started.
+    channel_pass: (u8, u32),
+    /// Target tick before the channel Step.
+    channel_tick: u64,
 }
 
 pub(super) fn install(app: &mut App) {
@@ -34,6 +38,7 @@ pub(super) fn install(app: &mut App) {
     if success.exists() {
         std::fs::remove_file(success).expect("remove previous qualification result");
     }
+    std::fs::write(output.join("image-checks.json"), "[]").expect("image checks header");
     std::fs::write(
         output.join("readbacks.csv"),
         "phase,epoch,tick,alive,density_sum,fnv64\n",
@@ -52,6 +57,8 @@ pub(super) fn install(app: &mut App) {
         tick: 0,
         epoch: 0,
         params: LeniaParams::default(),
+        channel_pass: (0, 0),
+        channel_tick: 0,
     })
     .add_systems(Last, flow::update);
 }

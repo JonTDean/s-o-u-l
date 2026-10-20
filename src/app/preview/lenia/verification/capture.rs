@@ -1,4 +1,5 @@
 use super::*;
+use crate::app::preview::automata::flow::stage_check;
 use bevy::render::view::screenshot::{Screenshot, ScreenshotCaptured, save_to_disk};
 use std::sync::atomic::Ordering;
 
@@ -11,9 +12,27 @@ pub(super) fn request(world: &mut World, verification: &mut Verification) {
     }
     let finished = Arc::new(AtomicBool::new(false));
     let signal = finished.clone();
+    let stage = stage_check::stage_pixels(world).expect("the lab publishes a stage");
+    let (output, file) = (
+        verification.output.clone(),
+        path.file_name().unwrap().to_string_lossy().into_owned(),
+    );
+    // Phase 8 is captured after Clear: the stage must hold no specimen pixels.
+    let populated = verification.phase != 8;
     let mut save = save_to_disk(path.clone());
     world.spawn(Screenshot::primary_window()).observe(
         move |trigger: Trigger<ScreenshotCaptured>| {
+            let row = stage_check::record(&output, &file, &trigger.event().0, stage);
+            let warm = row["warm_pixels"].as_u64().unwrap_or(0);
+            assert_eq!(
+                warm > 0,
+                populated,
+                "{file}: warm stage pixels {warm} (populated: {populated})"
+            );
+            assert_eq!(
+                row["panels_clear"], true,
+                "{file}: a panel overlaps the stage: {row}"
+            );
             save(trigger);
             signal.store(true, Ordering::Release);
         },

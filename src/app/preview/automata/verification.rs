@@ -13,6 +13,10 @@ pub(super) struct Verification {
     pub frames: u32,
     pub hold: u32,
     pub ticks: u64,
+    /// Capture steps for the current family.
+    pub steps: u32,
+    /// Channel under the command pass.
+    pub channel: Option<engine_core::automata::channel::ChannelId>,
     pub capture: Option<(PathBuf, Arc<AtomicBool>)>,
 }
 
@@ -26,6 +30,7 @@ pub(super) fn install(app: &mut App) {
         std::fs::remove_file(output.join("SUCCESS")).expect("remove stale success");
     }
     std::fs::write(output.join("sessions.csv"), "kind,ticks,status\n").expect("evidence header");
+    std::fs::write(output.join("image-checks.json"), "[]").expect("image checks header");
     app.add_systems(Last, super::flow::update);
     app.insert_resource(Verification {
         output,
@@ -34,6 +39,8 @@ pub(super) fn install(app: &mut App) {
         frames: 0,
         hold: 0,
         ticks: 0,
+        steps: 0,
+        channel: None,
         capture: None,
     });
 }

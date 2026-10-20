@@ -1,6 +1,10 @@
+pub(in crate::app::preview) mod stage_check;
 use super::{capture, verification::Verification};
 use bevy::prelude::*;
-use engine_core::events::AutomataCommand;
+use engine_core::{
+    automata::channel::{ChannelAction, ChannelCommand, Channels, Status},
+    events::AutomataCommand,
+};
 use models::workbench::{catalog::Kind, plugin::Workbench};
 use std::io::Write;
 
@@ -24,7 +28,7 @@ pub(super) fn update(world: &mut World) {
             session.single_step();
             assert_eq!(session.ticks, 1, "single step advances once");
             session.reset().unwrap();
-            let ticks = match kind {
+            check.steps = match kind {
                 Kind::Rule30 | Kind::Rule110 => 32,
                 Kind::Life => 4,
                 Kind::Hpp => 12,
@@ -33,7 +37,33 @@ pub(super) fn update(world: &mut World) {
                 Kind::Ants => 500,
                 _ => 256,
             };
-            for _ in 0..ticks {
+            // Channel-command pass: the same lifecycle through the public contract.
+            let id = session.channel;
+            world.send_event(ChannelCommand {
+                id,
+                action: ChannelAction::Reset,
+            });
+            world.send_event(ChannelCommand {
+                id,
+                action: ChannelAction::Step,
+            });
+            check.channel = Some(id);
+            check.phase = 4;
+        } else if check.phase == 4 {
+            let id = check.channel.expect("channel under test");
+            let Some(row) = world.resource::<Channels>().get(id).cloned() else {
+                return;
+            };
+            assert_eq!(
+                (row.tick, row.status),
+                (1, Status::Paused),
+                "{kind:?}: channel step advanced once"
+            );
+            // Restore the deterministic capture state used by the evidence.
+            let mut bench = world.resource_mut::<Workbench>();
+            let session = bench.sessions.first_mut().unwrap();
+            session.reset().unwrap();
+            for _ in 0..check.steps {
                 session.single_step();
             }
             assert!(session.ticks > 0);
