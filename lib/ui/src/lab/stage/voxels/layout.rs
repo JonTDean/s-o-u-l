@@ -1,7 +1,6 @@
 //! Model-owned symbol positions projected as voxel entities, not text tiles.
 use bevy::prelude::*;
 use models::workbench::symbolic::machine::Symbolic;
-use crate::lab::stage::painters::symbolic::tape_window;
 #[derive(Clone, Debug, PartialEq)]
 pub struct Cell {
     pub symbol: char,
