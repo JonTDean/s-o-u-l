@@ -6,5 +6,6 @@ pub use params::LeniaParams;
 pub use reference::{KERNEL, next_density, step};
 pub use seed::{LeniaSeed, seed};
 
+pub mod continuous;
 #[cfg(test)]
 mod tests;
