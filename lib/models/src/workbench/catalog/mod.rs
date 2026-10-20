@@ -107,3 +107,5 @@ pub fn register(app: &mut bevy::prelude::App, kinds: &[Kind]) {
 pub mod specimens;
 #[cfg(test)]
 mod tests;
+
+pub mod scenarios;

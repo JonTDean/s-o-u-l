@@ -3242,6 +3242,7 @@ name = "models"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "dirs-next",
  "engine-core",
  "gif",
  "glam",
