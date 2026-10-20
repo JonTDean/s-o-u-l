@@ -14,6 +14,7 @@ use simulation_kernel::{
 use std::collections::VecDeque;
 mod configuration;
 pub mod editing;
+mod energy;
 use crate::workbench::experiment::config::Settings;
 
 /// A finite grid with explicit boundary sampling and snapshot update semantics.
@@ -21,6 +22,8 @@ use crate::workbench::experiment::config::Settings;
 #[serde(deny_unknown_fields)]
 pub struct GridSession {
     pub grid: DenseGrid,
+    #[serde(default)]
+    pub energy: Option<Vec<[u16; 2]>>,
     #[serde(default)]
     pub boundary: simulation_kernel::core::boundary::Boundary,
     pub history: VecDeque<Vec<u8>>,
@@ -62,6 +65,7 @@ impl GridSession {
         }
         let mut session = Self {
             grid,
+            energy: None,
             history: VecDeque::new(),
             boundary: Default::default(),
             kind,
@@ -79,6 +83,7 @@ impl GridSession {
 
     /// Apply validated live rule settings to the next snapshot update.
     pub fn step_with_settings(&mut self, settings: &Settings) {
+        let prior = settings.energy.as_ref().map(|_| self.bytes());
         let configured = configuration::rules::CellularRule::new(self.kind, settings);
         let rule: &dyn AutomatonRule<D = Dim> = if self.kind == Kind::Hpp {
             &HPPRule
@@ -91,6 +96,9 @@ impl GridSession {
             &serde_json::Value::Null,
             settings.world.boundary,
         );
+        if let (Some(energy), Some(prior)) = (&settings.energy, prior) {
+            self.gate_energy(energy, &prior);
+        }
         self.record();
     }
 
