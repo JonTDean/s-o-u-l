@@ -9,6 +9,7 @@ use models::workbench::{
     experiment::config::Settings, operations::channels::ConfigureSession, session::Session,
 };
 use std::collections::HashMap;
+mod authored;
 mod fields;
 mod world;
 
@@ -17,6 +18,7 @@ mod world;
 pub struct Draft {
     original: Settings,
     edited: Settings,
+    editor: authored::Editor,
 }
 
 /// The draft for `id`, replaced whenever the session's settings changed elsewhere.
@@ -28,6 +30,7 @@ pub fn draft<'a>(
     let entry = drafts.entry(id).or_insert_with(|| Draft {
         original: current.clone(),
         edited: current.clone(),
+        editor: Default::default(),
     });
     if entry.original != *current {
         // The transport and colour swatches change pace and colour directly; keep any
@@ -41,6 +44,7 @@ pub fn draft<'a>(
             *entry = Draft {
                 original: current.clone(),
                 edited: current.clone(),
+                editor: Default::default(),
             };
         }
     }
@@ -81,8 +85,13 @@ pub fn show(
 ) {
     let id = session.channel;
     margin_section(ui, "parameters", false, |ui| {
-        let edited = draft(drafts, id, &session.settings);
+        draft(drafts, id, &session.settings);
+        let entry = drafts.get_mut(&id).unwrap();
+        let edited = &mut entry.edited;
         fields::draw(ui, session.kind, edited);
+        if session.kind == models::workbench::catalog::Kind::Life {
+            authored::draw(ui, edited, &mut entry.editor);
+        }
         note(
             ui,
             "Rate and rule apply live; seed and population need a reset.",

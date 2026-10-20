@@ -1,6 +1,9 @@
 //! Rule drafts are explicit: text validation prepares settings, Apply changes the session.
 use bevy_egui::egui::{self, Ui};
-use models::workbench::experiment::config::{Settings, authored::{Rule, composition::Program, storage}};
+use models::workbench::experiment::config::{
+    Settings,
+    authored::{Rule, composition::Program, storage},
+};
 mod transfer;
 #[derive(Clone, Debug, Default)]
 pub struct Editor {
@@ -21,19 +24,28 @@ pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
         ui.horizontal_wrapped(|ui| {
             if ui.button("Load current draft").clicked() {
                 editor.set(&settings.program.clone().unwrap_or(Program {
-                    primary: Rule::life(settings.birth, settings.survival), secondary: None,
+                    primary: Rule::life(settings.birth, settings.survival),
+                    secondary: None,
                 }));
             }
             if ui.button("Copy-west example").clicked() {
-                editor.set(&Program { primary: Rule::copy_west(), secondary: None });
+                editor.set(&Program {
+                    primary: Rule::copy_west(),
+                    secondary: None,
+                });
             }
             if ui.button("Use birth/survival masks").clicked() {
                 settings.program = None;
                 editor.status = "Built-in rule prepared; press Apply below".into();
             }
         });
-        ui.add(egui::TextEdit::multiline(&mut editor.text).code_editor()
-            .desired_rows(10).desired_width(f32::INFINITY).char_limit(storage::MAX_BYTES));
+        ui.add(
+            egui::TextEdit::multiline(&mut editor.text)
+                .code_editor()
+                .desired_rows(10)
+                .desired_width(f32::INFINITY)
+                .char_limit(storage::MAX_BYTES),
+        );
         transfer::draw(ui, editor);
         if ui.button("Validate and prepare rule").clicked() {
             match storage::parse(&editor.text) {
@@ -45,7 +57,9 @@ pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
             }
         }
         ui.label(&editor.status);
-        if let Some(program) = &settings.program { ui.label(format!("Prepared: {}", program.title())); }
+        if let Some(program) = &settings.program {
+            ui.label(format!("Prepared: {}", program.title()));
+        }
         ui.label("Rule files share definitions; My specimens shares the world and exact state.");
     });
 }
