@@ -28,6 +28,21 @@ pub fn summary(machine: &Symbolic) -> Vec<(&'static str, String)> {
         Symbolic::Turing(m) => rows.push(("state", format!("q{}", m.state))),
         Symbolic::Koch { word, .. } => rows.push(("symbols", word.chars().count().to_string())),
     }
+    if !matches!(machine, Symbolic::Koch { .. }) {
+        let cells = crate::lab::stage::voxels::layout::cells(machine);
+        let mut symbols: Vec<_> = cells.iter().map(|c| c.symbol).collect();
+        symbols.sort_unstable();
+        symbols.dedup();
+        rows.push((
+            "voxel key",
+            symbols
+                .iter()
+                .map(|s| format!("{s}: {}", crate::lab::stage::voxels::layout::palette(*s).1))
+                .collect::<Vec<_>>()
+                .join(", "),
+        ));
+        rows.push(("head", "white cap above the current voxel".into()));
+    }
     rows
 }
 

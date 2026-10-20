@@ -81,7 +81,12 @@ pub struct LabPlugin;
 impl Plugin for LabPlugin {
     fn build(&self, app: &mut App) {
         use chrome::drawers::{Comparison, Files, project};
-        app.init_resource::<state::LabState>()
+        app.add_systems(Startup, stage::voxels::setup)
+            .add_systems(
+                Update,
+                stage::voxels::sync.after(engine_core::automata::channel::ChannelSet::Publish),
+            )
+            .init_resource::<state::LabState>()
             .init_resource::<Files>()
             .init_resource::<Comparison>()
             .init_resource::<engine_core::automata::lenia::ReadbackBusy>()
