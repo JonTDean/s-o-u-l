@@ -14,6 +14,7 @@ use models::workbench::{
 };
 use std::collections::HashSet;
 pub mod authored;
+pub mod guides;
 
 /// Library groups in display order, omitting empty groups; filter is case-insensitive.
 pub fn entries<'a>(

@@ -174,6 +174,13 @@ fn draw(
             *stage_rect = stage::presenter::show(ctx, &mut lab, &data, &mut fx, typing)
         }
     }
+    chrome::drawers::library::guides::overlay(
+        ctx,
+        &mut lab,
+        &data,
+        &mut drawers.comparison,
+        &mut fx,
+    );
     stage::overlay::toast(ctx, &mut lab, dt);
     if let Some(url) = fx.open_url.take() {
         ctx.open_url(egui::OpenUrl::new_tab(url));

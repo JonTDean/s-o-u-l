@@ -69,6 +69,7 @@ pub fn show(
                     ui.set_min_height(screen.height() - 28.0);
                     egui::ScrollArea::vertical().show(ui, |ui| match drawer {
                         Drawer::Library => {
+                            library::guides::launcher(ui, lab, &mut state.files, fx);
                             library::authored::body(ui, lab, data, &mut state.files);
                             library::body(ui, lab, data, fx);
                         }
