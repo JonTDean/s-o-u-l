@@ -3,6 +3,7 @@ pub mod fade;
 pub mod fonts;
 pub mod tokens;
 pub mod visuals;
+pub mod widgets;
 pub use visuals::{BOTTOM_PAD, fullscreen_bg, panel_bg};
 
 use bevy::prelude::*;
