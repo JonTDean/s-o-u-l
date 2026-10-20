@@ -91,3 +91,65 @@ fn authored_life_matches_existing_rule_and_continues_after_serialization() {
         assert_eq!(field(&restored), field(&custom));
     }
 }
+#[test]
+fn portable_rules_reject_bad_files_and_never_replace_existing_exports() {
+    use super::storage;
+    let program = Program {
+        primary: Rule::copy_west(),
+        secondary: None,
+    };
+    let text = serde_json::to_string(&program).unwrap();
+    assert_eq!(storage::parse(&text).unwrap(), program);
+    assert!(storage::parse(&text.replace("\"version\":1", "\"version\":99")).is_err());
+    assert!(storage::parse(&" ".repeat(storage::MAX_BYTES + 1)).is_err());
+    assert!(storage::parse("{\"primary\":null}").is_err());
+    let root = std::env::temp_dir().join(format!("soul-rule-files-{}", std::process::id()));
+    std::fs::create_dir_all(&root).unwrap();
+    let path = root.join("rule.json");
+    let _ = std::fs::remove_file(&path);
+    storage::write(&path, &program).unwrap();
+    assert_eq!(storage::read(&path).unwrap(), program);
+    let mut changed = program.clone();
+    changed.primary.default_alive = true;
+    assert!(storage::write(&path, &changed).is_err());
+    assert_eq!(storage::read(&path).unwrap(), program);
+    std::fs::remove_dir_all(root).unwrap();
+}
+#[test]
+fn invalid_masks_lengths_and_foreign_channels_are_rejected() {
+    let mut rule = Rule::copy_west();
+    rule.transitions[0].mask = 512;
+    assert!(rule.validate().is_err());
+    rule.transitions = vec![
+        Transition {
+            mask: 0,
+            pattern: 0,
+            alive: false
+        };
+        513
+    ];
+    assert!(rule.validate().is_err());
+    rule.transitions.clear();
+    rule.default_alive = true;
+    assert!(rule.validate().is_ok());
+    assert!(rule.evaluate(0));
+    let mut s = Session::new(Kind::Rule30);
+    let mut settings = s.settings.clone();
+    settings.program = Some(Program {
+        primary: rule,
+        secondary: None,
+    });
+    assert!(s.configure(settings, true).is_err());
+    for blend in [Blend::Union, Blend::Intersection, Blend::ExclusiveOr] {
+        for left in [false, true] {
+            for right in [false, true] {
+                let expected = match blend {
+                    Blend::Union => left || right,
+                    Blend::Intersection => left && right,
+                    Blend::ExclusiveOr => left != right,
+                };
+                assert_eq!(blend.combine(left, right), expected);
+            }
+        }
+    }
+}
