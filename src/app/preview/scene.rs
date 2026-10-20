@@ -1,6 +1,9 @@
 //! A static volume and oblique camera exercise geometry, transforms, and depth.
 use bevy::prelude::*;
-use engine_common::controls::camera::{WorldCamera, manager::layers_world};
+use engine_common::controls::camera::{
+    WorldCamera,
+    manager::{layers_world, stage::StageCamera},
+};
 use engine_core::{automata::GpuGridSlice, prelude::AppState};
 
 pub(super) fn setup(mut commands: Commands, mut next: ResMut<NextState<AppState>>) {
@@ -30,6 +33,7 @@ pub(super) fn camera(commands: &mut Commands, centre: Vec3, label: &str) {
             clear_color: ClearColorConfig::Custom(Color::srgb(0.025, 0.035, 0.055)),
             ..default()
         },
+        StageCamera,
         Transform::from_translation(centre + Vec3::new(90.0, 65.0, 120.0))
             .looking_at(centre, Vec3::Y),
         layers_world(),
@@ -50,8 +54,12 @@ pub(super) fn camera(commands: &mut Commands, centre: Vec3, label: &str) {
     ));
 }
 
-pub(super) fn isolate_preview_camera(mut cameras: Query<&mut Camera, With<WorldCamera>>) {
-    for mut camera in &mut cameras {
+pub(super) fn isolate_preview_camera(
+    mut commands: Commands,
+    mut cameras: Query<(Entity, &mut Camera), With<WorldCamera>>,
+) {
+    for (entity, mut camera) in &mut cameras {
         camera.is_active = false;
+        commands.entity(entity).remove::<StageCamera>();
     }
 }

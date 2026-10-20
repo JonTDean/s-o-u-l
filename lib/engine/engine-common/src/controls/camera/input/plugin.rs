@@ -10,7 +10,10 @@ use crate::controls::camera::{
         rotate::{apply_orbit, gather_orbit_input},
         zoom::{zoom_keyboard, zoom_scroll},
     },
-    manager::{CameraSet, DragState},
+    manager::{
+        CameraSet, DragState,
+        stage::{stage_keys_allowed, stage_pointer_allowed},
+    },
 };
 use engine_core::prelude::AppState;
 
@@ -22,13 +25,10 @@ impl Plugin for InputFacadePlugin {
         app.add_systems(
             Update,
             (
-                zoom_scroll,
-                zoom_keyboard,
-                begin_drag,
-                drag_pan,
+                (zoom_scroll, begin_drag, drag_pan, gather_orbit_input)
+                    .run_if(stage_pointer_allowed),
                 end_drag,
-                key_pan,
-                gather_orbit_input,
+                (zoom_keyboard, key_pan).run_if(stage_keys_allowed),
             )
                 .in_set(CameraSet::Input)
                 .run_if(in_state(AppState::InGame)),
