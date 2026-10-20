@@ -1,0 +1,101 @@
+{
+  "limits": {
+    "directories": 3,
+    "files_min": 1,
+    "files_max": 4,
+    "sloc": 200
+  },
+  "roots": [
+    {
+      "root": "src",
+      "files": 36,
+      "maximum_sloc": 133,
+      "largest_file": "src/app/builder/config.rs"
+    },
+    {
+      "root": "lib/engine/engine-common/src",
+      "files": 30,
+      "maximum_sloc": 146,
+      "largest_file": "lib/engine/engine-common/src/controls/camera/manager/mod.rs"
+    },
+    {
+      "root": "lib/engine/engine-core/src",
+      "files": 28,
+      "maximum_sloc": 151,
+      "largest_file": "lib/engine/engine-core/src/automata/channel/mod.rs"
+    },
+    {
+      "root": "lib/engine/engine-gpu/src",
+      "files": 56,
+      "maximum_sloc": 144,
+      "largest_file": "lib/engine/engine-gpu/src/render/graph.rs"
+    },
+    {
+      "root": "lib/engine/engine-render/src",
+      "files": 12,
+      "maximum_sloc": 184,
+      "largest_file": "lib/engine/engine-render/src/command_executor/mod.rs"
+    },
+    {
+      "root": "lib/models/src",
+      "files": 98,
+      "maximum_sloc": 153,
+      "largest_file": "lib/models/src/workbench/session.rs"
+    },
+    {
+      "root": "lib/simulation_kernel/src",
+      "files": 29,
+      "maximum_sloc": 99,
+      "largest_file": "lib/simulation_kernel/src/stepper/sparse/tests.rs"
+    },
+    {
+      "root": "lib/simulation_kernel/benches",
+      "files": 2,
+      "maximum_sloc": 95,
+      "largest_file": "lib/simulation_kernel/benches/steppers.rs"
+    },
+    {
+      "root": "lib/tests/src",
+      "files": 8,
+      "maximum_sloc": 160,
+      "largest_file": "lib/tests/src/channels/cpu.rs"
+    },
+    {
+      "root": "lib/tooling/src",
+      "files": 8,
+      "maximum_sloc": 48,
+      "largest_file": "lib/tooling/src/debugging/plugin.rs"
+    },
+    {
+      "root": "lib/ui/src",
+      "files": 78,
+      "maximum_sloc": 186,
+      "largest_file": "lib/ui/src/lab/inspector/mod.rs"
+    },
+    {
+      "root": "assets/shaders",
+      "files": 3,
+      "maximum_sloc": 58,
+      "largest_file": "assets/shaders/lenia_continuous.wgsl"
+    },
+    {
+      "root": "lib/engine/engine-gpu/assets",
+      "files": 4,
+      "maximum_sloc": 49,
+      "largest_file": "lib/engine/engine-gpu/assets/voxel_surface.wgsl"
+    },
+    {
+      "root": "scripts",
+      "files": 3,
+      "maximum_sloc": 35,
+      "largest_file": "scripts/get_dirs_as_tree.ps1"
+    },
+    {
+      "root": "tools/structure",
+      "files": 6,
+      "maximum_sloc": 106,
+      "largest_file": "tools/structure/tests/test_audit.py"
+    }
+  ],
+  "violations": []
+}
