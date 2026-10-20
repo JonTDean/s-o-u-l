@@ -4,6 +4,14 @@ use bevy_egui::egui;
 use engine_core::automata::channel::{ChannelAction, ChannelCommand};
 pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut Effects) {
     let rows = &data.channels.rows;
+    let title = |row: &engine_core::automata::channel::ChannelRow| {
+        let index = data.channels.index_of(row.id).unwrap_or(0) + 1;
+        let session = data.bench.sessions.iter().find(|s| s.channel == row.id);
+        format!(
+            "{index} · {}",
+            crate::lab::chrome::tabs::title(row, &data.specimens, session)
+        )
+    };
     if rows.len() < 2 {
         note(ui, "Open two channels to compare.", false);
         return;
@@ -17,18 +25,12 @@ pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut
             let shown = rows
                 .iter()
                 .find(|r| Some(r.id) == *side)
-                .map_or("choose channel".into(), |r| {
-                    format!("{} · {}", r.id.0, r.kind)
-                });
+                .map_or("choose channel".into(), |r| title(r));
             egui::ComboBox::from_id_salt(("lab.compare", label))
                 .selected_text(shown)
                 .show_ui(ui, |ui| {
                     for row in rows {
-                        ui.selectable_value(
-                            side,
-                            Some(row.id),
-                            format!("{} · {}", row.id.0, row.kind),
-                        );
+                        ui.selectable_value(side, Some(row.id), title(row));
                     }
                 });
         }

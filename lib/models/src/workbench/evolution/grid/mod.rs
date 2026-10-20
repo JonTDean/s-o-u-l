@@ -16,7 +16,7 @@ mod configuration;
 pub mod editing;
 use crate::workbench::experiment::config::Settings;
 
-/// A finite grid with dead boundaries and snapshot update semantics.
+/// A finite grid with explicit boundary sampling and snapshot update semantics.
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GridSession {

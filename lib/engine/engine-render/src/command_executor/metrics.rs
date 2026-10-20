@@ -12,7 +12,7 @@ use engine_core::automata::{
 };
 use std::collections::HashMap;
 
-/// Lenia mass: Σ density / 255.
+/// Lenia mass: sum of normalized densities, retaining continuous precision.
 pub const MASS: MetricId = MetricId {
     name: "mass",
     label: "mass",
