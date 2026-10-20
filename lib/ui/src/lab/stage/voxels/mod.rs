@@ -26,12 +26,27 @@ pub fn is_symbolic(model: &Model) -> bool {
     matches!(model, Model::Symbolic(m) if !matches!(m, Symbolic::Koch { .. }))
 }
 #[allow(clippy::too_many_arguments)]
-pub fn sync(mut commands: Commands, bench: Res<Workbench>, channels: Res<Channels>, rect: Res<StageRect>,
-    windows: Query<&Window, With<PrimaryWindow>>, mut cameras: Query<&mut Camera, With<VoxelCamera>>,
-    entities: Query<Entity, With<SymbolVoxel>>, mut assets: ResMut<Meshes>,
-    mut materials: ResMut<Assets<StandardMaterial>>, mut previous: Local<Vec<layout::Cell>>) {
-    let model = bench.sessions.iter().find(|s| Some(s.channel) == channels.selected).map(|s| &s.model);
-    let cells = match model { Some(Model::Symbolic(m)) => layout::cells(m), _ => Vec::new() };
+pub fn sync(
+    mut commands: Commands,
+    bench: Res<Workbench>,
+    channels: Res<Channels>,
+    rect: Res<StageRect>,
+    windows: Query<&Window, With<PrimaryWindow>>,
+    mut cameras: Query<&mut Camera, With<VoxelCamera>>,
+    entities: Query<Entity, With<SymbolVoxel>>,
+    mut assets: ResMut<Meshes>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut previous: Local<Vec<layout::Cell>>,
+) {
+    let model = bench
+        .sessions
+        .iter()
+        .find(|s| Some(s.channel) == channels.selected)
+        .map(|s| &s.model);
+    let cells = match model {
+        Some(Model::Symbolic(m)) => layout::cells(m),
+        _ => Vec::new(),
+    };
     for mut camera in &mut cameras {
         camera.viewport = windows
             .single()
