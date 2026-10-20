@@ -60,10 +60,10 @@ pub fn definitions() -> FontDefinitions {
         FontFamily::Proportional,
         chain("libertinus-sans", &fallback),
     );
-    fonts.families.insert(
-        FontFamily::Monospace,
-        chain("libertinus-mono", &mono_fallback),
-    );
+    // Libertinus Mono lacks symbols such as ␣; Libertinus Sans is the last resort.
+    let mut mono = chain("libertinus-mono", &mono_fallback);
+    mono.push("libertinus-sans".into());
+    fonts.families.insert(FontFamily::Monospace, mono);
     for (name, key) in [
         (SERIF, "libertinus-serif"),
         (SERIF_ITALIC, "libertinus-serif-italic"),
@@ -103,6 +103,10 @@ mod tests {
             ctx.fonts(|fonts| {
                 assert!(fonts.has_glyphs(&FontId::new(12.0, family(SERIF_ITALIC)), "μσΔ⁂×"));
                 assert!(fonts.has_glyphs(&FontId::new(12.0, FontFamily::Monospace), "0123456789"));
+                assert!(
+                    fonts.has_glyphs(&FontId::new(12.0, FontFamily::Monospace), "␣→"),
+                    "Turing tables print the blank as ␣"
+                );
                 assert!(
                     fonts.has_glyphs(&FontId::new(12.0, FontFamily::Proportional), "▶‖↺"),
                     "↺ only via egui fallback"

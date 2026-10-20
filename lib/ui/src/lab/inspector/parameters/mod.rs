@@ -1,0 +1,131 @@
+//! `parameters` margin section: experiment settings drafts applied through `ConfigureSession`.
+use crate::{
+    lab::Effects,
+    theme::widgets::{margin_section, note, pill},
+};
+use bevy_egui::egui::Ui;
+use engine_core::automata::channel::ChannelId;
+use models::workbench::{
+    experiment::config::Settings, operations::channels::ConfigureSession, session::Session,
+};
+use std::collections::HashMap;
+mod fields;
+
+/// An edited copy of a session's settings and the settings it was taken from.
+#[derive(Clone, Debug)]
+pub struct Draft {
+    original: Settings,
+    edited: Settings,
+}
+
+/// The draft for `id`, replaced whenever the session's settings changed elsewhere.
+pub fn draft<'a>(
+    drafts: &'a mut HashMap<ChannelId, Draft>,
+    id: ChannelId,
+    current: &Settings,
+) -> &'a mut Settings {
+    let entry = drafts.entry(id).or_insert_with(|| Draft {
+        original: current.clone(),
+        edited: current.clone(),
+    });
+    if entry.original != *current {
+        *entry = Draft {
+            original: current.clone(),
+            edited: current.clone(),
+        };
+    }
+    &mut entry.edited
+}
+
+/// Buttons under the parameter fields.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Action {
+    /// Rate and rule parameters take effect immediately.
+    ApplyLive,
+    /// Apply and reset (seed and population changes need this).
+    ApplyReset,
+    /// Restore the family defaults into the draft only.
+    Defaults,
+}
+
+/// The backend request for an action; `Defaults` only edits the draft.
+pub fn request(id: ChannelId, settings: &Settings, action: Action) -> Option<ConfigureSession> {
+    let reset = match action {
+        Action::ApplyLive => false,
+        Action::ApplyReset => true,
+        Action::Defaults => return None,
+    };
+    Some(ConfigureSession {
+        id,
+        settings: Box::new(settings.clone()),
+        reset,
+    })
+}
+
+/// Draw the section for one CPU session.
+pub fn show(
+    ui: &mut Ui,
+    session: &Session,
+    drafts: &mut HashMap<ChannelId, Draft>,
+    fx: &mut Effects,
+) {
+    let id = session.channel;
+    margin_section(ui, "parameters", false, |ui| {
+        let edited = draft(drafts, id, &session.settings);
+        fields::draw(ui, session.kind, edited);
+        note(
+            ui,
+            "Rate and rule apply live; seed and population need a reset.",
+            false,
+        );
+        ui.horizontal(|ui| {
+            for (label, action) in [
+                ("Apply live", Action::ApplyLive),
+                ("Apply and reset", Action::ApplyReset),
+                ("Defaults", Action::Defaults),
+            ] {
+                if pill(ui, label, action == Action::ApplyLive, true).clicked() {
+                    match request(id, edited, action) {
+                        Some(request) => fx.configure.push(request),
+                        None => *edited = Settings::for_kind(session.kind),
+                    }
+                }
+            }
+        });
+    });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use models::workbench::catalog::Kind;
+
+    #[test]
+    fn drafts_survive_frames_and_follow_external_changes() {
+        let mut drafts = HashMap::new();
+        let id = ChannelId(2);
+        let mut current = Settings::for_kind(Kind::Life);
+        draft(&mut drafts, id, &current).birth = 0b1000;
+        assert_eq!(
+            draft(&mut drafts, id, &current).birth,
+            0b1000,
+            "edits persist"
+        );
+        current.rate_hz = 30.0; // applied elsewhere, e.g. the transport
+        assert_eq!(
+            *draft(&mut drafts, id, &current),
+            current,
+            "a changed session replaces the draft"
+        );
+    }
+
+    #[test]
+    fn actions_become_configure_requests() {
+        let id = ChannelId(5);
+        let settings = Settings::for_kind(Kind::Boids);
+        let live = request(id, &settings, Action::ApplyLive).unwrap();
+        assert_eq!((live.id, live.reset), (id, false));
+        assert!(request(id, &settings, Action::ApplyReset).unwrap().reset);
+        assert!(request(id, &settings, Action::Defaults).is_none());
+    }
+}

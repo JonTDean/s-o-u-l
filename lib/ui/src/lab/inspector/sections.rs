@@ -1,0 +1,73 @@
+//! Pure formatting helpers for inspector sections.
+use engine_core::automata::channel::metrics::MetricId;
+use models::workbench::{catalog::Kind, session::Model};
+
+/// Order parameters keep two decimals; counts are integers.
+pub fn format_metric(value: f64, id: &MetricId) -> String {
+    if id.name == "polarisation" || id.name == "mass" {
+        format!("{value:.2}")
+    } else {
+        format!("{value:.0}")
+    }
+}
+
+/// Size, boundary and backend for the `grid` margin section.
+pub fn arena_label(model: &Model, kind: Kind) -> String {
+    match model {
+        Model::Grid(_) if matches!(kind, Kind::Rule30 | Kind::Rule110) => {
+            "64 cells · 64-row history · CPU".into()
+        }
+        Model::Grid(_) => "64 × 64 · dead edges · CPU".into(),
+        Model::Boids(_) => "64 × 64 · wraps · CPU".into(),
+        Model::Ants(_) => "64 × 64 · clamped · CPU".into(),
+        Model::Symbolic(_) => "tape · CPU".into(),
+    }
+}
+
+/// Input hint and whether it is a warning (over the 256-symbol bound).
+pub fn input_note(len: usize) -> (String, bool) {
+    if len > 256 {
+        (format!("{len}/256: too long, Reset is refused"), true)
+    } else {
+        (format!("applies on reset · {len}/256"), false)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use models::workbench::{catalog::Kind, session::Session};
+
+    #[test]
+    fn metric_values_format_by_kind() {
+        let order = MetricId {
+            name: "polarisation",
+            label: "order",
+            unit: "0–1",
+        };
+        let pop = MetricId {
+            name: "population",
+            label: "alive",
+            unit: "cells",
+        };
+        assert_eq!(format_metric(0.912_3, &order), "0.91");
+        assert_eq!(format_metric(212.0, &pop), "212");
+    }
+
+    #[test]
+    fn arenas_describe_size_and_edges() {
+        let label = |kind| arena_label(&Session::new(kind).model, kind);
+        assert_eq!(label(Kind::Life), "64 × 64 · dead edges · CPU");
+        assert_eq!(label(Kind::Rule30), "64 cells · 64-row history · CPU");
+        assert_eq!(label(Kind::Boids), "64 × 64 · wraps · CPU");
+    }
+
+    #[test]
+    fn input_note_warns_beyond_the_bound() {
+        assert_eq!(
+            input_note(6),
+            ("applies on reset · 6/256".to_string(), false)
+        );
+        assert!(input_note(300).1);
+    }
+}

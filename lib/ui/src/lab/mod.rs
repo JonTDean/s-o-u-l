@@ -16,6 +16,7 @@ use engine_core::{
 };
 use models::workbench::{
     catalog::{Catalog, specimens::Specimens},
+    operations::channels::ConfigureSession,
     plugin::Workbench,
 };
 use std::collections::HashSet;
@@ -34,6 +35,8 @@ pub struct Effects {
     pub commands: Vec<ChannelCommand>,
     /// Spawn and clear requests.
     pub automata: Vec<AutomataCommand>,
+    /// Experiment settings for CPU sessions.
+    pub configure: Vec<ConfigureSession>,
     /// DOI link to open in the browser.
     pub open_url: Option<String>,
     /// Write the debug centre square into the selected GPU slice.
@@ -104,6 +107,7 @@ fn draw(
     mut commands: EventWriter<ChannelCommand>,
     mut automata: EventWriter<AutomataCommand>,
     mut debug: EventWriter<DebugSeedSquare>,
+    mut configure: EventWriter<ConfigureSession>,
 ) {
     let Ok(ctx) = contexts.ctx_mut() else { return };
     let mut fx = Effects::default();
@@ -159,4 +163,5 @@ fn draw(
     }
     commands.write_batch(fx.commands);
     automata.write_batch(fx.automata);
+    configure.write_batch(fx.configure);
 }

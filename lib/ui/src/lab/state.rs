@@ -1,5 +1,5 @@
 //! Per-viewer lab UI state: mode, panels, drafts and stage views.
-use super::stage::view::StageView;
+use super::{inspector::parameters::Draft, stage::view::StageView};
 use bevy::prelude::Resource;
 use engine_core::automata::channel::ChannelId;
 use std::collections::HashMap;
@@ -46,6 +46,8 @@ pub struct LabState {
     pub inputs: HashMap<ChannelId, String>,
     /// Zoom and pan per CPU channel.
     pub views: HashMap<ChannelId, StageView>,
+    /// Unapplied experiment settings per CPU channel.
+    pub params: HashMap<ChannelId, Draft>,
     /// Message and remaining seconds.
     pub toast: Option<(String, f32)>,
 }
@@ -62,6 +64,7 @@ impl Default for LabState {
             idle_secs: 0.0,
             inputs: HashMap::new(),
             views: HashMap::new(),
+            params: HashMap::new(),
             toast: None,
         }
     }
