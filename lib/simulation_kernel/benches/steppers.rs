@@ -18,29 +18,29 @@ fn benchmarks(c: &mut Criterion) {
                 group.bench_function(
                     BenchmarkId::new(backend, format!("{side}-{percent}pct")),
                     |b| {
-                        b.iter_batched(
+                        b.iter_batched_ref(
                             || (d.clone(), s.clone()),
-                            |(mut d, mut s)| {
+                            |(d, s)| {
                                 let size = glam::UVec3::new(side, side, 1);
                                 match backend {
                                     "dense" => dense::step_dense(
-                                        &mut d,
+                                        d,
                                         &fixtures::Life,
                                         &serde_json::Value::Null,
                                     ),
                                     "dense_parallel" => dense::parallel::step_dense_dyn_parallel(
-                                        &mut d,
+                                        d,
                                         &fixtures::Life,
                                         &serde_json::Value::Null,
                                     ),
                                     "sparse" => sparse::step_sparse_bounded(
-                                        &mut s,
+                                        s,
                                         &fixtures::Life,
                                         &serde_json::Value::Null,
                                         size,
                                     ),
                                     _ => sparse::parallel::step_sparse_bounded_parallel(
-                                        &mut s,
+                                        s,
                                         &fixtures::Life,
                                         &serde_json::Value::Null,
                                         size,
