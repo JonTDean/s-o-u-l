@@ -22,6 +22,44 @@ pub fn show(
     fx: &mut Effects,
 ) {
     let send = |fx: &mut Effects, action| fx.commands.push(ChannelCommand { id, action });
+    margin_section(ui, "model", false, |ui| {
+        use simulation_kernel::core::{
+            boundary::Boundary,
+            lenia::continuous::{Kernel, Shape},
+        };
+        let mut continuous = sim.kernel.is_some();
+        choice(
+            ui,
+            &mut continuous,
+            &[(false, "quantized XY"), (true, "continuous XYZ")],
+        );
+        let mut kernel = sim.kernel.unwrap_or_default();
+        if continuous {
+            ui.horizontal(|ui| {
+                ui.label("radius");
+                ui.add(egui::DragValue::new(&mut kernel.radius).range(1..=4));
+            });
+            choice(
+                ui,
+                &mut kernel.shape,
+                &[(Shape::Gaussian, "Gaussian"), (Shape::Shell, "shell")],
+            );
+            choice(
+                ui,
+                &mut kernel.boundary,
+                &[(Boundary::Dead, "dead"), (Boundary::Periodic, "periodic")],
+            );
+        }
+        let selected: Option<Kernel> = continuous.then_some(kernel);
+        if selected != sim.kernel {
+            send(fx, ChannelAction::Lenia(LeniaAction::Kernel(selected)));
+        }
+        note(
+            ui,
+            "Model and kernel changes reset the field. XYZ retains float density and couples all axes.",
+            false,
+        );
+    });
     margin_section(ui, "growth", false, |ui| {
         let mut params = sim.params;
         slider(ui, "μ", &mut params.mu, 0.0..=1.0, false);

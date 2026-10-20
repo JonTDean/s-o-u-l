@@ -45,7 +45,10 @@ pub(crate) fn synchronize(
             continue;
         }
         if slots.get(entity).is_some_and(|slot| {
-            slot.epoch == sim.epoch && slot.origin == origin && slot.buffers.size == size
+            slot.epoch == sim.epoch
+                && slot.origin == origin
+                && slot.buffers.size == size
+                && slot.buffers.kernel == sim.kernel
         }) {
             continue;
         }
@@ -54,7 +57,21 @@ pub(crate) fn synchronize(
             || simulation_kernel::core::lenia::seed(size, sim.seed),
             |saved| saved.densities.clone(),
         );
-        match LeniaBuffers::new(device, pipelines, size, &cells) {
+        let allocated = if let Some(kernel) = sim.kernel {
+            let values = sim
+                .restored
+                .as_ref()
+                .and_then(|s| s.continuous.as_ref())
+                .map_or_else(
+                    || cells.iter().map(|v| *v as f32 / 255.0).collect::<Vec<_>>(),
+                    |s| s.values.clone(),
+                );
+            let words: Vec<_> = values.iter().map(|v| v.to_bits()).collect();
+            LeniaBuffers::from_words(device, pipelines, size, &words, Some(kernel))
+        } else {
+            LeniaBuffers::new(device, pipelines, size, &cells)
+        };
+        match allocated {
             Ok(mut buffers) => {
                 buffers.tick = sim.restored.as_ref().map_or(0, |saved| saved.tick);
                 slots.insert(
