@@ -43,6 +43,9 @@ pub struct Session {
 impl Session {
     /// Describe the active rules, including live edits to catalog defaults.
     pub fn title(&self) -> String {
+        if let Some(program) = &self.settings.program {
+            return program.title();
+        }
         match self.kind {
             Kind::Rule30 | Kind::Rule110 => {
                 format!("Rule {} · space-time", self.settings.elementary)

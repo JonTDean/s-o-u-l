@@ -40,7 +40,8 @@ pub fn arena_label(model: &Model, kind: Kind) -> String {
 /// specimen, so its authored title, caption and footnote no longer describe it.
 pub fn customised(session: &Session) -> bool {
     let (s, d) = (&session.settings, Settings::for_kind(session.kind));
-    s.elementary != d.elementary
+    s.program != d.program
+        || s.elementary != d.elementary
         || s.birth != d.birth
         || s.survival != d.survival
         || s.agent_count != d.agent_count
