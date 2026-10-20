@@ -14,7 +14,9 @@ pub fn poll(
             if !s.paused {
                 return Err("Pause both channels before capture or stepping".into());
             }
-            field::cpu(s)?;
+            if s.halted() {
+                return Err("Both channels must be able to advance".into());
+            }
             return Ok(Stamp::from_cpu(s));
         }
         let (_, _, s) = sims
