@@ -61,7 +61,7 @@ pub fn sync(
     channels: Res<Channels>,
     rect: Res<StageRect>,
     windows: Query<&Window, With<PrimaryWindow>>,
-    mut cameras: Query<&mut Camera, With<VoxelCamera>>,
+    mut cameras: Query<(&mut Camera, &mut Transform), With<VoxelCamera>>,
     entities: Query<Entity, With<SymbolVoxel>>,
     mut assets: ResMut<Meshes>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -76,7 +76,18 @@ pub fn sync(
         Some(Model::Symbolic(m)) => layout::cells(m),
         _ => Vec::new(),
     };
-    for mut camera in &mut cameras {
+    for (mut camera, mut transform) in &mut cameras {
+        let min = cells.iter().fold(Vec3::ZERO, |a, c| a.min(c.position));
+        let max = cells.iter().fold(Vec3::Y * 3.0, |a, c| a.max(c.position));
+        let centre = (min + max) * 0.5;
+        let aspect = (rect.size.x / rect.size.y.max(1.0)).max(0.5);
+        let distance = ((max.x - min.x + 8.0) / aspect)
+            .max(max.y - min.y + 8.0)
+            .max(18.0)
+            * 1.6;
+        *transform =
+            Transform::from_translation(centre + Vec3::new(0.0, distance * 0.35, distance))
+                .looking_at(centre, Vec3::Y);
         camera.viewport = windows
             .single()
             .ok()
