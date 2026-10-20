@@ -6,10 +6,18 @@ pub enum LeniaSeed {
     #[default]
     Blob,
     Ring,
+    /// Published polynomial XY Orbium.
+    Orbium,
 }
 
 /// Seed a bounded volume; small grids remain safe and outside cells stay zero.
 pub fn seed(size: [u32; 3], pattern: LeniaSeed) -> Vec<u8> {
+    if pattern == LeniaSeed::Orbium {
+        return super::continuous::orbium::seed(size)
+            .iter()
+            .map(|v| (v * 255.0).round() as u8)
+            .collect();
+    }
     let [width, height, depth] = size;
     let mut cells = vec![0; (width * height * depth) as usize];
     let radius = (width.min(height) as f32 / 6.0).max(1.0);

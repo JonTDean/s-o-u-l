@@ -63,7 +63,13 @@ pub(crate) fn synchronize(
                 .as_ref()
                 .and_then(|s| s.continuous.as_ref())
                 .map_or_else(
-                    || cells.iter().map(|v| *v as f32 / 255.0).collect::<Vec<_>>(),
+                    || {
+                        if sim.seed == simulation_kernel::core::lenia::LeniaSeed::Orbium {
+                            simulation_kernel::core::lenia::continuous::orbium::seed(size)
+                        } else {
+                            cells.iter().map(|v| *v as f32 / 255.0).collect::<Vec<_>>()
+                        }
+                    },
                     |s| s.values.clone(),
                 );
             let words: Vec<_> = values.iter().map(|v| v.to_bits()).collect();
