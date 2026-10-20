@@ -6,7 +6,7 @@ pub(super) fn update(world: &mut World) {
         if v.frames < v.wait {
             return;
         }
-        if v.phase <= 3 {
+        if v.phase <= 3 || v.phase == 12 {
             cpu::run(world, &mut v);
         } else {
             gpu::run(world, &mut v);

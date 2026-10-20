@@ -53,6 +53,21 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
             v.phase = 3;
         }
         3 if v.output.join("Life.json").exists() => finish(world, v),
+        12 => {
+            let bench = world.resource::<Workbench>();
+            assert_eq!(bench.sessions.len(), 1);
+            assert_eq!(
+                serde_json::to_value(&bench.sessions[0]).unwrap(),
+                *v.expected.as_ref().unwrap()
+            );
+            world.send_event(AutomataCommand::Clear);
+            world.resource_mut::<Files>().load = Some(Scenario::Languages.project().unwrap());
+            let mut lab = world.resource_mut::<LabState>();
+            lab.guide.active = Some(Scenario::Languages);
+            lab.guide.step = 1;
+            v.phase = 4;
+            v.wait = v.frames + 60;
+        }
         _ => {}
     }
 }
@@ -75,11 +90,7 @@ fn finish(world: &mut World, v: &mut Verification) {
         100,
     )
     .unwrap();
-    world.send_event(AutomataCommand::Clear);
-    world.resource_mut::<Files>().load = Some(Scenario::Languages.project().unwrap());
-    let mut lab = world.resource_mut::<LabState>();
-    lab.guide.active = Some(Scenario::Languages);
-    lab.guide.step = 1;
-    v.phase = 4;
+    world.resource_mut::<Files>().request = Some(Request::Load);
+    v.phase = 12;
     v.wait = v.frames + 60;
 }

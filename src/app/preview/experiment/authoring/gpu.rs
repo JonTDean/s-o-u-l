@@ -65,6 +65,11 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
             v.phase = 9;
         }
         9 if v.captured.load(std::sync::atomic::Ordering::Acquire) => {
+            world.resource_mut::<Files>().request = Some(Request::Load);
+            v.phase = 13;
+            v.wait = v.frames + 60;
+        }
+        13 => {
             let (owner, mut sim) = world
                 .query::<(Entity, &mut LeniaSimulation)>()
                 .iter_mut(world)
