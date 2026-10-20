@@ -54,7 +54,7 @@ pub(crate) fn paint(
                     view.zoom_by((scroll / 200.0).exp());
                 }
             }
-            if response.dragged() && lab.editor.tool == editing::Tool::Navigate {
+            if response.dragged() && (!chrome || lab.editor.tool == editing::Tool::Navigate) {
                 view.pan += response.drag_delta();
             }
             if response.double_clicked() {

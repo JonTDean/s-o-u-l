@@ -18,10 +18,18 @@ pub fn format_metric(value: f64, id: &MetricId) -> String {
 /// Size, boundary and backend for the `grid` margin section.
 pub fn arena_label(model: &Model, kind: Kind) -> String {
     match model {
-        Model::Grid(_) if matches!(kind, Kind::Rule30 | Kind::Rule110) => {
-            "64 cells · 64-row history · CPU".into()
+        Model::Grid(g) if matches!(kind, Kind::Rule30 | Kind::Rule110) => {
+            format!("{} cells · 64-row history · CPU", g.grid.size.x)
         }
-        Model::Grid(_) => "64 × 64 · dead edges · CPU".into(),
+        Model::Grid(g) => format!(
+            "{} × {} · {} · CPU",
+            g.grid.size.x,
+            g.grid.size.y,
+            match g.boundary {
+                simulation_kernel::core::boundary::Boundary::Dead => "dead edges",
+                simulation_kernel::core::boundary::Boundary::Periodic => "periodic",
+            }
+        ),
         Model::Boids(_) => "64 × 64 · wraps · CPU".into(),
         Model::Ants(_) => "64 × 64 · clamped · CPU".into(),
         Model::Symbolic(_) => "tape · CPU".into(),
@@ -37,6 +45,7 @@ pub fn customised(session: &Session) -> bool {
         || s.survival != d.survival
         || s.agent_count != d.agent_count
         || s.pattern != d.pattern
+        || s.world != d.world
 }
 
 /// Input hint and whether it is a warning (over the 256-symbol bound).

@@ -27,11 +27,10 @@ pub(super) fn draw(ui: &mut Ui, s: &mut Settings, kind: Kind) {
         ],
     );
     if s.world.seed.is_some() {
-        note(
-            ui,
-            "Authored reset seed. Select a preset to replace it.",
-            false,
-        );
+        note(ui, "Authored reset seed", false);
+        if ui.button("Replace with preset").clicked() {
+            s.world.seed = None;
+        }
     }
     note(
         ui,

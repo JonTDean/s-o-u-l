@@ -26,8 +26,11 @@ pub enum ChannelAction {
     SampleMetric(bool),
     /// Paint a paused cellular field; the first batch starts one undoable stroke.
     Paint {
+        /// Cells crossed by this stroke segment.
         points: Vec<[i32; 2]>,
+        /// Binary density or HPP direction bits.
         value: u8,
+        /// Begin a new undoable stroke.
         start: bool,
     },
     /// Undo (`false`) or redo (`true`) a cellular stroke.

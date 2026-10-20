@@ -2,6 +2,7 @@ use super::*;
 use crate::automata::classical::regular::wolfram_1d::rules::{rule30::Rule30, rule110::Rule110};
 use crate::automata::dynamical::particle::life::Life;
 use simulation_kernel::stepper::dense::parallel::step_dense_dyn_parallel;
+use simulation_kernel::stepper::dense::step_dense;
 
 #[test]
 fn elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions() {

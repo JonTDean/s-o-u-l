@@ -1,5 +1,6 @@
 use super::*;
 use crate::automata::dynamical::particle::hpp::{N, S};
+use simulation_kernel::stepper::dense::step_dense;
 
 #[test]
 fn hpp_particles_keep_direction_and_head_on_collisions_turn_perpendicularly() {
