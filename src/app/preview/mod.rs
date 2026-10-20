@@ -1,6 +1,7 @@
 //! Reproducible 3D voxel preview with an optional window-only screenshot.
 use bevy::prelude::*;
 mod automata;
+mod boot;
 mod capture;
 mod experiment;
 mod lenia;
@@ -14,6 +15,7 @@ pub(super) fn enabled() -> bool {
 }
 
 pub(super) fn install(app: &mut App) {
+    boot::install(app);
     if experiment::enabled() {
         experiment::install(app);
         app.add_systems(PostStartup, experiment::setup);

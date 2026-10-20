@@ -1,18 +1,18 @@
 use glam::{IVec3, UVec3};
 use serde_json::Value;
 use simulation_kernel::{
+    AutomatonRule,
     core::{
         cell::{CellCtx, CellOutcome, CellState},
-        dim::{Dim3, Dimensionality},
+        dim::{Dim, Dimensionality},
     },
     grid::{DenseGrid, SparseGrid},
-    stepper::AutomatonRule,
 };
 pub struct Life;
 impl AutomatonRule for Life {
-    type D = Dim3;
-    fn next_state(&self, c: CellCtx<Dim3>, _: &Value) -> CellOutcome {
-        let n = Dim3::NEIGHBOUR_OFFSETS
+    type D = Dim;
+    fn next_state(&self, c: CellCtx<Dim>, _: &Value) -> CellOutcome {
+        let n = Dim::NEIGHBOUR_OFFSETS
             .iter()
             .zip(c.neighbourhood)
             .filter(|(p, s)| p.z == 0 && **s != CellState::Dead)
