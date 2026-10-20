@@ -47,6 +47,7 @@ impl Plugin for WorkbenchPlugin {
     fn build(&self, app: &mut App) {
         ensure_plugin(app);
         app.init_resource::<Workbench>()
+            .insert_resource(super::catalog::specimens::Specimens::embedded())
             .add_event::<ConfigureSession>()
             .add_systems(
                 Update,

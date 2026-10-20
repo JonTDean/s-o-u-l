@@ -3253,6 +3253,7 @@ dependencies = [
  "serde",
  "serde_json",
  "simulation_kernel",
+ "toml",
 ]
 
 [[package]]
@@ -4791,6 +4792,7 @@ dependencies = [
  "bevy_ecs",
  "engine-core",
  "engine-gpu",
+ "engine-render",
  "models",
  "simulation_kernel",
 ]
