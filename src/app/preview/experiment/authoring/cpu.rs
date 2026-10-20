@@ -65,6 +65,8 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
             let mut lab = world.resource_mut::<LabState>();
             lab.guide.active = Some(Scenario::Languages);
             lab.guide.step = 1;
+            lab.drawer = Some(ui::lab::state::Drawer::Library);
+            lab.authoring.name = "My specimen".into();
             v.phase = 4;
             v.wait = v.frames + 60;
         }

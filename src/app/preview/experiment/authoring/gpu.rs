@@ -3,6 +3,8 @@ use engine_core::events::AutomataCommand;
 pub(super) fn run(world: &mut World, v: &mut Verification) {
     match v.phase {
         4 => {
+            capture(world, v, "authoring-library.png");
+            world.resource_mut::<LabState>().drawer = None;
             let id = world.resource::<Workbench>().sessions[0].channel;
             world.resource_mut::<Channels>().selected = Some(id);
             world.resource_mut::<Workbench>().sessions[0].single_step();
