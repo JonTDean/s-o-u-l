@@ -90,10 +90,16 @@ cells, particles, steps, length, order or food) into a 200-sample trace.
 Lenia's mass comes from GPU readbacks, so it is opt-in (inspector → *sample*).
 It is sampled at 4 Hz and yields to project saves.
 
-**Comparison and projects.** The Compare drawer picks two CPU channels, steps
-them together and exports isolated copies as PNG, GIF, project and manifest.
-The Project drawer saves once every channel is paused, and waits for completed
-GPU state before writing. Loading replaces every channel.
+**World authoring.** Cellular channels support dimensions from 8 to 256 and dead
+or periodic boundaries. Pause to paint or erase on the stage; undo/redo groups
+whole strokes. Edited fields become Reset seeds and survive project save/load.
+
+**Comparison and projects.** The Compare drawer selects CPU or GPU channels and
+waits for completed states when stepping. Compatible fields show error statistics
+and difference heatmaps; metric traces and CSV exports retain epochs, ticks and
+units. PNG/GIF/project exports evolve isolated copies. The Project drawer saves
+paused channels, including exact completed GPU state. Loading replaces every
+channel. See the [worlds and comparison guide](docs/verification/worlds/README.md).
 
 ## Specimen catalog
 
@@ -115,10 +121,11 @@ GPU state before writing. Loading replaces every channel.
 
 **Scope notes.**
 
-- *Lenia.* This Lenia stores density in 0–255. Each XY plane evolves on its own
-  under a finite 3 × 3 Gaussian kernel with zero boundaries. It is a bounded
-  variant, not isotropic 3-D Lenia, and its ring seed is not a qualified
-  published Orbium.
+- *Lenia.* The default quantized model stores density in 0–255, with independent
+  XY planes, a finite 3 × 3 kernel and zero edges. The inspector also offers
+  continuous XYZ: float density, normalized Gaussian/shell kernels, configurable
+  radius, dead/periodic boundaries and coupling across all axes. Model changes
+  reset the field. Neither fixture is claimed to reproduce published Orbium.
 - *Machines.* The linear-bounded automaton never grows its tape. The Turing
   machine is a small transition table, not a universal machine.
 
@@ -247,8 +254,10 @@ The lab shell and visual language (sub-projects 1 and 2) are complete. Next:
 2. **Experiment tooling, and the menu and scenario flow.**
 3. **Authoring.** User-defined specimens and rules.
 
-Broader goals include continuous/isotropic 3-D Lenia, sparse storage, stepper
-benchmarks, and hosted CI on Windows and macOS. See the
+Authored cellular worlds, quantitative comparison and continuous XYZ Lenia are
+implemented; see their [contract and qualification](docs/verification/worlds/README.md).
+Further goals include published-organism qualification, expanded benchmark tooling,
+and hosted CI on Windows and macOS. See the
 [kanban](docs/kanban/v0-0-2.md).
 
 ## License
