@@ -68,7 +68,10 @@ pub fn show(
                     ui.set_width(WIDTH);
                     ui.set_min_height(screen.height() - 28.0);
                     egui::ScrollArea::vertical().show(ui, |ui| match drawer {
-                        Drawer::Library => library::body(ui, lab, data, fx),
+                        Drawer::Library => {
+                            library::authored::body(ui, lab, data, &mut state.files);
+                            library::body(ui, lab, data, fx);
+                        }
                         Drawer::Compare => {
                             let path = state.files.path.clone();
                             compare::body(ui, &mut state.comparison, &path, data, fx)

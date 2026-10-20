@@ -72,3 +72,15 @@ pub fn create(destination: &Path, project: &Project) -> Result<(), String> {
     }
     write(destination, project)
 }
+
+/// Stable per-user location; override permits isolated tests and portable installations.
+pub fn default_root() -> PathBuf {
+    std::env::var_os("SOUL_LIBRARY")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| {
+            dirs_next::data_dir()
+                .unwrap_or_else(|| PathBuf::from("."))
+                .join("soul")
+                .join("specimens")
+        })
+}
