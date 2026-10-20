@@ -12,6 +12,7 @@ pub struct Stamp {
     pub tick: u64,
     pub params: Option<LeniaParams>,
     pub kernel: Option<Kernel>,
+    pub cpu_settings: Option<models::workbench::experiment::config::Settings>,
 }
 #[derive(Clone, Debug)]
 pub struct Frame {
@@ -34,6 +35,7 @@ impl Stamp {
             id: s.channel,
             epoch: s.epoch,
             tick: s.ticks,
+            cpu_settings: Some(s.settings.clone()),
             params: None,
             kernel: None,
         }
@@ -43,6 +45,7 @@ impl Stamp {
             id,
             epoch: s.epoch,
             tick: s.target_tick,
+            cpu_settings: None,
             params: Some(s.params),
             kernel: s.kernel,
         }

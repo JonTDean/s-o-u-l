@@ -80,6 +80,11 @@ pub fn write(
             }
         }
     }
+    let provenance = state.capture.result.as_ref().map(|frames| frames.iter().map(|frame| {
+        let s = &frame.stamp;
+        serde_json::json!({"channel":s.id.0,"epoch":s.epoch,"tick":s.tick,"size":frame.field.size,
+            "units":frame.field.units,"cpu_settings":s.cpu_settings,"lenia_growth":s.params,"continuous_kernel":s.kernel})
+    }).collect::<Vec<_>>());
     let destination = Path::new(&state.folder);
     if destination.exists() {
         return Err("Export folder exists; choose a new folder below".into());

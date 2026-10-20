@@ -50,6 +50,7 @@ pub fn poll(
                 || current.tick > expected.tick
                 || current.params != expected.params
                 || current.kernel != expected.kernel
+                || current.cpu_settings != expected.cpu_settings
             {
                 return Err("Comparison cancelled: channel changed during capture".into());
             }
