@@ -82,6 +82,7 @@ fn run(world: &mut World, v: &mut Verification) {
             v.phase = 8;
         }
         8 if v.captured.load(std::sync::atomic::Ordering::Acquire) => {
+            checkpoint::mass(world);
             std::fs::write(v.output.join("SUCCESS"),"Edited periodic worlds, undo/redo, completed CPU/GPU comparison, CSV, exact float project restoration, CPU oracle continuation and native screenshots passed.\n").unwrap();
             world.send_event(AppExit::Success);
             v.phase = 9;

@@ -95,3 +95,24 @@ pub(super) fn load(world: &mut World, v: &mut Verification) -> bool {
     world.resource_mut::<Files>().request = Some(Request::Load);
     true
 }
+
+pub(super) fn mass(world: &World) {
+    let c = world.resource::<Comparison>();
+    let metrics = world.resource::<Metrics>();
+    for frame in c.capture.result.as_ref().unwrap() {
+        let sample = metrics
+            .get(frame.stamp.id)
+            .unwrap()
+            .latest
+            .expect("opt-in GPU mass sample");
+        assert_eq!(
+            (sample.epoch, sample.tick),
+            (frame.stamp.epoch, frame.stamp.tick)
+        );
+        let expected: f64 = frame.field.values.iter().map(|v| *v as f64).sum();
+        assert!(
+            (sample.value - expected).abs() < 1e-9,
+            "mass must retain float density precision"
+        );
+    }
+}
