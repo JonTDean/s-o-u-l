@@ -1,4 +1,5 @@
 pub mod authored;
+pub mod energy;
 pub mod world;
 use crate::workbench::catalog::Kind;
 use engine_core::automata::channel::Srgb;
@@ -20,6 +21,8 @@ pub enum Pattern {
 pub struct Settings {
     #[serde(default)]
     pub program: Option<authored::composition::Program>,
+    #[serde(default)]
+    pub energy: Option<energy::Energy>,
     #[serde(default)]
     pub world: world::World,
     pub rate_hz: f32,
@@ -46,6 +49,7 @@ impl Settings {
         Self {
             world: world::World::default(),
             program: None,
+            energy: None,
             rate_hz: 10.0,
             pattern: Pattern::Default,
             random_seed: 0x534f554c,
@@ -65,7 +69,8 @@ impl Settings {
     }
     /// Initial conditions are stable until reset, unlike live rule parameters.
     pub fn same_initial_conditions(&self, other: &Self) -> bool {
-        self.world == other.world
+        self.energy == other.energy
+            && self.world == other.world
             && self.pattern == other.pattern
             && self.random_seed == other.random_seed
             && self.agent_count == other.agent_count

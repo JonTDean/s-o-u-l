@@ -31,3 +31,29 @@ Use the existing governed roots and limits without exceptions. Keep source
 checkpoints at or below 100 changed lines. Run full `make check`, build and native
 monitor-1 windowed verification before merging to local main. Record actual
 results and remaining limitations; prior hosted results do not qualify new code.
+
+## Two-pool starting contract (v1)
+
+This is a new configurable starting model, not a claimed reproduction of an
+unprovided historical rule. Each cell, alive or dead, owns two integer energy
+pools. Default capacities are [64,32], uniform initial energies [32,16], diffusion
+[250,100] parts per thousand, decay [1,1], recharge [3,2], birth costs [8,4] and
+survival costs [2,1]. All quantities and capacities are editable; capacity is
+1..4096, diffusion 0..1000, other amounts 0..capacity.
+
+Each tick first computes the ordinary binary rule/composition candidate from the
+complete previous occupancy. Independently for each pool, sample the four
+cardinal XY neighbors from the previous energy field (periodic wrap or zero
+outside dead edges). Calculate floor((self*(4000-4*d)+neighbor_sum*d)/4000),
+subtract decay saturating at zero, add recharge, then clamp to capacity. A
+candidate birth or survival succeeds only if both pools cover its respective
+costs; deduct those costs only on success. Otherwise the cell dies. Remaining
+energy persists even in dead cells. There is no death refund or cross-pool
+conversion. Recharge and decay deliberately make this an open energy system.
+
+Any energy-parameter change requires reset. Reset and painting initialize both
+pools uniformly; undo restores exact prior pools. Projects/specimens retain both
+fields and definitions; restore rejects mismatched lengths or out-of-capacity
+values. Occupancy remains the stage/comparison quantity; inspector reports both
+energy totals separately. Tests cover the arithmetic, boundaries, exhaustion,
+continuation, configuration refusal and editing history.

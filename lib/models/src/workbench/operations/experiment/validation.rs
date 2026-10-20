@@ -4,6 +4,12 @@ impl Settings {
     /// Reject nonfinite, incompatible or excessive settings without mutation.
     pub fn validate(&self, kind: Kind) -> Result<(), &'static str> {
         self.world.validate(kind)?;
+        if let Some(energy) = &self.energy {
+            if kind != Kind::Life {
+                return Err("Two-pool energy requires a Life cellular channel");
+            }
+            energy.validate()?;
+        }
         if let Some(program) = &self.program {
             if kind != Kind::Life {
                 return Err("Authored XY rules require a Life cellular channel");
