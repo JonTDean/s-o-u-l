@@ -80,7 +80,7 @@ pub fn write(
             }
         }
     }
-    let provenance = state.capture.result.as_ref().map(|frames| frames.iter().map(|frame| {
+    let provenance = state.capture.result.as_ref().filter(|f| (f[0].stamp.id,f[1].stamp.id)==pair).map(|frames| frames.iter().map(|frame| {
         let s = &frame.stamp;
         serde_json::json!({"channel":s.id.0,"epoch":s.epoch,"tick":s.tick,"size":frame.field.size,
             "units":frame.field.units,"cpu_settings":s.cpu_settings,"lenia_growth":s.params,"continuous_kernel":s.kernel})
@@ -93,6 +93,7 @@ pub fn write(
     fs::create_dir(&temp).map_err(|e| e.to_string())?;
     let result=(|| {
         fs::write(temp.join("metrics.csv"),metrics)?;
+        fs::write(temp.join("capture.json"),serde_json::to_vec_pretty(&provenance)?)?;
         fs::write(temp.join("differences.csv"),fields)?;
         fs::write(temp.join("README.txt"),"Metric traces contain up to 200 actual samples per current epoch. Fields are completed captured states; XYZ error projects by maximum absolute value in the viewer. Empty differences means no captured field pair. Channel IDs are run-local.\n")?;
         fs::rename(&temp,destination)
