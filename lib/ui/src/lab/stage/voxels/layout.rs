@@ -1,4 +1,5 @@
 //! Model-owned symbol positions projected as voxel entities, not text tiles.
+use crate::lab::stage::painters::symbolic::tape_window;
 use bevy::prelude::*;
 use models::workbench::symbolic::machine::Symbolic;
 #[derive(Clone, Debug, PartialEq)]
