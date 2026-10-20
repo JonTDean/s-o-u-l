@@ -139,5 +139,6 @@ fn row(session: &Session) -> ChannelRow {
         },
     }
 }
+pub mod analysis;
 #[cfg(test)]
 mod tests;
