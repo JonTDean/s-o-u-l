@@ -16,7 +16,8 @@ pub(super) fn session(s: &Session) -> Result<(), String> {
     let valid = match (&s.model, s.kind) {
         (Model::Grid(g), Kind::Rule30 | Kind::Rule110 | Kind::Life | Kind::Hpp) => {
             let size = s.settings.world.size(s.kind);
-            g.kind == s.kind
+            g.valid_energy(s.settings.energy.as_ref())
+                && g.kind == s.kind
                 && g.grid.size == size
                 && g.boundary == s.settings.world.boundary
                 && g.grid.voxels.len() == (size.x * size.y) as usize

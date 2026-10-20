@@ -8,8 +8,14 @@ pub fn describe(session: &Session) -> String {
         Model::Grid(g) => {
             let bytes = g.bytes();
             let occupied = bytes.iter().filter(|v| **v != 0).count();
+            let energy = g.energy.as_ref().map_or(String::new(), |field| {
+                let totals = field.iter().fold([0u64; 2], |a, p| {
+                    [a[0] + u64::from(p[0]), a[1] + u64::from(p[1])]
+                });
+                format!(" · energy A {} / B {}", totals[0], totals[1])
+            });
             format!(
-                "{} occupied / {} cells ({:.2}%)",
+                "{} occupied / {} cells ({:.2}%){energy}",
                 occupied,
                 bytes.len(),
                 100.0 * occupied as f64 / bytes.len() as f64

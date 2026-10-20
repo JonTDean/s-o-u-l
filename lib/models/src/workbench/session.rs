@@ -44,7 +44,14 @@ impl Session {
     /// Describe the active rules, including live edits to catalog defaults.
     pub fn title(&self) -> String {
         if let Some(program) = &self.settings.program {
-            return program.title();
+            return if self.settings.energy.is_some() {
+                format!("Two-pool energy · {}", program.title())
+            } else {
+                program.title()
+            };
+        }
+        if self.settings.energy.is_some() {
+            return "Two-pool energy · Life".into();
         }
         match self.kind {
             Kind::Rule30 | Kind::Rule110 => {
@@ -112,7 +119,7 @@ impl Session {
     pub fn configure(&mut self, settings: Settings, reset: bool) -> Result<(), &'static str> {
         settings.validate(self.kind)?;
         if !reset && !self.settings.same_initial_conditions(&settings) {
-            return Err("Seed and population changes require Apply and reset");
+            return Err("Seed, population and energy changes require Apply and reset");
         }
         if reset && self.input.chars().count() > 256 {
             return Err("Input is limited to 256 symbols");
