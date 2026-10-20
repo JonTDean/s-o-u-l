@@ -103,3 +103,5 @@ pub fn write(
     }
     result
 }
+#[cfg(test)]
+mod tests;
