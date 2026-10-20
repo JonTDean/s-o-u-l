@@ -7,7 +7,9 @@ struct Params { size: vec4<u32>, growth: vec4<f32>, kernel: vec4<u32> }
 fn density(at: vec3<i32>) -> f32 {
     var p = at;
     let size = vec3<i32>(params.size.xyz);
-    if params.kernel.z == 1u { p = ((p % size) + size) % size; }
+    // Radius is bounded to four. Shift by four positive periods before unsigned
+    // remainder: older Vulkan targets do not define negative OpSRem operands.
+    if params.kernel.z == 1u { p = vec3<i32>(vec3<u32>(p + size * 4) % params.size.xyz); }
     if any(p < vec3<i32>(0)) || any(p >= size) { return 0.0; }
     return bitcast<f32>(previous[(u32(p.z) * params.size.y + u32(p.y)) * params.size.x + u32(p.x)]);
 }
