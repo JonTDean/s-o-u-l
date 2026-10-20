@@ -31,8 +31,11 @@ pub struct LeniaControlPlugin;
 
 impl Plugin for LeniaControlPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<LeniaCommand>()
-            .add_systems(Update, apply_commands);
+        crate::automata::channel::ensure_plugin(app);
+        app.add_event::<LeniaCommand>().add_systems(
+            Update,
+            apply_commands.in_set(crate::automata::channel::ChannelSet::Tick),
+        );
     }
 }
 

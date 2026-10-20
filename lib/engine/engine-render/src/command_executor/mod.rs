@@ -5,12 +5,17 @@
 use bevy::prelude::*;
 use engine_common::controls::camera::WorldCamera;
 use engine_core::{
-    automata::{AutomatonInfo, GpuGridSlice},
+    automata::{
+        AutomatonInfo, GpuGridSlice,
+        channel::{ChannelId, ChannelIds, ChannelSet, Channels},
+        lenia::LeniaSimulation,
+    },
     events::{AutomataCommand, AutomatonAdded, AutomatonId, AutomatonRemoved},
     prelude::{AppState, AutomataRegistry, RuleRegistry},
 };
 use serde_json::Value;
 use std::sync::Arc;
+pub mod channels;
 mod restore;
 
 /* ───────────────────────────── constants ───────────────────────────── */
@@ -25,6 +30,14 @@ pub struct CommandExecutorPlugin;
 impl Plugin for CommandExecutorPlugin {
     fn build(&self, app: &mut App) {
         use engine_core::systems::schedule::MainSet;
+        engine_core::automata::channel::ensure_plugin(app);
+        app.add_systems(
+            Update,
+            (
+                channels::route.in_set(ChannelSet::Route),
+                channels::publish.in_set(ChannelSet::Publish),
+            ),
+        );
 
         app
             // existing command router
@@ -48,7 +61,12 @@ impl Plugin for CommandExecutorPlugin {
 fn clear_on_main_menu(
     mut registry: ResMut<AutomataRegistry>,
     mut removed: EventWriter<AutomatonRemoved>,
+    owners: Query<&ChannelId, With<LeniaSimulation>>,
+    mut ids: ResMut<ChannelIds>,
 ) {
+    for id in &owners {
+        ids.release(*id);
+    }
     for id in registry.list().iter().map(|a| a.id).collect::<Vec<_>>() {
         registry.remove(id);
         removed.write(AutomatonRemoved { id });
@@ -63,17 +81,29 @@ fn handle_commands(
     mut added_writer: EventWriter<AutomatonAdded>,
     mut removed_writer: EventWriter<AutomatonRemoved>,
     mut commands: Commands,
+    mut ids: ResMut<ChannelIds>,
+    mut channels: ResMut<Channels>,
+    owners: Query<&ChannelId, With<LeniaSimulation>>,
 ) {
     for event in cmd_reader.read() {
         match *event {
             AutomataCommand::RestoreLenia(ref saved) => {
-                restore::restore(
+                let Some(channel) = ids.allocate() else {
+                    warn!("8 of 8 open — close one to add another");
+                    continue;
+                };
+                match restore::restore(
                     saved,
                     &mut registry,
                     &rules,
                     &mut commands,
                     &mut added_writer,
-                );
+                ) {
+                    Some(entity) => {
+                        channels::adopt(&mut commands.entity(entity), channel, &mut channels)
+                    }
+                    None => ids.release(channel),
+                }
             }
             /* ─── spawn default pattern ─────────────────────────── */
             AutomataCommand::SeedPattern { ref id } => {
@@ -83,6 +113,10 @@ fn handle_commands(
                 }
                 let Some((rule, _)) = rules.get(id.as_str()) else {
                     warn!("Unknown automaton pattern “{id}” – ignored");
+                    continue;
+                };
+                let Some(channel) = ids.allocate() else {
+                    warn!("8 of 8 open — close one to add another");
                     continue;
                 };
 
@@ -124,12 +158,16 @@ fn handle_commands(
                         ..default()
                     });
                 }
+                channels::adopt(&mut owner, channel, &mut channels);
                 let entity = owner.id();
                 added_writer.write(AutomatonAdded { id: new_id, entity });
             }
 
             /* ─── clear all ──────────────────────────────────────── */
             AutomataCommand::Clear => {
+                for id in &owners {
+                    ids.release(*id);
+                }
                 for id in registry.list().iter().map(|a| a.id).collect::<Vec<_>>() {
                     registry.remove(id);
                     removed_writer.write(AutomatonRemoved { id });

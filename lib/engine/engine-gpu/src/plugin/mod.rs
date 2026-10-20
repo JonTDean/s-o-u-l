@@ -30,7 +30,11 @@ impl Plugin for GpuAutomataComputePlugin {
             .init_resource::<VoxelRenderStatus>()
             .init_resource::<crate::LeniaProbe>()
             .add_systems(Update, setup::count_sim_steps_main)
-            .add_systems(Update, setup::ticks::request_ticks)
+            .add_systems(
+                Update,
+                setup::ticks::request_ticks
+                    .in_set(engine_core::automata::channel::ChannelSet::Tick),
+            )
             .add_systems(
                 Update,
                 (

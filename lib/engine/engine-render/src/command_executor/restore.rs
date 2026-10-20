@@ -7,13 +7,9 @@ pub(super) fn restore(
     rules: &RuleRegistry,
     commands: &mut Commands,
     added: &mut EventWriter<AutomatonAdded>,
-) {
-    if saved.validate().is_err() {
-        return;
-    }
-    let Some((rule, _)) = rules.get("lenia") else {
-        return;
-    };
+) -> Option<Entity> {
+    saved.validate().ok()?;
+    let (rule, _) = rules.get("lenia")?;
     let id = registry.register(AutomatonInfo {
         id: AutomatonId(0),
         name: "lenia".into(),
@@ -46,4 +42,5 @@ pub(super) fn restore(
         ))
         .id();
     added.write(AutomatonAdded { id, entity });
+    Some(entity)
 }
