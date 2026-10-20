@@ -13,17 +13,26 @@ impl LeniaBuffers {
         params: LeniaParams,
     ) -> Result<(), &'static str> {
         let params = params.validate()?;
-        queue.write_buffer(
-            &self.params,
-            0,
-            bytemuck::bytes_of(&GpuParams::new(self.size, self.stride, params)),
-        );
+        let mut gpu = GpuParams::new(self.size, self.stride, params);
+        if let Some(k) = self.kernel {
+            gpu.kernel = [
+                k.radius,
+                u32::from(k.shape == simulation_kernel::core::lenia::continuous::Shape::Shell),
+                u32::from(k.boundary == simulation_kernel::core::boundary::Boundary::Periodic),
+                0,
+            ];
+        }
+        queue.write_buffer(&self.params, 0, bytemuck::bytes_of(&gpu));
         for _ in 0..steps {
             let mut pass = encoder.begin_compute_pass(&ComputePassDescriptor {
                 label: Some("lenia.evolve"),
                 timestamp_writes: None,
             });
-            pass.set_pipeline(&pipelines.evolve);
+            pass.set_pipeline(if self.kernel.is_some() {
+                &pipelines.continuous[0]
+            } else {
+                &pipelines.evolve
+            });
             pass.set_bind_group(0, &self.binds[self.current], &[]);
             pass.dispatch_workgroups(
                 self.size[0].div_ceil(8),
@@ -49,7 +58,11 @@ impl LeniaBuffers {
                 label: Some("lenia.pack"),
                 timestamp_writes: None,
             });
-            pass.set_pipeline(&pipelines.pack);
+            pass.set_pipeline(if self.kernel.is_some() {
+                &pipelines.continuous[1]
+            } else {
+                &pipelines.pack
+            });
             pass.set_bind_group(0, &self.binds[self.current], &[]);
             pass.dispatch_workgroups((self.stride / 4).div_ceil(64), self.size[1], self.size[2]);
         }

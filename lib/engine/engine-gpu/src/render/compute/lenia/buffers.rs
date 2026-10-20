@@ -7,6 +7,7 @@ use simulation_kernel::core::lenia::LeniaParams;
 pub(crate) struct GpuParams {
     pub size: [u32; 4],
     pub growth: [f32; 4],
+    pub kernel: [u32; 4],
 }
 
 pub(crate) struct LeniaBuffers {
@@ -16,6 +17,7 @@ pub(crate) struct LeniaBuffers {
     pub binds: [BindGroup; 2],
     pub size: [u32; 3],
     pub stride: u32,
+    pub kernel: Option<simulation_kernel::core::lenia::continuous::Kernel>,
     pub current: usize,
     pub tick: u64,
 }
@@ -25,6 +27,7 @@ impl GpuParams {
         Self {
             size: [size[0], size[1], size[2], stride],
             growth: [p.mu, p.sigma, p.dt, 0.0],
+            kernel: [0; 4],
         }
     }
 }
@@ -36,6 +39,19 @@ impl LeniaBuffers {
         size: [u32; 3],
         cells: &[u8],
     ) -> Result<Self, &'static str> {
+        let words: Vec<_> = cells.iter().map(|v| u32::from(*v)).collect();
+        Self::from_words(device, pipelines, size, &words, None)
+    }
+    pub fn from_words(
+        device: &RenderDevice,
+        pipelines: &LeniaPipelines,
+        size: [u32; 3],
+        cells: &[u32],
+        kernel: Option<simulation_kernel::core::lenia::continuous::Kernel>,
+    ) -> Result<Self, &'static str> {
+        if let Some(k) = kernel {
+            k.validate()?;
+        }
         let count = size.iter().try_fold(1u64, |n, &v| n.checked_mul(v as u64));
         if size.contains(&0) || count != Some(cells.len() as u64) {
             return Err("invalid Lenia dimensions");
@@ -46,11 +62,10 @@ impl LeniaBuffers {
         if cells.len() as u64 * 4 > limit || packed_size > limit {
             return Err("Lenia exceeds device buffer limit");
         }
-        let values: Vec<u32> = cells.iter().map(|&v| v as u32).collect();
         let make = || {
             device.create_buffer_with_data(&BufferInitDescriptor {
                 label: Some("lenia.state"),
-                contents: bytemuck::cast_slice(&values),
+                contents: bytemuck::cast_slice(cells),
                 usage: BufferUsages::STORAGE | BufferUsages::COPY_SRC,
             })
         };
@@ -86,6 +101,7 @@ impl LeniaBuffers {
             binds,
             size,
             stride,
+            kernel,
             current: 0,
             tick: 0,
         })
