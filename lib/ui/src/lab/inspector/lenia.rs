@@ -31,7 +31,7 @@ pub fn show(
         choice(
             ui,
             &mut continuous,
-            &[(false, "quantized XY"), (true, "continuous XYZ")],
+            &[(false, "quantized XY"), (true, "continuous density")],
         );
         let mut kernel = sim.kernel.unwrap_or_default();
         if continuous {

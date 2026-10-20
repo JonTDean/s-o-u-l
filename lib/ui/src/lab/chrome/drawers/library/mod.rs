@@ -50,6 +50,12 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     ui.add(filter);
     ui.add_space(10.0);
     let full = data.channels.is_full();
+    if pill(ui, "Published Orbium · polynomial XY", false, !full).clicked() {
+        fx.automata.push(AutomataCommand::RestoreLenia(Box::new(
+            models::workbench::project::library::orbium::specimen(),
+        )));
+        lab.drawer = None;
+    }
     for (group, items) in entries(&data.specimens, &data.available(), &lab.filter) {
         margin_section(ui, group.label(), false, |ui| {
             for specimen in items {
