@@ -30,7 +30,7 @@ jobs:
       - name: Install native dependencies and source tokenizer
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libvulkan1 mesa-vulkan-drivers cmake ninja-build
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-0 libvulkan1 mesa-vulkan-drivers cmake ninja-build
           python3 -m pip install -r tools/structure/requirements.txt
           mkdir -m 700 "$XDG_RUNTIME_DIR"
       - run: make check

@@ -43,7 +43,7 @@ and present them, and every specimen cites its source.
 
 **Requirements:** stable Rust (CI pins 1.94.1), Python 3.11 or newer, a Vulkan
 driver on Linux (macOS uses Metal), and Bevy's native build dependencies (on Debian/Ubuntu:
-`libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev cmake ninja-build`).
+`libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-0 cmake ninja-build`).
 
 ```sh
 cargo run            # main menu → scenarios → lab
