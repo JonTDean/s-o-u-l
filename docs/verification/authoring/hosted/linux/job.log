@@ -1,0 +1,1433 @@
+﻿2026-10-20T15:59:35.1520478Z Current runner version: '2.338.0'
+2026-10-20T15:59:35.1545482Z ##[group]Runner Image Provisioner
+2026-10-20T15:59:35.1546869Z Hosted Compute Agent
+2026-10-20T15:59:35.1547533Z Version: 20261012.601
+2026-10-20T15:59:35.1548186Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-20T15:59:35.1548903Z Build Date: 2026-10-12T17:48:21Z
+2026-10-20T15:59:35.1549676Z Worker ID: {390fe99e-9667-4aee-a5a3-ce7a8b67658c}
+2026-10-20T15:59:35.1550380Z Region: eastus
+2026-10-20T15:59:35.1550930Z Cloud: Azure
+2026-10-20T15:59:35.1551523Z ##[endgroup]
+2026-10-20T15:59:35.1553248Z ##[group]Operating System
+2026-10-20T15:59:35.1553997Z Ubuntu
+2026-10-20T15:59:35.1554640Z 24.04.5
+2026-10-20T15:59:35.1555520Z LTS
+2026-10-20T15:59:35.1556306Z ##[endgroup]
+2026-10-20T15:59:35.1556856Z ##[group]Runner Image
+2026-10-20T15:59:35.1557548Z Image: ubuntu-24.04
+2026-10-20T15:59:35.1558108Z Version: 20261012.334.1
+2026-10-20T15:59:35.1559404Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-20T15:59:35.1560975Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-20T15:59:35.1562020Z ##[endgroup]
+2026-10-20T15:59:35.1563125Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T15:59:35.1565358Z Contents: read
+2026-10-20T15:59:35.1566299Z Metadata: read
+2026-10-20T15:59:35.1566873Z ##[endgroup]
+2026-10-20T15:59:35.1569140Z Secret source: Actions
+2026-10-20T15:59:35.1570073Z Cache mode: write
+2026-10-20T15:59:35.1571216Z Prepare workflow directory
+2026-10-20T15:59:35.1962623Z Prepare all required actions
+2026-10-20T15:59:35.2010372Z Getting action download info
+2026-10-20T15:59:35.4296490Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-20T15:59:35.5314346Z Download action repository 'actions/setup-python@v7' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+2026-10-20T15:59:35.6070466Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-10-20T15:59:35.7006623Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+2026-10-20T15:59:35.8015155Z Download action repository 'actions/upload-artifact@v7' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-20T15:59:36.1255285Z Complete job name: native (ubuntu-24.04)
+2026-10-20T15:59:36.2077400Z ##[group]Run actions/checkout@v7
+2026-10-20T15:59:36.2078263Z with:
+2026-10-20T15:59:36.2078699Z   repository: JonTDean/s-o-u-l
+2026-10-20T15:59:36.2082365Z   token: ***
+2026-10-20T15:59:36.2082794Z   ssh-strict: true
+2026-10-20T15:59:36.2083224Z   ssh-user: git
+2026-10-20T15:59:36.2083671Z   persist-credentials: true
+2026-10-20T15:59:36.2084149Z   clean: true
+2026-10-20T15:59:36.2084587Z   sparse-checkout-cone-mode: true
+2026-10-20T15:59:36.2085105Z   fetch-depth: 1
+2026-10-20T15:59:36.2085527Z   fetch-tags: false
+2026-10-20T15:59:36.2086282Z   show-progress: true
+2026-10-20T15:59:36.2086734Z   lfs: false
+2026-10-20T15:59:36.2087143Z   submodules: false
+2026-10-20T15:59:36.2087608Z   set-safe-directory: true
+2026-10-20T15:59:36.2088104Z   allow-unsafe-pr-checkout: false
+2026-10-20T15:59:36.2088877Z env:
+2026-10-20T15:59:36.2089293Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:36.2089756Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:36.2090277Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:36.2090832Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:36.2091329Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:36.2091825Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:36.2092360Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:36.2092845Z ##[endgroup]
+2026-10-20T15:59:36.3191208Z Syncing repository: JonTDean/s-o-u-l
+2026-10-20T15:59:36.3193864Z ##[group]Getting Git version info
+2026-10-20T15:59:36.3194968Z Working directory is '/home/runner/work/s-o-u-l/s-o-u-l'
+2026-10-20T15:59:36.3196956Z [command]/usr/bin/git version
+2026-10-20T15:59:36.3327968Z git version 2.55.0
+2026-10-20T15:59:36.3354811Z ##[endgroup]
+2026-10-20T15:59:36.3366617Z Temporarily overriding HOME='/home/runner/work/_temp/a64a7cbb-25fb-43b3-8605-08cd2fcad7a3' before making global git config changes
+2026-10-20T15:59:36.3373163Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T15:59:36.3375063Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T15:59:36.3432872Z Deleting the contents of '/home/runner/work/s-o-u-l/s-o-u-l'
+2026-10-20T15:59:36.3444200Z ##[group]Determining repository object format
+2026-10-20T15:59:36.3453799Z ##[endgroup]
+2026-10-20T15:59:36.3454882Z ##[group]Initializing the repository
+2026-10-20T15:59:36.3456446Z [command]/usr/bin/git init /home/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T15:59:36.3629298Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T15:59:36.3631182Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T15:59:36.3632822Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T15:59:36.3634171Z hint: call:
+2026-10-20T15:59:36.3634598Z hint:
+2026-10-20T15:59:36.3635146Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T15:59:36.3636110Z hint:
+2026-10-20T15:59:36.3637214Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T15:59:36.3638912Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T15:59:36.3639984Z hint:
+2026-10-20T15:59:36.3640555Z hint: 	git branch -m <name>
+2026-10-20T15:59:36.3641420Z hint:
+2026-10-20T15:59:36.3642308Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T15:59:36.3643601Z Initialized empty Git repository in /home/runner/work/s-o-u-l/s-o-u-l/.git/
+2026-10-20T15:59:36.3651486Z [command]/usr/bin/git remote add origin https://github.com/JonTDean/s-o-u-l
+2026-10-20T15:59:36.3720928Z ##[endgroup]
+2026-10-20T15:59:36.3722010Z ##[group]Disabling automatic garbage collection
+2026-10-20T15:59:36.3725238Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-20T15:59:36.3766547Z ##[endgroup]
+2026-10-20T15:59:36.3767756Z ##[group]Setting up auth
+2026-10-20T15:59:36.3768612Z Removing SSH command configuration
+2026-10-20T15:59:36.3773631Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T15:59:36.3812430Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T15:59:36.4303830Z Removing HTTP extra header
+2026-10-20T15:59:36.4310722Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T15:59:36.4350706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T15:59:36.4575513Z Removing includeIf entries pointing to credentials config files
+2026-10-20T15:59:36.4582267Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T15:59:36.4628475Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T15:59:36.4859046Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T15:59:36.4902089Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git.path /home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T15:59:36.4938149Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T15:59:36.4977614Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T15:59:36.5012915Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T15:59:36.5046657Z ##[endgroup]
+2026-10-20T15:59:36.5048003Z ##[group]Fetching the repository
+2026-10-20T15:59:36.5054002Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d621f89dfcac841275d8f72dc7c4065314955242:refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.4931053Z From https://github.com/JonTDean/s-o-u-l
+2026-10-20T15:59:37.4933331Z  * [new ref]         d621f89dfcac841275d8f72dc7c4065314955242 -> origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.4942035Z [command]/usr/bin/git branch --list --remote origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.4976210Z   origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.4984512Z [command]/usr/bin/git rev-parse refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.5011876Z d621f89dfcac841275d8f72dc7c4065314955242
+2026-10-20T15:59:37.5017385Z ##[endgroup]
+2026-10-20T15:59:37.5018788Z ##[group]Determining the checkout info
+2026-10-20T15:59:37.5020608Z ##[endgroup]
+2026-10-20T15:59:37.5021833Z [command]/usr/bin/git sparse-checkout disable
+2026-10-20T15:59:37.5078859Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T15:59:37.5114258Z ##[group]Checking out the ref
+2026-10-20T15:59:37.5119755Z [command]/usr/bin/git checkout --progress --force -B feature/authoring-guides-qualification refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:59:37.6605229Z Switched to a new branch 'feature/authoring-guides-qualification'
+2026-10-20T15:59:37.6612677Z branch 'feature/authoring-guides-qualification' set up to track 'origin/feature/authoring-guides-qualification'.
+2026-10-20T15:59:37.6626415Z ##[endgroup]
+2026-10-20T15:59:37.6681634Z [command]/usr/bin/git log -1 --format=%H
+2026-10-20T15:59:37.6715424Z d621f89dfcac841275d8f72dc7c4065314955242
+2026-10-20T15:59:37.7009598Z ##[group]Run actions/setup-python@v7
+2026-10-20T15:59:37.7010186Z with:
+2026-10-20T15:59:37.7010597Z   python-version: 3.13
+2026-10-20T15:59:37.7011052Z   check-latest: false
+2026-10-20T15:59:37.7013948Z   token: ***
+2026-10-20T15:59:37.7014392Z   update-environment: true
+2026-10-20T15:59:37.7014865Z   allow-prereleases: false
+2026-10-20T15:59:37.7015329Z   freethreaded: false
+2026-10-20T15:59:37.7016089Z env:
+2026-10-20T15:59:37.7016497Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.7016929Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.7017414Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.7017916Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.7018363Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.7018789Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.7019225Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.7019668Z ##[endgroup]
+2026-10-20T15:59:37.8205144Z ##[group]Installed versions
+2026-10-20T15:59:37.8328644Z Successfully set up CPython (3.13.16)
+2026-10-20T15:59:37.8330138Z ##[endgroup]
+2026-10-20T15:59:37.8703029Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-10-20T15:59:37.8703653Z with:
+2026-10-20T15:59:37.8704047Z   toolchain: 1.94.1
+2026-10-20T15:59:37.8704474Z   components: rustfmt, clippy
+2026-10-20T15:59:37.8704918Z env:
+2026-10-20T15:59:37.8705293Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.8705985Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.8706462Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.8706943Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.8707390Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.8707847Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.8708298Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.8708823Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.8709520Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:37.8710419Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.8711024Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.8711681Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.8712302Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:37.8712831Z ##[endgroup]
+2026-10-20T15:59:37.8785625Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+2026-10-20T15:59:37.8849790Z ##[group]Run if [[ -z $toolchain ]]; then
+2026-10-20T15:59:37.8850557Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-10-20T15:59:37.8851391Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-10-20T15:59:37.8852215Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-10-20T15:59:37.8852725Z [36;1m  exit 1[0m
+2026-10-20T15:59:37.8853281Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-10-20T15:59:37.8853967Z [36;1m  if [[ Linux == macOS ]]; then[0m
+2026-10-20T15:59:37.8854768Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:37.8855525Z [36;1m  else[0m
+2026-10-20T15:59:37.8856388Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:37.8857084Z [36;1m  fi[0m
+2026-10-20T15:59:37.8857699Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-10-20T15:59:37.8858562Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:37.8859266Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-10-20T15:59:37.8860030Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:37.8861029Z [36;1melse[0m
+2026-10-20T15:59:37.8861466Z [36;1m  delimiter=EOF[0m
+2026-10-20T15:59:37.8862005Z [36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done[0m
+2026-10-20T15:59:37.8862779Z [36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:37.8863416Z [36;1mfi[0m
+2026-10-20T15:59:37.9250693Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:37.9251423Z env:
+2026-10-20T15:59:37.9251890Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.9252400Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.9252962Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.9253533Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.9254089Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.9254624Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.9255160Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.9256000Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9256702Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:37.9257359Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9258240Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9258861Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9259483Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:37.9260038Z   toolchain: 1.94.1
+2026-10-20T15:59:37.9260432Z ##[endgroup]
+2026-10-20T15:59:37.9410637Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=62]
+2026-10-20T15:59:37.9416723Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+2026-10-20T15:59:37.9443426Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+2026-10-20T15:59:37.9444145Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+2026-10-20T15:59:37.9507635Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:37.9508213Z env:
+2026-10-20T15:59:37.9508588Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.9509018Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.9509483Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.9509938Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.9510375Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.9510798Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.9511219Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.9511721Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9512352Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:37.9512994Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9513583Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9514167Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9514758Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:37.9515280Z ##[endgroup]
+2026-10-20T15:59:37.9610259Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=19]
+2026-10-20T15:59:37.9613455Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+2026-10-20T15:59:37.9676613Z ##[group]Run if ! command -v rustup &>/dev/null; then
+2026-10-20T15:59:37.9677194Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-10-20T15:59:37.9678197Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+2026-10-20T15:59:37.9679166Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+2026-10-20T15:59:37.9679635Z [36;1mfi[0m
+2026-10-20T15:59:37.9739458Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:37.9740004Z env:
+2026-10-20T15:59:37.9740361Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.9740766Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.9741224Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.9741670Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.9742098Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.9742523Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.9742942Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.9743450Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9744079Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:37.9744709Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9745289Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9746113Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9746707Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:37.9747240Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:37.9747659Z ##[endgroup]
+2026-10-20T15:59:37.9842734Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=22]
+2026-10-20T15:59:37.9846693Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+2026-10-20T15:59:37.9855239Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-20T15:59:37.9870082Z ##[start-action display=rustup toolchain install 1.94.1;id=__dtolnay_rust-toolchain.__run_4]
+2026-10-20T15:59:37.9894931Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+2026-10-20T15:59:37.9896109Z [36;1mset -f  # split targets and components on commas and whitespace, without glob expansion[0m
+2026-10-20T15:59:37.9896782Z [36;1mflags=()[0m
+2026-10-20T15:59:37.9897255Z [36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done[0m
+2026-10-20T15:59:37.9897878Z [36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done[0m
+2026-10-20T15:59:37.9898608Z [36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi[0m
+2026-10-20T15:59:37.9899425Z [36;1mlog=$(mktemp)[0m
+2026-10-20T15:59:37.9899849Z [36;1mtrap 'rm -f "$log"' EXIT[0m
+2026-10-20T15:59:37.9900303Z [36;1mfor attempt in 1 2 3 4 5; do[0m
+2026-10-20T15:59:37.9901094Z [36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then[0m
+2026-10-20T15:59:37.9901875Z [36;1m    break[0m
+2026-10-20T15:59:37.9902258Z [36;1m  else[0m
+2026-10-20T15:59:37.9902628Z [36;1m    status=$?[0m
+2026-10-20T15:59:37.9903025Z [36;1m  fi[0m
+2026-10-20T15:59:37.9903518Z [36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \[0m
+2026-10-20T15:59:37.9904295Z [36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then[0m
+2026-10-20T15:59:37.9904976Z [36;1m    exit "$status"[0m
+2026-10-20T15:59:37.9905384Z [36;1m  fi[0m
+2026-10-20T15:59:37.9906181Z [36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2[0m
+2026-10-20T15:59:37.9906821Z [36;1m  sleep 30[0m
+2026-10-20T15:59:37.9907203Z [36;1mdone[0m
+2026-10-20T15:59:37.9967151Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:37.9967700Z env:
+2026-10-20T15:59:37.9968061Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:37.9968471Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:37.9968915Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:37.9969384Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:37.9969831Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:37.9970271Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:37.9970709Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:37.9971229Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9971876Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:37.9972508Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9973101Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9973716Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:37.9974333Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:37.9974885Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:37.9975321Z   toolchain: 1.94.1
+2026-10-20T15:59:37.9975961Z   targets: 
+2026-10-20T15:59:37.9976361Z   components: rustfmt, clippy
+2026-10-20T15:59:37.9976801Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-10-20T15:59:37.9977219Z ##[endgroup]
+2026-10-20T15:59:38.0702141Z info: syncing channel updates for 1.94.1-x86_64-unknown-linux-gnu
+2026-10-20T15:59:38.2048861Z info: latest update on 2026-03-26 for version 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:59:38.2050128Z info: downloading 5 components
+2026-10-20T15:59:46.0569330Z 
+2026-10-20T15:59:46.0641715Z   1.94.1-x86_64-unknown-linux-gnu installed - rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:59:46.0642193Z 
+2026-10-20T15:59:46.0750840Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=8087]
+2026-10-20T15:59:46.0761805Z ##[start-action display=rustup default 1.94.1;id=__dtolnay_rust-toolchain.__run_5]
+2026-10-20T15:59:46.0786009Z ##[group]Run rustup default "$toolchain" --force-non-host
+2026-10-20T15:59:46.0786575Z [36;1mrustup default "$toolchain" --force-non-host[0m
+2026-10-20T15:59:46.0851956Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.0852353Z env:
+2026-10-20T15:59:46.0852587Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.0852866Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.0853172Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.0853493Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.0853782Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.0854086Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.0854383Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.0854739Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.0855252Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.0856205Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.0856652Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.0857086Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.0857533Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.0857926Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.0858217Z   toolchain: 1.94.1
+2026-10-20T15:59:46.0858461Z ##[endgroup]
+2026-10-20T15:59:46.0990296Z info: using existing install for 1.94.1-x86_64-unknown-linux-gnu
+2026-10-20T15:59:46.0997412Z info: default toolchain set to 1.94.1-x86_64-unknown-linux-gnu
+2026-10-20T15:59:46.0997835Z 
+2026-10-20T15:59:46.1067976Z   1.94.1-x86_64-unknown-linux-gnu unchanged - rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:59:46.1068579Z 
+2026-10-20T15:59:46.1086612Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=32]
+2026-10-20T15:59:46.1091405Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+2026-10-20T15:59:46.1115137Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-20T15:59:46.1116452Z [36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-10-20T15:59:46.1117246Z [36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-10-20T15:59:46.1117819Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:59:46.1184276Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.1184679Z env:
+2026-10-20T15:59:46.1184918Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.1185188Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.1185496Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.1186016Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.1186314Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.1186600Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.1186904Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.1187259Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1187754Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.1188229Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1188659Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1189138Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1189607Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.1189999Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.1190288Z   toolchain: 1.94.1
+2026-10-20T15:59:46.1190536Z ##[endgroup]
+2026-10-20T15:59:46.1555500Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=46]
+2026-10-20T15:59:46.1558978Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+2026-10-20T15:59:46.1582617Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+2026-10-20T15:59:46.1583088Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-10-20T15:59:46.1583486Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-10-20T15:59:46.1583812Z [36;1mfi[0m
+2026-10-20T15:59:46.1652857Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.1653260Z env:
+2026-10-20T15:59:46.1653496Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.1653769Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.1654075Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.1654390Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.1654684Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.1654982Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.1655281Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.1655642Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1656586Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.1657084Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1657530Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1657992Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1658449Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.1658834Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.1659125Z ##[endgroup]
+2026-10-20T15:59:46.1757736Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=19]
+2026-10-20T15:59:46.1760365Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+2026-10-20T15:59:46.1782280Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+2026-10-20T15:59:46.1782697Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-10-20T15:59:46.1783096Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-10-20T15:59:46.1783441Z [36;1mfi[0m
+2026-10-20T15:59:46.1849190Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.1849604Z env:
+2026-10-20T15:59:46.1849841Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.1850116Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.1850416Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.1850717Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.1850999Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.1851279Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.1851566Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.1851917Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1852389Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.1852861Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1853281Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1853719Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.1854148Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.1854557Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.1854864Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:46.1855126Z ##[endgroup]
+2026-10-20T15:59:46.1951853Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=19]
+2026-10-20T15:59:46.1956593Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+2026-10-20T15:59:46.1980474Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+2026-10-20T15:59:46.1981076Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-10-20T15:59:46.1981851Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-10-20T15:59:46.1982667Z [36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-10-20T15:59:46.1983325Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-20T15:59:46.1984107Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-10-20T15:59:46.1984696Z [36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-10-20T15:59:46.1985332Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-20T15:59:46.1986226Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-10-20T15:59:46.1986663Z [36;1m  fi[0m
+2026-10-20T15:59:46.1986909Z [36;1mfi[0m
+2026-10-20T15:59:46.2052660Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.2053066Z env:
+2026-10-20T15:59:46.2053305Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.2053586Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.2054076Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.2054382Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.2054661Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.2054942Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.2055230Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.2055594Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2056337Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.2056816Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2057246Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2057682Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2058114Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.2058512Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.2058807Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:46.2059067Z   CARGO_TERM_COLOR: always
+2026-10-20T15:59:46.2059331Z   toolchain: 1.94.1
+2026-10-20T15:59:46.2059583Z ##[endgroup]
+2026-10-20T15:59:46.2393176Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=43]
+2026-10-20T15:59:46.2399529Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+2026-10-20T15:59:46.2442644Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+2026-10-20T15:59:46.2443488Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-10-20T15:59:46.2444172Z [36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-10-20T15:59:46.2444720Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-10-20T15:59:46.2445088Z [36;1mfi[0m
+2026-10-20T15:59:46.2513298Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.2513703Z env:
+2026-10-20T15:59:46.2513950Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.2514241Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.2514545Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.2514854Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.2515154Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.2515443Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.2515956Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.2516330Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2516809Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.2517336Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2517789Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2518224Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2518660Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.2519044Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.2519348Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:46.2519661Z   CARGO_TERM_COLOR: always
+2026-10-20T15:59:46.2519943Z   toolchain: 1.94.1
+2026-10-20T15:59:46.2520193Z ##[endgroup]
+2026-10-20T15:59:46.2741580Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=34]
+2026-10-20T15:59:46.2748378Z ##[start-action display=rustc +1.94.1 --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-10-20T15:59:46.2770691Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-10-20T15:59:46.2771116Z [36;1mrustc +"$toolchain" --version --verbose[0m
+2026-10-20T15:59:46.2839472Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:59:46.2839879Z env:
+2026-10-20T15:59:46.2840122Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.2840396Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.2840704Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.2841017Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.2841304Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.2841589Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.2842061Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.2842415Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2842927Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.2843407Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2843836Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2844283Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.2844726Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.2845118Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.2845414Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:46.2845920Z   CARGO_TERM_COLOR: always
+2026-10-20T15:59:46.2846258Z   toolchain: 1.94.1
+2026-10-20T15:59:46.2846596Z ##[endgroup]
+2026-10-20T15:59:46.3047781Z rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:59:46.3049156Z binary: rustc
+2026-10-20T15:59:46.3050247Z commit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1
+2026-10-20T15:59:46.3050998Z commit-date: 2026-03-25
+2026-10-20T15:59:46.3051320Z host: x86_64-unknown-linux-gnu
+2026-10-20T15:59:46.3051646Z release: 1.94.1
+2026-10-20T15:59:46.3051924Z LLVM version: 21.1.8
+2026-10-20T15:59:46.3066817Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=31]
+2026-10-20T15:59:46.4576630Z ##[group]Run actions/cache@v5
+2026-10-20T15:59:46.4577024Z with:
+2026-10-20T15:59:46.4577315Z   path: ~/.cargo/registry
+~/.cargo/git
+target
+
+2026-10-20T15:59:46.4577926Z   key: Linux-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T15:59:46.4578515Z   enableCrossOsArchive: false
+2026-10-20T15:59:46.4578821Z   fail-on-cache-miss: false
+2026-10-20T15:59:46.4579101Z   lookup-only: false
+2026-10-20T15:59:46.4579359Z   save-always: false
+2026-10-20T15:59:46.4579605Z env:
+2026-10-20T15:59:46.4579835Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:46.4580108Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:46.4580423Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:46.4580729Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:46.4581014Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:46.4581290Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:46.4581569Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:46.4581968Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.4582460Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:46.4582927Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.4583351Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.4583777Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:46.4584211Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:46.4584595Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:46.4584889Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:46.4585148Z   CARGO_TERM_COLOR: always
+2026-10-20T15:59:46.4585418Z ##[endgroup]
+2026-10-20T15:59:46.6704677Z Cache hit for: Linux-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T15:59:47.7382935Z Received 230686720 of 740185520 (31.2%), 220.2 MBs/sec
+2026-10-20T15:59:48.7406287Z Received 528482304 of 740185520 (71.4%), 251.7 MBs/sec
+2026-10-20T15:59:49.5734533Z Received 740185520 of 740185520 (100.0%), 249.4 MBs/sec
+2026-10-20T15:59:49.5735360Z Cache Size: ~706 MB (740185520 B)
+2026-10-20T15:59:49.5797758Z [command]/usr/bin/tar -xf /home/runner/work/_temp/3bd8e6f4-c2d8-464a-bd4e-e8f83948ed65/cache.tzst -P -C /home/runner/work/s-o-u-l/s-o-u-l --use-compress-program unzstd
+2026-10-20T15:59:55.1502214Z Cache restored successfully
+2026-10-20T15:59:56.0633586Z Cache restored from key: Linux-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T15:59:56.1024919Z ##[group]Run sudo apt-get update
+2026-10-20T15:59:56.1025430Z [36;1msudo apt-get update[0m
+2026-10-20T15:59:56.1027091Z [36;1msudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-0 libvulkan1 mesa-vulkan-drivers cmake ninja-build xvfb[0m
+2026-10-20T15:59:56.1091349Z shell: /usr/bin/bash -e {0}
+2026-10-20T15:59:56.1091653Z env:
+2026-10-20T15:59:56.1091854Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:59:56.1092089Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:59:56.1092358Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:59:56.1092631Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:59:56.1092887Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:59:56.1093127Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:59:56.1093374Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:59:56.1093693Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:56.1094172Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T15:59:56.1094666Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:56.1095064Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:56.1095468Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T15:59:56.1096003Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T15:59:56.1096367Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T15:59:56.1096628Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:59:56.1096853Z   CARGO_TERM_COLOR: always
+2026-10-20T15:59:56.1097076Z ##[endgroup]
+2026-10-20T15:59:56.4741661Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T15:59:56.5117779Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-20T15:59:56.5134096Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-20T15:59:56.5199864Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-20T15:59:56.5236696Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-20T15:59:56.5349801Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-20T15:59:56.6553452Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-20T15:59:56.6709169Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+2026-10-20T15:59:56.6728982Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
+2026-10-20T15:59:56.6828495Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-20T15:59:56.6854260Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+2026-10-20T15:59:56.6958309Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+2026-10-20T15:59:56.7752812Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-20T15:59:56.7809420Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-20T15:59:56.7827516Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+2026-10-20T15:59:56.7906786Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-20T15:59:56.8320491Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+2026-10-20T15:59:56.8330870Z Get:19 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+2026-10-20T15:59:56.8430625Z Get:20 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+2026-10-20T15:59:56.8445938Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+2026-10-20T15:59:56.8458359Z Get:21 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
+2026-10-20T15:59:59.9522311Z Fetched 12.5 MB in 1s (9818 kB/s)
+2026-10-20T16:00:00.8937762Z Reading package lists...
+2026-10-20T16:00:00.9250527Z Reading package lists...
+2026-10-20T16:00:01.1315372Z Building dependency tree...
+2026-10-20T16:00:01.1323001Z Reading state information...
+2026-10-20T16:00:01.2911209Z libvulkan1 is already the newest version (1.3.275.0-1build1).
+2026-10-20T16:00:01.2912131Z libvulkan1 set to manually installed.
+2026-10-20T16:00:01.2912880Z The following additional packages will be installed:
+2026-10-20T16:00:01.2914249Z   cmake-data libjsoncpp25 libnss-systemd libpam-systemd librhash0
+2026-10-20T16:00:01.2915384Z   libsystemd-shared libsystemd0 libudev1 libwayland-bin libwayland-server0
+2026-10-20T16:00:01.2917160Z   libxcb-xkb1 systemd systemd-coredump systemd-dev systemd-resolved
+2026-10-20T16:00:01.2917886Z   systemd-sysv udev xserver-common
+2026-10-20T16:00:01.2924060Z Suggested packages:
+2026-10-20T16:00:01.2924711Z   cmake-doc cmake-format elpa-cmake-mode libasound2-doc libwayland-doc
+2026-10-20T16:00:01.2925875Z   systemd-container systemd-homed systemd-userdbd systemd-boot libqrencode4
+2026-10-20T16:00:01.2926429Z Recommended packages:
+2026-10-20T16:00:01.2926699Z   xfonts-base
+2026-10-20T16:00:01.3314284Z The following NEW packages will be installed:
+2026-10-20T16:00:01.3322716Z   cmake cmake-data libasound2-dev libjsoncpp25 librhash0 libudev-dev
+2026-10-20T16:00:01.3323610Z   libwayland-bin libwayland-dev libwayland-server0 libxcb-xkb1
+2026-10-20T16:00:01.3329291Z   libxkbcommon-dev libxkbcommon-x11-0 mesa-vulkan-drivers ninja-build
+2026-10-20T16:00:01.3338251Z The following packages will be upgraded:
+2026-10-20T16:00:01.3344466Z   libnss-systemd libpam-systemd libsystemd-shared libsystemd0 libudev1 systemd
+2026-10-20T16:00:01.3345284Z   systemd-coredump systemd-dev systemd-resolved systemd-sysv udev
+2026-10-20T16:00:01.3345998Z   xserver-common xvfb
+2026-10-20T16:00:01.3522130Z 13 upgraded, 14 newly installed, 0 to remove and 68 not upgraded.
+2026-10-20T16:00:01.3522853Z Need to get 41.4 MB of archives.
+2026-10-20T16:00:01.3523503Z After this operation, 150 MB of additional disk space will be used.
+2026-10-20T16:00:01.3524259Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T16:00:01.3829322Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libnss-systemd amd64 255.4-1ubuntu8.18 [159 kB]
+2026-10-20T16:00:01.4004516Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 systemd-dev all 255.4-1ubuntu8.18 [107 kB]
+2026-10-20T16:00:01.4168825Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 systemd-coredump amd64 255.4-1ubuntu8.18 [71.7 kB]
+2026-10-20T16:00:01.4324462Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 systemd-resolved amd64 255.4-1ubuntu8.18 [296 kB]
+2026-10-20T16:00:01.4488330Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libsystemd-shared amd64 255.4-1ubuntu8.18 [2077 kB]
+2026-10-20T16:00:01.4793902Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libsystemd0 amd64 255.4-1ubuntu8.18 [436 kB]
+2026-10-20T16:00:01.5298252Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 systemd-sysv amd64 255.4-1ubuntu8.18 [11.9 kB]
+2026-10-20T16:00:01.6750513Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libpam-systemd amd64 255.4-1ubuntu8.18 [235 kB]
+2026-10-20T16:00:01.7723011Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 systemd amd64 255.4-1ubuntu8.18 [3475 kB]
+2026-10-20T16:00:01.9743210Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 udev amd64 255.4-1ubuntu8.18 [1875 kB]
+2026-10-20T16:00:02.1193997Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libudev1 amd64 255.4-1ubuntu8.18 [178 kB]
+2026-10-20T16:00:02.3272855Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libjsoncpp25 amd64 1.9.5-6build1 [82.8 kB]
+2026-10-20T16:00:02.4235419Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 librhash0 amd64 1.4.3-3build1 [129 kB]
+2026-10-20T16:00:02.5236782Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 cmake-data all 3.28.3-1build7 [2155 kB]
+2026-10-20T16:00:02.6189748Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 cmake amd64 3.28.3-1build7 [11.2 MB]
+2026-10-20T16:00:02.7776523Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libasound2-dev amd64 1.2.11-1ubuntu0.3 [115 kB]
+2026-10-20T16:00:02.9641571Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libudev-dev amd64 255.4-1ubuntu8.18 [22.0 kB]
+2026-10-20T16:00:03.6786039Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-server0 amd64 1.22.0-2.1build1 [33.9 kB]
+2026-10-20T16:00:03.7127231Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcb-xkb1 amd64 1.15-1ubuntu2 [32.3 kB]
+2026-10-20T16:00:03.7366454Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxkbcommon-dev amd64 1.6.0-1build1 [56.3 kB]
+2026-10-20T16:00:03.7643894Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxkbcommon-x11-0 amd64 1.6.0-1build1 [14.5 kB]
+2026-10-20T16:00:03.7808901Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-vulkan-drivers amd64 25.2.8-0ubuntu0.24.04.4 [17.5 MB]
+2026-10-20T16:00:03.9830674Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 ninja-build amd64 1.11.1-2 [129 kB]
+2026-10-20T16:00:03.9986866Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 xserver-common all 2:21.1.12-1ubuntu1.9 [35.0 kB]
+2026-10-20T16:00:04.0134553Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 xvfb amd64 2:21.1.12-1ubuntu1.9 [877 kB]
+2026-10-20T16:00:04.0374865Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-bin amd64 1.22.0-2.1build1 [20.6 kB]
+2026-10-20T16:00:04.0523641Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-dev amd64 1.22.0-2.1build1 [71.3 kB]
+2026-10-20T16:00:04.3237199Z Fetched 41.4 MB in 3s (15.3 MB/s)
+2026-10-20T16:00:04.3900626Z (Reading database ... 
+2026-10-20T16:00:04.3901130Z (Reading database ... 5%
+2026-10-20T16:00:04.3901583Z (Reading database ... 10%
+2026-10-20T16:00:04.3902019Z (Reading database ... 15%
+2026-10-20T16:00:04.3902436Z (Reading database ... 20%
+2026-10-20T16:00:04.3902841Z (Reading database ... 25%
+2026-10-20T16:00:04.3903247Z (Reading database ... 30%
+2026-10-20T16:00:04.3903644Z (Reading database ... 35%
+2026-10-20T16:00:04.3904041Z (Reading database ... 40%
+2026-10-20T16:00:04.3904437Z (Reading database ... 45%
+2026-10-20T16:00:04.3904842Z (Reading database ... 50%
+2026-10-20T16:00:04.3963680Z (Reading database ... 55%
+2026-10-20T16:00:04.5201836Z (Reading database ... 60%
+2026-10-20T16:00:04.7145135Z (Reading database ... 65%
+2026-10-20T16:00:04.9139315Z (Reading database ... 70%
+2026-10-20T16:00:05.1157304Z (Reading database ... 75%
+2026-10-20T16:00:05.2615007Z (Reading database ... 80%
+2026-10-20T16:00:05.4613596Z (Reading database ... 85%
+2026-10-20T16:00:05.5897297Z (Reading database ... 90%
+2026-10-20T16:00:05.7757916Z (Reading database ... 95%
+2026-10-20T16:00:05.7758546Z (Reading database ... 100%
+2026-10-20T16:00:05.7759320Z (Reading database ... 203540 files and directories currently installed.)
+2026-10-20T16:00:05.7805018Z Preparing to unpack .../0-libnss-systemd_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:05.7919783Z Unpacking libnss-systemd:amd64 (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:05.8607240Z Preparing to unpack .../1-systemd-dev_255.4-1ubuntu8.18_all.deb ...
+2026-10-20T16:00:05.8631751Z Unpacking systemd-dev (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:05.9242515Z Preparing to unpack .../2-systemd-coredump_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:05.9348274Z Unpacking systemd-coredump (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:05.9896761Z Preparing to unpack .../3-systemd-resolved_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:05.9944151Z Unpacking systemd-resolved (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.0647750Z Preparing to unpack .../4-libsystemd-shared_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.0680710Z Unpacking libsystemd-shared:amd64 (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.1391719Z Preparing to unpack .../5-libsystemd0_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.1550397Z Unpacking libsystemd0:amd64 (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.2090045Z Setting up libsystemd0:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:06.2399632Z (Reading database ... 
+2026-10-20T16:00:06.2400511Z (Reading database ... 5%
+2026-10-20T16:00:06.2401460Z (Reading database ... 10%
+2026-10-20T16:00:06.2402227Z (Reading database ... 15%
+2026-10-20T16:00:06.2402667Z (Reading database ... 20%
+2026-10-20T16:00:06.2403033Z (Reading database ... 25%
+2026-10-20T16:00:06.2403366Z (Reading database ... 30%
+2026-10-20T16:00:06.2403705Z (Reading database ... 35%
+2026-10-20T16:00:06.2404036Z (Reading database ... 40%
+2026-10-20T16:00:06.2404400Z (Reading database ... 45%
+2026-10-20T16:00:06.2404724Z (Reading database ... 50%
+2026-10-20T16:00:06.2419756Z (Reading database ... 55%
+2026-10-20T16:00:06.2532641Z (Reading database ... 60%
+2026-10-20T16:00:06.2560799Z (Reading database ... 65%
+2026-10-20T16:00:06.2580355Z (Reading database ... 70%
+2026-10-20T16:00:06.2614322Z (Reading database ... 75%
+2026-10-20T16:00:06.2641867Z (Reading database ... 80%
+2026-10-20T16:00:06.2781632Z (Reading database ... 85%
+2026-10-20T16:00:06.3011008Z (Reading database ... 90%
+2026-10-20T16:00:06.3103950Z (Reading database ... 95%
+2026-10-20T16:00:06.3104521Z (Reading database ... 100%
+2026-10-20T16:00:06.3105281Z (Reading database ... 203540 files and directories currently installed.)
+2026-10-20T16:00:06.3147043Z Preparing to unpack .../systemd-sysv_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.3172911Z Unpacking systemd-sysv (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.3573746Z Preparing to unpack .../libpam-systemd_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.3663014Z Unpacking libpam-systemd:amd64 (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.4068915Z Preparing to unpack .../systemd_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.4273926Z Unpacking systemd (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.7412741Z Preparing to unpack .../udev_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.7702984Z Unpacking udev (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.8906784Z Preparing to unpack .../libudev1_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:06.8968296Z Unpacking libudev1:amd64 (255.4-1ubuntu8.18) over (255.4-1ubuntu8.17) ...
+2026-10-20T16:00:06.9432754Z Setting up libudev1:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:06.9697128Z Selecting previously unselected package libjsoncpp25:amd64.
+2026-10-20T16:00:06.9751971Z (Reading database ... 
+2026-10-20T16:00:06.9752714Z (Reading database ... 5%
+2026-10-20T16:00:06.9753234Z (Reading database ... 10%
+2026-10-20T16:00:06.9753784Z (Reading database ... 15%
+2026-10-20T16:00:06.9754316Z (Reading database ... 20%
+2026-10-20T16:00:06.9754839Z (Reading database ... 25%
+2026-10-20T16:00:06.9755345Z (Reading database ... 30%
+2026-10-20T16:00:06.9756085Z (Reading database ... 35%
+2026-10-20T16:00:06.9756507Z (Reading database ... 40%
+2026-10-20T16:00:06.9756900Z (Reading database ... 45%
+2026-10-20T16:00:06.9757370Z (Reading database ... 50%
+2026-10-20T16:00:06.9767428Z (Reading database ... 55%
+2026-10-20T16:00:06.9874589Z (Reading database ... 60%
+2026-10-20T16:00:06.9900413Z (Reading database ... 65%
+2026-10-20T16:00:06.9919525Z (Reading database ... 70%
+2026-10-20T16:00:06.9953510Z (Reading database ... 75%
+2026-10-20T16:00:06.9979968Z (Reading database ... 80%
+2026-10-20T16:00:07.0117321Z (Reading database ... 85%
+2026-10-20T16:00:07.0347415Z (Reading database ... 90%
+2026-10-20T16:00:07.0439410Z (Reading database ... 95%
+2026-10-20T16:00:07.0439915Z (Reading database ... 100%
+2026-10-20T16:00:07.0440874Z (Reading database ... 203540 files and directories currently installed.)
+2026-10-20T16:00:07.0485313Z Preparing to unpack .../00-libjsoncpp25_1.9.5-6build1_amd64.deb ...
+2026-10-20T16:00:07.0495207Z Unpacking libjsoncpp25:amd64 (1.9.5-6build1) ...
+2026-10-20T16:00:07.0718649Z Selecting previously unselected package librhash0:amd64.
+2026-10-20T16:00:07.0848327Z Preparing to unpack .../01-librhash0_1.4.3-3build1_amd64.deb ...
+2026-10-20T16:00:07.0855576Z Unpacking librhash0:amd64 (1.4.3-3build1) ...
+2026-10-20T16:00:07.1077777Z Selecting previously unselected package cmake-data.
+2026-10-20T16:00:07.1205345Z Preparing to unpack .../02-cmake-data_3.28.3-1build7_all.deb ...
+2026-10-20T16:00:07.1273686Z Unpacking cmake-data (3.28.3-1build7) ...
+2026-10-20T16:00:07.6032081Z Selecting previously unselected package cmake.
+2026-10-20T16:00:07.6176627Z Preparing to unpack .../03-cmake_3.28.3-1build7_amd64.deb ...
+2026-10-20T16:00:07.6184631Z Unpacking cmake (3.28.3-1build7) ...
+2026-10-20T16:00:07.7778852Z Selecting previously unselected package libasound2-dev:amd64.
+2026-10-20T16:00:07.7908987Z Preparing to unpack .../04-libasound2-dev_1.2.11-1ubuntu0.3_amd64.deb ...
+2026-10-20T16:00:07.7944901Z Unpacking libasound2-dev:amd64 (1.2.11-1ubuntu0.3) ...
+2026-10-20T16:00:07.8277199Z Selecting previously unselected package libudev-dev:amd64.
+2026-10-20T16:00:07.8410309Z Preparing to unpack .../05-libudev-dev_255.4-1ubuntu8.18_amd64.deb ...
+2026-10-20T16:00:07.8417536Z Unpacking libudev-dev:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:07.8787653Z Selecting previously unselected package libwayland-server0:amd64.
+2026-10-20T16:00:07.8917682Z Preparing to unpack .../06-libwayland-server0_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T16:00:07.8926846Z Unpacking libwayland-server0:amd64 (1.22.0-2.1build1) ...
+2026-10-20T16:00:07.9132788Z Selecting previously unselected package libxcb-xkb1:amd64.
+2026-10-20T16:00:07.9263538Z Preparing to unpack .../07-libxcb-xkb1_1.15-1ubuntu2_amd64.deb ...
+2026-10-20T16:00:07.9270974Z Unpacking libxcb-xkb1:amd64 (1.15-1ubuntu2) ...
+2026-10-20T16:00:07.9475301Z Selecting previously unselected package libxkbcommon-dev:amd64.
+2026-10-20T16:00:07.9606629Z Preparing to unpack .../08-libxkbcommon-dev_1.6.0-1build1_amd64.deb ...
+2026-10-20T16:00:07.9616116Z Unpacking libxkbcommon-dev:amd64 (1.6.0-1build1) ...
+2026-10-20T16:00:07.9855048Z Selecting previously unselected package libxkbcommon-x11-0:amd64.
+2026-10-20T16:00:07.9988357Z Preparing to unpack .../09-libxkbcommon-x11-0_1.6.0-1build1_amd64.deb ...
+2026-10-20T16:00:07.9997917Z Unpacking libxkbcommon-x11-0:amd64 (1.6.0-1build1) ...
+2026-10-20T16:00:08.0212670Z Selecting previously unselected package mesa-vulkan-drivers:amd64.
+2026-10-20T16:00:08.0344680Z Preparing to unpack .../10-mesa-vulkan-drivers_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-20T16:00:08.0354209Z Unpacking mesa-vulkan-drivers:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T16:00:08.3518164Z Selecting previously unselected package ninja-build.
+2026-10-20T16:00:08.3648892Z Preparing to unpack .../11-ninja-build_1.11.1-2_amd64.deb ...
+2026-10-20T16:00:08.3655433Z Unpacking ninja-build (1.11.1-2) ...
+2026-10-20T16:00:08.4104904Z Preparing to unpack .../12-xserver-common_2%3a21.1.12-1ubuntu1.9_all.deb ...
+2026-10-20T16:00:08.4129139Z Unpacking xserver-common (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T16:00:08.4496946Z Preparing to unpack .../13-xvfb_2%3a21.1.12-1ubuntu1.9_amd64.deb ...
+2026-10-20T16:00:08.4517236Z Unpacking xvfb (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T16:00:08.4837738Z Selecting previously unselected package libwayland-bin.
+2026-10-20T16:00:08.4970296Z Preparing to unpack .../14-libwayland-bin_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T16:00:08.4982086Z Unpacking libwayland-bin (1.22.0-2.1build1) ...
+2026-10-20T16:00:08.5184434Z Selecting previously unselected package libwayland-dev:amd64.
+2026-10-20T16:00:08.5314045Z Preparing to unpack .../15-libwayland-dev_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T16:00:08.5328049Z Unpacking libwayland-dev:amd64 (1.22.0-2.1build1) ...
+2026-10-20T16:00:08.5792001Z Setting up mesa-vulkan-drivers:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T16:00:08.5812415Z Setting up libwayland-server0:amd64 (1.22.0-2.1build1) ...
+2026-10-20T16:00:08.5830596Z Setting up libxkbcommon-dev:amd64 (1.6.0-1build1) ...
+2026-10-20T16:00:08.5849353Z Setting up systemd-dev (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:08.5866183Z Setting up ninja-build (1.11.1-2) ...
+2026-10-20T16:00:08.5888034Z Setting up libxcb-xkb1:amd64 (1.15-1ubuntu2) ...
+2026-10-20T16:00:08.5906576Z Setting up libwayland-bin (1.22.0-2.1build1) ...
+2026-10-20T16:00:08.5945217Z Setting up libxkbcommon-x11-0:amd64 (1.6.0-1build1) ...
+2026-10-20T16:00:08.5976208Z Setting up libsystemd-shared:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:08.5999188Z Setting up libjsoncpp25:amd64 (1.9.5-6build1) ...
+2026-10-20T16:00:08.6021103Z Setting up libudev-dev:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:08.6040719Z Setting up librhash0:amd64 (1.4.3-3build1) ...
+2026-10-20T16:00:08.6064172Z Setting up cmake-data (3.28.3-1build7) ...
+2026-10-20T16:00:08.6128388Z Setting up xserver-common (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T16:00:08.6147447Z Setting up libasound2-dev:amd64 (1.2.11-1ubuntu0.3) ...
+2026-10-20T16:00:08.6166025Z Setting up xvfb (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T16:00:08.6184436Z Setting up systemd (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:09.0978628Z Setting up libwayland-dev:amd64 (1.22.0-2.1build1) ...
+2026-10-20T16:00:09.1011652Z Setting up udev (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:09.7799322Z Setting up cmake (3.28.3-1build7) ...
+2026-10-20T16:00:09.7820714Z Setting up systemd-resolved (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:10.3050154Z Setting up systemd-sysv (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:10.3516292Z Setting up systemd-coredump (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:10.6350467Z Setting up libnss-systemd:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:10.6380089Z Setting up libpam-systemd:amd64 (255.4-1ubuntu8.18) ...
+2026-10-20T16:00:10.7893292Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-20T16:00:10.8550769Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-20T16:00:10.8590499Z Not building database; man-db/auto-update is not 'true'.
+2026-10-20T16:00:10.8606199Z Processing triggers for dbus (1.14.10-4ubuntu4.1) ...
+2026-10-20T16:00:10.8733981Z Processing triggers for initramfs-tools (0.142ubuntu25.8) ...
+2026-10-20T16:00:10.9119865Z update-initramfs: Generating /boot/initrd.img-6.17.0-1022-azure
+2026-10-20T16:00:16.1443832Z 
+2026-10-20T16:00:16.1447009Z Running kernel seems to be up-to-date.
+2026-10-20T16:00:16.1447463Z 
+2026-10-20T16:00:16.1447684Z Restarting services...
+2026-10-20T16:00:16.2324404Z  systemctl restart multipathd.service packagekit.service php8.3-fpm.service polkit.service rsyslog.service udisks2.service
+2026-10-20T16:00:16.4103366Z 
+2026-10-20T16:00:16.4104119Z Service restarts being deferred:
+2026-10-20T16:00:16.4104888Z  systemctl restart ModemManager.service
+2026-10-20T16:00:16.4110064Z  /etc/needrestart/restart.d/dbus.service
+2026-10-20T16:00:16.4110603Z  systemctl restart docker.service
+2026-10-20T16:00:16.4111020Z  systemctl restart networkd-dispatcher.service
+2026-10-20T16:00:16.4111416Z  systemctl restart systemd-logind.service
+2026-10-20T16:00:16.4111734Z  systemctl restart walinuxagent.service
+2026-10-20T16:00:16.4111938Z 
+2026-10-20T16:00:16.4112055Z No containers need to be restarted.
+2026-10-20T16:00:16.4112233Z 
+2026-10-20T16:00:16.4112344Z User sessions running outdated binaries:
+2026-10-20T16:00:16.4112650Z  runner @ user manager service: systemd[1312]
+2026-10-20T16:00:16.4206395Z 
+2026-10-20T16:00:16.4226828Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-20T16:00:17.5002442Z ##[group]Run python -m pip install -r tools/structure/requirements.txt
+2026-10-20T16:00:17.5003082Z [36;1mpython -m pip install -r tools/structure/requirements.txt[0m
+2026-10-20T16:00:17.5003625Z [36;1mpython -m unittest discover -s tools/structure/tests -t tools/structure[0m
+2026-10-20T16:00:17.5004086Z [36;1mpython tools/structure/audit.py[0m
+2026-10-20T16:00:17.5004399Z [36;1mcargo fmt --all -- --check[0m
+2026-10-20T16:00:17.5068219Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:00:17.5068548Z env:
+2026-10-20T16:00:17.5068792Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:00:17.5069099Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:00:17.5069445Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:00:17.5069793Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:00:17.5070112Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:00:17.5070432Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:00:17.5070743Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:00:17.5071193Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:17.5071786Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:00:17.5072361Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:17.5072877Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:17.5073392Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:17.5073912Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:00:17.5074395Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:00:17.5074736Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:00:17.5075023Z   CARGO_TERM_COLOR: always
+2026-10-20T16:00:17.5075320Z ##[endgroup]
+2026-10-20T16:00:19.7191007Z Collecting Pygments==2.18.0 (from -r tools/structure/requirements.txt (line 1))
+2026-10-20T16:00:19.7871763Z   Downloading pygments-2.18.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-20T16:00:19.8057358Z Downloading pygments-2.18.0-py3-none-any.whl (1.2 MB)
+2026-10-20T16:00:19.9467817Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 11.0 MB/s  0:00:00
+2026-10-20T16:00:20.0547542Z Installing collected packages: Pygments
+2026-10-20T16:00:20.7480944Z Successfully installed Pygments-2.18.0
+2026-10-20T16:00:21.5139765Z ....................
+2026-10-20T16:00:21.5140646Z ----------------------------------------------------------------------
+2026-10-20T16:00:21.5141646Z Ran 20 tests in 0.145s
+2026-10-20T16:00:21.5142041Z 
+2026-10-20T16:00:21.5142258Z OK
+2026-10-20T16:00:23.4379284Z Structural governance: 0 violation(s).
+2026-10-20T16:00:23.7576567Z ##[group]Run cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+2026-10-20T16:00:23.7577299Z [36;1mcargo clippy --locked --workspace --all-targets --all-features -- -D warnings[0m
+2026-10-20T16:00:23.7640607Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:00:23.7640910Z env:
+2026-10-20T16:00:23.7641139Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:00:23.7641430Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:00:23.7641746Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:00:23.7642071Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:00:23.7642379Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:00:23.7642673Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:00:23.7642963Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:00:23.7643333Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:23.7643883Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:00:23.7644433Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:23.7644963Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:23.7645459Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:23.7646205Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:00:23.7646639Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:00:23.7646946Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:00:23.7647213Z   CARGO_TERM_COLOR: always
+2026-10-20T16:00:23.7647486Z ##[endgroup]
+2026-10-20T16:00:24.1676055Z [1m[92m    Checking[0m simulation_kernel v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/simulation_kernel)
+2026-10-20T16:00:24.4878264Z [1m[92m    Checking[0m engine-core v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T16:00:24.9799017Z [1m[92m    Checking[0m engine-common v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T16:00:25.1520293Z [1m[92m    Checking[0m engine-gpu v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T16:00:25.5948153Z [1m[92m    Checking[0m tooling v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T16:00:25.7356790Z [1m[92m    Checking[0m models v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T16:00:26.4630796Z [1m[92m    Checking[0m engine-render v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T16:00:27.0339353Z [1m[92m    Checking[0m ui v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T16:00:28.1944279Z [1m[92m    Checking[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:00:28.8977508Z [1m[92m    Checking[0m tests v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/tests)
+2026-10-20T16:00:31.2612590Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 7.45s
+2026-10-20T16:00:31.3107459Z ##[group]Run cargo test --locked --workspace --all-features
+2026-10-20T16:00:31.3107967Z [36;1mcargo test --locked --workspace --all-features[0m
+2026-10-20T16:00:31.3172701Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:00:31.3173037Z env:
+2026-10-20T16:00:31.3173290Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:00:31.3173604Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:00:31.3173955Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:00:31.3174309Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:00:31.3174632Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:00:31.3174949Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:00:31.3175266Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:00:31.3175888Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:31.3176483Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:00:31.3177057Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:31.3177623Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:31.3178161Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:00:31.3178679Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:00:31.3179159Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:00:31.3179501Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:00:31.3179790Z   CARGO_TERM_COLOR: always
+2026-10-20T16:00:31.3180079Z ##[endgroup]
+2026-10-20T16:00:31.7463629Z [1m[92m   Compiling[0m simulation_kernel v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/simulation_kernel)
+2026-10-20T16:00:33.5647201Z [1m[92m   Compiling[0m engine-core v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T16:00:35.0596236Z [1m[92m   Compiling[0m tooling v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T16:00:36.4772473Z [1m[92m   Compiling[0m engine-gpu v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T16:00:37.9409870Z [1m[92m   Compiling[0m engine-common v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T16:00:45.2104765Z [1m[92m   Compiling[0m engine-render v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T16:00:45.2582164Z [1m[92m   Compiling[0m models v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T16:00:48.6232064Z [1m[92m   Compiling[0m ui v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T16:01:00.2691287Z [1m[92m   Compiling[0m tests v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/tests)
+2026-10-20T16:01:01.4092401Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:01:23.9667986Z [1m[92m    Finished[0m `test` profile [optimized] target(s) in 52.63s
+2026-10-20T16:01:23.9954237Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_common-43378ae1d2ab21c6)
+2026-10-20T16:01:24.0058762Z 
+2026-10-20T16:01:24.0059373Z running 7 tests
+2026-10-20T16:01:24.0064506Z test controls::camera::manager::stage::tests::degenerate_stage_has_no_viewport ... ok
+2026-10-20T16:01:24.0068113Z test controls::camera::manager::stage::tests::input_gates_default_open_without_a_lab ... ok
+2026-10-20T16:01:24.0069699Z test controls::camera::manager::stage::tests::logical_rect_maps_to_physical_pixels ... ok
+2026-10-20T16:01:24.0077294Z test controls::camera::manager::stage::tests::viewport_is_clamped_inside_the_window ... ok
+2026-10-20T16:01:24.0086780Z test controls::camera::manager::stage::tests::hidden_world_keeps_stage_cameras_running_in_one_pixel ... ok
+2026-10-20T16:01:24.0088192Z test controls::camera::manager::stage::tests::stage_applies_only_while_a_world_is_shown ... ok
+2026-10-20T16:01:24.0089555Z test controls::camera::manager::stage::tests::frame_selected_centres_on_the_slice_and_ignores_missing_slice ... ok
+2026-10-20T16:01:24.0090332Z 
+2026-10-20T16:01:24.0090988Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:24.0091745Z 
+2026-10-20T16:01:24.0108520Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_core-a7e9ccc018541655)
+2026-10-20T16:01:24.0218631Z 
+2026-10-20T16:01:24.0219209Z running 18 tests
+2026-10-20T16:01:24.0222660Z test automata::channel::clock::tests::step_clock_divides_exactly_with_integer_carry ... ok
+2026-10-20T16:01:24.0226045Z test automata::channel::clock::tests::step_clock_passes_through_at_base_rate ... ok
+2026-10-20T16:01:24.0231429Z test automata::channel::colour::tests::linear_conversion_hits_known_points ... ok
+2026-10-20T16:01:24.0233216Z test automata::channel::colour::tests::ramp_keeps_the_chosen_colour_as_its_third_stop ... ok
+2026-10-20T16:01:24.0236632Z test automata::channel::colour::tests::ramp_lightness_is_strictly_increasing ... ok
+2026-10-20T16:01:24.0238653Z test automata::channel::metrics::tests::mass_is_density_sum_over_255 ... ok
+2026-10-20T16:01:24.0241180Z test automata::channel::metrics::tests::record_requires_declaration_and_tracks_latest ... ok
+2026-10-20T16:01:24.0242736Z test automata::channel::metrics::trace::tests::newer_epoch_clears_and_older_epoch_is_rejected ... ok
+2026-10-20T16:01:24.0244025Z test automata::channel::metrics::trace::tests::range_spans_min_and_max ... ok
+2026-10-20T16:01:24.0245364Z test automata::channel::metrics::trace::tests::same_tick_replaces_and_older_tick_is_rejected ... ok
+2026-10-20T16:01:24.0246631Z test automata::channel::tests::ids_are_never_reused_and_capacity_is_shared ... ok
+2026-10-20T16:01:24.0247621Z test automata::channel::tests::publish_replaces_one_backend_and_keeps_creation_order ... ok
+2026-10-20T16:01:24.0248792Z test automata::channel::tests::rate_presets_span_one_to_sixty_hertz ... ok
+2026-10-20T16:01:24.0249851Z test automata::channel::metrics::trace::tests::evicts_oldest_beyond_capacity ... ok
+2026-10-20T16:01:24.0277281Z test automata::channel::tests::select_command_targets_only_existing_rows ... ok
+2026-10-20T16:01:24.0278169Z test automata::channel::tests::settle_selects_predecessor_after_removal ... ok
+2026-10-20T16:01:24.0279067Z test automata::lenia::tests::lenia_controls_pause_step_reset_parameters_and_ignore_stale_entities ... ok
+2026-10-20T16:01:24.0291381Z test automata::lenia::tests::continuous_model_reset_validation_and_exact_serialization ... ok
+2026-10-20T16:01:24.0291846Z 
+2026-10-20T16:01:24.0292264Z test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T16:01:24.0292890Z 
+2026-10-20T16:01:24.0309692Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_gpu-9075c3301292c12d)
+2026-10-20T16:01:24.0413222Z 
+2026-10-20T16:01:24.0413494Z running 21 tests
+2026-10-20T16:01:24.0418118Z test plugin::drawing::palette::tests::build_stores_linear_ramp_stops_and_caps_at_eight ... ok
+2026-10-20T16:01:24.0419533Z test plugin::drawing::palette::tests::layout_is_656_bytes_with_eighty_byte_entries ... ok
+2026-10-20T16:01:24.0420907Z test plugin::drawing::palette::tests::rect_matches_surface_world_mapping ... ok
+2026-10-20T16:01:24.0422096Z test plugin::drawing::palette::tests::shader_default_ramp_matches_signal ... ok
+2026-10-20T16:01:24.0425211Z test render::compute::lenia::tests::continuous::oracle::normalized_periodic_field_and_z_coupling ... ok
+2026-10-20T16:01:24.0682570Z test plugin::setup::ticks::tests::paced_lenia_owner_requests_ticks_at_its_channel_rate ... ok
+2026-10-20T16:01:24.0689282Z test plugin::setup::ticks::tests::lenia_fixed_ticks_respect_both_pause_layers ... ok
+2026-10-20T16:01:27.5007092Z test render::compute::lenia::tests::evolution::gpu_lenia_matches_cpu_for_odd_and_even_tick_batches ... ok
+2026-10-20T16:01:27.5457899Z test render::compute::lenia::tests::evolution::ownership::gpu_lenia_reset_removal_and_entity_reuse_discard_prior_state ... ok
+2026-10-20T16:01:27.5630387Z test render::compute::lenia::tests::evolution::isolation::gpu_lenia_slices_keep_independent_parameters_state_and_atlas_regions ... ok
+2026-10-20T16:01:27.6207496Z test render::compute::lenia::tests::evolution::packing::gpu_lenia_publishes_odd_width_rows_at_nonzero_atlas_origin ... ok
+2026-10-20T16:01:27.6232226Z test render::compute::voxel::tests::active_shaders_validate ... ok
+2026-10-20T16:01:27.6287171Z test render::compute::lenia::tests::continuous::continuous_gpu_matches_independent_oracle_and_restored_continuation ... ok
+2026-10-20T16:01:27.6650698Z test render::compute::lenia::tests::evolution::transition::gpu_lenia_parameter_changes_apply_to_subsequent_ticks_without_reseeding ... ok
+2026-10-20T16:01:29.2057333Z test render::compute::voxel::tests::surfaces::adjacent_voxels_cull_their_shared_face ... ok
+2026-10-20T16:01:29.2623788Z test render::compute::lenia::tests::continuous::orbium::published_orbium_gpu_matches_pinned_fft_trajectory ... ok
+2026-10-20T16:01:29.2947389Z test render::compute::voxel::tests::surfaces::overflow_clamps_indirect_draw_to_whole_faces ... ok
+2026-10-20T16:01:29.3433622Z test render::compute::voxel::tests::surfaces::preview_volume_matches_a_cpu_exposed_face_oracle ... ok
+2026-10-20T16:01:29.3578439Z test render::compute::voxel::tests::surfaces::subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream ... ok
+2026-10-20T16:01:29.3587820Z test render::compute::voxel::tests::surfaces::one_voxel_has_six_outward_faces_at_the_requested_world_transform ... ok
+2026-10-20T16:01:29.4563242Z test render::compute::voxel::tests::surfaces::empty_region_emits_no_vertices ... ok
+2026-10-20T16:01:29.4563779Z 
+2026-10-20T16:01:29.4564084Z test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.41s
+2026-10-20T16:01:29.4564529Z 
+2026-10-20T16:01:29.5191081Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_render-c47a0f35fa20328f)
+2026-10-20T16:01:29.5208058Z 
+2026-10-20T16:01:29.5208445Z running 0 tests
+2026-10-20T16:01:29.5208720Z 
+2026-10-20T16:01:29.5209045Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:29.5209464Z 
+2026-10-20T16:01:29.5211388Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/models-c9004805242d52a7)
+2026-10-20T16:01:29.5321167Z 
+2026-10-20T16:01:29.5321646Z running 42 tests
+2026-10-20T16:01:29.5343353Z test automata::dynamical::lenia::tests::invalid_growth_parameters_leave_model_state_unchanged ... ok
+2026-10-20T16:01:29.5356950Z test plugin::tests::model_registration_runs_without_a_renderer_or_window ... ok
+2026-10-20T16:01:29.5358897Z test workbench::catalog::tests::copy_keeps_contract_disclaimers ... ok
+2026-10-20T16:01:29.5362186Z test workbench::catalog::tests::doi_syntax_and_unknown_groups ... ok
+2026-10-20T16:01:29.5364409Z test workbench::catalog::tests::every_family_and_lenia_has_exactly_one_entry ... ok
+2026-10-20T16:01:29.5370584Z test workbench::catalog::tests::fields_are_present_and_dois_valid ... ok
+2026-10-20T16:01:29.5371585Z test workbench::catalog::tests::figure_numbers_follow_file_order ... ok
+2026-10-20T16:01:29.5374346Z test workbench::catalog::scenarios::tests::scenarios_reveal_their_documented_outcomes ... ok
+2026-10-20T16:01:29.5376793Z test workbench::catalog::tests::metric_names_match_the_metric_sources ... ok
+2026-10-20T16:01:29.5386958Z test workbench::evolution::agents::tests::a_carrying_ant_returns_home_and_evaporation_removes_exhausted_trails ... ok
+2026-10-20T16:01:29.5397173Z test automata::dynamical::lenia::tests::serial_and_parallel_models_match_reference_over_many_ticks ... ok
+2026-10-20T16:01:29.5398296Z test workbench::catalog::scenarios::tests::scenarios_are_repeatable_and_paused ... ok
+2026-10-20T16:01:29.5409892Z test workbench::evolution::grid::editing::tests::old_projects_default_worlds_and_new_world_limits_validate ... ok
+2026-10-20T16:01:29.5413629Z test workbench::evolution::grid::editing::tests::invalid_strokes_are_atomic_and_running_worlds_refuse_edits ... ok
+2026-10-20T16:01:29.5415077Z test workbench::evolution::grid::gas_tests::hpp_particles_keep_direction_and_head_on_collisions_turn_perpendicularly ... ok
+2026-10-20T16:01:29.5418185Z test workbench::evolution::agents::tests::flock_update_is_order_independent_and_respects_speed_and_arena_bounds ... ok
+2026-10-20T16:01:29.5430954Z test workbench::evolution::grid::tests::elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions ... ok
+2026-10-20T16:01:29.5432332Z test workbench::evolution::grid::editing::tests::stroke_undo_redo_reset_and_loaded_continuation ... ok
+2026-10-20T16:01:29.5488143Z test workbench::evolution::symbolic::tests::languages::bounded_languages_match_exhaustive_short_words_and_reject_unicode ... ok
+2026-10-20T16:01:29.5490476Z test workbench::evolution::symbolic::tests::languages::bounded_tape_never_allocates_outside_its_input ... ok
+2026-10-20T16:01:29.5511648Z test workbench::evolution::agents::tests::ant_rng_reset_replays_food_deliveries_and_bounded_trails ... ok
+2026-10-20T16:01:29.5513476Z test workbench::evolution::symbolic::tests::languages::pushdown_stack_tracks_nesting_and_rejects_nonparenthesis_symbols ... ok
+2026-10-20T16:01:29.5516383Z test workbench::evolution::symbolic::tests::machines::lsystem_rewrites_in_parallel_and_stops_before_exceeding_its_bound ... ok
+2026-10-20T16:01:29.5519088Z test workbench::evolution::symbolic::tests::machines::turing_rewrites_halts_rejects_and_extends_both_tape_ends ... ok
+2026-10-20T16:01:29.5521599Z test workbench::operations::channels::analysis::tests::error_measures_and_projection_include_every_z_plane ... ok
+2026-10-20T16:01:29.5523914Z test workbench::operations::channels::tests::every_kind_has_a_named_metric ... ok
+2026-10-20T16:01:29.5547254Z test workbench::evolution::grid::tests::life_blinker_period_and_glider_displacement_are_correct ... ok
+2026-10-20T16:01:29.5548529Z test workbench::evolution::symbolic::tests::machines::nfa_epsilon_cycles_and_branching_remain_closed ... ok
+2026-10-20T16:01:29.5549691Z test workbench::operations::channels::tests::koch_length_symbolic_steps_boids_and_ants ... ok
+2026-10-20T16:01:29.5576601Z test workbench::operations::channels::tests::life_counts_the_glider_and_rule30_its_newest_row ... ok
+2026-10-20T16:01:29.5617343Z test workbench::operations::experiment::tests::settings::agent_population_edits_require_reset_and_controls_are_finite ... ok
+2026-10-20T16:01:29.5671310Z test workbench::operations::experiment::tests::settings::seeded_patterns_reproduce_and_live_rules_keep_state ... ok
+2026-10-20T16:01:29.5799636Z test workbench::operations::channels::tests::hpp_particle_count_is_conserved_before_walls_reach_edges ... ok
+2026-10-20T16:01:29.5876393Z test workbench::operations::project::library::tests::names_and_invalid_imports_do_not_escape_or_create_entries ... ok
+2026-10-20T16:01:29.5960554Z test workbench::operations::project::library::tests::published_gpu_specimen_preserves_kernel_seed_and_exact_float_state ... ok
+2026-10-20T16:01:29.6531598Z test workbench::operations::project::library::tests::imported_and_duplicated_specimens_preserve_every_family ... ok
+2026-10-20T16:01:29.6737493Z test workbench::operations::project::tests::continuation::live_edit_reset_and_fractional_clock_contract ... ok
+2026-10-20T16:01:29.6766788Z test workbench::operations::project::tests::rejection::file_roundtrip_and_unknown_fields ... ok
+2026-10-20T16:01:29.6778604Z test workbench::operations::experiment::tests::export::export_decodes_and_preserves_live_state ... ok
+2026-10-20T16:01:29.6794284Z test workbench::operations::project::tests::rejection::malformed_projects_fail_before_mutation ... ok
+2026-10-20T16:01:29.8576490Z test workbench::operations::project::tests::continuation::every_family_continues_after_roundtrip ... ok
+2026-10-20T16:01:29.9147138Z test workbench::evolution::grid::tests::cellular_histories_and_parallel_updates_preserve_snapshot_semantics ... ok
+2026-10-20T16:01:29.9148011Z 
+2026-10-20T16:01:29.9148475Z test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+2026-10-20T16:01:29.9149108Z 
+2026-10-20T16:01:29.9163187Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/simulation_kernel-855e437ca848ba95)
+2026-10-20T16:01:29.9176407Z 
+2026-10-20T16:01:29.9176585Z running 10 tests
+2026-10-20T16:01:29.9181943Z test core::lenia::tests::boundaries_are_zero_and_z_planes_are_independent ... ok
+2026-10-20T16:01:29.9207743Z test core::lenia::tests::every_xy_neighbor_uses_its_original_offset ... ok
+2026-10-20T16:01:29.9226649Z test core::lenia::tests::growth_clamps_quantizes_and_preserves_zero_dt ... ok
+2026-10-20T16:01:29.9227606Z test core::lenia::tests::numerical::fixtures_are_safe_for_small_shapes_and_distinct ... ok
+2026-10-20T16:01:29.9228792Z test stepper::sparse::benchmark::sparse_benchmark ... ignored, measurement benchmark: set SOUL_BENCH_REPORT to retain JSON
+2026-10-20T16:01:29.9229847Z test core::lenia::tests::parameters_and_shape_fail_closed ... ok
+2026-10-20T16:01:29.9230620Z test stepper::sparse::tests::unbounded_births_and_coordinate_extremes ... ok
+2026-10-20T16:01:29.9231462Z test stepper::sparse::tests::finite_serial_parallel_dense_sparse_parity ... ok
+2026-10-20T16:01:29.9235318Z test core::lenia::tests::numerical::seeded_multitick_reference_matches_independent_numerics ... ok
+2026-10-20T16:01:31.2547994Z test core::lenia::continuous::qualification::published_orbium_matches_fft_reference_through_one_hundred_ticks ... ok
+2026-10-20T16:01:31.2548589Z 
+2026-10-20T16:01:31.2548886Z test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.34s
+2026-10-20T16:01:31.2549296Z 
+2026-10-20T16:01:31.2553781Z [1m[92m     Running[0m unittests src/main.rs (target/debug/deps/swarm_orchestrator_for_autonomous_learners-d8947e91c167d01c)
+2026-10-20T16:01:31.2570731Z 
+2026-10-20T16:01:31.2577727Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/tests-382de1691fdb855b)
+2026-10-20T16:01:31.2578700Z running 3 tests
+2026-10-20T16:01:31.2579590Z test app::preview::automata::flow::stage_check::tests::counts_only_matching_pixels_inside_the_stage ... ok
+2026-10-20T16:01:31.2580539Z test app::preview::automata::flow::stage_check::tests::detects_panel_fill_inside_the_stage_edge ... ok
+2026-10-20T16:01:31.2581210Z test app::preview::automata::flow::stage_check::tests::warm_pixels_need_hue_and_saturation ... ok
+2026-10-20T16:01:31.2581583Z 
+2026-10-20T16:01:31.2581857Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:31.2582209Z 
+2026-10-20T16:01:31.2692761Z 
+2026-10-20T16:01:31.2693102Z running 23 tests
+2026-10-20T16:01:31.2743049Z test channels::cpu::replaced_sessions_are_adopted_and_old_ids_released ... ok
+2026-10-20T16:01:31.2751977Z test channels::cpu::colour_input_and_configuration_apply ... ok
+2026-10-20T16:01:31.2764103Z test channels::cpu::remove_releases_shared_capacity ... ok
+2026-10-20T16:01:31.2772107Z test channels::cpu::halted_machines_report_halted_and_refuse_resume ... ok
+2026-10-20T16:01:31.2779577Z test channels::cpu::spawn_publishes_a_paused_selected_row ... ok
+2026-10-20T16:01:31.2785148Z test channels::gpu::lenia_rows_publish_as_gpu_channels ... ok
+2026-10-20T16:01:31.2808750Z test channels::gpu::lenia_spawn_refused_when_full ... ok
+2026-10-20T16:01:31.2824133Z test channels::gpu::lenia_spawn_allocates_a_selected_channel ... ok
+2026-10-20T16:01:31.2840948Z test channels::gpu::remove_emits_automaton_removed_and_releases_the_id ... ok
+2026-10-20T16:01:31.2842251Z test channels::cpu::step_only_while_paused_and_reset_bumps_epoch ... ok
+2026-10-20T16:01:31.2851933Z test channels::gpu::lifecycle_actions_map_to_lenia_actions ... ok
+2026-10-20T16:01:31.2876367Z test channels::mass::busy_mailbox_suspends_sampling ... ok
+2026-10-20T16:01:31.2879034Z test channels::mass::off_by_default_declares_opt_in_and_never_requests ... ok
+2026-10-20T16:01:31.2882768Z test channels::mass::enabled_requests_are_throttled_and_results_recorded ... ok
+2026-10-20T16:01:31.2899970Z test channels::mass::readback_error_becomes_unavailable ... ok
+2026-10-20T16:01:31.2907479Z test channels::mass::stale_epoch_snapshots_are_dropped ... ok
+2026-10-20T16:01:31.2912375Z test families::capacity_and_invalid_inputs_do_not_mutate_other_sessions ... ok
+2026-10-20T16:01:31.2972308Z test channels::mass::stalled_readback_times_out ... ok
+2026-10-20T16:01:31.2992365Z test families::all_families_pause_step_reset_and_hold_terminal_states ... ok
+2026-10-20T16:01:31.3001100Z test sim_loop::spiral_guard_caps_work_and_discards_excess_lag ... ok
+2026-10-20T16:01:31.3002213Z test families::every_family_plugin_registers_and_native_spawn_clear_commands_execute ... ok
+2026-10-20T16:01:31.3003147Z test sim_loop::accumulator_emits_correct_steps ... ok
+2026-10-20T16:01:31.3782653Z test channels::cpu::running_channels_advance_at_their_own_rate ... ok
+2026-10-20T16:01:31.3783198Z 
+2026-10-20T16:01:31.3783644Z test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+2026-10-20T16:01:31.3784248Z 
+2026-10-20T16:01:31.3803414Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/tooling-2a84e4ace9ad19b2)
+2026-10-20T16:01:31.3820552Z 
+2026-10-20T16:01:31.3820848Z running 0 tests
+2026-10-20T16:01:31.3821102Z 
+2026-10-20T16:01:31.3821423Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:31.3821804Z 
+2026-10-20T16:01:31.3823720Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/ui-d18fe4995fe09aa2)
+2026-10-20T16:01:31.3932150Z 
+2026-10-20T16:01:31.3932488Z running 49 tests
+2026-10-20T16:01:31.3947883Z test lab::chrome::drawers::compare::tests::pairs_must_be_distinct_and_able_to_advance ... ok
+2026-10-20T16:01:31.3954694Z test lab::chrome::drawers::compare::tests::the_pair_follows_its_channels_when_tabs_close ... ok
+2026-10-20T16:01:31.3957956Z test lab::chrome::drawers::compare::export::tests::csv_bundle_preserves_samples_fields_metadata_and_refuses_overwrite ... ok
+2026-10-20T16:01:31.3959783Z test lab::chrome::drawers::library::tests::filter_matches_title_subtitle_and_group_case_insensitively ... ok
+2026-10-20T16:01:31.3964066Z test lab::chrome::transport::tests::flat_or_short_traces ... ok
+2026-10-20T16:01:31.3965225Z test lab::chrome::drawers::library::tests::groups_follow_library_order_and_hide_unavailable_specimens ... ok
+2026-10-20T16:01:31.3966652Z test lab::chrome::transport::tests::rate_presets_mark_the_nearest_rate ... ok
+2026-10-20T16:01:31.3968040Z test lab::chrome::transport::tests::sparkline_spans_the_rect_with_max_at_the_top ... ok
+2026-10-20T16:01:31.3969055Z test lab::inspector::machine::tests::summaries_name_state_and_result ... ok
+2026-10-20T16:01:31.3970072Z test lab::inspector::machine::tests::turing_table_lists_every_transition_sorted ... ok
+2026-10-20T16:01:31.3976608Z test lab::inspector::parameters::tests::actions_become_configure_requests ... ok
+2026-10-20T16:01:31.3977622Z test lab::inspector::parameters::tests::drafts_survive_frames_and_follow_external_changes ... ok
+2026-10-20T16:01:31.3978602Z test lab::inspector::sections::tests::arenas_describe_size_and_edges ... ok
+2026-10-20T16:01:31.3979615Z test lab::inspector::sections::tests::edited_rules_and_populations_are_customised ... ok
+2026-10-20T16:01:31.3980627Z test lab::inspector::sections::tests::input_note_warns_beyond_the_bound ... ok
+2026-10-20T16:01:31.3981582Z test lab::inspector::sections::tests::metric_values_format_by_kind ... ok
+2026-10-20T16:01:31.3982552Z test lab::stage::painters::symbolic::tests::tape_window_keeps_the_head_visible ... ok
+2026-10-20T16:01:31.3984024Z test lab::stage::painters::symbolic::tests::tapes_are_sized_to_their_visible_window ... ok
+2026-10-20T16:01:31.3988424Z test lab::stage::painters::tests::ramp_colour_hits_stops_at_thirds ... ok
+2026-10-20T16:01:31.3993655Z test lab::stage::view::tests::content_is_centred_and_fitted ... ok
+2026-10-20T16:01:31.3994399Z test lab::stage::view::tests::cursor_maps_back_to_cells ... ok
+2026-10-20T16:01:31.3995057Z test lab::stage::view::tests::zoom_is_clamped ... ok
+2026-10-20T16:01:31.3996284Z test lab::stage::editing::tests::pointer_strokes_generate_one_undo_group_and_fill_drag_gaps ... ok
+2026-10-20T16:01:31.3997669Z test lab::stage::voxels::tests::stack_voxels_and_end_of_tape_heads_remain_visible ... ok
+2026-10-20T16:01:31.3998818Z test lab::state::tests::inspector_width_is_clamped ... ok
+2026-10-20T16:01:31.4000488Z test lab::state::tests::launch_library_steps_aside_once_a_channel_opens ... ok
+2026-10-20T16:01:31.4001651Z test lab::state::tests::library_opens_on_first_launch_and_drawers_toggle ... ok
+2026-10-20T16:01:31.4002896Z test lab::state::tests::presenter_transport_fades_after_two_idle_seconds ... ok
+2026-10-20T16:01:31.4004113Z test lab::tests::escape_closes_the_settings_popover_first ... ok
+2026-10-20T16:01:31.4005364Z test lab::tests::escape_is_swallowed_only_when_lab_consumes_it ... ok
+2026-10-20T16:01:31.4030749Z test lab::tests::frame_input_reads_keys_without_relocking_the_context ... ok
+2026-10-20T16:01:31.4033643Z test lab::tests::keys_map_to_shortcuts ... ok
+2026-10-20T16:01:31.4034697Z test lab::tests::legacy_ui_modules_are_gone ... ok
+2026-10-20T16:01:31.4036477Z test lab::chrome::drawers::compare::capture::tests::step_waits_for_completed_states_and_compares_exact_ticks ... ok
+2026-10-20T16:01:31.4038038Z test lab::tests::run_pause_step_reset_target_the_selected_channel ... ok
+2026-10-20T16:01:31.4039291Z test lab::stage::voxels::tests::selected_tape_creates_meshes_steps_and_cleans_up ... ok
+2026-10-20T16:01:31.4040541Z test lab::tests::tab_titles_stop_claiming_the_catalog_specimen_once_customised ... ok
+2026-10-20T16:01:31.4041508Z test lab::tests::toggles ... ok
+2026-10-20T16:01:31.4042435Z test theme::fonts::tests::every_family_leads_with_libertinus_and_keeps_fallbacks ... ok
+2026-10-20T16:01:31.4047534Z test lab::chrome::drawers::compare::capture::tests::reset_and_closed_channels_cancel_a_pending_pair ... ok
+2026-10-20T16:01:31.4048953Z test theme::tokens::tests::text_tokens_meet_wcag_aa_on_both_surfaces ... ok
+2026-10-20T16:01:31.4059491Z test theme::tokens::tests::signal_matches_the_channel_default_colour ... ok
+2026-10-20T16:01:31.4061478Z test theme::visuals::tests::type_scale_uses_spec_sizes ... ok
+2026-10-20T16:01:31.4063290Z test theme::widgets::tests::colour_rules ... ok
+2026-10-20T16:01:31.4064475Z test theme::fonts::tests::fonts_load_and_cover_lab_glyphs ... ok
+2026-10-20T16:01:31.4065470Z test theme::widgets::tests::ticks_are_zero_padded_to_six_digits ... ok
+2026-10-20T16:01:31.4066561Z test theme::visuals::tests::no_widget_or_window_draws_a_hairline ... ok
+2026-10-20T16:01:31.4087703Z test theme::fonts::tests::named_families_are_ready_only_from_the_pass_after_install ... ok
+2026-10-20T16:01:31.4090857Z test theme::widgets::tests::widgets_render_headless_without_panicking ... ok
+2026-10-20T16:01:31.4091401Z 
+2026-10-20T16:01:31.4091803Z test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+2026-10-20T16:01:31.4092173Z 
+2026-10-20T16:01:31.4109975Z [1m[92m   Doc-tests[0m engine_common
+2026-10-20T16:01:32.0030865Z 
+2026-10-20T16:01:32.0031386Z running 4 tests
+2026-10-20T16:01:32.0034656Z test lib/engine/engine-common/src/controls/camera/plugin_bundle.rs - controls::camera::plugin_bundle::CameraPluginBundle (line 13) - compile ... ok
+2026-10-20T16:01:32.0036079Z test lib/engine/engine-common/src/plugin.rs - plugin (line 7) - compile ... ok
+2026-10-20T16:01:32.0037058Z test lib/engine/engine-common/src/lib.rs - (line 7) - compile ... ok
+2026-10-20T16:01:32.0049954Z test lib/engine/engine-common/src/prelude.rs - prelude (line 3) ... ok
+2026-10-20T16:01:32.0050875Z 
+2026-10-20T16:01:32.0051322Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:32.0051725Z 
+2026-10-20T16:01:32.0058908Z all doctests ran in 0.52s; merged doctests compilation took 0.52s
+2026-10-20T16:01:32.0079205Z [1m[92m   Doc-tests[0m engine_core
+2026-10-20T16:01:32.5166775Z 
+2026-10-20T16:01:32.5167276Z running 1 test
+2026-10-20T16:01:32.5276875Z test lib/engine/engine-core/src/systems/execution/simulation/mod.rs - systems::execution::simulation (line 16) ... ok
+2026-10-20T16:01:32.5277531Z 
+2026-10-20T16:01:32.5277828Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T16:01:32.5278239Z 
+2026-10-20T16:01:32.5294571Z all doctests ran in 0.44s; merged doctests compilation took 0.42s
+2026-10-20T16:01:32.5316797Z [1m[92m   Doc-tests[0m engine_gpu
+2026-10-20T16:01:32.6358060Z 
+2026-10-20T16:01:32.6358543Z running 0 tests
+2026-10-20T16:01:32.6358754Z 
+2026-10-20T16:01:32.6359096Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:32.6359482Z 
+2026-10-20T16:01:32.6382433Z [1m[92m   Doc-tests[0m engine_render
+2026-10-20T16:01:32.7023541Z 
+2026-10-20T16:01:32.7024032Z running 0 tests
+2026-10-20T16:01:32.7024243Z 
+2026-10-20T16:01:32.7024565Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:32.7024986Z 
+2026-10-20T16:01:32.7044200Z [1m[92m   Doc-tests[0m models
+2026-10-20T16:01:33.1715045Z 
+2026-10-20T16:01:33.1715547Z running 4 tests
+2026-10-20T16:01:33.1720145Z test lib/models/src/plugin.rs - plugin (line 20) - compile ... ok
+2026-10-20T16:01:33.1721261Z test lib/models/src/plugin.rs - plugin::ComputationalIntelligencePlugin (line 52) - compile ... ok
+2026-10-20T16:01:33.1831215Z test lib/models/src/prelude.rs - prelude (line 3) ... ok
+2026-10-20T16:01:33.1837236Z test lib/models/src/lib.rs - (line 5) ... ok
+2026-10-20T16:01:33.1837654Z 
+2026-10-20T16:01:33.1837962Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T16:01:33.1838339Z 
+2026-10-20T16:01:33.1857961Z all doctests ran in 0.34s; merged doctests compilation took 0.32s
+2026-10-20T16:01:33.1879813Z [1m[92m   Doc-tests[0m simulation_kernel
+2026-10-20T16:01:33.2353497Z 
+2026-10-20T16:01:33.2353963Z running 0 tests
+2026-10-20T16:01:33.2354246Z 
+2026-10-20T16:01:33.2354709Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:33.2355312Z 
+2026-10-20T16:01:33.2370326Z [1m[92m   Doc-tests[0m tests
+2026-10-20T16:01:33.2824476Z 
+2026-10-20T16:01:33.2824969Z running 0 tests
+2026-10-20T16:01:33.2825244Z 
+2026-10-20T16:01:33.2825649Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:33.2826241Z 
+2026-10-20T16:01:33.2845357Z [1m[92m   Doc-tests[0m tooling
+2026-10-20T16:01:33.3377830Z 
+2026-10-20T16:01:33.3378331Z running 0 tests
+2026-10-20T16:01:33.3378649Z 
+2026-10-20T16:01:33.3379087Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:33.3379479Z 
+2026-10-20T16:01:33.3397660Z [1m[92m   Doc-tests[0m ui
+2026-10-20T16:01:33.4529062Z 
+2026-10-20T16:01:33.4529560Z running 0 tests
+2026-10-20T16:01:33.4529841Z 
+2026-10-20T16:01:33.4530300Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T16:01:33.4530679Z 
+2026-10-20T16:01:33.4659885Z ##[group]Run cargo build --locked --workspace --all-features
+2026-10-20T16:01:33.4660381Z [36;1mcargo build --locked --workspace --all-features[0m
+2026-10-20T16:01:33.4724053Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:01:33.4724321Z env:
+2026-10-20T16:01:33.4724526Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:01:33.4724784Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:01:33.4725057Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:01:33.4725339Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:01:33.4725978Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:01:33.4726266Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:01:33.4726542Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:01:33.4726890Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:33.4727387Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:01:33.4727889Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:33.4728451Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:33.4728899Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:33.4729346Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:01:33.4729742Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:01:33.4730038Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:01:33.4730291Z   CARGO_TERM_COLOR: always
+2026-10-20T16:01:33.4730545Z ##[endgroup]
+2026-10-20T16:01:33.7927082Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:01:38.3750998Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 4.88s
+2026-10-20T16:01:38.4159903Z ##[group]Run xvfb-run -a cargo run --locked --all-features -- --automata-demo
+2026-10-20T16:01:38.4160520Z [36;1mxvfb-run -a cargo run --locked --all-features -- --automata-demo[0m
+2026-10-20T16:01:38.4224091Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:01:38.4224381Z env:
+2026-10-20T16:01:38.4224597Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:01:38.4224854Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:01:38.4225144Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:01:38.4225440Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:01:38.4225997Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:01:38.4226298Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:01:38.4226569Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:01:38.4226915Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:38.4227431Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:01:38.4227951Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:38.4228415Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:38.4228847Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:01:38.4229286Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:01:38.4229674Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:01:38.4229960Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:01:38.4230191Z   CARGO_TERM_COLOR: always
+2026-10-20T16:01:38.4230435Z   SOUL_BOOT_VERIFY: native-boot
+2026-10-20T16:01:38.4230689Z   WGPU_BACKEND: vulkan
+2026-10-20T16:01:38.4230917Z ##[endgroup]
+2026-10-20T16:01:38.9578168Z [1m[92m   Compiling[0m hashbrown v0.15.4
+2026-10-20T16:01:38.9674932Z [1m[92m   Compiling[0m half v2.6.0
+2026-10-20T16:01:39.4488486Z [1m[92m   Compiling[0m indexmap v2.10.0
+2026-10-20T16:01:39.4927173Z [1m[92m   Compiling[0m bevy_platform v0.16.1
+2026-10-20T16:01:39.6054655Z [1m[92m   Compiling[0m bevy_utils v0.16.1
+2026-10-20T16:01:39.6550675Z [1m[92m   Compiling[0m bevy_tasks v0.16.1
+2026-10-20T16:01:40.0218798Z [1m[92m   Compiling[0m petgraph v0.7.1
+2026-10-20T16:01:40.8381975Z [1m[92m   Compiling[0m naga v24.0.0
+2026-10-20T16:01:42.0267593Z [1m[92m   Compiling[0m bevy_reflect v0.16.1
+2026-10-20T16:02:07.4670214Z [1m[92m   Compiling[0m bevy_ecs v0.16.1
+2026-10-20T16:02:13.0199406Z [1m[92m   Compiling[0m bevy_math v0.16.1
+2026-10-20T16:02:37.3095204Z [1m[92m   Compiling[0m bevy_app v0.16.1
+2026-10-20T16:02:37.6256683Z [1m[92m   Compiling[0m bevy_color v0.16.2
+2026-10-20T16:02:42.2911716Z [1m[92m   Compiling[0m bevy_log v0.16.1
+2026-10-20T16:02:44.5890364Z [1m[92m   Compiling[0m bevy_asset v0.16.1
+2026-10-20T16:02:46.1525924Z [1m[92m   Compiling[0m bevy_input v0.16.1
+2026-10-20T16:03:08.6720817Z [1m[92m   Compiling[0m gpu-descriptor v0.3.2
+2026-10-20T16:03:08.8624347Z [1m[92m   Compiling[0m wgpu-hal v24.0.4
+2026-10-20T16:03:11.1342226Z [1m[92m   Compiling[0m bevy_window v0.16.1
+2026-10-20T16:03:22.3506387Z [1m[92m   Compiling[0m bevy_image v0.16.1
+2026-10-20T16:03:34.8151030Z [1m[92m   Compiling[0m bevy_transform v0.16.1
+2026-10-20T16:03:35.6339418Z [1m[92m   Compiling[0m bevy_time v0.16.1
+2026-10-20T16:03:43.5972236Z [1m[92m   Compiling[0m wgpu-core v24.0.5
+2026-10-20T16:03:45.3757505Z [1m[92m   Compiling[0m bevy_diagnostic v0.16.1
+2026-10-20T16:03:48.0917518Z [1m[92m   Compiling[0m wgpu v24.0.5
+2026-10-20T16:03:54.7755274Z [1m[92m   Compiling[0m bevy_mesh v0.16.1
+2026-10-20T16:04:09.3082563Z [1m[92m   Compiling[0m naga_oil v0.17.1
+2026-10-20T16:04:16.2995243Z [1m[92m   Compiling[0m bevy_render v0.16.1
+2026-10-20T16:04:19.0712674Z [1m[92m   Compiling[0m bevy_a11y v0.16.1
+2026-10-20T16:04:22.4079203Z [1m[92m   Compiling[0m bevy_input_focus v0.16.1
+2026-10-20T16:04:33.1939278Z [1m[92m   Compiling[0m bevy_core_pipeline v0.16.1
+2026-10-20T16:05:44.2957264Z [1m[92m   Compiling[0m bevy_picking v0.16.1
+2026-10-20T16:05:45.9864681Z [1m[92m   Compiling[0m bevy_pbr v0.16.1
+2026-10-20T16:06:16.1036949Z [1m[92m   Compiling[0m bevy_sprite v0.16.1
+2026-10-20T16:07:10.0442355Z [1m[92m   Compiling[0m bevy_text v0.16.1
+2026-10-20T16:07:38.3491592Z [1m[92m   Compiling[0m bevy_animation v0.16.1
+2026-10-20T16:08:11.7634693Z [1m[92m   Compiling[0m bevy_scene v0.16.1
+2026-10-20T16:08:18.1817951Z [1m[92m   Compiling[0m bevy_winit v0.16.1
+2026-10-20T16:08:29.9927651Z [1m[92m   Compiling[0m bevy_gltf v0.16.1
+2026-10-20T16:08:36.3204787Z [1m[92m   Compiling[0m bevy_ui v0.16.1
+2026-10-20T16:09:01.5581219Z [1m[92m   Compiling[0m bevy_gizmos v0.16.1
+2026-10-20T16:09:30.4321155Z [1m[92m   Compiling[0m bevy_gilrs v0.16.1
+2026-10-20T16:09:33.5549412Z [1m[92m   Compiling[0m bevy_audio v0.16.1
+2026-10-20T16:09:41.5420214Z [1m[92m   Compiling[0m bevy_state v0.16.1
+2026-10-20T16:09:50.2869760Z [1m[92m   Compiling[0m bevy_internal v0.16.1
+2026-10-20T16:09:54.5426218Z [1m[92m   Compiling[0m bevy_egui v0.35.1
+2026-10-20T16:10:02.5820483Z [1m[92m   Compiling[0m bevy_dylib v0.16.1
+2026-10-20T16:10:04.4564768Z [1m[92m   Compiling[0m bevy v0.16.1
+2026-10-20T16:10:04.5122671Z [1m[92m   Compiling[0m engine-core v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T16:10:08.5644254Z [1m[92m   Compiling[0m engine-gpu v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T16:10:16.2233843Z [1m[92m   Compiling[0m engine-common v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T16:10:22.9708499Z [1m[92m   Compiling[0m tooling v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T16:10:23.1657432Z [1m[92m   Compiling[0m models v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T16:10:23.9827460Z [1m[92m   Compiling[0m engine-render v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T16:10:27.1331591Z [1m[92m   Compiling[0m ui v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T16:10:39.7592511Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/home/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:10:44.3503779Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 9m 05s
+2026-10-20T16:10:44.3754159Z [1m[92m     Running[0m `target/debug/swarm_orchestrator_for_autonomous_learners --automata-demo`
+2026-10-20T16:10:44.4014021Z [2m2026-10-20T16:10:44.400933Z[0m [33m WARN[0m [2mwinit::platform_impl::linux::x11::xdisplay[0m[2m:[0m error setting XSETTINGS; Xft options won't reload automatically
+2026-10-20T16:10:44.5117487Z [2m2026-10-20T16:10:44.511371Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "llvmpipe (LLVM 20.1.2, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)", backend: Vulkan }
+2026-10-20T16:10:44.5120858Z [2m2026-10-20T16:10:44.511404Z[0m [33m WARN[0m [2mbevy_render::renderer[0m[2m:[0m The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevyengine.org/learn/errors/b0006/
+2026-10-20T16:10:44.6209199Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-20T16:10:44.6210879Z ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-20T16:10:44.6212527Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-20T16:10:44.6214105Z ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-20T16:10:44.6215977Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-20T16:10:44.6217388Z ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-20T16:10:44.6218602Z ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-20T16:10:44.6219509Z ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+2026-10-20T16:10:44.6229595Z [2m2026-10-20T16:10:44.622742Z[0m [33m WARN[0m [2mbevy_audio::audio_output[0m[2m:[0m No audio device found.
+2026-10-20T16:10:44.8927546Z [2m2026-10-20T16:10:44.892403Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+2026-10-20T16:10:44.9145420Z [2m2026-10-20T16:10:44.914233Z[0m [33m WARN[0m [2mwinit::platform_impl::linux::x11::util::randr[0m[2m:[0m XRandR reported that the display's 0mm in size, which is certifiably insane
+2026-10-20T16:10:44.9147967Z [2m2026-10-20T16:10:44.914288Z[0m [32m INFO[0m [2mbevy_winit::system[0m[2m:[0m Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T16:10:44.9149825Z [2m2026-10-20T16:10:44.914361Z[0m [32m INFO[0m [2mwinit::platform_impl::linux::x11::window[0m[2m:[0m Guessed window scale factor: 1
+2026-10-20T16:10:48.2109550Z [2m2026-10-20T16:10:48.210206Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to native-boot/boot.png
+2026-10-20T16:10:48.2991252Z ##[group]Run python -c "from pathlib import Path; assert Path('native-boot/SUCCESS').is_file(); assert Path('native-boot/boot.png').stat().st_size > 1000"
+2026-10-20T16:10:48.2992367Z [36;1mpython -c "from pathlib import Path; assert Path('native-boot/SUCCESS').is_file(); assert Path('native-boot/boot.png').stat().st_size > 1000"[0m
+2026-10-20T16:10:48.3056020Z shell: /usr/bin/bash -e {0}
+2026-10-20T16:10:48.3056301Z env:
+2026-10-20T16:10:48.3056507Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:10:48.3056751Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:10:48.3057019Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:10:48.3057299Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:10:48.3057559Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:10:48.3057806Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:10:48.3058052Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:10:48.3058381Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3058913Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:10:48.3059387Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3059797Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3060205Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3060624Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:10:48.3060982Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:10:48.3061244Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:10:48.3061470Z   CARGO_TERM_COLOR: always
+2026-10-20T16:10:48.3061706Z ##[endgroup]
+2026-10-20T16:10:48.3453911Z ##[group]Run actions/upload-artifact@v7
+2026-10-20T16:10:48.3454224Z with:
+2026-10-20T16:10:48.3454536Z   name: native-ubuntu-24.04-d621f89dfcac841275d8f72dc7c4065314955242
+2026-10-20T16:10:48.3454908Z   path: native-boot
+2026-10-20T16:10:48.3455127Z   if-no-files-found: warn
+2026-10-20T16:10:48.3455360Z   compression-level: 6
+2026-10-20T16:10:48.3456106Z   overwrite: false
+2026-10-20T16:10:48.3456412Z   include-hidden-files: false
+2026-10-20T16:10:48.3456651Z   archive: true
+2026-10-20T16:10:48.3456843Z env:
+2026-10-20T16:10:48.3457022Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:10:48.3457252Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:10:48.3457505Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:10:48.3457765Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:10:48.3458005Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:10:48.3458247Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:10:48.3458482Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:10:48.3458827Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3459271Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+2026-10-20T16:10:48.3459697Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3460080Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3460460Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+2026-10-20T16:10:48.3460854Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+2026-10-20T16:10:48.3461191Z   CARGO_HOME: /home/runner/.cargo
+2026-10-20T16:10:48.3461445Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:10:48.3461666Z   CARGO_TERM_COLOR: always
+2026-10-20T16:10:48.3461888Z ##[endgroup]
+2026-10-20T16:10:48.5019195Z With the provided path, there will be 2 files uploaded
+2026-10-20T16:10:48.5020656Z Artifact name is valid!
+2026-10-20T16:10:48.5021776Z Root directory input is valid!
+2026-10-20T16:10:48.7240268Z Uploading artifact: native-ubuntu-24.04-d621f89dfcac841275d8f72dc7c4065314955242.zip
+2026-10-20T16:10:48.7284389Z Beginning upload of artifact content to blob storage
+2026-10-20T16:10:48.8364299Z Uploaded bytes 115537
+2026-10-20T16:10:48.8527774Z Finished uploading artifact content to blob storage!
+2026-10-20T16:10:48.8529239Z SHA256 digest of uploaded artifact is 73a7452d4f40025bff844bc4cc99df8f493171dbd37f95ae4b1e40bc39043ca6
+2026-10-20T16:10:48.8530518Z Finalizing artifact upload
+2026-10-20T16:10:49.1269921Z Artifact native-ubuntu-24.04-d621f89dfcac841275d8f72dc7c4065314955242 successfully finalized. Artifact ID 12279394840
+2026-10-20T16:10:49.1271984Z Artifact native-ubuntu-24.04-d621f89dfcac841275d8f72dc7c4065314955242 has been successfully uploaded! Final size is 115537 bytes. Artifact ID is 12279394840
+2026-10-20T16:10:49.1274251Z Artifact download URL: https://github.com/JonTDean/s-o-u-l/actions/runs/39453442892/artifacts/12279394840
+2026-10-20T16:10:49.8181741Z Post job cleanup.
+2026-10-20T16:10:49.9598137Z Cache hit occurred on the primary key Linux-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876, not saving cache.
+2026-10-20T16:10:49.9712095Z Post job cleanup.
+2026-10-20T16:10:50.1034842Z Post job cleanup.
+2026-10-20T16:10:50.1935757Z [command]/usr/bin/git version
+2026-10-20T16:10:50.1982739Z git version 2.55.0
+2026-10-20T16:10:50.2039012Z Temporarily overriding HOME='/home/runner/work/_temp/f504d775-c44b-491f-b2cf-4fd1a49ef090' before making global git config changes
+2026-10-20T16:10:50.2040671Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T16:10:50.2044733Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T16:10:50.2092803Z Removing SSH command configuration
+2026-10-20T16:10:50.2101702Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T16:10:50.2154847Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T16:10:50.2428163Z Removing HTTP extra header
+2026-10-20T16:10:50.2433965Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T16:10:50.2472492Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T16:10:50.2728650Z Removing includeIf entries pointing to credentials config files
+2026-10-20T16:10:50.2738405Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T16:10:50.2778513Z includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git.path
+2026-10-20T16:10:50.2779588Z includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path
+2026-10-20T16:10:50.2780621Z includeif.gitdir:/github/workspace/.git.path
+2026-10-20T16:10:50.2781425Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T16:10:50.2789113Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git.path
+2026-10-20T16:10:50.2817738Z /home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T16:10:50.2838898Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-36930f1f\-3f4a\-45b2\-9ca2\-fa9cb279dd8a\.config
+2026-10-20T16:10:50.2888928Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path
+2026-10-20T16:10:50.2919503Z /home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T16:10:50.2940106Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-36930f1f\-3f4a\-45b2\-9ca2\-fa9cb279dd8a\.config
+2026-10-20T16:10:50.3025353Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-20T16:10:50.3053570Z /github/runner_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T16:10:50.3061551Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-36930f1f\-3f4a\-45b2\-9ca2\-fa9cb279dd8a\.config
+2026-10-20T16:10:50.3097979Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T16:10:50.3124266Z /github/runner_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config
+2026-10-20T16:10:50.3132189Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-36930f1f\-3f4a\-45b2\-9ca2\-fa9cb279dd8a\.config
+2026-10-20T16:10:50.3169667Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T16:10:50.3397670Z Removing credentials config '/home/runner/work/_temp/git-credentials-36930f1f-3f4a-45b2-9ca2-fa9cb279dd8a.config'
+2026-10-20T16:10:50.3543364Z Cleaning up orphan processes

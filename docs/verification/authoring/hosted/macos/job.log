@@ -1,0 +1,2268 @@
+﻿2026-10-20T15:28:20.3419710Z Current runner version: '2.338.0'
+2026-10-20T15:28:20.3448280Z ##[group]Runner Image Provisioner
+2026-10-20T15:28:20.3449820Z Hosted Compute Agent
+2026-10-20T15:28:20.3451050Z Version: 20260828.587
+2026-10-20T15:28:20.3452100Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-10-20T15:28:20.3452620Z Build Date: 2026-08-28T16:44:25Z
+2026-10-20T15:28:20.3453090Z Worker ID: {10590e82-0847-4867-9719-13f7383039fc}
+2026-10-20T15:28:20.3453660Z Azure Region: westus
+2026-10-20T15:28:20.3454160Z ##[endgroup]
+2026-10-20T15:28:20.3455530Z ##[group]Operating System
+2026-10-20T15:28:20.3455970Z macOS
+2026-10-20T15:28:20.3456380Z 15.7.9
+2026-10-20T15:28:20.3456710Z 24G830
+2026-10-20T15:28:20.3457050Z ##[endgroup]
+2026-10-20T15:28:20.3457410Z ##[group]Runner Image
+2026-10-20T15:28:20.3458010Z Image: macos-15-arm64
+2026-10-20T15:28:20.3458630Z Version: 20260907.0337.1
+2026-10-20T15:28:20.3459640Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260907.0337/images/macos/macos-15-arm64-Readme.md
+2026-10-20T15:28:20.3461150Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260907.0337
+2026-10-20T15:28:20.3462980Z ##[endgroup]
+2026-10-20T15:28:20.3468350Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T15:28:20.3475880Z Contents: read
+2026-10-20T15:28:20.3476580Z Metadata: read
+2026-10-20T15:28:20.3477110Z ##[endgroup]
+2026-10-20T15:28:20.3496450Z Secret source: Actions
+2026-10-20T15:28:20.3498400Z Cache mode: write
+2026-10-20T15:28:20.3499680Z Prepare workflow directory
+2026-10-20T15:28:20.4039610Z Prepare all required actions
+2026-10-20T15:28:20.4087560Z Getting action download info
+2026-10-20T15:28:20.7184930Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-20T15:28:21.0407510Z Download action repository 'actions/setup-python@v7' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+2026-10-20T15:28:21.1274450Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-10-20T15:28:21.4012310Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+2026-10-20T15:28:21.5490420Z Download action repository 'actions/upload-artifact@v7' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-20T15:28:22.0826430Z Complete job name: native (macos-15)
+2026-10-20T15:28:22.1355100Z ##[group]Run actions/checkout@v7
+2026-10-20T15:28:22.1394530Z with:
+2026-10-20T15:28:22.1395090Z   repository: JonTDean/s-o-u-l
+2026-10-20T15:28:22.1398390Z   token: ***
+2026-10-20T15:28:22.1398750Z   ssh-strict: true
+2026-10-20T15:28:22.1399110Z   ssh-user: git
+2026-10-20T15:28:22.1399470Z   persist-credentials: true
+2026-10-20T15:28:22.1399870Z   clean: true
+2026-10-20T15:28:22.1400240Z   sparse-checkout-cone-mode: true
+2026-10-20T15:28:22.1400670Z   fetch-depth: 1
+2026-10-20T15:28:22.1401040Z   fetch-tags: false
+2026-10-20T15:28:22.1401400Z   show-progress: true
+2026-10-20T15:28:22.1401770Z   lfs: false
+2026-10-20T15:28:22.1402130Z   submodules: false
+2026-10-20T15:28:22.1402710Z   set-safe-directory: true
+2026-10-20T15:28:22.1403160Z   allow-unsafe-pr-checkout: false
+2026-10-20T15:28:22.1404320Z env:
+2026-10-20T15:28:22.1404660Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:22.1405040Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:22.1405490Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:22.1406020Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:22.1406460Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:22.1406870Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:22.1407310Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:22.1407720Z ##[endgroup]
+2026-10-20T15:28:22.4644980Z Syncing repository: JonTDean/s-o-u-l
+2026-10-20T15:28:22.4646560Z ##[group]Getting Git version info
+2026-10-20T15:28:22.4647130Z Working directory is '/Users/runner/work/s-o-u-l/s-o-u-l'
+2026-10-20T15:28:22.4648030Z [command]/opt/homebrew/bin/git version
+2026-10-20T15:28:22.5162390Z git version 2.55.0
+2026-10-20T15:28:22.5174440Z ##[endgroup]
+2026-10-20T15:28:22.5186800Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/af498573-8078-489e-ae59-be71a913af71/.gitconfig'
+2026-10-20T15:28:22.5194160Z Temporarily overriding HOME='/Users/runner/work/_temp/af498573-8078-489e-ae59-be71a913af71' before making global git config changes
+2026-10-20T15:28:22.5197900Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T15:28:22.5210200Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T15:28:22.5319730Z Deleting the contents of '/Users/runner/work/s-o-u-l/s-o-u-l'
+2026-10-20T15:28:22.5322630Z ##[group]Determining repository object format
+2026-10-20T15:28:22.5323680Z ##[endgroup]
+2026-10-20T15:28:22.5324410Z ##[group]Initializing the repository
+2026-10-20T15:28:22.5327360Z [command]/opt/homebrew/bin/git init /Users/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T15:28:22.5536260Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T15:28:22.5537580Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T15:28:22.5539430Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T15:28:22.5540190Z hint: call:
+2026-10-20T15:28:22.5540760Z hint:
+2026-10-20T15:28:22.5541380Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T15:28:22.5542180Z hint:
+2026-10-20T15:28:22.5543930Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T15:28:22.5545160Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T15:28:22.5545990Z hint:
+2026-10-20T15:28:22.5546630Z hint: 	git branch -m <name>
+2026-10-20T15:28:22.5547180Z hint:
+2026-10-20T15:28:22.5548000Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T15:28:22.5549150Z Initialized empty Git repository in /Users/runner/work/s-o-u-l/s-o-u-l/.git/
+2026-10-20T15:28:22.5551280Z [command]/opt/homebrew/bin/git remote add origin https://github.com/JonTDean/s-o-u-l
+2026-10-20T15:28:22.5610540Z ##[endgroup]
+2026-10-20T15:28:22.5611570Z ##[group]Disabling automatic garbage collection
+2026-10-20T15:28:22.5612440Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-20T15:28:22.5672390Z ##[endgroup]
+2026-10-20T15:28:22.5673950Z ##[group]Setting up auth
+2026-10-20T15:28:22.5723630Z Removing SSH command configuration
+2026-10-20T15:28:22.5739640Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T15:28:22.5742370Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T15:28:22.6839780Z Removing HTTP extra header
+2026-10-20T15:28:22.6852070Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T15:28:22.6950530Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T15:28:22.7813800Z Removing includeIf entries pointing to credentials config files
+2026-10-20T15:28:22.7817240Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T15:28:22.7886010Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T15:28:22.8559810Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T15:28:22.8625690Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git.path /Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T15:28:22.8682390Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T15:28:22.8747110Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T15:28:22.8803700Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T15:28:22.8856270Z ##[endgroup]
+2026-10-20T15:28:22.8857230Z ##[group]Fetching the repository
+2026-10-20T15:28:22.8859930Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c21b634e89779eacafd4c29546648429093be4eb:refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.1793450Z From https://github.com/JonTDean/s-o-u-l
+2026-10-20T15:28:24.1795860Z  * [new ref]         c21b634e89779eacafd4c29546648429093be4eb -> origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.1803380Z [command]/opt/homebrew/bin/git branch --list --remote origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.1896900Z   origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.1910360Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.1972170Z c21b634e89779eacafd4c29546648429093be4eb
+2026-10-20T15:28:24.1976960Z ##[endgroup]
+2026-10-20T15:28:24.1978020Z ##[group]Determining the checkout info
+2026-10-20T15:28:24.1979300Z ##[endgroup]
+2026-10-20T15:28:24.1986620Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-20T15:28:24.2434160Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T15:28:24.2628050Z ##[group]Checking out the ref
+2026-10-20T15:28:24.2634390Z [command]/opt/homebrew/bin/git checkout --progress --force -B feature/authoring-guides-qualification refs/remotes/origin/feature/authoring-guides-qualification
+2026-10-20T15:28:24.5066200Z Switched to a new branch 'feature/authoring-guides-qualification'
+2026-10-20T15:28:24.5082000Z branch 'feature/authoring-guides-qualification' set up to track 'origin/feature/authoring-guides-qualification'.
+2026-10-20T15:28:24.5088800Z ##[endgroup]
+2026-10-20T15:28:24.5198440Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-20T15:28:24.5293270Z c21b634e89779eacafd4c29546648429093be4eb
+2026-10-20T15:28:24.5714510Z ##[group]Run actions/setup-python@v7
+2026-10-20T15:28:24.5715500Z with:
+2026-10-20T15:28:24.5716090Z   python-version: 3.13
+2026-10-20T15:28:24.5716770Z   check-latest: false
+2026-10-20T15:28:24.5724850Z   token: ***
+2026-10-20T15:28:24.5725520Z   update-environment: true
+2026-10-20T15:28:24.5726310Z   allow-prereleases: false
+2026-10-20T15:28:24.5727080Z   freethreaded: false
+2026-10-20T15:28:24.5727810Z env:
+2026-10-20T15:28:24.5728380Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.5729080Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.5729970Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.5730790Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.5731630Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.5732440Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.5733160Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.5733910Z ##[endgroup]
+2026-10-20T15:28:24.7271480Z ##[group]Installed versions
+2026-10-20T15:28:24.7344310Z Successfully set up CPython (3.13.15)
+2026-10-20T15:28:24.7346210Z ##[endgroup]
+2026-10-20T15:28:24.7871420Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-10-20T15:28:24.7872220Z with:
+2026-10-20T15:28:24.7872790Z   toolchain: 1.94.1
+2026-10-20T15:28:24.7873430Z   components: rustfmt, clippy
+2026-10-20T15:28:24.7874130Z env:
+2026-10-20T15:28:24.7874790Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.7875490Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.7876300Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.7877120Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.7878590Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.7879400Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.7895000Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.7896060Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.7897390Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:24.7898660Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.7899960Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.7901120Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.7902090Z ##[endgroup]
+2026-10-20T15:28:24.7987790Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+2026-10-20T15:28:24.8056320Z ##[group]Run if [[ -z $toolchain ]]; then
+2026-10-20T15:28:24.8057250Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-10-20T15:28:24.8058610Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-10-20T15:28:24.8060300Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-10-20T15:28:24.8061260Z [36;1m  exit 1[0m
+2026-10-20T15:28:24.8062420Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-10-20T15:28:24.8064170Z [36;1m  if [[ macOS == macOS ]]; then[0m
+2026-10-20T15:28:24.8065780Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:24.8067420Z [36;1m  else[0m
+2026-10-20T15:28:24.8068770Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:24.8070640Z [36;1m  fi[0m
+2026-10-20T15:28:24.8071480Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-10-20T15:28:24.8072830Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:24.8074080Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-10-20T15:28:24.8075450Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:24.8076760Z [36;1melse[0m
+2026-10-20T15:28:24.8077340Z [36;1m  delimiter=EOF[0m
+2026-10-20T15:28:24.8078190Z [36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done[0m
+2026-10-20T15:28:24.8079520Z [36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:24.8080640Z [36;1mfi[0m
+2026-10-20T15:28:24.8198610Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:24.8200990Z env:
+2026-10-20T15:28:24.8202510Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.8204390Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.8206190Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.8208260Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.8210040Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.8211730Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.8213410Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.8215760Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8218720Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:24.8220070Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8221960Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8223140Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8224750Z   toolchain: 1.94.1
+2026-10-20T15:28:24.8225390Z ##[endgroup]
+2026-10-20T15:28:24.8727440Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=73]
+2026-10-20T15:28:24.8737140Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+2026-10-20T15:28:24.8778930Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+2026-10-20T15:28:24.8780120Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+2026-10-20T15:28:24.8818960Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:24.8819840Z env:
+2026-10-20T15:28:24.8820410Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.8821140Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.8822030Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.8822840Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.8823540Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.8824230Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.8824900Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.8825750Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8827080Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:24.8828360Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8829550Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8830700Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.8831680Z ##[endgroup]
+2026-10-20T15:28:24.9152860Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=41]
+2026-10-20T15:28:24.9157860Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+2026-10-20T15:28:24.9222530Z ##[group]Run if ! command -v rustup &>/dev/null; then
+2026-10-20T15:28:24.9223450Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-10-20T15:28:24.9225340Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+2026-10-20T15:28:24.9227050Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+2026-10-20T15:28:24.9227770Z [36;1mfi[0m
+2026-10-20T15:28:24.9267960Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:24.9268810Z env:
+2026-10-20T15:28:24.9269350Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.9269950Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.9270610Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.9271290Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.9271930Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.9272560Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.9273180Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.9274020Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9275190Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:24.9276340Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9277470Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9278560Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9279480Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:24.9280160Z ##[endgroup]
+2026-10-20T15:28:24.9642050Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=48]
+2026-10-20T15:28:24.9647640Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+2026-10-20T15:28:24.9660120Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-20T15:28:24.9675090Z ##[start-action display=rustup toolchain install 1.94.1;id=__dtolnay_rust-toolchain.__run_4]
+2026-10-20T15:28:24.9715320Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+2026-10-20T15:28:24.9717100Z [36;1mset -f  # split targets and components on commas and whitespace, without glob expansion[0m
+2026-10-20T15:28:24.9718350Z [36;1mflags=()[0m
+2026-10-20T15:28:24.9719110Z [36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done[0m
+2026-10-20T15:28:24.9720610Z [36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done[0m
+2026-10-20T15:28:24.9722000Z [36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi[0m
+2026-10-20T15:28:24.9723050Z [36;1mlog=$(mktemp)[0m
+2026-10-20T15:28:24.9724000Z [36;1mtrap 'rm -f "$log"' EXIT[0m
+2026-10-20T15:28:24.9724870Z [36;1mfor attempt in 1 2 3 4 5; do[0m
+2026-10-20T15:28:24.9726490Z [36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then[0m
+2026-10-20T15:28:24.9728070Z [36;1m    break[0m
+2026-10-20T15:28:24.9728680Z [36;1m  else[0m
+2026-10-20T15:28:24.9729310Z [36;1m    status=$?[0m
+2026-10-20T15:28:24.9730140Z [36;1m  fi[0m
+2026-10-20T15:28:24.9730940Z [36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \[0m
+2026-10-20T15:28:24.9732710Z [36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then[0m
+2026-10-20T15:28:24.9734180Z [36;1m    exit "$status"[0m
+2026-10-20T15:28:24.9734960Z [36;1m  fi[0m
+2026-10-20T15:28:24.9736230Z [36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2[0m
+2026-10-20T15:28:24.9737670Z [36;1m  sleep 30[0m
+2026-10-20T15:28:24.9738390Z [36;1mdone[0m
+2026-10-20T15:28:24.9781060Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:24.9781890Z env:
+2026-10-20T15:28:24.9782500Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:24.9783130Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:24.9783830Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:24.9784520Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:24.9785200Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:24.9785870Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:24.9786500Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:24.9787400Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9788610Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:24.9789810Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9790900Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9792010Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:24.9792950Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:24.9793620Z   toolchain: 1.94.1
+2026-10-20T15:28:24.9794190Z   targets: 
+2026-10-20T15:28:24.9794790Z   components: rustfmt, clippy
+2026-10-20T15:28:24.9795480Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-10-20T15:28:24.9796120Z ##[endgroup]
+2026-10-20T15:28:25.0761390Z info: syncing channel updates for 1.94.1-aarch64-apple-darwin
+2026-10-20T15:28:25.2911720Z info: latest update on 2026-03-26 for version 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:28:25.2915470Z info: downloading 5 components
+2026-10-20T15:28:32.6561080Z 
+2026-10-20T15:28:32.6981510Z   1.94.1-aarch64-apple-darwin installed - rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:28:32.6986390Z 
+2026-10-20T15:28:32.6989100Z info: self-update is disabled for this build of rustup
+2026-10-20T15:28:32.6989790Z info: any updates to rustup will need to be fetched with your system package manager
+2026-10-20T15:28:32.7561810Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=7788]
+2026-10-20T15:28:32.7574310Z ##[start-action display=rustup default 1.94.1;id=__dtolnay_rust-toolchain.__run_5]
+2026-10-20T15:28:32.7623550Z ##[group]Run rustup default "$toolchain" --force-non-host
+2026-10-20T15:28:32.7624160Z [36;1mrustup default "$toolchain" --force-non-host[0m
+2026-10-20T15:28:32.7681300Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:32.7681640Z env:
+2026-10-20T15:28:32.7681930Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:32.7682190Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:32.7682480Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:32.7688100Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:32.7688720Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:32.7689320Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:32.7689840Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:32.7690650Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.7691800Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:32.7693080Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.7694190Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.7695200Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.7695600Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:32.7695830Z   toolchain: 1.94.1
+2026-10-20T15:28:32.7696170Z ##[endgroup]
+2026-10-20T15:28:32.8312550Z info: using existing install for 1.94.1-aarch64-apple-darwin
+2026-10-20T15:28:32.8339690Z info: default toolchain set to 1.94.1-aarch64-apple-darwin
+2026-10-20T15:28:32.8340510Z 
+2026-10-20T15:28:32.8451580Z   1.94.1-aarch64-apple-darwin unchanged - rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:28:32.8457780Z 
+2026-10-20T15:28:32.8463410Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=88]
+2026-10-20T15:28:32.8467250Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+2026-10-20T15:28:32.8490670Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-20T15:28:32.8491490Z [36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-10-20T15:28:32.8492110Z [36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-10-20T15:28:32.8492590Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-10-20T15:28:32.8527410Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:32.8527740Z env:
+2026-10-20T15:28:32.8527940Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:32.8528180Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:32.8528470Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:32.8528690Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:32.8529020Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:32.8529280Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:32.8529500Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:32.8529800Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.8530320Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:32.8530840Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.8531360Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.8531870Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.8532210Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:32.8532510Z   toolchain: 1.94.1
+2026-10-20T15:28:32.8532690Z ##[endgroup]
+2026-10-20T15:28:32.9541040Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=107]
+2026-10-20T15:28:32.9546770Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+2026-10-20T15:28:32.9594050Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+2026-10-20T15:28:32.9595440Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-10-20T15:28:32.9596160Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-10-20T15:28:32.9596860Z [36;1mfi[0m
+2026-10-20T15:28:32.9673630Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:32.9673930Z env:
+2026-10-20T15:28:32.9674100Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:32.9674300Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:32.9674500Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:32.9674730Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:32.9675230Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:32.9675460Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:32.9675670Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:32.9675950Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.9676390Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:32.9676820Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.9677280Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.9677740Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:32.9678110Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:32.9678320Z ##[endgroup]
+2026-10-20T15:28:33.0285570Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=73]
+2026-10-20T15:28:33.0287930Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+2026-10-20T15:28:33.0444160Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+2026-10-20T15:28:33.0444490Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-10-20T15:28:33.0444800Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-10-20T15:28:33.0445020Z [36;1mfi[0m
+2026-10-20T15:28:33.0496360Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:33.0496620Z env:
+2026-10-20T15:28:33.0496780Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.0496950Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.0497200Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.0497410Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.0497610Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.0498230Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.0498430Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.0498720Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.0499190Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.0499650Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.0500050Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.0500430Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.0500730Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.0500940Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.0501520Z ##[endgroup]
+2026-10-20T15:28:33.0987870Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=69]
+2026-10-20T15:28:33.0991380Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+2026-10-20T15:28:33.1010810Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+2026-10-20T15:28:33.1011300Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-10-20T15:28:33.1011890Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/Users/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-10-20T15:28:33.1012590Z [36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-10-20T15:28:33.1013150Z [36;1m    touch "/Users/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-20T15:28:33.1013670Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-10-20T15:28:33.1014410Z [36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-10-20T15:28:33.1014930Z [36;1m    touch "/Users/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-20T15:28:33.1015410Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-10-20T15:28:33.1015700Z [36;1m  fi[0m
+2026-10-20T15:28:33.1015870Z [36;1mfi[0m
+2026-10-20T15:28:33.1104050Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:33.1105490Z env:
+2026-10-20T15:28:33.1105670Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.1105900Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.1106180Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.1106390Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.1106610Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.1107210Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.1107420Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.1107710Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.1108180Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.1108780Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.1109240Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.1109620Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.1110040Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.1110260Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.1110450Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:33.1110630Z   toolchain: 1.94.1
+2026-10-20T15:28:33.1110810Z ##[endgroup]
+2026-10-20T15:28:33.2106260Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=111]
+2026-10-20T15:28:33.2109850Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+2026-10-20T15:28:33.2131910Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+2026-10-20T15:28:33.2132660Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-10-20T15:28:33.2133180Z [36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-10-20T15:28:33.2133600Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-10-20T15:28:33.2133910Z [36;1mfi[0m
+2026-10-20T15:28:33.2167670Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:33.2168060Z env:
+2026-10-20T15:28:33.2168230Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.2168420Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.2168830Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.2169140Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.2169350Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.2169580Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.2170820Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.2171220Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2171670Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.2172090Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2172480Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2172960Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2173260Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.2173470Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.2173650Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:33.2174290Z   toolchain: 1.94.1
+2026-10-20T15:28:33.2174460Z ##[endgroup]
+2026-10-20T15:28:33.2726390Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=61]
+2026-10-20T15:28:33.2729680Z ##[start-action display=rustc +1.94.1 --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-10-20T15:28:33.2759430Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-10-20T15:28:33.2759760Z [36;1mrustc +"$toolchain" --version --verbose[0m
+2026-10-20T15:28:33.2794540Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-20T15:28:33.2794800Z env:
+2026-10-20T15:28:33.2794960Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.2795120Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.2795340Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.2795550Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.2796030Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.2796220Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.2796460Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.2796750Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2797180Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.2797600Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2797980Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2798390Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.2798700Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.2798930Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.2799120Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:33.2799300Z   toolchain: 1.94.1
+2026-10-20T15:28:33.2799500Z ##[endgroup]
+2026-10-20T15:28:33.3304030Z rustc 1.94.1 (e408947bf 2026-03-25)
+2026-10-20T15:28:33.3304800Z binary: rustc
+2026-10-20T15:28:33.3305440Z commit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1
+2026-10-20T15:28:33.3306190Z commit-date: 2026-03-25
+2026-10-20T15:28:33.3306680Z host: aarch64-apple-darwin
+2026-10-20T15:28:33.3307180Z release: 1.94.1
+2026-10-20T15:28:33.3307790Z LLVM version: 21.1.8
+2026-10-20T15:28:33.3322190Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=59]
+2026-10-20T15:28:33.5354120Z ##[group]Run actions/cache@v5
+2026-10-20T15:28:33.5354440Z with:
+2026-10-20T15:28:33.5354630Z   path: ~/.cargo/registry
+~/.cargo/git
+target
+
+2026-10-20T15:28:33.5355110Z   key: macOS-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T15:28:33.5355570Z   enableCrossOsArchive: false
+2026-10-20T15:28:33.5355780Z   fail-on-cache-miss: false
+2026-10-20T15:28:33.5355990Z   lookup-only: false
+2026-10-20T15:28:33.5356160Z   save-always: false
+2026-10-20T15:28:33.5356330Z env:
+2026-10-20T15:28:33.5356480Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.5356770Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.5356990Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.5357230Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.5357450Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.5357650Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.5357880Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.5358240Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.5358690Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.5359110Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.5359510Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.5359910Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.5360360Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.5360590Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.5360790Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:33.5360980Z ##[endgroup]
+2026-10-20T15:28:33.9134160Z Cache not found for input keys: macOS-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T15:28:33.9180410Z ##[group]Run python -m pip install -r tools/structure/requirements.txt
+2026-10-20T15:28:33.9180860Z [36;1mpython -m pip install -r tools/structure/requirements.txt[0m
+2026-10-20T15:28:33.9181280Z [36;1mpython -m unittest discover -s tools/structure/tests -t tools/structure[0m
+2026-10-20T15:28:33.9181720Z [36;1mpython tools/structure/audit.py[0m
+2026-10-20T15:28:33.9181960Z [36;1mcargo fmt --all -- --check[0m
+2026-10-20T15:28:33.9224070Z shell: /bin/bash -e {0}
+2026-10-20T15:28:33.9224810Z env:
+2026-10-20T15:28:33.9225320Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:33.9225840Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:33.9226540Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:33.9227150Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:33.9227720Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:33.9229170Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:33.9229680Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:33.9230440Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.9231610Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:33.9232690Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.9233660Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.9234630Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:33.9236110Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:33.9236720Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:33.9237200Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:33.9237700Z ##[endgroup]
+2026-10-20T15:28:35.6396040Z Collecting Pygments==2.18.0 (from -r tools/structure/requirements.txt (line 1))
+2026-10-20T15:28:35.7181470Z   Downloading pygments-2.18.0-py3-none-any.whl.metadata (2.5 kB)
+2026-10-20T15:28:35.8093920Z Downloading pygments-2.18.0-py3-none-any.whl (1.2 MB)
+2026-10-20T15:28:35.8666500Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 33.2 MB/s  0:00:00
+2026-10-20T15:28:35.8997630Z Installing collected packages: Pygments
+2026-10-20T15:28:36.5562730Z Successfully installed Pygments-2.18.0
+2026-10-20T15:28:36.9176280Z ....................
+2026-10-20T15:28:36.9288310Z ----------------------------------------------------------------------
+2026-10-20T15:28:36.9330810Z Ran 20 tests in 0.108s
+2026-10-20T15:28:36.9336890Z 
+2026-10-20T15:28:36.9385110Z OK
+2026-10-20T15:28:38.4714160Z Structural governance: 0 violation(s).
+2026-10-20T15:28:38.9274680Z ##[group]Run cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+2026-10-20T15:28:38.9276140Z [36;1mcargo clippy --locked --workspace --all-targets --all-features -- -D warnings[0m
+2026-10-20T15:28:38.9345220Z shell: /bin/bash -e {0}
+2026-10-20T15:28:38.9346150Z env:
+2026-10-20T15:28:38.9346790Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:28:38.9346990Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:28:38.9347360Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:28:38.9347570Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:28:38.9347840Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:28:38.9348080Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:28:38.9348290Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:28:38.9348570Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:38.9349210Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:28:38.9349770Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:38.9350210Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:38.9350920Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:28:38.9351360Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:28:38.9351580Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:28:38.9351890Z   CARGO_TERM_COLOR: always
+2026-10-20T15:28:38.9352080Z ##[endgroup]
+2026-10-20T15:28:39.1415150Z [1m[92m    Updating[0m crates.io index
+2026-10-20T15:28:41.0105360Z [1m[92m Downloading[0m crates ...
+2026-10-20T15:28:41.1284750Z [1m[92m  Downloaded[0m approx v0.5.1
+2026-10-20T15:28:41.1384890Z [1m[92m  Downloaded[0m adler2 v2.0.1
+2026-10-20T15:28:41.1486530Z [1m[92m  Downloaded[0m ab_glyph_rasterizer v0.1.9
+2026-10-20T15:28:41.1588720Z [1m[92m  Downloaded[0m hexf-parse v0.2.1
+2026-10-20T15:28:41.1688500Z [1m[92m  Downloaded[0m ab_glyph v0.2.31
+2026-10-20T15:28:41.1747000Z [1m[92m  Downloaded[0m bevy_input v0.16.1
+2026-10-20T15:28:41.1747670Z [1m[92m  Downloaded[0m icu_properties v2.0.1
+2026-10-20T15:28:41.1748470Z [1m[92m  Downloaded[0m bevy_macro_utils v0.16.1
+2026-10-20T15:28:41.1752810Z [1m[92m  Downloaded[0m minimal-lexical v0.2.1
+2026-10-20T15:28:41.1848340Z [1m[92m  Downloaded[0m rand_chacha v0.3.1
+2026-10-20T15:28:41.1994200Z [1m[92m  Downloaded[0m rand_core v0.6.4
+2026-10-20T15:28:41.2199160Z [1m[92m  Downloaded[0m constgebra v0.1.4
+2026-10-20T15:28:41.2507260Z [1m[92m  Downloaded[0m dispatch2 v0.3.0
+2026-10-20T15:28:41.2834850Z [1m[92m  Downloaded[0m displaydoc v0.2.5
+2026-10-20T15:28:41.3147310Z [1m[92m  Downloaded[0m rectangle-pack v0.4.2
+2026-10-20T15:28:41.3434850Z [1m[92m  Downloaded[0m clap_lex v1.1.1
+2026-10-20T15:28:41.3594630Z [1m[92m  Downloaded[0m core-graphics v0.23.2
+2026-10-20T15:28:41.3785750Z [1m[92m  Downloaded[0m criterion-plot v0.5.0
+2026-10-20T15:28:41.3935040Z [1m[92m  Downloaded[0m crossbeam-epoch v0.9.18
+2026-10-20T15:28:41.4087940Z [1m[92m  Downloaded[0m crossbeam-queue v0.3.12
+2026-10-20T15:28:41.4215870Z [1m[92m  Downloaded[0m font-types v0.9.0
+2026-10-20T15:28:41.4391260Z [1m[92m  Downloaded[0m thiserror v2.0.12
+2026-10-20T15:28:41.4619480Z [1m[92m  Downloaded[0m tracing v0.1.41
+2026-10-20T15:28:41.4770550Z [1m[92m  Downloaded[0m toml_writer v1.0.2
+2026-10-20T15:28:41.4838030Z [1m[92m  Downloaded[0m toml_datetime v0.7.0
+2026-10-20T15:28:41.4883720Z [1m[92m  Downloaded[0m toml_edit v0.22.27
+2026-10-20T15:28:41.5033290Z [1m[92m  Downloaded[0m toml_datetime v0.6.11
+2026-10-20T15:28:41.5117190Z [1m[92m  Downloaded[0m toml v0.9.3
+2026-10-20T15:28:41.5294120Z [1m[92m  Downloaded[0m ruzstd v0.8.1
+2026-10-20T15:28:41.5577140Z [1m[92m  Downloaded[0m stable_deref_trait v1.2.0
+2026-10-20T15:28:41.5604240Z [1m[92m  Downloaded[0m stackfuture v0.3.0
+2026-10-20T15:28:41.5673340Z [1m[92m  Downloaded[0m slotmap v1.0.7
+2026-10-20T15:28:41.5718180Z [1m[92m  Downloaded[0m slab v0.4.10
+2026-10-20T15:28:41.5767440Z [1m[92m  Downloaded[0m smol_str v0.2.2
+2026-10-20T15:28:41.5869190Z [1m[92m  Downloaded[0m skrifa v0.31.3
+2026-10-20T15:28:41.6130540Z [1m[92m  Downloaded[0m serde_json v1.0.141
+2026-10-20T15:28:41.6326530Z [1m[92m  Downloaded[0m serde_spanned v1.0.0
+2026-10-20T15:28:41.6361250Z [1m[92m  Downloaded[0m spirv v0.3.0+sdk-1.3.268.0
+2026-10-20T15:28:41.6396980Z [1m[92m  Downloaded[0m spin v0.9.8
+2026-10-20T15:28:41.6479630Z [1m[92m  Downloaded[0m smallvec v1.15.1
+2026-10-20T15:28:41.6558800Z [1m[92m  Downloaded[0m simd-adler32 v0.3.7
+2026-10-20T15:28:41.6652780Z [1m[92m  Downloaded[0m shlex v1.3.0
+2026-10-20T15:28:41.6695760Z [1m[92m  Downloaded[0m sharded-slab v0.1.7
+2026-10-20T15:28:41.6776800Z [1m[92m  Downloaded[0m shaderc v0.9.1
+2026-10-20T15:28:41.6792560Z [1m[92m  Downloaded[0m glam v0.29.3
+2026-10-20T15:28:41.7340390Z [1m[92m  Downloaded[0m regex-syntax v0.8.5
+2026-10-20T15:28:41.7442630Z [1m[92m  Downloaded[0m rustversion v1.0.21
+2026-10-20T15:28:41.7505150Z [1m[92m  Downloaded[0m rustc-hash v2.1.1
+2026-10-20T15:28:41.7536860Z [1m[92m  Downloaded[0m rustc-hash v1.1.0
+2026-10-20T15:28:41.7552900Z [1m[92m  Downloaded[0m roxmltree v0.20.0
+2026-10-20T15:28:41.7839670Z [1m[92m  Downloaded[0m ron v0.8.1
+2026-10-20T15:28:41.7984060Z [1m[92m  Downloaded[0m rodio v0.20.1
+2026-10-20T15:28:41.8115870Z [1m[92m  Downloaded[0m renderdoc-sys v1.1.0
+2026-10-20T15:28:41.8136270Z [1m[92m  Downloaded[0m gilrs-core v0.6.4
+2026-10-20T15:28:41.8203640Z [1m[92m  Downloaded[0m getrandom v0.3.3
+2026-10-20T15:28:41.8290750Z [1m[92m  Downloaded[0m fontdb v0.16.2
+2026-10-20T15:28:41.8337640Z [1m[92m  Downloaded[0m tinystr v0.8.1
+2026-10-20T15:28:41.8386810Z [1m[92m  Downloaded[0m sysinfo v0.34.2
+2026-10-20T15:28:41.8638120Z [1m[92m  Downloaded[0m rustybuzz v0.14.1
+2026-10-20T15:28:41.8841340Z [1m[92m  Downloaded[0m regex-syntax v0.6.29
+2026-10-20T15:28:41.9295960Z [1m[92m  Downloaded[0m gilrs v0.11.0
+2026-10-20T15:28:41.9394540Z [1m[92m  Downloaded[0m futures-lite v2.6.0
+2026-10-20T15:28:41.9451450Z [1m[92m  Downloaded[0m futures-io v0.3.31
+2026-10-20T15:28:41.9486490Z [1m[92m  Downloaded[0m foreign-types-shared v0.3.1
+2026-10-20T15:28:41.9516330Z [1m[92m  Downloaded[0m tinytemplate v1.2.1
+2026-10-20T15:28:41.9559470Z [1m[92m  Downloaded[0m thiserror-impl v2.0.12
+2026-10-20T15:28:41.9587850Z [1m[92m  Downloaded[0m thiserror-impl v1.0.69
+2026-10-20T15:28:41.9614000Z [1m[92m  Downloaded[0m taffy v0.7.7
+2026-10-20T15:28:41.9733270Z [1m[92m  Downloaded[0m gif v0.13.3
+2026-10-20T15:28:41.9769720Z [1m[92m  Downloaded[0m getrandom v0.2.16
+2026-10-20T15:28:41.9864000Z [1m[92m  Downloaded[0m futures-core v0.3.31
+2026-10-20T15:28:41.9912550Z [1m[92m  Downloaded[0m form_urlencoded v1.2.1
+2026-10-20T15:28:41.9939760Z [1m[92m  Downloaded[0m foreign-types-macros v0.2.3
+2026-10-20T15:28:41.9966300Z [1m[92m  Downloaded[0m foreign-types v0.5.0
+2026-10-20T15:28:41.9986570Z [1m[92m  Downloaded[0m epaint_default_fonts v0.32.0
+2026-10-20T15:28:42.0101400Z [1m[92m  Downloaded[0m epaint_default_fonts v0.31.1
+2026-10-20T15:28:42.0223400Z [1m[92m  Downloaded[0m tinyvec v1.9.0
+2026-10-20T15:28:42.0329870Z [1m[92m  Downloaded[0m thread_local v1.1.9
+2026-10-20T15:28:42.0364210Z [1m[92m  Downloaded[0m toml_parser v1.0.1
+2026-10-20T15:28:42.0466870Z [1m[92m  Downloaded[0m tinyvec_macros v0.1.1
+2026-10-20T15:28:42.0541720Z [1m[92m  Downloaded[0m termcolor v1.4.1
+2026-10-20T15:28:42.0551580Z [1m[92m  Downloaded[0m syn v2.0.104
+2026-10-20T15:28:42.0685790Z [1m[92m  Downloaded[0m swash v0.2.5
+2026-10-20T15:28:42.0811940Z [1m[92m  Downloaded[0m svg_fmt v0.4.5
+2026-10-20T15:28:42.0827690Z [1m[92m  Downloaded[0m egui v0.31.1
+2026-10-20T15:28:42.1016190Z [1m[92m  Downloaded[0m ecolor v0.32.0
+2026-10-20T15:28:42.1040650Z [1m[92m  Downloaded[0m ecolor v0.31.1
+2026-10-20T15:28:42.1076960Z [1m[92m  Downloaded[0m dpi v0.1.2
+2026-10-20T15:28:42.1111980Z [1m[92m  Downloaded[0m downcast-rs v2.0.1
+2026-10-20T15:28:42.1143510Z [1m[92m  Downloaded[0m document-features v0.2.11
+2026-10-20T15:28:42.1175090Z [1m[92m  Downloaded[0m tracing-core v0.1.34
+2026-10-20T15:28:42.1229930Z [1m[92m  Downloaded[0m disqualified v1.0.0
+2026-10-20T15:28:42.1258610Z [1m[92m  Downloaded[0m dispatch v0.2.0
+2026-10-20T15:28:42.1284850Z [1m[92m  Downloaded[0m tracing-attributes v0.1.30
+2026-10-20T15:28:42.1335850Z [1m[92m  Downloaded[0m dirs-sys-next v0.1.2
+2026-10-20T15:28:42.1382130Z [1m[92m  Downloaded[0m dirs-next v2.0.0
+2026-10-20T15:28:42.1403190Z [1m[92m  Downloaded[0m derive_more-impl v1.0.0
+2026-10-20T15:28:42.1528030Z [1m[92m  Downloaded[0m data-encoding v2.9.0
+2026-10-20T15:28:42.1544100Z [1m[92m  Downloaded[0m dasp_sample v0.11.0
+2026-10-20T15:28:42.1563220Z [1m[92m  Downloaded[0m cursor-icon v1.2.0
+2026-10-20T15:28:42.1591390Z [1m[92m  Downloaded[0m ctrlc v3.4.7
+2026-10-20T15:28:42.1627150Z [1m[92m  Downloaded[0m crossbeam-utils v0.8.21
+2026-10-20T15:28:42.1685020Z [1m[92m  Downloaded[0m metal v0.31.0
+2026-10-20T15:28:42.2065330Z [1m[92m  Downloaded[0m thiserror v1.0.69
+2026-10-20T15:28:42.2178240Z [1m[92m  Downloaded[0m sys-locale v0.3.2
+2026-10-20T15:28:42.2203750Z [1m[92m  Downloaded[0m synstructure v0.13.2
+2026-10-20T15:28:42.2222910Z [1m[92m  Downloaded[0m strum_macros v0.26.4
+2026-10-20T15:28:42.2265460Z [1m[92m  Downloaded[0m strum v0.26.3
+2026-10-20T15:28:42.2280640Z [1m[92m  Downloaded[0m tiff v0.9.1
+2026-10-20T15:28:42.2486330Z [1m[92m  Downloaded[0m static_assertions v1.1.0
+2026-10-20T15:28:42.2515840Z [1m[92m  Downloaded[0m serde_derive v1.0.219
+2026-10-20T15:28:42.2574970Z [1m[92m  Downloaded[0m serde v1.0.219
+2026-10-20T15:28:42.2646880Z [1m[92m  Downloaded[0m self_cell v1.2.0
+2026-10-20T15:28:42.2689500Z [1m[92m  Downloaded[0m scopeguard v1.2.0
+2026-10-20T15:28:42.2717890Z [1m[92m  Downloaded[0m same-file v1.0.6
+2026-10-20T15:28:42.2758500Z [1m[92m  Downloaded[0m ryu v1.0.20
+2026-10-20T15:28:42.2860060Z [1m[92m  Downloaded[0m foldhash v0.1.5
+2026-10-20T15:28:42.2896740Z [1m[92m  Downloaded[0m fnv v1.0.7
+2026-10-20T15:28:42.2913330Z [1m[92m  Downloaded[0m flate2 v1.1.2
+2026-10-20T15:28:42.3022060Z [1m[92m  Downloaded[0m fixedbitset v0.5.7
+2026-10-20T15:28:42.3078160Z [1m[92m  Downloaded[0m fdeflate v0.3.7
+2026-10-20T15:28:42.3130310Z [1m[92m  Downloaded[0m fastrand v2.3.0
+2026-10-20T15:28:42.3163920Z [1m[92m  Downloaded[0m event-listener-strategy v0.5.4
+2026-10-20T15:28:42.3179150Z [1m[92m  Downloaded[0m event-listener v5.4.0
+2026-10-20T15:28:42.3216810Z [1m[92m  Downloaded[0m euclid v0.22.11
+2026-10-20T15:28:42.3299400Z [1m[92m  Downloaded[0m erased-serde v0.4.6
+2026-10-20T15:28:42.3338900Z [1m[92m  Downloaded[0m equivalent v1.0.2
+2026-10-20T15:28:42.3353330Z [1m[92m  Downloaded[0m criterion v0.5.1
+2026-10-20T15:28:42.3506540Z [1m[92m  Downloaded[0m cosmic-text v0.13.2
+2026-10-20T15:28:42.3863990Z [1m[92m  Downloaded[0m petgraph v0.7.1
+2026-10-20T15:28:42.4226310Z [1m[92m  Downloaded[0m naga v25.0.1
+2026-10-20T15:28:42.4713460Z [1m[92m  Downloaded[0m libc v0.2.174
+2026-10-20T15:28:42.5229800Z [1m[92m  Downloaded[0m jpeg-decoder v0.3.2
+2026-10-20T15:28:42.5375530Z [1m[92m  Downloaded[0m critical-section v1.2.0
+2026-10-20T15:28:42.5434860Z [1m[92m  Downloaded[0m crc32fast v1.5.0
+2026-10-20T15:28:42.5491420Z [1m[92m  Downloaded[0m regex-automata v0.4.9
+2026-10-20T15:28:42.5845680Z [1m[92m  Downloaded[0m objc2-app-kit v0.3.1
+2026-10-20T15:28:42.7521260Z [1m[92m  Downloaded[0m naga v24.0.0
+2026-10-20T15:28:42.7848160Z [1m[92m  Downloaded[0m unicode-ccc v0.2.0
+2026-10-20T15:28:42.7862710Z [1m[92m  Downloaded[0m ttf-parser v0.21.1
+2026-10-20T15:28:42.8050080Z [1m[92m  Downloaded[0m tracing-log v0.2.0
+2026-10-20T15:28:42.8073790Z [1m[92m  Downloaded[0m read-fonts v0.29.3
+2026-10-20T15:28:42.8374180Z [1m[92m  Downloaded[0m nix v0.30.1
+2026-10-20T15:28:42.8635160Z [1m[92m  Downloaded[0m cpal v0.15.3
+2026-10-20T15:28:42.8730110Z [1m[92m  Downloaded[0m coreaudio-sys v0.2.17
+2026-10-20T15:28:42.8758360Z [1m[92m  Downloaded[0m coreaudio-rs v0.11.3
+2026-10-20T15:28:42.8810580Z [1m[92m  Downloaded[0m core-graphics-types v0.1.3
+2026-10-20T15:28:42.8829430Z [1m[92m  Downloaded[0m unicode-properties v0.1.3
+2026-10-20T15:28:42.8864720Z [1m[92m  Downloaded[0m unicode-linebreak v0.1.5
+2026-10-20T15:28:42.8878490Z [1m[92m  Downloaded[0m unicode-ident v1.0.18
+2026-10-20T15:28:42.8948110Z [1m[92m  Downloaded[0m unicode-bidi-mirroring v0.2.0
+2026-10-20T15:28:42.8963030Z [1m[92m  Downloaded[0m unicode-bidi v0.3.18
+2026-10-20T15:28:42.9008840Z [1m[92m  Downloaded[0m typeid v1.0.3
+2026-10-20T15:28:42.9034290Z [1m[92m  Downloaded[0m twox-hash v2.1.1
+2026-10-20T15:28:42.9076530Z [1m[92m  Downloaded[0m ttf-parser v0.25.1
+2026-10-20T15:28:42.9310490Z [1m[92m  Downloaded[0m ttf-parser v0.20.0
+2026-10-20T15:28:42.9494280Z [1m[92m  Downloaded[0m tracing-subscriber v0.3.19
+2026-10-20T15:28:42.9667090Z [1m[92m  Downloaded[0m zerovec-derive v0.11.1
+2026-10-20T15:28:42.9699230Z [1m[92m  Downloaded[0m yoke-derive v0.8.0
+2026-10-20T15:28:42.9725380Z [1m[92m  Downloaded[0m writeable v0.6.1
+2026-10-20T15:28:42.9760670Z [1m[92m  Downloaded[0m winnow v0.7.12
+2026-10-20T15:28:42.9937110Z [1m[92m  Downloaded[0m wgpu-hal v24.0.4
+2026-10-20T15:28:43.0109190Z [1m[92m  Downloaded[0m version_check v0.9.5
+2026-10-20T15:28:43.0135980Z [1m[92m  Downloaded[0m regex v1.11.1
+2026-10-20T15:28:43.0875270Z [1m[92m  Downloaded[0m objc2-foundation v0.3.1
+2026-10-20T15:28:43.1336980Z [1m[92m  Downloaded[0m objc2-foundation v0.2.2
+2026-10-20T15:28:43.1769620Z [1m[92m  Downloaded[0m objc2-app-kit v0.2.2
+2026-10-20T15:28:43.2345390Z [1m[92m  Downloaded[0m objc2 v0.6.1
+2026-10-20T15:28:43.2652520Z [1m[92m  Downloaded[0m image v0.25.6
+2026-10-20T15:28:43.2859960Z [1m[92m  Downloaded[0m core-foundation-sys v0.8.7
+2026-10-20T15:28:43.2972290Z [1m[92m  Downloaded[0m core-foundation v0.10.1
+2026-10-20T15:28:43.3040560Z [1m[92m  Downloaded[0m core-foundation v0.9.4
+2026-10-20T15:28:43.3085220Z [1m[92m  Downloaded[0m const-fnv1a-hash v1.1.0
+2026-10-20T15:28:43.3097470Z [1m[92m  Downloaded[0m concurrent-queue v2.5.0
+2026-10-20T15:28:43.3128180Z [1m[92m  Downloaded[0m color_quant v1.1.0
+2026-10-20T15:28:43.3149140Z [1m[92m  Downloaded[0m codespan-reporting v0.11.1
+2026-10-20T15:28:43.3333040Z [1m[92m  Downloaded[0m cmake v0.1.54
+2026-10-20T15:28:43.3354860Z [1m[92m  Downloaded[0m clap_builder v4.6.7
+2026-10-20T15:28:43.3479160Z [1m[92m  Downloaded[0m clap v4.6.7
+2026-10-20T15:28:43.3824150Z [1m[92m  Downloaded[0m zerovec v0.11.2
+2026-10-20T15:28:43.3947950Z [1m[92m  Downloaded[0m zerotrie v0.2.2
+2026-10-20T15:28:43.4037900Z [1m[92m  Downloaded[0m zerofrom-derive v0.1.6
+2026-10-20T15:28:43.4060680Z [1m[92m  Downloaded[0m zerofrom v0.1.6
+2026-10-20T15:28:43.4086140Z [1m[92m  Downloaded[0m zeno v0.3.3
+2026-10-20T15:28:43.4128530Z [1m[92m  Downloaded[0m yoke v0.8.0
+2026-10-20T15:28:43.4166410Z [1m[92m  Downloaded[0m yazi v0.2.1
+2026-10-20T15:28:43.4267830Z [1m[92m  Downloaded[0m wgpu-core v24.0.5
+2026-10-20T15:28:43.4411620Z [1m[92m  Downloaded[0m wgpu v24.0.5
+2026-10-20T15:28:43.4774670Z [1m[92m  Downloaded[0m webbrowser v1.0.5
+2026-10-20T15:28:43.4853370Z [1m[92m  Downloaded[0m walkdir v2.5.0
+2026-10-20T15:28:43.4886590Z [1m[92m  Downloaded[0m vec_map v0.8.2
+2026-10-20T15:28:43.4917700Z [1m[92m  Downloaded[0m variadics_please v1.1.0
+2026-10-20T15:28:43.4947000Z [1m[92m  Downloaded[0m uuid v1.17.0
+2026-10-20T15:28:43.4999530Z [1m[92m  Downloaded[0m utf8_iter v1.0.4
+2026-10-20T15:28:43.5050800Z [1m[92m  Downloaded[0m url v2.5.4
+2026-10-20T15:28:43.5079010Z [1m[92m  Downloaded[0m unicode-width v0.1.14
+2026-10-20T15:28:43.5157600Z [1m[92m  Downloaded[0m unicode-segmentation v1.12.0
+2026-10-20T15:28:43.5257910Z [1m[92m  Downloaded[0m regex-automata v0.1.10
+2026-10-20T15:28:43.5313970Z [1m[92m  Downloaded[0m rayon v1.10.0
+2026-10-20T15:28:43.5520930Z [1m[92m  Downloaded[0m portable-atomic v1.11.1
+2026-10-20T15:28:43.5656400Z [1m[92m  Downloaded[0m objc2-core-foundation v0.3.1
+2026-10-20T15:28:43.5847880Z [1m[92m  Downloaded[0m objc2 v0.5.2
+2026-10-20T15:28:43.6062650Z [1m[92m  Downloaded[0m itertools v0.14.0
+2026-10-20T15:28:43.6321810Z [1m[92m  Downloaded[0m itertools v0.13.0
+2026-10-20T15:28:43.6518940Z [1m[92m  Downloaded[0m weezl v0.1.10
+2026-10-20T15:28:43.6608870Z [1m[92m  Downloaded[0m unicode-xid v0.2.6
+2026-10-20T15:28:43.6609520Z [1m[92m  Downloaded[0m unicode-script v0.5.7
+2026-10-20T15:28:43.6634420Z [1m[92m  Downloaded[0m rayon-core v1.12.1
+2026-10-20T15:28:43.6751010Z [1m[92m  Downloaded[0m rangemap v1.6.0
+2026-10-20T15:28:43.6808880Z [1m[92m  Downloaded[0m rand_distr v0.4.3
+2026-10-20T15:28:43.6890680Z [1m[92m  Downloaded[0m hexasphere v15.1.0
+2026-10-20T15:28:43.6917070Z [1m[92m  Downloaded[0m heck v0.5.0
+2026-10-20T15:28:43.6940910Z [1m[92m  Downloaded[0m hashbrown v0.15.4
+2026-10-20T15:28:43.7023210Z [1m[92m  Downloaded[0m half v2.6.0
+2026-10-20T15:28:43.7065780Z [1m[92m  Downloaded[0m guillotiere v0.6.2
+2026-10-20T15:28:43.7092700Z [1m[92m  Downloaded[0m grid v0.15.0
+2026-10-20T15:28:43.7111770Z [1m[92m  Downloaded[0m gpu-descriptor-types v0.2.0
+2026-10-20T15:28:43.7122920Z [1m[92m  Downloaded[0m gpu-descriptor v0.3.2
+2026-10-20T15:28:43.7136700Z [1m[92m  Downloaded[0m gpu-alloc-types v0.3.0
+2026-10-20T15:28:43.7149200Z [1m[92m  Downloaded[0m gpu-alloc v0.6.0
+2026-10-20T15:28:43.7176280Z [1m[92m  Downloaded[0m gltf-json v1.4.1
+2026-10-20T15:28:43.7235660Z [1m[92m  Downloaded[0m gltf-derive v1.4.1
+2026-10-20T15:28:43.7248870Z [1m[92m  Downloaded[0m gltf v1.4.1
+2026-10-20T15:28:43.7342930Z [1m[92m  Downloaded[0m glow v0.16.0
+2026-10-20T15:28:43.7444060Z [1m[92m  Downloaded[0m glob v0.3.2
+2026-10-20T15:28:43.7547630Z [1m[92m  Downloaded[0m epaint v0.32.0
+2026-10-20T15:28:43.7624840Z [1m[92m  Downloaded[0m epaint v0.31.1
+2026-10-20T15:28:43.7703510Z [1m[92m  Downloaded[0m encase v0.10.0
+2026-10-20T15:28:43.7818730Z [1m[92m  Downloaded[0m emath v0.32.0
+2026-10-20T15:28:43.7918970Z [1m[92m  Downloaded[0m either v1.15.0
+2026-10-20T15:28:43.7924640Z [1m[92m  Downloaded[0m egui v0.32.0
+2026-10-20T15:28:43.8182040Z [1m[92m  Downloaded[0m winit v0.30.12
+2026-10-20T15:28:43.8626190Z [1m[92m  Downloaded[0m rand v0.9.2
+2026-10-20T15:28:43.8718700Z [1m[92m  Downloaded[0m png v0.17.16
+2026-10-20T15:28:43.8798450Z [1m[92m  Downloaded[0m nom v7.1.3
+2026-10-20T15:28:43.8953660Z [1m[92m  Downloaded[0m naga_oil v0.17.1
+2026-10-20T15:28:43.9262020Z [1m[92m  Downloaded[0m libm v0.2.15
+2026-10-20T15:28:43.9525010Z [1m[92m  Downloaded[0m itertools v0.10.5
+2026-10-20T15:28:43.9669890Z [1m[92m  Downloaded[0m idna v1.0.3
+2026-10-20T15:28:43.9746190Z [1m[92m  Downloaded[0m icu_properties_data v2.0.1
+2026-10-20T15:28:44.0078310Z [1m[92m  Downloaded[0m bevy_pbr v0.16.1
+2026-10-20T15:28:44.0396610Z [1m[92m  Downloaded[0m bevy_ecs v0.16.1
+2026-10-20T15:28:44.0857870Z [1m[92m  Downloaded[0m bevy_core_pipeline v0.16.1
+2026-10-20T15:28:44.1136490Z [1m[92m  Downloaded[0m bevy v0.16.1
+2026-10-20T15:28:44.2181030Z [1m[92m  Downloaded[0m raw-window-handle v0.6.2
+2026-10-20T15:28:44.2220410Z [1m[92m  Downloaded[0m encase_derive_impl v0.10.0
+2026-10-20T15:28:44.2235530Z [1m[92m  Downloaded[0m encase_derive v0.10.0
+2026-10-20T15:28:44.2248580Z [1m[92m  Downloaded[0m emath v0.31.1
+2026-10-20T15:28:44.2283650Z [1m[92m  Downloaded[0m zerocopy v0.8.26
+2026-10-20T15:28:44.2887340Z [1m[92m  Downloaded[0m rand v0.8.5
+2026-10-20T15:28:44.2952360Z [1m[92m  Downloaded[0m objc2-metal v0.2.2
+2026-10-20T15:28:44.3103820Z [1m[92m  Downloaded[0m objc2-core-graphics v0.3.1
+2026-10-20T15:28:44.3242590Z [1m[92m  Downloaded[0m num-traits v0.2.19
+2026-10-20T15:28:44.3296900Z [1m[92m  Downloaded[0m naga_oil v0.18.0
+2026-10-20T15:28:44.3563320Z [1m[92m  Downloaded[0m miniz_oxide v0.8.9
+2026-10-20T15:28:44.3608470Z [1m[92m  Downloaded[0m memmap2 v0.9.7
+2026-10-20T15:28:44.3642080Z [1m[92m  Downloaded[0m memchr v2.7.5
+2026-10-20T15:28:44.3742400Z [1m[92m  Downloaded[0m litemap v0.8.0
+2026-10-20T15:28:44.3803760Z [1m[92m  Downloaded[0m indexmap v2.10.0
+2026-10-20T15:28:44.3882050Z [1m[92m  Downloaded[0m icu_provider v2.0.0
+2026-10-20T15:28:44.3969380Z [1m[92m  Downloaded[0m icu_normalizer_data v2.0.0
+2026-10-20T15:28:44.3981930Z [1m[92m  Downloaded[0m icu_locale_core v2.0.0
+2026-10-20T15:28:44.4224500Z [1m[92m  Downloaded[0m icu_collections v2.0.0
+2026-10-20T15:28:44.4351050Z [1m[92m  Downloaded[0m bevy_render v0.16.1
+2026-10-20T15:28:44.4513910Z [1m[92m  Downloaded[0m ash v0.38.0+1.3.281
+2026-10-20T15:28:44.4813100Z [1m[92m  Downloaded[0m derive_more v1.0.0
+2026-10-20T15:28:44.5081180Z [1m[92m  Downloaded[0m crossbeam-deque v0.8.6
+2026-10-20T15:28:44.5107180Z [1m[92m  Downloaded[0m crossbeam-channel v0.5.15
+2026-10-20T15:28:44.5191200Z [1m[92m  Downloaded[0m const_panic v0.2.13
+2026-10-20T15:28:44.5270420Z [1m[92m  Downloaded[0m clang-sys v1.8.1
+2026-10-20T15:28:44.5315840Z [1m[92m  Downloaded[0m radsort v0.1.1
+2026-10-20T15:28:44.5344080Z [1m[92m  Downloaded[0m proc-macro2 v1.0.95
+2026-10-20T15:28:44.5405550Z [1m[92m  Downloaded[0m pp-rs v0.2.1
+2026-10-20T15:28:44.5441630Z [1m[92m  Downloaded[0m pin-project-lite v0.2.16
+2026-10-20T15:28:44.5582220Z [1m[92m  Downloaded[0m parking_lot_core v0.9.11
+2026-10-20T15:28:44.5635500Z [1m[92m  Downloaded[0m parking_lot v0.12.4
+2026-10-20T15:28:44.5689410Z [1m[92m  Downloaded[0m overload v0.1.1
+2026-10-20T15:28:44.5724890Z [1m[92m  Downloaded[0m oorandom v11.1.5
+2026-10-20T15:28:44.5803100Z [1m[92m  Downloaded[0m once_cell v1.21.3
+2026-10-20T15:28:44.6039270Z [1m[92m  Downloaded[0m objc2-core-image v0.2.2
+2026-10-20T15:28:44.6096420Z [1m[92m  Downloaded[0m objc-sys v0.3.5
+2026-10-20T15:28:44.6141400Z [1m[92m  Downloaded[0m objc v0.2.7
+2026-10-20T15:28:44.6199580Z [1m[92m  Downloaded[0m nu-ansi-term v0.46.0
+2026-10-20T15:28:44.6238310Z [1m[92m  Downloaded[0m mach2 v0.4.3
+2026-10-20T15:28:44.6317030Z [1m[92m  Downloaded[0m log v0.4.27
+2026-10-20T15:28:44.6359380Z [1m[92m  Downloaded[0m lock_api v0.4.13
+2026-10-20T15:28:44.6381390Z [1m[92m  Downloaded[0m litrs v0.4.2
+2026-10-20T15:28:44.6495860Z [1m[92m  Downloaded[0m libloading v0.8.8
+2026-10-20T15:28:44.6562780Z [1m[92m  Downloaded[0m lewton v0.10.2
+2026-10-20T15:28:44.6682110Z [1m[92m  Downloaded[0m io-kit-sys v0.4.1
+2026-10-20T15:28:44.6792860Z [1m[92m  Downloaded[0m immutable-chunkmap v2.0.6
+2026-10-20T15:28:44.6875210Z [1m[92m  Downloaded[0m icu_normalizer v2.0.0
+2026-10-20T15:28:44.7353190Z [1m[92m  Downloaded[0m cc v1.2.30
+2026-10-20T15:28:44.7427570Z [1m[92m  Downloaded[0m blake3 v1.8.2
+2026-10-20T15:28:44.7576530Z [1m[92m  Downloaded[0m bindgen v0.72.0
+2026-10-20T15:28:44.7715610Z [1m[92m  Downloaded[0m bevy_ui v0.16.1
+2026-10-20T15:28:44.7809230Z [1m[92m  Downloaded[0m bevy_reflect v0.16.1
+2026-10-20T15:28:44.8015110Z [1m[92m  Downloaded[0m bevy_math v0.16.1
+2026-10-20T15:28:44.8190520Z [1m[92m  Downloaded[0m bevy_egui v0.35.1
+2026-10-20T15:28:44.8256500Z [1m[92m  Downloaded[0m bevy_asset v0.16.1
+2026-10-20T15:28:44.8352010Z [1m[92m  Downloaded[0m aho-corasick v1.1.3
+2026-10-20T15:28:44.8441030Z [1m[92m  Downloaded[0m const_soft_float v0.1.4
+2026-10-20T15:28:44.8521570Z [1m[92m  Downloaded[0m codespan-reporting v0.12.0
+2026-10-20T15:28:44.8734490Z [1m[92m  Downloaded[0m wgpu-types v24.0.0
+2026-10-20T15:28:44.8817230Z [1m[92m  Downloaded[0m rand_core v0.9.3
+2026-10-20T15:28:44.8846340Z [1m[92m  Downloaded[0m rand_chacha v0.9.0
+2026-10-20T15:28:44.8898110Z [1m[92m  Downloaded[0m profiling v1.0.17
+2026-10-20T15:28:44.8914580Z [1m[92m  Downloaded[0m ppv-lite86 v0.2.21
+2026-10-20T15:28:44.8921420Z [1m[92m  Downloaded[0m potential_utf v0.1.2
+2026-10-20T15:28:44.8940680Z [1m[92m  Downloaded[0m pkg-config v0.3.32
+2026-10-20T15:28:44.8981000Z [1m[92m  Downloaded[0m piper v0.2.4
+2026-10-20T15:28:44.8995650Z [1m[92m  Downloaded[0m percent-encoding v2.3.1
+2026-10-20T15:28:44.9042540Z [1m[92m  Downloaded[0m owned_ttf_parser v0.25.1
+2026-10-20T15:28:44.9092960Z [1m[92m  Downloaded[0m ordered-float v4.6.0
+2026-10-20T15:28:44.9111890Z [1m[92m  Downloaded[0m ogg v0.8.0
+2026-10-20T15:28:44.9112840Z [1m[92m  Downloaded[0m offset-allocator v0.2.0
+2026-10-20T15:28:44.9126290Z [1m[92m  Downloaded[0m objc2-encode v4.1.0
+2026-10-20T15:28:44.9146540Z [1m[92m  Downloaded[0m objc2-core-data v0.2.2
+2026-10-20T15:28:44.9976500Z [1m[92m  Downloaded[0m nonmax v0.5.5
+2026-10-20T15:28:44.9998200Z [1m[92m  Downloaded[0m ktx2 v0.3.0
+2026-10-20T15:28:45.0036580Z [1m[92m  Downloaded[0m khronos-egl v6.0.0
+2026-10-20T15:28:45.0077810Z [1m[92m  Downloaded[0m jobserver v0.1.33
+2026-10-20T15:28:45.0130190Z [1m[92m  Downloaded[0m bytemuck v1.23.1
+2026-10-20T15:28:45.0185690Z [1m[92m  Downloaded[0m bumpalo v3.19.0
+2026-10-20T15:28:45.0234990Z [1m[92m  Downloaded[0m bevy_window v0.16.1
+2026-10-20T15:28:45.0263710Z [1m[92m  Downloaded[0m bevy_text v0.16.1
+2026-10-20T15:28:45.0315050Z [1m[92m  Downloaded[0m bevy_sprite v0.16.1
+2026-10-20T15:28:45.0382090Z [1m[92m  Downloaded[0m bevy_scene v0.16.1
+2026-10-20T15:28:45.0419640Z [1m[92m  Downloaded[0m bevy_reflect_derive v0.16.1
+2026-10-20T15:28:45.0490480Z [1m[92m  Downloaded[0m bevy_picking v0.16.1
+2026-10-20T15:28:45.0552380Z [1m[92m  Downloaded[0m bevy_mesh v0.16.1
+2026-10-20T15:28:45.0611020Z [1m[92m  Downloaded[0m bevy_internal v0.16.1
+2026-10-20T15:28:45.0641750Z [1m[92m  Downloaded[0m bevy_image v0.16.1
+2026-10-20T15:28:45.0705390Z [1m[92m  Downloaded[0m bevy_gltf v0.16.1
+2026-10-20T15:28:45.0760890Z [1m[92m  Downloaded[0m bevy_gizmos v0.16.1
+2026-10-20T15:28:45.0812360Z [1m[92m  Downloaded[0m bevy_color v0.16.2
+2026-10-20T15:28:45.0880360Z [1m[92m  Downloaded[0m bevy_audio v0.16.1
+2026-10-20T15:28:45.0912490Z [1m[92m  Downloaded[0m bevy_animation v0.16.1
+2026-10-20T15:28:45.0946130Z [1m[92m  Downloaded[0m base64 v0.22.1
+2026-10-20T15:28:45.1026580Z [1m[92m  Downloaded[0m base64 v0.21.7
+2026-10-20T15:28:45.1102750Z [1m[92m  Downloaded[0m async-lock v3.4.0
+2026-10-20T15:28:45.1142430Z [1m[92m  Downloaded[0m arboard v3.6.0
+2026-10-20T15:28:45.1202210Z [1m[92m  Downloaded[0m constant_time_eq v0.3.1
+2026-10-20T15:28:45.1226890Z [1m[92m  Downloaded[0m parking v2.2.1
+2026-10-20T15:28:45.1245170Z [1m[92m  Downloaded[0m objc2-io-surface v0.3.1
+2026-10-20T15:28:45.1269380Z [1m[92m  Downloaded[0m link-cplusplus v1.0.10
+2026-10-20T15:28:45.1303730Z [1m[92m  Downloaded[0m lazy_static v1.5.0
+2026-10-20T15:28:45.1365520Z [1m[92m  Downloaded[0m is-terminal v0.4.17
+2026-10-20T15:28:45.1389480Z [1m[92m  Downloaded[0m ciborium v0.2.2
+2026-10-20T15:28:45.1443050Z [1m[92m  Downloaded[0m cexpr v0.6.0
+2026-10-20T15:28:45.1495850Z [1m[92m  Downloaded[0m bytemuck_derive v1.10.0
+2026-10-20T15:28:45.1523210Z [1m[92m  Downloaded[0m blocking v1.6.2
+2026-10-20T15:28:45.1546340Z [1m[92m  Downloaded[0m block2 v0.5.1
+2026-10-20T15:28:45.1568860Z [1m[92m  Downloaded[0m bitflags v2.9.1
+2026-10-20T15:28:45.1644910Z [1m[92m  Downloaded[0m bitflags v1.3.2
+2026-10-20T15:28:45.1718670Z [1m[92m  Downloaded[0m bit-vec v0.6.3
+2026-10-20T15:28:45.1753980Z [1m[92m  Downloaded[0m bevy_winit v0.16.1
+2026-10-20T15:28:45.1792060Z [1m[92m  Downloaded[0m bevy_transform v0.16.1
+2026-10-20T15:28:45.1831780Z [1m[92m  Downloaded[0m bevy_time v0.16.1
+2026-10-20T15:28:45.1862640Z [1m[92m  Downloaded[0m bevy_tasks v0.16.1
+2026-10-20T15:28:45.1903620Z [1m[92m  Downloaded[0m bevy_state_macros v0.16.1
+2026-10-20T15:28:45.1919800Z [1m[92m  Downloaded[0m bevy_state v0.16.1
+2026-10-20T15:28:45.1957510Z [1m[92m  Downloaded[0m bevy_render_macros v0.16.1
+2026-10-20T15:28:45.1977920Z [1m[92m  Downloaded[0m bevy_input_focus v0.16.1
+2026-10-20T15:28:45.2002550Z [1m[92m  Downloaded[0m bevy_gizmos_macros v0.16.1
+2026-10-20T15:28:45.2023450Z [1m[92m  Downloaded[0m bevy_gilrs v0.16.1
+2026-10-20T15:28:45.2051880Z [1m[92m  Downloaded[0m bevy_ecs_macros v0.16.1
+2026-10-20T15:28:45.2077740Z [1m[92m  Downloaded[0m bevy_diagnostic v0.16.1
+2026-10-20T15:28:45.2102960Z [1m[92m  Downloaded[0m bevy_asset_macros v0.16.1
+2026-10-20T15:28:45.2115100Z [1m[92m  Downloaded[0m bevy_app v0.16.1
+2026-10-20T15:28:45.2171370Z [1m[92m  Downloaded[0m autocfg v1.5.0
+2026-10-20T15:28:45.2205340Z [1m[92m  Downloaded[0m async-task v4.7.1
+2026-10-20T15:28:45.2282080Z [1m[92m  Downloaded[0m async-fs v2.1.3
+2026-10-20T15:28:45.2298740Z [1m[92m  Downloaded[0m shaderc-sys v0.9.1
+2026-10-20T15:28:46.3219510Z [1m[92m  Downloaded[0m async-executor v1.13.2
+2026-10-20T15:28:46.3270940Z [1m[92m  Downloaded[0m async-channel v2.5.0
+2026-10-20T15:28:46.3305670Z [1m[92m  Downloaded[0m async-broadcast v0.7.2
+2026-10-20T15:28:46.3339600Z [1m[92m  Downloaded[0m assert_type_match v0.1.1
+2026-10-20T15:28:46.3476630Z [1m[92m  Downloaded[0m arrayvec v0.7.6
+2026-10-20T15:28:46.3514770Z [1m[92m  Downloaded[0m anstyle v1.0.14
+2026-10-20T15:28:46.3547110Z [1m[92m  Downloaded[0m anes v0.1.6
+2026-10-20T15:28:46.3662700Z [1m[92m  Downloaded[0m quote v1.0.40
+2026-10-20T15:28:46.3775680Z [1m[92m  Downloaded[0m paste v1.0.15
+2026-10-20T15:28:46.3889930Z [1m[92m  Downloaded[0m objc2-quartz-core v0.2.2
+2026-10-20T15:28:46.3952670Z [1m[92m  Downloaded[0m nohash-hasher v0.2.0
+2026-10-20T15:28:46.3967980Z [1m[92m  Downloaded[0m matchers v0.1.0
+2026-10-20T15:28:46.4001240Z [1m[92m  Downloaded[0m itoa v1.0.15
+2026-10-20T15:28:46.4052990Z [1m[92m  Downloaded[0m inflections v1.1.1
+2026-10-20T15:28:46.4054390Z [1m[92m  Downloaded[0m idna_adapter v1.2.1
+2026-10-20T15:28:46.4078410Z [1m[92m  Downloaded[0m ciborium-ll v0.2.2
+2026-10-20T15:28:46.4095940Z [1m[92m  Downloaded[0m ciborium-io v0.2.2
+2026-10-20T15:28:46.4107110Z [1m[92m  Downloaded[0m cfg_aliases v0.2.1
+2026-10-20T15:28:46.4123020Z [1m[92m  Downloaded[0m cfg-if v1.0.1
+2026-10-20T15:28:46.4143460Z [1m[92m  Downloaded[0m byteorder-lite v0.1.0
+2026-10-20T15:28:46.4160240Z [1m[92m  Downloaded[0m byteorder v1.5.0
+2026-10-20T15:28:46.4196920Z [1m[92m  Downloaded[0m block v0.1.6
+2026-10-20T15:28:46.4208500Z [1m[92m  Downloaded[0m bit-vec v0.8.0
+2026-10-20T15:28:46.4269750Z [1m[92m  Downloaded[0m bit-set v0.8.0
+2026-10-20T15:28:46.4302880Z [1m[92m  Downloaded[0m bevy_platform v0.16.1
+2026-10-20T15:28:46.4350320Z [1m[92m  Downloaded[0m bevy_mikktspace v0.16.1
+2026-10-20T15:28:46.4407470Z [1m[92m  Downloaded[0m bevy_derive v0.16.1
+2026-10-20T15:28:46.4472180Z [1m[92m  Downloaded[0m bevy_a11y v0.16.1
+2026-10-20T15:28:46.4510990Z [1m[92m  Downloaded[0m atomicow v1.1.0
+2026-10-20T15:28:46.4539250Z [1m[92m  Downloaded[0m atomic-waker v1.1.2
+2026-10-20T15:28:46.4589550Z [1m[92m  Downloaded[0m ahash v0.8.12
+2026-10-20T15:28:46.4857040Z [1m[92m  Downloaded[0m malloc_buf v0.0.6
+2026-10-20T15:28:46.4974460Z [1m[92m  Downloaded[0m cast v0.3.0
+2026-10-20T15:28:46.5007380Z [1m[92m  Downloaded[0m bit-set v0.5.3
+2026-10-20T15:28:46.5037400Z [1m[92m  Downloaded[0m bevy_utils v0.16.1
+2026-10-20T15:28:46.5084100Z [1m[92m  Downloaded[0m bevy_ptr v0.16.1
+2026-10-20T15:28:46.5130970Z [1m[92m  Downloaded[0m bevy_log v0.16.1
+2026-10-20T15:28:46.5174590Z [1m[92m  Downloaded[0m bevy_encase_derive v0.16.1
+2026-10-20T15:28:46.5199430Z [1m[92m  Downloaded[0m bevy_dylib v0.16.1
+2026-10-20T15:28:46.5216550Z [1m[92m  Downloaded[0m arrayref v0.3.9
+2026-10-20T15:28:46.5261470Z [1m[92m  Downloaded[0m accesskit_macos v0.19.0
+2026-10-20T15:28:46.5307160Z [1m[92m  Downloaded[0m accesskit_winit v0.25.0
+2026-10-20T15:28:46.5372490Z [1m[92m  Downloaded[0m accesskit_consumer v0.27.0
+2026-10-20T15:28:46.5414210Z [1m[92m  Downloaded[0m accesskit v0.18.0
+2026-10-20T15:28:46.7399910Z [1m[92m   Compiling[0m proc-macro2 v1.0.95
+2026-10-20T15:28:46.7402690Z [1m[92m   Compiling[0m unicode-ident v1.0.18
+2026-10-20T15:28:47.4996220Z [1m[92m   Compiling[0m serde v1.0.219
+2026-10-20T15:28:51.2470760Z [1m[92m   Compiling[0m libc v0.2.174
+2026-10-20T15:28:52.3205290Z [1m[92m   Compiling[0m quote v1.0.40
+2026-10-20T15:28:53.2122110Z [1m[92m   Compiling[0m syn v2.0.104
+2026-10-20T15:28:54.5067700Z [1m[92m    Checking[0m cfg-if v1.0.1
+2026-10-20T15:28:54.5358640Z [1m[92m   Compiling[0m autocfg v1.5.0
+2026-10-20T15:28:55.8871060Z [1m[92m   Compiling[0m libm v0.2.15
+2026-10-20T15:28:58.1722340Z [1m[92m   Compiling[0m zerocopy v0.8.26
+2026-10-20T15:28:59.0253550Z [1m[92m   Compiling[0m cfg_aliases v0.2.1
+2026-10-20T15:28:59.0551520Z [1m[92m   Compiling[0m parking_lot_core v0.9.11
+2026-10-20T15:29:00.5542520Z [1m[92m   Compiling[0m crossbeam-utils v0.8.21
+2026-10-20T15:29:01.2564380Z [1m[92m    Checking[0m foldhash v0.1.5
+2026-10-20T15:29:01.3543970Z [1m[92m    Checking[0m smallvec v1.15.1
+2026-10-20T15:29:01.4578480Z [1m[92m    Checking[0m equivalent v1.0.2
+2026-10-20T15:29:01.4865440Z [1m[92m    Checking[0m log v0.4.27
+2026-10-20T15:29:01.5942170Z [1m[92m    Checking[0m ppv-lite86 v0.2.21
+2026-10-20T15:29:01.7415640Z [1m[92m    Checking[0m pin-project-lite v0.2.16
+2026-10-20T15:29:01.7825010Z [1m[92m   Compiling[0m num-traits v0.2.19
+2026-10-20T15:29:01.9291540Z [1m[92m   Compiling[0m lock_api v0.4.13
+2026-10-20T15:29:02.0776010Z [1m[92m    Checking[0m getrandom v0.2.16
+2026-10-20T15:29:02.1868380Z [1m[92m    Checking[0m rand_core v0.6.4
+2026-10-20T15:29:02.5977690Z [1m[92m   Compiling[0m scopeguard v1.2.0
+2026-10-20T15:29:02.6332820Z [1m[92m   Compiling[0m hashbrown v0.15.4
+2026-10-20T15:29:03.0901780Z [1m[92m   Compiling[0m indexmap v2.10.0
+2026-10-20T15:29:04.4939800Z [1m[92m    Checking[0m rand_chacha v0.3.1
+2026-10-20T15:29:04.5983350Z [1m[92m   Compiling[0m toml_datetime v0.6.11
+2026-10-20T15:29:04.9053590Z [1m[92m    Checking[0m arrayvec v0.7.6
+2026-10-20T15:29:05.0103060Z [1m[92m   Compiling[0m winnow v0.7.12
+2026-10-20T15:29:06.5747890Z [1m[92m   Compiling[0m toml_edit v0.22.27
+2026-10-20T15:29:15.6120470Z [1m[92m    Checking[0m rand v0.8.5
+2026-10-20T15:29:16.0793780Z [1m[92m   Compiling[0m parking_lot v0.12.4
+2026-10-20T15:29:17.1946950Z [1m[92m   Compiling[0m thiserror v2.0.12
+2026-10-20T15:29:17.6914370Z [1m[92m    Checking[0m once_cell v1.21.3
+2026-10-20T15:29:17.8722750Z [1m[92m   Compiling[0m bevy_macro_utils v0.16.1
+2026-10-20T15:29:20.0353060Z [1m[92m   Compiling[0m serde_derive v1.0.219
+2026-10-20T15:29:23.0882880Z [1m[92m   Compiling[0m bytemuck_derive v1.10.0
+2026-10-20T15:29:34.1320870Z [1m[92m    Checking[0m bytemuck v1.23.1
+2026-10-20T15:29:34.2947490Z [1m[92m   Compiling[0m thiserror-impl v2.0.12
+2026-10-20T15:29:39.7942640Z [1m[92m    Checking[0m bitflags v2.9.1
+2026-10-20T15:29:40.9236380Z [1m[92m   Compiling[0m getrandom v0.3.3
+2026-10-20T15:29:41.5433370Z [1m[92m    Checking[0m glam v0.29.3
+2026-10-20T15:29:45.7720420Z [1m[92m    Checking[0m parking v2.2.1
+2026-10-20T15:29:45.9864310Z [1m[92m    Checking[0m concurrent-queue v2.5.0
+2026-10-20T15:29:46.1408760Z [1m[92m    Checking[0m event-listener v5.4.0
+2026-10-20T15:29:46.9430060Z [1m[92m   Compiling[0m shlex v1.3.0
+2026-10-20T15:29:47.3203980Z [1m[92m    Checking[0m futures-core v0.3.31
+2026-10-20T15:29:47.4154080Z [1m[92m    Checking[0m event-listener-strategy v0.5.4
+2026-10-20T15:29:47.5036980Z [1m[92m    Checking[0m smol_str v0.2.2
+2026-10-20T15:29:47.6369580Z [1m[92m    Checking[0m futures-io v0.3.31
+2026-10-20T15:29:47.7048780Z [1m[92m   Compiling[0m typeid v1.0.3
+2026-10-20T15:29:48.1333330Z [1m[92m    Checking[0m fastrand v2.3.0
+2026-10-20T15:29:48.2759670Z [1m[92m    Checking[0m spin v0.9.8
+2026-10-20T15:29:48.4128210Z [1m[92m   Compiling[0m unicode-xid v0.2.6
+2026-10-20T15:29:48.4907370Z [1m[92m   Compiling[0m derive_more-impl v1.0.0
+2026-10-20T15:29:50.2259180Z [1m[92m    Checking[0m bevy_platform v0.16.1
+2026-10-20T15:29:50.5622120Z [1m[92m    Checking[0m uuid v1.17.0
+2026-10-20T15:29:50.9218610Z [1m[92m    Checking[0m thread_local v1.1.9
+2026-10-20T15:29:51.0153390Z [1m[92m    Checking[0m memchr v2.7.5
+2026-10-20T15:29:51.9375200Z [1m[92m    Checking[0m futures-lite v2.6.0
+2026-10-20T15:29:52.5184550Z [1m[92m    Checking[0m fixedbitset v0.5.7
+2026-10-20T15:29:52.7323330Z [1m[92m    Checking[0m async-task v4.7.1
+2026-10-20T15:29:52.8910600Z [1m[92m    Checking[0m either v1.15.0
+2026-10-20T15:29:53.0338030Z [1m[92m    Checking[0m atomic-waker v1.1.2
+2026-10-20T15:29:53.1008440Z [1m[92m    Checking[0m petgraph v0.7.1
+2026-10-20T15:29:55.0877430Z [1m[92m    Checking[0m erased-serde v0.4.6
+2026-10-20T15:29:55.4862380Z [1m[92m   Compiling[0m bevy_reflect_derive v0.16.1
+2026-10-20T15:30:14.6745230Z [1m[92m    Checking[0m derive_more v1.0.0
+2026-10-20T15:30:14.7616300Z [1m[92m    Checking[0m bevy_utils v0.16.1
+2026-10-20T15:30:14.8659870Z [1m[92m    Checking[0m async-channel v2.5.0
+2026-10-20T15:30:14.8994380Z [1m[92m   Compiling[0m assert_type_match v0.1.1
+2026-10-20T15:30:15.0529410Z [1m[92m   Compiling[0m variadics_please v1.1.0
+2026-10-20T15:30:17.3574800Z [1m[92m    Checking[0m downcast-rs v2.0.1
+2026-10-20T15:30:17.3817170Z [1m[92m    Checking[0m bevy_ptr v0.16.1
+2026-10-20T15:30:17.4214830Z [1m[92m    Checking[0m disqualified v1.0.0
+2026-10-20T15:30:17.4596550Z [1m[92m    Checking[0m core-foundation-sys v0.8.7
+2026-10-20T15:30:17.5476660Z [1m[92m   Compiling[0m nix v0.30.1
+2026-10-20T15:30:18.0904010Z [1m[92m    Checking[0m slab v0.4.10
+2026-10-20T15:30:18.1547680Z [1m[92m    Checking[0m bitflags v1.3.2
+2026-10-20T15:30:18.1792340Z [1m[92m    Checking[0m async-executor v1.13.2
+2026-10-20T15:30:18.2981060Z [1m[92m    Checking[0m crossbeam-queue v0.3.12
+2026-10-20T15:30:18.3566840Z [1m[92m    Checking[0m nonmax v0.5.5
+2026-10-20T15:30:18.4743030Z [1m[92m    Checking[0m bevy_tasks v0.16.1
+2026-10-20T15:30:19.1962840Z [1m[92m   Compiling[0m bevy_ecs_macros v0.16.1
+2026-10-20T15:30:20.5582670Z [1m[92m    Checking[0m bevy_reflect v0.16.1
+2026-10-20T15:30:24.5357000Z [1m[92m    Checking[0m bumpalo v3.19.0
+2026-10-20T15:30:24.6835980Z [1m[92m    Checking[0m ctrlc v3.4.7
+2026-10-20T15:30:24.7511100Z [1m[92m   Compiling[0m cc v1.2.30
+2026-10-20T15:30:30.7521980Z [1m[92m   Compiling[0m bevy_derive v0.16.1
+2026-10-20T15:30:32.7908600Z [1m[92m    Checking[0m bevy_ecs v0.16.1
+2026-10-20T15:30:37.2928320Z [1m[92m    Checking[0m objc2-encode v4.1.0
+2026-10-20T15:30:37.6087820Z [1m[92m    Checking[0m tracing-core v0.1.34
+2026-10-20T15:30:38.3695590Z [1m[92m    Checking[0m aho-corasick v1.1.3
+2026-10-20T15:30:39.1794760Z [1m[92m   Compiling[0m tracing-attributes v0.1.30
+2026-10-20T15:30:44.3499000Z [1m[92m    Checking[0m bevy_app v0.16.1
+2026-10-20T15:30:44.9864680Z [1m[92m    Checking[0m regex-syntax v0.8.5
+2026-10-20T15:30:46.6043500Z [1m[92m    Checking[0m regex-automata v0.4.9
+2026-10-20T15:30:48.5844080Z [1m[92m    Checking[0m regex v1.11.1
+2026-10-20T15:30:48.7838170Z [1m[92m    Checking[0m itertools v0.14.0
+2026-10-20T15:30:49.6963660Z [1m[92m    Checking[0m rand_distr v0.4.3
+2026-10-20T15:30:50.0593920Z [1m[92m    Checking[0m half v2.6.0
+2026-10-20T15:30:50.2918460Z [1m[92m   Compiling[0m rustversion v1.0.21
+2026-10-20T15:30:51.0077190Z [1m[92m    Checking[0m bevy_math v0.16.1
+2026-10-20T15:30:55.1711250Z [1m[92m    Checking[0m tracing v0.1.41
+2026-10-20T15:30:55.3325540Z [1m[92m   Compiling[0m crc32fast v1.5.0
+2026-10-20T15:30:55.7263200Z [1m[92m    Checking[0m simd-adler32 v0.3.7
+2026-10-20T15:30:55.7806580Z [1m[92m    Checking[0m core-foundation v0.9.4
+2026-10-20T15:30:55.9723520Z [1m[92m   Compiling[0m foreign-types-macros v0.2.3
+2026-10-20T15:30:56.9403520Z [1m[92m    Checking[0m foreign-types-shared v0.3.1
+2026-10-20T15:30:56.9650830Z [1m[92m   Compiling[0m heck v0.5.0
+2026-10-20T15:30:57.3557990Z [1m[92m    Checking[0m adler2 v2.0.1
+2026-10-20T15:30:57.3910800Z [1m[92m    Checking[0m termcolor v1.4.1
+2026-10-20T15:30:57.5166040Z [1m[92m    Checking[0m unicode-width v0.1.14
+2026-10-20T15:30:57.6335360Z [1m[92m   Compiling[0m objc2 v0.6.1
+2026-10-20T15:30:57.7720490Z [1m[92m    Checking[0m miniz_oxide v0.8.9
+2026-10-20T15:30:58.0187380Z [1m[92m   Compiling[0m strum_macros v0.26.4
+2026-10-20T15:30:59.1774800Z [1m[92m    Checking[0m foreign-types v0.5.0
+2026-10-20T15:30:59.2061870Z [1m[92m    Checking[0m core-graphics-types v0.1.3
+2026-10-20T15:30:59.3292990Z [1m[92m    Checking[0m crossbeam-channel v0.5.15
+2026-10-20T15:30:59.5805540Z [1m[92m    Checking[0m tinyvec_macros v0.1.1
+2026-10-20T15:30:59.6025200Z [1m[92m    Checking[0m raw-window-handle v0.6.2
+2026-10-20T15:30:59.7027660Z [1m[92m    Checking[0m lazy_static v1.5.0
+2026-10-20T15:30:59.7331340Z [1m[92m    Checking[0m bit-vec v0.8.0
+2026-10-20T15:30:59.8817450Z [1m[92m   Compiling[0m thiserror v1.0.69
+2026-10-20T15:31:00.3001550Z [1m[92m    Checking[0m rustc-hash v1.1.0
+2026-10-20T15:31:00.3457950Z [1m[92m    Checking[0m regex-syntax v0.6.29
+2026-10-20T15:31:01.4716040Z [1m[92m    Checking[0m regex-automata v0.1.10
+2026-10-20T15:31:01.8982860Z [1m[92m    Checking[0m bit-set v0.8.0
+2026-10-20T15:31:01.9655350Z [1m[92m    Checking[0m tinyvec v1.9.0
+2026-10-20T15:31:02.4677750Z [1m[92m    Checking[0m flate2 v1.1.2
+2026-10-20T15:31:03.4700870Z [1m[92m   Compiling[0m blake3 v1.8.2
+2026-10-20T15:31:04.2650740Z [1m[92m    Checking[0m piper v0.2.4
+2026-10-20T15:31:04.3345490Z [1m[92m    Checking[0m wgpu-types v24.0.0
+2026-10-20T15:31:05.0855300Z [1m[92m   Compiling[0m thiserror-impl v1.0.69
+2026-10-20T15:31:11.1034270Z [1m[92m    Checking[0m strum v0.26.3
+2026-10-20T15:31:11.1473410Z [1m[92m   Compiling[0m encase_derive_impl v0.10.0
+2026-10-20T15:31:14.1411440Z [1m[92m    Checking[0m profiling v1.0.17
+2026-10-20T15:31:14.1653820Z [1m[92m    Checking[0m weezl v0.1.10
+2026-10-20T15:31:14.3300750Z [1m[92m    Checking[0m hexf-parse v0.2.1
+2026-10-20T15:31:14.3935360Z [1m[92m    Checking[0m overload v0.1.1
+2026-10-20T15:31:14.4224100Z [1m[92m    Checking[0m nu-ansi-term v0.46.0
+2026-10-20T15:31:14.5817090Z [1m[92m    Checking[0m blocking v1.6.2
+2026-10-20T15:31:16.1491620Z [1m[92m    Checking[0m objc2-core-foundation v0.3.1
+2026-10-20T15:31:16.7092450Z [1m[92m    Checking[0m matchers v0.1.0
+2026-10-20T15:31:16.7985690Z [1m[92m    Checking[0m sharded-slab v0.1.7
+2026-10-20T15:31:17.1094260Z [1m[92m    Checking[0m fdeflate v0.3.7
+2026-10-20T15:31:17.3447580Z [1m[92m    Checking[0m tracing-log v0.2.0
+2026-10-20T15:31:17.4238430Z [1m[92m    Checking[0m async-lock v3.4.0
+2026-10-20T15:31:17.6640880Z [1m[92m   Compiling[0m naga v24.0.0
+2026-10-20T15:31:17.7159830Z [1m[92m    Checking[0m base64 v0.21.7
+2026-10-20T15:31:17.8771260Z [1m[92m    Checking[0m constant_time_eq v0.3.1
+2026-10-20T15:31:17.9053030Z [1m[92m    Checking[0m jpeg-decoder v0.3.2
+2026-10-20T15:31:17.9927560Z [1m[92m    Checking[0m arrayref v0.3.9
+2026-10-20T15:31:18.0135730Z [1m[92m   Compiling[0m paste v1.0.15
+2026-10-20T15:31:18.1941480Z [1m[92m    Checking[0m tiff v0.9.1
+2026-10-20T15:31:18.5072660Z [1m[92m    Checking[0m ron v0.8.1
+2026-10-20T15:31:18.5944960Z [1m[92m    Checking[0m async-fs v2.1.3
+2026-10-20T15:31:18.6922240Z [1m[92m    Checking[0m tracing-subscriber v0.3.19
+2026-10-20T15:31:18.8481500Z [1m[92m    Checking[0m png v0.17.16
+2026-10-20T15:31:19.2938620Z [1m[92m   Compiling[0m encase_derive v0.10.0
+2026-10-20T15:31:19.3696870Z [1m[92m    Checking[0m codespan-reporting v0.11.1
+2026-10-20T15:31:19.5500960Z [1m[92m    Checking[0m async-broadcast v0.7.2
+2026-10-20T15:31:19.6316100Z [1m[92m    Checking[0m spirv v0.3.0+sdk-1.3.268.0
+2026-10-20T15:31:20.1048650Z [1m[92m   Compiling[0m bevy_asset_macros v0.16.1
+2026-10-20T15:31:21.7738700Z [1m[92m    Checking[0m libloading v0.8.8
+2026-10-20T15:31:21.8376310Z [1m[92m    Checking[0m malloc_buf v0.0.6
+2026-10-20T15:31:21.8637880Z [1m[92m    Checking[0m byteorder-lite v0.1.0
+2026-10-20T15:31:21.9681790Z [1m[92m    Checking[0m const_panic v0.2.13
+2026-10-20T15:31:22.0453510Z [1m[92m    Checking[0m stackfuture v0.3.0
+2026-10-20T15:31:22.0779970Z [1m[92m    Checking[0m atomicow v1.1.0
+2026-10-20T15:31:22.1188390Z [1m[92m   Compiling[0m khronos-egl v6.0.0
+2026-10-20T15:31:22.2256060Z [1m[92m   Compiling[0m ash v0.38.0+1.3.281
+2026-10-20T15:31:22.3279120Z [1m[92m    Checking[0m encase v0.10.0
+2026-10-20T15:31:22.5067700Z [1m[92m    Checking[0m image v0.25.6
+2026-10-20T15:31:22.6760970Z [1m[92m    Checking[0m bevy_asset v0.16.1
+2026-10-20T15:31:23.2100670Z [1m[92m    Checking[0m objc v0.2.7
+2026-10-20T15:31:24.5070350Z [1m[92m    Checking[0m bevy_log v0.16.1
+2026-10-20T15:31:25.7037400Z [1m[92m    Checking[0m bevy_input v0.16.1
+2026-10-20T15:31:26.6675740Z [1m[92m    Checking[0m gpu-alloc-types v0.3.0
+2026-10-20T15:31:26.7827960Z [1m[92m    Checking[0m gpu-descriptor-types v0.2.0
+2026-10-20T15:31:26.8655310Z [1m[92m    Checking[0m euclid v0.22.11
+2026-10-20T15:31:27.1230300Z [1m[92m   Compiling[0m wgpu-hal v24.0.4
+2026-10-20T15:31:27.2655370Z [1m[92m   Compiling[0m version_check v0.9.5
+2026-10-20T15:31:27.5801870Z [1m[92m    Checking[0m twox-hash v2.1.1
+2026-10-20T15:31:27.6236110Z [1m[92m    Checking[0m svg_fmt v0.4.5
+2026-10-20T15:31:27.6935420Z [1m[92m    Checking[0m block v0.1.6
+2026-10-20T15:31:27.7399050Z [1m[92m    Checking[0m metal v0.31.0
+2026-10-20T15:31:28.0994990Z [1m[92m    Checking[0m guillotiere v0.6.2
+2026-10-20T15:31:28.2162430Z [1m[92m    Checking[0m ruzstd v0.8.1
+2026-10-20T15:31:28.6571540Z [1m[92m    Checking[0m gpu-descriptor v0.3.2
+2026-10-20T15:31:28.7438340Z [1m[92m    Checking[0m gpu-alloc v0.6.0
+2026-10-20T15:31:28.9076340Z [1m[92m    Checking[0m bevy_color v0.16.2
+2026-10-20T15:31:29.6823710Z [1m[92m    Checking[0m ktx2 v0.3.0
+2026-10-20T15:31:29.7981520Z [1m[92m    Checking[0m ordered-float v4.6.0
+2026-10-20T15:31:29.9835880Z [1m[92m   Compiling[0m wgpu-core v24.0.5
+2026-10-20T15:31:30.3620090Z [1m[92m   Compiling[0m litrs v0.4.2
+2026-10-20T15:31:31.3351900Z [1m[92m    Checking[0m glow v0.16.0
+2026-10-20T15:31:32.0738550Z [1m[92m    Checking[0m rectangle-pack v0.4.2
+2026-10-20T15:31:32.1968960Z [1m[92m    Checking[0m const_soft_float v0.1.4
+2026-10-20T15:31:32.3465780Z [1m[92m    Checking[0m constgebra v0.1.4
+2026-10-20T15:31:32.4071390Z [1m[92m    Checking[0m bevy_image v0.16.1
+2026-10-20T15:31:33.1008500Z [1m[92m   Compiling[0m document-features v0.2.11
+2026-10-20T15:31:34.3869270Z [1m[92m    Checking[0m bevy_window v0.16.1
+2026-10-20T15:31:35.6292710Z [1m[92m    Checking[0m bevy_transform v0.16.1
+2026-10-20T15:31:35.9102290Z [1m[92m    Checking[0m bevy_time v0.16.1
+2026-10-20T15:31:36.2564020Z [1m[92m   Compiling[0m wgpu v24.0.5
+2026-10-20T15:31:36.7738710Z [1m[92m    Checking[0m data-encoding v2.9.0
+2026-10-20T15:31:36.9753030Z [1m[92m    Checking[0m bit-vec v0.6.3
+2026-10-20T15:31:37.0726320Z [1m[92m    Checking[0m bit-set v0.5.3
+2026-10-20T15:31:37.1520890Z [1m[92m    Checking[0m hexasphere v15.1.0
+2026-10-20T15:31:37.2780970Z [1m[92m    Checking[0m sysinfo v0.34.2
+2026-10-20T15:31:37.4537910Z [1m[92m    Checking[0m bevy_mikktspace v0.16.1
+2026-10-20T15:31:37.5464130Z [1m[92m    Checking[0m const-fnv1a-hash v1.1.0
+2026-10-20T15:31:37.5734750Z [1m[92m    Checking[0m static_assertions v1.1.0
+2026-10-20T15:31:37.5952230Z [1m[92m    Checking[0m bevy_diagnostic v0.16.1
+2026-10-20T15:31:37.7192260Z [1m[92m    Checking[0m bevy_mesh v0.16.1
+2026-10-20T15:31:38.8532960Z [1m[92m    Checking[0m naga_oil v0.17.1
+2026-10-20T15:31:39.2240710Z [1m[92m   Compiling[0m bevy_encase_derive v0.16.1
+2026-10-20T15:31:41.8026960Z [1m[92m    Checking[0m offset-allocator v0.2.0
+2026-10-20T15:31:41.8665270Z [1m[92m   Compiling[0m bevy_render_macros v0.16.1
+2026-10-20T15:31:41.8772950Z [1m[92m   Compiling[0m glob v0.3.2
+2026-10-20T15:31:42.6677970Z [1m[92m   Compiling[0m clang-sys v1.8.1
+2026-10-20T15:31:42.8830900Z [1m[92m   Compiling[0m objc-sys v0.3.5
+2026-10-20T15:31:43.0277340Z [1m[92m   Compiling[0m serde_json v1.0.141
+2026-10-20T15:31:43.1498740Z [1m[92m   Compiling[0m minimal-lexical v0.2.1
+2026-10-20T15:31:48.4342100Z [1m[92m    Checking[0m ryu v1.0.20
+2026-10-20T15:31:49.0678530Z [1m[92m    Checking[0m itoa v1.0.15
+2026-10-20T15:31:49.5379900Z [1m[92m   Compiling[0m nom v7.1.3
+2026-10-20T15:31:51.2611060Z [1m[92m    Checking[0m bevy_render v0.16.1
+2026-10-20T15:31:56.1698150Z [1m[92m   Compiling[0m bindgen v0.72.0
+2026-10-20T15:31:56.6524540Z [1m[92m   Compiling[0m itertools v0.13.0
+2026-10-20T15:32:00.8648380Z [1m[92m    Checking[0m objc2 v0.5.2
+2026-10-20T15:32:02.3896540Z [1m[92m   Compiling[0m cexpr v0.6.0
+2026-10-20T15:32:03.6491890Z [1m[92m   Compiling[0m rustc-hash v2.1.1
+2026-10-20T15:32:03.7038250Z [1m[92m    Checking[0m radsort v0.1.1
+2026-10-20T15:32:05.0712410Z [1m[92m    Checking[0m bevy_core_pipeline v0.16.1
+2026-10-20T15:32:10.6584470Z [1m[92m    Checking[0m block2 v0.5.1
+2026-10-20T15:32:10.7484880Z [1m[92m   Compiling[0m slotmap v1.0.7
+2026-10-20T15:32:10.8491760Z [1m[92m   Compiling[0m synstructure v0.13.2
+2026-10-20T15:32:17.8969910Z [1m[92m    Checking[0m mach2 v0.4.3
+2026-10-20T15:32:18.0755380Z [1m[92m    Checking[0m accesskit v0.18.0
+2026-10-20T15:32:18.2903450Z [1m[92m    Checking[0m dispatch v0.2.0
+2026-10-20T15:32:18.3613950Z [1m[92m    Checking[0m objc2-foundation v0.2.2
+2026-10-20T15:32:20.2045520Z [1m[92m    Checking[0m font-types v0.9.0
+2026-10-20T15:32:20.3665620Z [1m[92m    Checking[0m byteorder v1.5.0
+2026-10-20T15:32:20.4633030Z [1m[92m    Checking[0m read-fonts v0.29.3
+2026-10-20T15:32:23.8365760Z [1m[92m    Checking[0m objc2-app-kit v0.2.2
+2026-10-20T15:32:25.9965420Z [1m[92m   Compiling[0m zerofrom-derive v0.1.6
+2026-10-20T15:32:29.7928210Z [1m[92m   Compiling[0m coreaudio-sys v0.2.17
+2026-10-20T15:32:32.7651100Z [1m[92m    Checking[0m bevy_picking v0.16.1
+2026-10-20T15:32:34.1584440Z [1m[92m    Checking[0m core-foundation v0.10.1
+2026-10-20T15:32:34.3294840Z [1m[92m    Checking[0m immutable-chunkmap v2.0.6
+2026-10-20T15:32:34.5267640Z [1m[92m   Compiling[0m winit v0.30.12
+2026-10-20T15:32:35.1195860Z [1m[92m   Compiling[0m io-kit-sys v0.4.1
+2026-10-20T15:32:35.2767600Z [1m[92m    Checking[0m percent-encoding v2.3.1
+2026-10-20T15:32:35.3359030Z [1m[92m    Checking[0m accesskit_consumer v0.27.0
+2026-10-20T15:32:36.0118600Z [1m[92m    Checking[0m skrifa v0.31.3
+2026-10-20T15:32:37.3260840Z [1m[92m   Compiling[0m yoke-derive v0.8.0
+2026-10-20T15:32:38.6298570Z [1m[92m    Checking[0m zerofrom v0.1.6
+2026-10-20T15:32:38.6844190Z [1m[92m    Checking[0m core-graphics v0.23.2
+2026-10-20T15:32:38.9107960Z [1m[92m    Checking[0m crossbeam-epoch v0.9.18
+2026-10-20T15:32:39.1002100Z [1m[92m    Checking[0m memmap2 v0.9.7
+2026-10-20T15:32:39.2479740Z [1m[92m   Compiling[0m inflections v1.1.1
+2026-10-20T15:32:39.9091390Z [1m[92m    Checking[0m unicode-segmentation v1.12.0
+2026-10-20T15:32:40.1041180Z [1m[92m    Checking[0m unicode-properties v0.1.3
+2026-10-20T15:32:40.1989660Z [1m[92m    Checking[0m unicode-script v0.5.7
+2026-10-20T15:32:40.3990360Z [1m[92m    Checking[0m stable_deref_trait v1.2.0
+2026-10-20T15:32:40.4292850Z [1m[92m    Checking[0m ttf-parser v0.20.0
+2026-10-20T15:32:41.4727530Z [1m[92m   Compiling[0m rayon-core v1.12.1
+2026-10-20T15:32:41.5772900Z [1m[92m    Checking[0m ttf-parser v0.21.1
+2026-10-20T15:32:42.7442400Z [1m[92m   Compiling[0m cpal v0.15.3
+2026-10-20T15:32:42.8478950Z [1m[92m    Checking[0m yazi v0.2.1
+2026-10-20T15:32:43.0548410Z [1m[92m    Checking[0m cursor-icon v1.2.0
+2026-10-20T15:32:43.1048460Z [1m[92m    Checking[0m zeno v0.3.3
+2026-10-20T15:32:43.3833170Z [1m[92m    Checking[0m dpi v0.1.2
+2026-10-20T15:32:43.4477450Z [1m[92m    Checking[0m unicode-ccc v0.2.0
+2026-10-20T15:32:43.4777570Z [1m[92m    Checking[0m unicode-bidi-mirroring v0.2.0
+2026-10-20T15:32:43.5046850Z [1m[92m    Checking[0m rustybuzz v0.14.1
+2026-10-20T15:32:45.6945850Z [1m[92m    Checking[0m swash v0.2.5
+2026-10-20T15:32:47.3633700Z [1m[92m    Checking[0m fontdb v0.16.2
+2026-10-20T15:32:47.5293870Z [1m[92m   Compiling[0m gltf-derive v1.4.1
+2026-10-20T15:32:49.0328150Z [1m[92m    Checking[0m yoke v0.8.0
+2026-10-20T15:32:49.1033700Z [1m[92m    Checking[0m crossbeam-deque v0.8.6
+2026-10-20T15:32:49.1753570Z [1m[92m    Checking[0m coreaudio-rs v0.11.3
+2026-10-20T15:32:49.4144130Z [1m[92m    Checking[0m accesskit_macos v0.19.0
+2026-10-20T15:32:49.7522860Z [1m[92m    Checking[0m bevy_sprite v0.16.1
+2026-10-20T15:32:50.0695360Z [1m[92m    Checking[0m ogg v0.8.0
+2026-10-20T15:32:50.1575540Z [1m[92m    Checking[0m bevy_a11y v0.16.1
+2026-10-20T15:32:50.2478740Z [1m[92m    Checking[0m sys-locale v0.3.2
+2026-10-20T15:32:50.2811760Z [1m[92m   Compiling[0m gilrs v0.11.0
+2026-10-20T15:32:50.7156060Z [1m[92m    Checking[0m self_cell v1.2.0
+2026-10-20T15:32:50.7460080Z [1m[92m    Checking[0m unicode-linebreak v0.1.5
+2026-10-20T15:32:50.8648690Z [1m[92m    Checking[0m vec_map v0.8.2
+2026-10-20T15:32:50.9285910Z [1m[92m    Checking[0m unicode-bidi v0.3.18
+2026-10-20T15:32:51.1248440Z [1m[92m    Checking[0m rangemap v1.6.0
+2026-10-20T15:32:51.2407070Z [1m[92m    Checking[0m dasp_sample v0.11.0
+2026-10-20T15:32:51.4896740Z [1m[92m    Checking[0m cosmic-text v0.13.2
+2026-10-20T15:32:52.0690170Z [1m[92m    Checking[0m gilrs-core v0.6.4
+2026-10-20T15:32:52.2546640Z [1m[92m    Checking[0m lewton v0.10.2
+2026-10-20T15:32:52.5846410Z [1m[92m    Checking[0m gltf-json v1.4.1
+2026-10-20T15:32:52.9269240Z [1m[92m    Checking[0m accesskit_winit v0.25.0
+2026-10-20T15:32:53.1904820Z [1m[92m    Checking[0m bevy_pbr v0.16.1
+2026-10-20T15:32:53.7488730Z [1m[92m    Checking[0m bevy_input_focus v0.16.1
+2026-10-20T15:32:54.0739420Z [1m[92m   Compiling[0m zerovec-derive v0.11.1
+2026-10-20T15:33:00.6824610Z [1m[92m    Checking[0m approx v0.5.1
+2026-10-20T15:33:00.8815580Z [1m[92m    Checking[0m grid v0.15.0
+2026-10-20T15:33:01.0386680Z [1m[92m    Checking[0m fnv v1.0.7
+2026-10-20T15:33:01.3479710Z [1m[92m    Checking[0m taffy v0.7.7
+2026-10-20T15:33:01.8984040Z [1m[92m    Checking[0m bevy_winit v0.16.1
+2026-10-20T15:33:02.5700950Z [1m[92m    Checking[0m zerovec v0.11.2
+2026-10-20T15:33:03.0962410Z [1m[92m    Checking[0m gltf v1.4.1
+2026-10-20T15:33:03.5854720Z [1m[92m    Checking[0m rayon v1.10.0
+2026-10-20T15:33:04.9055380Z [1m[92m    Checking[0m bevy_text v0.16.1
+2026-10-20T15:33:05.9550910Z [1m[92m    Checking[0m rodio v0.20.1
+2026-10-20T15:33:06.2983420Z [1m[92m    Checking[0m bevy_animation v0.16.1
+2026-10-20T15:33:06.6833480Z [1m[92m    Checking[0m bevy_scene v0.16.1
+2026-10-20T15:33:07.0876340Z [1m[92m   Compiling[0m bevy_state_macros v0.16.1
+2026-10-20T15:33:07.5556490Z [1m[92m   Compiling[0m bevy_gizmos_macros v0.16.1
+2026-10-20T15:33:10.6506150Z [1m[92m   Compiling[0m displaydoc v0.2.5
+2026-10-20T15:33:11.3886960Z [1m[92m    Checking[0m base64 v0.22.1
+2026-10-20T15:33:11.5235230Z [1m[92m    Checking[0m bevy_gltf v0.16.1
+2026-10-20T15:33:12.0730310Z [1m[92m    Checking[0m bevy_state v0.16.1
+2026-10-20T15:33:15.6289610Z [1m[92m    Checking[0m bevy_gizmos v0.16.1
+2026-10-20T15:33:17.5835880Z [1m[92m    Checking[0m bevy_audio v0.16.1
+2026-10-20T15:33:18.0512120Z [1m[92m    Checking[0m bevy_ui v0.16.1
+2026-10-20T15:33:19.3411730Z [1m[92m    Checking[0m bevy_gilrs v0.16.1
+2026-10-20T15:33:19.4498210Z [1m[92m    Checking[0m simulation_kernel v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/simulation_kernel)
+2026-10-20T15:33:19.7703860Z [1m[92m    Checking[0m tinystr v0.8.1
+2026-10-20T15:33:19.8587490Z [1m[92m    Checking[0m dirs-sys-next v0.1.2
+2026-10-20T15:33:19.9169350Z [1m[92m    Checking[0m litemap v0.8.0
+2026-10-20T15:33:20.0131090Z [1m[92m    Checking[0m writeable v0.6.1
+2026-10-20T15:33:20.0940300Z [1m[92m    Checking[0m icu_locale_core v2.0.0
+2026-10-20T15:33:20.3938450Z [1m[92m    Checking[0m dirs-next v2.0.0
+2026-10-20T15:33:20.4256200Z [1m[92m    Checking[0m zerotrie v0.2.2
+2026-10-20T15:33:20.5505420Z [1m[92m    Checking[0m potential_utf v0.1.2
+2026-10-20T15:33:20.5969010Z [1m[92m   Compiling[0m icu_normalizer_data v2.0.0
+2026-10-20T15:33:20.7049860Z [1m[92m   Compiling[0m icu_properties_data v2.0.1
+2026-10-20T15:33:20.8123930Z [1m[92m    Checking[0m icu_collections v2.0.0
+2026-10-20T15:33:20.9941280Z [1m[92m    Checking[0m icu_provider v2.0.0
+2026-10-20T15:33:21.1148770Z [1m[92m   Compiling[0m ahash v0.8.12
+2026-10-20T15:33:21.2296520Z [1m[92m    Checking[0m ttf-parser v0.25.1
+2026-10-20T15:33:22.0294250Z [1m[92m    Checking[0m bevy_internal v0.16.1
+2026-10-20T15:33:22.1416480Z [1m[92m    Checking[0m bevy_dylib v0.16.1
+2026-10-20T15:33:22.1896950Z [1m[92m    Checking[0m bevy v0.16.1
+2026-10-20T15:33:22.2424530Z [1m[92m    Checking[0m engine-core v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T15:33:22.3238070Z [1m[92m    Checking[0m owned_ttf_parser v0.25.1
+2026-10-20T15:33:22.5125750Z [1m[92m    Checking[0m ab_glyph_rasterizer v0.1.9
+2026-10-20T15:33:22.5582510Z [1m[92m    Checking[0m ab_glyph v0.2.31
+2026-10-20T15:33:22.6700560Z [1m[92m    Checking[0m icu_properties v2.0.1
+2026-10-20T15:33:22.6722630Z [1m[92m    Checking[0m icu_normalizer v2.0.0
+2026-10-20T15:33:22.9216470Z [1m[92m   Compiling[0m link-cplusplus v1.0.10
+2026-10-20T15:33:23.1183850Z [1m[92m    Checking[0m nohash-hasher v0.2.0
+2026-10-20T15:33:23.1978610Z [1m[92m    Checking[0m idna_adapter v1.2.1
+2026-10-20T15:33:23.2415650Z [1m[92m   Compiling[0m cmake v0.1.54
+2026-10-20T15:33:23.8649630Z [1m[92m    Checking[0m emath v0.31.1
+2026-10-20T15:33:24.0209310Z [1m[92m    Checking[0m utf8_iter v1.0.4
+2026-10-20T15:33:24.0709320Z [1m[92m   Compiling[0m roxmltree v0.20.0
+2026-10-20T15:33:24.6620280Z [1m[92m   Compiling[0m pkg-config v0.3.32
+2026-10-20T15:33:25.6261340Z [1m[92m    Checking[0m idna v1.0.3
+2026-10-20T15:33:25.7647350Z [1m[92m    Checking[0m ecolor v0.31.1
+2026-10-20T15:33:25.8484780Z [1m[92m    Checking[0m form_urlencoded v1.2.1
+2026-10-20T15:33:25.9012790Z [1m[92m    Checking[0m objc2-core-graphics v0.3.1
+2026-10-20T15:33:25.9558670Z [1m[92m   Compiling[0m shaderc-sys v0.9.1
+2026-10-20T15:33:26.1617440Z [1m[92m    Checking[0m objc2-foundation v0.3.1
+2026-10-20T15:33:27.1786070Z [1m[92m   Compiling[0m naga v25.0.1
+2026-10-20T15:33:27.2343000Z [1m[92m    Checking[0m epaint_default_fonts v0.31.1
+2026-10-20T15:33:27.2787390Z [1m[92m    Checking[0m epaint v0.31.1
+2026-10-20T15:33:27.8350550Z [1m[92m    Checking[0m objc2-app-kit v0.3.1
+2026-10-20T15:33:28.0334010Z [1m[92m    Checking[0m url v2.5.4
+2026-10-20T15:33:28.3306250Z [1m[92m    Checking[0m pp-rs v0.2.1
+2026-10-20T15:33:28.4741650Z [1m[92m    Checking[0m codespan-reporting v0.12.0
+2026-10-20T15:33:28.6616580Z [1m[92m    Checking[0m rand_core v0.9.3
+2026-10-20T15:33:28.7355280Z [1m[92m    Checking[0m rand_chacha v0.9.0
+2026-10-20T15:33:32.4796580Z [1m[92m    Checking[0m webbrowser v1.0.5
+2026-10-20T15:33:32.5546810Z [1m[92m    Checking[0m arboard v3.6.0
+2026-10-20T15:33:32.6506780Z [1m[92m    Checking[0m egui v0.31.1
+2026-10-20T15:33:34.3688780Z [1m[92m    Checking[0m bevy_egui v0.35.1
+2026-10-20T15:33:37.2598190Z [1m[92m    Checking[0m naga_oil v0.18.0
+2026-10-20T15:33:37.6673280Z [1m[92m    Checking[0m rand v0.9.2
+2026-10-20T15:33:38.6842200Z [1m[92m    Checking[0m toml_parser v1.0.1
+2026-10-20T15:33:38.9312480Z [1m[92m    Checking[0m toml_datetime v0.7.0
+2026-10-20T15:33:39.0312140Z [1m[92m    Checking[0m serde_spanned v1.0.0
+2026-10-20T15:33:39.0718710Z [1m[92m    Checking[0m toml_writer v1.0.2
+2026-10-20T15:33:39.1562130Z [1m[92m    Checking[0m color_quant v1.1.0
+2026-10-20T15:33:39.2026540Z [1m[92m    Checking[0m gif v0.13.3
+2026-10-20T15:33:39.3810260Z [1m[92m    Checking[0m toml v0.9.3
+2026-10-20T15:33:39.7976740Z [1m[92m    Checking[0m tooling v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T15:33:39.9381360Z [1m[92m    Checking[0m engine-common v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T15:33:40.4095620Z [1m[92m    Checking[0m models v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T15:33:41.4062080Z [1m[92m    Checking[0m clap_lex v1.1.1
+2026-10-20T15:33:41.4800130Z [1m[92m    Checking[0m ciborium-io v0.2.2
+2026-10-20T15:33:41.5068600Z [1m[92m    Checking[0m anstyle v1.0.14
+2026-10-20T15:33:41.5992660Z [1m[92m    Checking[0m clap_builder v4.6.7
+2026-10-20T15:33:42.4237230Z [1m[92m    Checking[0m ciborium-ll v0.2.2
+2026-10-20T15:33:42.5140890Z [1m[92m    Checking[0m itertools v0.10.5
+2026-10-20T15:33:43.5063500Z [1m[92m    Checking[0m same-file v1.0.6
+2026-10-20T15:33:43.5566310Z [1m[92m    Checking[0m cast v0.3.0
+2026-10-20T15:33:43.6523240Z [1m[92m    Checking[0m emath v0.32.0
+2026-10-20T15:33:43.9272420Z [1m[92m    Checking[0m ecolor v0.32.0
+2026-10-20T15:33:44.0375170Z [1m[92m    Checking[0m criterion-plot v0.5.0
+2026-10-20T15:33:44.2081300Z [1m[92m    Checking[0m walkdir v2.5.0
+2026-10-20T15:33:44.3352780Z [1m[92m    Checking[0m ciborium v0.2.2
+2026-10-20T15:33:44.6106160Z [1m[92m    Checking[0m clap v4.6.7
+2026-10-20T15:33:44.6407720Z [1m[92m    Checking[0m tinytemplate v1.2.1
+2026-10-20T15:33:44.7750740Z [1m[92m    Checking[0m is-terminal v0.4.17
+2026-10-20T15:33:44.8706990Z [1m[92m    Checking[0m epaint_default_fonts v0.32.0
+2026-10-20T15:33:44.9457050Z [1m[92m    Checking[0m oorandom v11.1.5
+2026-10-20T15:33:44.9797360Z [1m[92m    Checking[0m anes v0.1.6
+2026-10-20T15:33:45.0612890Z [1m[92m    Checking[0m criterion v0.5.1
+2026-10-20T15:33:46.0672610Z [1m[92m    Checking[0m epaint v0.32.0
+2026-10-20T15:33:46.8062020Z [1m[92m    Checking[0m egui v0.32.0
+2026-10-20T15:38:38.4283400Z [1m[92m    Checking[0m shaderc v0.9.1
+2026-10-20T15:38:38.8696980Z [1m[92m    Checking[0m engine-gpu v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T15:38:41.8053830Z [1m[92m    Checking[0m engine-render v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T15:38:42.1909720Z [1m[92m    Checking[0m ui v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T15:38:43.3044040Z [1m[92m    Checking[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T15:38:44.1331890Z [1m[92m    Checking[0m tests v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tests)
+2026-10-20T15:38:44.6059880Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 10m 05s
+2026-10-20T15:38:44.9961130Z ##[group]Run cargo test --locked --workspace --all-features --exclude engine-gpu
+2026-10-20T15:38:44.9976790Z [36;1mcargo test --locked --workspace --all-features --exclude engine-gpu[0m
+2026-10-20T15:38:45.0493980Z shell: /bin/bash -e {0}
+2026-10-20T15:38:45.0494870Z env:
+2026-10-20T15:38:45.0495190Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:38:45.0495420Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:38:45.0495730Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:38:45.0496050Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:38:45.0496650Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:38:45.0496990Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:38:45.0497270Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:38:45.0499240Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:38:45.0500660Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:38:45.0501770Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:38:45.0503080Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:38:45.0504180Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:38:45.0505240Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:38:45.0505820Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:38:45.0506410Z   CARGO_TERM_COLOR: always
+2026-10-20T15:38:45.0506920Z ##[endgroup]
+2026-10-20T15:38:46.7580100Z [1m[92m   Compiling[0m serde v1.0.219
+2026-10-20T15:38:46.7581700Z [1m[92m   Compiling[0m libc v0.2.174
+2026-10-20T15:38:47.5953150Z [1m[92m   Compiling[0m bytemuck v1.23.1
+2026-10-20T15:38:47.7676800Z [1m[92m   Compiling[0m zerocopy v0.8.26
+2026-10-20T15:38:48.7488630Z [1m[92m   Compiling[0m bitflags v2.9.1
+2026-10-20T15:38:48.8981730Z [1m[92m   Compiling[0m libm v0.2.15
+2026-10-20T15:38:49.0296090Z [1m[92m   Compiling[0m smallvec v1.15.1
+2026-10-20T15:38:49.1515870Z [1m[92m   Compiling[0m crossbeam-utils v0.8.21
+2026-10-20T15:38:49.6148420Z [1m[92m   Compiling[0m foldhash v0.1.5
+2026-10-20T15:38:49.7815120Z [1m[92m   Compiling[0m hashbrown v0.15.4
+2026-10-20T15:38:50.3059750Z [1m[92m   Compiling[0m log v0.4.27
+2026-10-20T15:38:50.3428190Z [1m[92m   Compiling[0m ppv-lite86 v0.2.21
+2026-10-20T15:38:50.4402550Z [1m[92m   Compiling[0m pin-project-lite v0.2.16
+2026-10-20T15:38:50.4856760Z [1m[92m   Compiling[0m getrandom v0.2.16
+2026-10-20T15:38:50.4886250Z [1m[92m   Compiling[0m arrayvec v0.7.6
+2026-10-20T15:38:50.6045900Z [1m[92m   Compiling[0m rand_core v0.6.4
+2026-10-20T15:38:50.6454500Z [1m[92m   Compiling[0m parking v2.2.1
+2026-10-20T15:38:50.7336510Z [1m[92m   Compiling[0m rand_chacha v0.3.1
+2026-10-20T15:38:50.7364300Z [1m[92m   Compiling[0m getrandom v0.3.3
+2026-10-20T15:38:50.8594900Z [1m[92m   Compiling[0m indexmap v2.10.0
+2026-10-20T15:38:51.6155500Z [1m[92m   Compiling[0m rand v0.8.5
+2026-10-20T15:38:52.1379280Z [1m[92m   Compiling[0m glam v0.29.3
+2026-10-20T15:38:52.5781900Z [1m[92m   Compiling[0m concurrent-queue v2.5.0
+2026-10-20T15:38:52.7821310Z [1m[92m   Compiling[0m once_cell v1.21.3
+2026-10-20T15:38:52.9165050Z [1m[92m   Compiling[0m thiserror v2.0.12
+2026-10-20T15:38:52.9525050Z [1m[92m   Compiling[0m event-listener v5.4.0
+2026-10-20T15:38:53.1817520Z [1m[92m   Compiling[0m futures-core v0.3.31
+2026-10-20T15:38:53.2778320Z [1m[92m   Compiling[0m event-listener-strategy v0.5.4
+2026-10-20T15:38:53.3313950Z [1m[92m   Compiling[0m smol_str v0.2.2
+2026-10-20T15:38:53.5130030Z [1m[92m   Compiling[0m spin v0.9.8
+2026-10-20T15:38:53.6226630Z [1m[92m   Compiling[0m futures-io v0.3.31
+2026-10-20T15:38:53.7674630Z [1m[92m   Compiling[0m fastrand v2.3.0
+2026-10-20T15:38:53.9253100Z [1m[92m   Compiling[0m bevy_platform v0.16.1
+2026-10-20T15:38:54.0586630Z [1m[92m   Compiling[0m uuid v1.17.0
+2026-10-20T15:38:54.5736910Z [1m[92m   Compiling[0m thread_local v1.1.9
+2026-10-20T15:38:54.7751600Z [1m[92m   Compiling[0m derive_more v1.0.0
+2026-10-20T15:38:54.8173480Z [1m[92m   Compiling[0m typeid v1.0.3
+2026-10-20T15:38:54.8687540Z [1m[92m   Compiling[0m futures-lite v2.6.0
+2026-10-20T15:38:55.6603390Z [1m[92m   Compiling[0m fixedbitset v0.5.7
+2026-10-20T15:38:56.1427480Z [1m[92m   Compiling[0m async-task v4.7.1
+2026-10-20T15:38:56.2433570Z [1m[92m   Compiling[0m atomic-waker v1.1.2
+2026-10-20T15:38:56.3097790Z [1m[92m   Compiling[0m petgraph v0.7.1
+2026-10-20T15:38:56.4453700Z [1m[92m   Compiling[0m erased-serde v0.4.6
+2026-10-20T15:38:56.9741350Z [1m[92m   Compiling[0m num-traits v0.2.19
+2026-10-20T15:38:57.5110650Z [1m[92m   Compiling[0m bevy_utils v0.16.1
+2026-10-20T15:38:57.5848550Z [1m[92m   Compiling[0m async-channel v2.5.0
+2026-10-20T15:38:57.7183160Z [1m[92m   Compiling[0m memchr v2.7.5
+2026-10-20T15:38:58.3559400Z [1m[92m   Compiling[0m disqualified v1.0.0
+2026-10-20T15:38:58.4716180Z [1m[92m   Compiling[0m bevy_ptr v0.16.1
+2026-10-20T15:38:58.4922890Z [1m[92m   Compiling[0m either v1.15.0
+2026-10-20T15:38:58.5282480Z [1m[92m   Compiling[0m core-foundation-sys v0.8.7
+2026-10-20T15:38:58.5961730Z [1m[92m   Compiling[0m downcast-rs v2.0.1
+2026-10-20T15:38:58.6354960Z [1m[92m   Compiling[0m bevy_reflect v0.16.1
+2026-10-20T15:38:58.6403510Z [1m[92m   Compiling[0m bitflags v1.3.2
+2026-10-20T15:38:58.6691650Z [1m[92m   Compiling[0m slab v0.4.10
+2026-10-20T15:38:58.7607030Z [1m[92m   Compiling[0m async-executor v1.13.2
+2026-10-20T15:38:59.2393840Z [1m[92m   Compiling[0m crossbeam-queue v0.3.12
+2026-10-20T15:38:59.3236760Z [1m[92m   Compiling[0m nonmax v0.5.5
+2026-10-20T15:38:59.6193470Z [1m[92m   Compiling[0m bevy_tasks v0.16.1
+2026-10-20T15:39:00.9842860Z [1m[92m   Compiling[0m nix v0.30.1
+2026-10-20T15:39:03.0215950Z [1m[92m   Compiling[0m bumpalo v3.19.0
+2026-10-20T15:39:03.2292920Z [1m[92m   Compiling[0m ctrlc v3.4.7
+2026-10-20T15:39:03.4110740Z [1m[92m   Compiling[0m objc2-encode v4.1.0
+2026-10-20T15:39:04.1212550Z [1m[92m   Compiling[0m tracing-core v0.1.34
+2026-10-20T15:39:05.0968800Z [1m[92m   Compiling[0m bevy_ecs v0.16.1
+2026-10-20T15:39:30.6440810Z [1m[92m   Compiling[0m bevy_app v0.16.1
+2026-10-20T15:39:36.7541490Z [1m[92m   Compiling[0m lock_api v0.4.13
+2026-10-20T15:39:36.9593660Z [1m[92m   Compiling[0m parking_lot_core v0.9.11
+2026-10-20T15:39:37.2096840Z [1m[92m   Compiling[0m tracing v0.1.41
+2026-10-20T15:39:37.4591340Z [1m[92m   Compiling[0m parking_lot v0.12.4
+2026-10-20T15:39:38.4787860Z [1m[92m   Compiling[0m aho-corasick v1.1.3
+2026-10-20T15:39:42.8620220Z [1m[92m   Compiling[0m regex-syntax v0.8.5
+2026-10-20T15:39:43.2987350Z [1m[92m   Compiling[0m itertools v0.14.0
+2026-10-20T15:39:44.6277690Z [1m[92m   Compiling[0m regex-automata v0.4.9
+2026-10-20T15:39:50.2555910Z [1m[92m   Compiling[0m rand_distr v0.4.3
+2026-10-20T15:39:50.6729600Z [1m[92m   Compiling[0m bevy_math v0.16.1
+2026-10-20T15:39:56.8045450Z [1m[92m   Compiling[0m regex v1.11.1
+2026-10-20T15:39:58.5029570Z [1m[92m   Compiling[0m simd-adler32 v0.3.7
+2026-10-20T15:39:58.5941690Z [1m[92m   Compiling[0m core-foundation v0.9.4
+2026-10-20T15:39:58.9776100Z [1m[92m   Compiling[0m adler2 v2.0.1
+2026-10-20T15:39:59.0570660Z [1m[92m   Compiling[0m foreign-types-shared v0.3.1
+2026-10-20T15:39:59.0848870Z [1m[92m   Compiling[0m foreign-types v0.5.0
+2026-10-20T15:39:59.1120470Z [1m[92m   Compiling[0m miniz_oxide v0.8.9
+2026-10-20T15:40:00.8305460Z [1m[92m   Compiling[0m core-graphics-types v0.1.3
+2026-10-20T15:40:00.8862970Z [1m[92m   Compiling[0m crc32fast v1.5.0
+2026-10-20T15:40:01.0965470Z [1m[92m   Compiling[0m crossbeam-channel v0.5.15
+2026-10-20T15:40:01.6802670Z [1m[92m   Compiling[0m half v2.6.0
+2026-10-20T15:40:02.0298620Z [1m[92m   Compiling[0m lazy_static v1.5.0
+2026-10-20T15:40:02.0664430Z [1m[92m   Compiling[0m regex-syntax v0.6.29
+2026-10-20T15:40:09.4102850Z [1m[92m   Compiling[0m tinyvec_macros v0.1.1
+2026-10-20T15:40:09.4376930Z [1m[92m   Compiling[0m raw-window-handle v0.6.2
+2026-10-20T15:40:09.6276630Z [1m[92m   Compiling[0m tinyvec v1.9.0
+2026-10-20T15:40:10.3033830Z [1m[92m   Compiling[0m regex-automata v0.1.10
+2026-10-20T15:40:13.7124940Z [1m[92m   Compiling[0m flate2 v1.1.2
+2026-10-20T15:40:14.2455080Z [1m[92m   Compiling[0m objc2 v0.6.1
+2026-10-20T15:40:16.1569280Z [1m[92m   Compiling[0m piper v0.2.4
+2026-10-20T15:40:16.3182270Z [1m[92m   Compiling[0m wgpu-types v24.0.0
+2026-10-20T15:40:18.2872770Z [1m[92m   Compiling[0m profiling v1.0.17
+2026-10-20T15:40:18.3212530Z [1m[92m   Compiling[0m overload v0.1.1
+2026-10-20T15:40:18.3631280Z [1m[92m   Compiling[0m weezl v0.1.10
+2026-10-20T15:40:19.4143600Z [1m[92m   Compiling[0m nu-ansi-term v0.46.0
+2026-10-20T15:40:19.9076970Z [1m[92m   Compiling[0m thiserror v1.0.69
+2026-10-20T15:40:19.9648860Z [1m[92m   Compiling[0m blocking v1.6.2
+2026-10-20T15:40:20.4596120Z [1m[92m   Compiling[0m objc2-core-foundation v0.3.1
+2026-10-20T15:40:21.0775930Z [1m[92m   Compiling[0m matchers v0.1.0
+2026-10-20T15:40:21.1442800Z [1m[92m   Compiling[0m sharded-slab v0.1.7
+2026-10-20T15:40:21.4692680Z [1m[92m   Compiling[0m fdeflate v0.3.7
+2026-10-20T15:40:21.6070400Z [1m[92m   Compiling[0m tracing-log v0.2.0
+2026-10-20T15:40:21.8477000Z [1m[92m   Compiling[0m async-lock v3.4.0
+2026-10-20T15:40:22.3389770Z [1m[92m   Compiling[0m naga v24.0.0
+2026-10-20T15:40:22.4348410Z [1m[92m   Compiling[0m constant_time_eq v0.3.1
+2026-10-20T15:40:22.4833880Z [1m[92m   Compiling[0m jpeg-decoder v0.3.2
+2026-10-20T15:40:22.7997420Z [1m[92m   Compiling[0m rustc-hash v1.1.0
+2026-10-20T15:40:22.8816430Z [1m[92m   Compiling[0m unicode-width v0.1.14
+2026-10-20T15:40:23.0811440Z [1m[92m   Compiling[0m termcolor v1.4.1
+2026-10-20T15:40:23.4672670Z [1m[92m   Compiling[0m base64 v0.21.7
+2026-10-20T15:40:23.9553400Z [1m[92m   Compiling[0m arrayref v0.3.9
+2026-10-20T15:40:23.9890440Z [1m[92m   Compiling[0m bit-vec v0.8.0
+2026-10-20T15:40:24.1675790Z [1m[92m   Compiling[0m bit-set v0.8.0
+2026-10-20T15:40:24.2642690Z [1m[92m   Compiling[0m blake3 v1.8.2
+2026-10-20T15:40:24.8800820Z [1m[92m   Compiling[0m ron v0.8.1
+2026-10-20T15:40:25.2136210Z [1m[92m   Compiling[0m codespan-reporting v0.11.1
+2026-10-20T15:40:26.2711720Z [1m[92m   Compiling[0m tiff v0.9.1
+2026-10-20T15:40:27.1407390Z [1m[92m   Compiling[0m async-fs v2.1.3
+2026-10-20T15:40:27.7316850Z [1m[92m   Compiling[0m tracing-subscriber v0.3.19
+2026-10-20T15:40:28.1221980Z [1m[92m   Compiling[0m png v0.17.16
+2026-10-20T15:40:30.3070060Z [1m[92m   Compiling[0m strum v0.26.3
+2026-10-20T15:40:30.3840810Z [1m[92m   Compiling[0m async-broadcast v0.7.2
+2026-10-20T15:40:30.5334840Z [1m[92m   Compiling[0m malloc_buf v0.0.6
+2026-10-20T15:40:30.5781970Z [1m[92m   Compiling[0m atomicow v1.1.0
+2026-10-20T15:40:30.6689560Z [1m[92m   Compiling[0m const_panic v0.2.13
+2026-10-20T15:40:31.2019670Z [1m[92m   Compiling[0m stackfuture v0.3.0
+2026-10-20T15:40:31.2607260Z [1m[92m   Compiling[0m hexf-parse v0.2.1
+2026-10-20T15:40:31.3612320Z [1m[92m   Compiling[0m byteorder-lite v0.1.0
+2026-10-20T15:40:31.5107300Z [1m[92m   Compiling[0m image v0.25.6
+2026-10-20T15:40:49.9347810Z [1m[92m   Compiling[0m bevy_asset v0.16.1
+2026-10-20T15:41:09.1641600Z [1m[92m   Compiling[0m encase v0.10.0
+2026-10-20T15:41:09.5335980Z [1m[92m   Compiling[0m objc v0.2.7
+2026-10-20T15:41:09.9716890Z [1m[92m   Compiling[0m bevy_log v0.16.1
+2026-10-20T15:41:12.4385260Z [1m[92m   Compiling[0m bevy_input v0.16.1
+2026-10-20T15:41:21.7176210Z [1m[92m   Compiling[0m euclid v0.22.11
+2026-10-20T15:41:22.2091730Z [1m[92m   Compiling[0m wgpu-hal v24.0.4
+2026-10-20T15:41:22.6138790Z [1m[92m   Compiling[0m twox-hash v2.1.1
+2026-10-20T15:41:22.7096750Z [1m[92m   Compiling[0m block v0.1.6
+2026-10-20T15:41:22.7931040Z [1m[92m   Compiling[0m svg_fmt v0.4.5
+2026-10-20T15:41:23.0377420Z [1m[92m   Compiling[0m guillotiere v0.6.2
+2026-10-20T15:41:23.7280650Z [1m[92m   Compiling[0m metal v0.31.0
+2026-10-20T15:41:28.7078520Z [1m[92m   Compiling[0m ruzstd v0.8.1
+2026-10-20T15:41:32.7865010Z [1m[92m   Compiling[0m bevy_color v0.16.2
+2026-10-20T15:41:42.8730390Z [1m[92m   Compiling[0m khronos-egl v6.0.0
+2026-10-20T15:41:43.2262480Z [1m[92m   Compiling[0m ktx2 v0.3.0
+2026-10-20T15:41:43.4430200Z [1m[92m   Compiling[0m rectangle-pack v0.4.2
+2026-10-20T15:41:43.7864400Z [1m[92m   Compiling[0m const_soft_float v0.1.4
+2026-10-20T15:41:44.0395650Z [1m[92m   Compiling[0m glow v0.16.0
+2026-10-20T15:41:44.2555630Z [1m[92m   Compiling[0m constgebra v0.1.4
+2026-10-20T15:41:44.3671270Z [1m[92m   Compiling[0m bevy_image v0.16.1
+2026-10-20T15:42:00.9922560Z [1m[92m   Compiling[0m bevy_window v0.16.1
+2026-10-20T15:42:05.7662970Z [1m[92m   Compiling[0m bevy_transform v0.16.1
+2026-10-20T15:42:17.2877520Z [1m[92m   Compiling[0m bevy_time v0.16.1
+2026-10-20T15:42:27.1381840Z [1m[92m   Compiling[0m bit-vec v0.6.3
+2026-10-20T15:42:27.3126020Z [1m[92m   Compiling[0m bit-set v0.5.3
+2026-10-20T15:42:27.4073190Z [1m[92m   Compiling[0m wgpu-core v24.0.5
+2026-10-20T15:42:32.5224050Z [1m[92m   Compiling[0m hexasphere v15.1.0
+2026-10-20T15:42:33.1518700Z [1m[92m   Compiling[0m sysinfo v0.34.2
+2026-10-20T15:42:34.2092520Z [1m[92m   Compiling[0m bevy_mikktspace v0.16.1
+2026-10-20T15:42:34.5373830Z [1m[92m   Compiling[0m data-encoding v2.9.0
+2026-10-20T15:42:37.4256680Z [1m[92m   Compiling[0m const-fnv1a-hash v1.1.0
+2026-10-20T15:42:37.4742160Z [1m[92m   Compiling[0m static_assertions v1.1.0
+2026-10-20T15:42:37.5113750Z [1m[92m   Compiling[0m wgpu v24.0.5
+2026-10-20T15:42:45.8653700Z [1m[92m   Compiling[0m bevy_diagnostic v0.16.1
+2026-10-20T15:42:49.4614020Z [1m[92m   Compiling[0m naga_oil v0.17.1
+2026-10-20T15:42:58.9718560Z [1m[92m   Compiling[0m bevy_mesh v0.16.1
+2026-10-20T15:43:01.9603630Z [1m[92m   Compiling[0m offset-allocator v0.2.0
+2026-10-20T15:43:02.1016960Z [1m[92m   Compiling[0m bevy_render v0.16.1
+2026-10-20T15:43:25.9748870Z [1m[92m   Compiling[0m objc-sys v0.3.5
+2026-10-20T15:43:26.0420930Z [1m[92m   Compiling[0m ryu v1.0.20
+2026-10-20T15:43:26.3245950Z [1m[92m   Compiling[0m itoa v1.0.15
+2026-10-20T15:43:26.3975750Z [1m[92m   Compiling[0m serde_json v1.0.141
+2026-10-20T15:43:28.9101630Z [1m[92m   Compiling[0m objc2 v0.5.2
+2026-10-20T15:43:30.0489370Z [1m[92m   Compiling[0m radsort v0.1.1
+2026-10-20T15:43:30.2305640Z [1m[92m   Compiling[0m bevy_core_pipeline v0.16.1
+2026-10-20T15:44:56.2497260Z [1m[92m   Compiling[0m block2 v0.5.1
+2026-10-20T15:44:56.5662280Z [1m[92m   Compiling[0m mach2 v0.4.3
+2026-10-20T15:44:56.8582700Z [1m[92m   Compiling[0m dispatch v0.2.0
+2026-10-20T15:44:57.0154020Z [1m[92m   Compiling[0m accesskit v0.18.0
+2026-10-20T15:44:58.0646200Z [1m[92m   Compiling[0m objc2-foundation v0.2.2
+2026-10-20T15:45:03.7366010Z [1m[92m   Compiling[0m font-types v0.9.0
+2026-10-20T15:45:03.9368970Z [1m[92m   Compiling[0m byteorder v1.5.0
+2026-10-20T15:45:04.0554660Z [1m[92m   Compiling[0m read-fonts v0.29.3
+2026-10-20T15:45:04.1170760Z [1m[92m   Compiling[0m slotmap v1.0.7
+2026-10-20T15:45:04.3985210Z [1m[92m   Compiling[0m objc2-app-kit v0.2.2
+2026-10-20T15:45:08.9254350Z [1m[92m   Compiling[0m bevy_picking v0.16.1
+2026-10-20T15:45:18.7297510Z [1m[92m   Compiling[0m core-foundation v0.10.1
+2026-10-20T15:45:19.1717590Z [1m[92m   Compiling[0m immutable-chunkmap v2.0.6
+2026-10-20T15:45:19.6240620Z [1m[92m   Compiling[0m percent-encoding v2.3.1
+2026-10-20T15:45:19.7922190Z [1m[92m   Compiling[0m accesskit_consumer v0.27.0
+2026-10-20T15:45:22.8827460Z [1m[92m   Compiling[0m skrifa v0.31.3
+2026-10-20T15:45:33.4873280Z [1m[92m   Compiling[0m coreaudio-sys v0.2.17
+2026-10-20T15:45:34.0900490Z [1m[92m   Compiling[0m core-graphics v0.23.2
+2026-10-20T15:45:34.5021660Z [1m[92m   Compiling[0m memmap2 v0.9.7
+2026-10-20T15:45:34.6357850Z [1m[92m   Compiling[0m ttf-parser v0.21.1
+2026-10-20T15:45:38.4972670Z [1m[92m   Compiling[0m unicode-ccc v0.2.0
+2026-10-20T15:45:38.5943930Z [1m[92m   Compiling[0m ttf-parser v0.20.0
+2026-10-20T15:45:42.3949800Z [1m[92m   Compiling[0m unicode-segmentation v1.12.0
+2026-10-20T15:45:42.8899900Z [1m[92m   Compiling[0m dpi v0.1.2
+2026-10-20T15:45:42.9747090Z [1m[92m   Compiling[0m zeno v0.3.3
+2026-10-20T15:45:43.8331990Z [1m[92m   Compiling[0m unicode-script v0.5.7
+2026-10-20T15:45:44.3408830Z [1m[92m   Compiling[0m unicode-bidi-mirroring v0.2.0
+2026-10-20T15:45:44.4322900Z [1m[92m   Compiling[0m cursor-icon v1.2.0
+2026-10-20T15:45:44.5114790Z [1m[92m   Compiling[0m unicode-properties v0.1.3
+2026-10-20T15:45:44.6496510Z [1m[92m   Compiling[0m yazi v0.2.1
+2026-10-20T15:45:45.4945390Z [1m[92m   Compiling[0m swash v0.2.5
+2026-10-20T15:45:46.2771670Z [1m[92m   Compiling[0m rustybuzz v0.14.1
+2026-10-20T15:45:56.5722070Z [1m[92m   Compiling[0m winit v0.30.12
+2026-10-20T15:45:59.7298390Z [1m[92m   Compiling[0m fontdb v0.16.2
+2026-10-20T15:46:00.8323800Z [1m[92m   Compiling[0m coreaudio-rs v0.11.3
+2026-10-20T15:46:01.9241740Z [1m[92m   Compiling[0m accesskit_macos v0.19.0
+2026-10-20T15:46:02.1147430Z [1m[92m   Compiling[0m io-kit-sys v0.4.1
+2026-10-20T15:46:02.2748110Z [1m[92m   Compiling[0m bevy_sprite v0.16.1
+2026-10-20T15:46:04.3978590Z [1m[92m   Compiling[0m ogg v0.8.0
+2026-10-20T15:46:04.9761040Z [1m[92m   Compiling[0m bevy_a11y v0.16.1
+2026-10-20T15:46:09.4403420Z [1m[92m   Compiling[0m crossbeam-epoch v0.9.18
+2026-10-20T15:46:09.8222130Z [1m[92m   Compiling[0m unicode-bidi v0.3.18
+2026-10-20T15:46:11.2289990Z [1m[92m   Compiling[0m dasp_sample v0.11.0
+2026-10-20T15:46:11.4376690Z [1m[92m   Compiling[0m rangemap v1.6.0
+2026-10-20T15:46:11.6736960Z [1m[92m   Compiling[0m unicode-linebreak v0.1.5
+2026-10-20T15:46:11.8684620Z [1m[92m   Compiling[0m self_cell v1.2.0
+2026-10-20T15:46:11.9276100Z [1m[92m   Compiling[0m vec_map v0.8.2
+2026-10-20T15:46:12.0471320Z [1m[92m   Compiling[0m sys-locale v0.3.2
+2026-10-20T15:46:12.1326110Z [1m[92m   Compiling[0m cosmic-text v0.13.2
+2026-10-20T15:46:21.0426190Z [1m[92m   Compiling[0m gilrs-core v0.6.4
+2026-10-20T15:46:23.4066460Z [1m[92m   Compiling[0m cpal v0.15.3
+2026-10-20T15:46:24.6353210Z [1m[92m   Compiling[0m crossbeam-deque v0.8.6
+2026-10-20T15:46:24.7641490Z [1m[92m   Compiling[0m lewton v0.10.2
+2026-10-20T15:46:27.8856780Z [1m[92m   Compiling[0m accesskit_winit v0.25.0
+2026-10-20T15:46:27.9857350Z [1m[92m   Compiling[0m gltf-json v1.4.1
+2026-10-20T15:46:59.4149950Z [1m[92m   Compiling[0m bevy_pbr v0.16.1
+2026-10-20T15:47:14.2165560Z [1m[92m   Compiling[0m bevy_input_focus v0.16.1
+2026-10-20T15:47:28.8369210Z [1m[92m   Compiling[0m approx v0.5.1
+2026-10-20T15:47:28.9216150Z [1m[92m   Compiling[0m fnv v1.0.7
+2026-10-20T15:47:28.9627880Z [1m[92m   Compiling[0m grid v0.15.0
+2026-10-20T15:47:29.1170150Z [1m[92m   Compiling[0m taffy v0.7.7
+2026-10-20T15:47:30.7008580Z [1m[92m   Compiling[0m gilrs v0.11.0
+2026-10-20T15:47:33.9730140Z [1m[92m   Compiling[0m bevy_winit v0.16.1
+2026-10-20T15:47:56.2531280Z [1m[92m   Compiling[0m gltf v1.4.1
+2026-10-20T15:48:10.6148720Z [1m[92m   Compiling[0m rodio v0.20.1
+2026-10-20T15:48:13.8172140Z [1m[92m   Compiling[0m rayon-core v1.12.1
+2026-10-20T15:48:15.6600300Z [1m[92m   Compiling[0m bevy_text v0.16.1
+2026-10-20T15:48:53.8636190Z [1m[92m   Compiling[0m bevy_scene v0.16.1
+2026-10-20T15:49:23.0650120Z [1m[92m   Compiling[0m bevy_animation v0.16.1
+2026-10-20T15:50:07.5180020Z [1m[92m   Compiling[0m base64 v0.22.1
+2026-10-20T15:50:08.1480920Z [1m[92m   Compiling[0m bevy_gltf v0.16.1
+2026-10-20T15:50:42.5923240Z [1m[92m   Compiling[0m bevy_state v0.16.1
+2026-10-20T15:50:50.3172100Z [1m[92m   Compiling[0m bevy_gizmos v0.16.1
+2026-10-20T15:50:55.0079070Z [1m[92m   Compiling[0m zerofrom v0.1.6
+2026-10-20T15:50:55.0829620Z [1m[92m   Compiling[0m bevy_ui v0.16.1
+2026-10-20T15:51:30.6959270Z [1m[92m   Compiling[0m rayon v1.10.0
+2026-10-20T15:51:32.8672370Z [1m[92m   Compiling[0m bevy_audio v0.16.1
+2026-10-20T15:52:03.0857200Z [1m[92m   Compiling[0m bevy_gilrs v0.16.1
+2026-10-20T15:52:07.4352770Z [1m[92m   Compiling[0m stable_deref_trait v1.2.0
+2026-10-20T15:52:07.4811490Z [1m[92m   Compiling[0m yoke v0.8.0
+2026-10-20T15:52:07.6585410Z [1m[92m   Compiling[0m bevy_internal v0.16.1
+2026-10-20T15:52:21.7953530Z [1m[92m   Compiling[0m simulation_kernel v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/simulation_kernel)
+2026-10-20T15:52:24.5788460Z [1m[92m   Compiling[0m dirs-sys-next v0.1.2
+2026-10-20T15:52:24.7224050Z [1m[92m   Compiling[0m zerovec v0.11.2
+2026-10-20T15:52:26.0122790Z [1m[92m   Compiling[0m dirs-next v2.0.0
+2026-10-20T15:52:26.1418520Z [1m[92m   Compiling[0m tinystr v0.8.1
+2026-10-20T15:52:26.3267110Z [1m[92m   Compiling[0m bevy_dylib v0.16.1
+2026-10-20T15:52:26.4108280Z [1m[92m   Compiling[0m writeable v0.6.1
+2026-10-20T15:52:26.9598650Z [1m[92m   Compiling[0m litemap v0.8.0
+2026-10-20T15:52:27.1735310Z [1m[92m   Compiling[0m icu_locale_core v2.0.0
+2026-10-20T15:52:31.3969730Z [1m[92m   Compiling[0m zerotrie v0.2.2
+2026-10-20T15:52:31.9644760Z [1m[92m   Compiling[0m potential_utf v0.1.2
+2026-10-20T15:52:32.1530630Z [1m[92m   Compiling[0m icu_collections v2.0.0
+2026-10-20T15:52:33.2802640Z [1m[92m   Compiling[0m icu_provider v2.0.0
+2026-10-20T15:52:33.3951630Z [1m[92m   Compiling[0m bevy v0.16.1
+2026-10-20T15:52:33.5788630Z [1m[92m   Compiling[0m engine-core v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T15:52:33.8988610Z [1m[92m   Compiling[0m ttf-parser v0.25.1
+2026-10-20T15:52:39.5270540Z [1m[92m   Compiling[0m owned_ttf_parser v0.25.1
+2026-10-20T15:52:39.8174710Z [1m[92m   Compiling[0m icu_properties_data v2.0.1
+2026-10-20T15:52:39.9665770Z [1m[92m   Compiling[0m icu_normalizer_data v2.0.0
+2026-10-20T15:52:40.0102510Z [1m[92m   Compiling[0m ab_glyph_rasterizer v0.1.9
+2026-10-20T15:52:40.1840240Z [1m[92m   Compiling[0m ab_glyph v0.2.31
+2026-10-20T15:52:40.5220350Z [1m[92m   Compiling[0m icu_normalizer v2.0.0
+2026-10-20T15:52:41.6138310Z [1m[92m   Compiling[0m icu_properties v2.0.1
+2026-10-20T15:52:42.1028010Z [1m[92m   Compiling[0m ahash v0.8.12
+2026-10-20T15:52:42.3272100Z [1m[92m   Compiling[0m nohash-hasher v0.2.0
+2026-10-20T15:52:42.4060260Z [1m[92m   Compiling[0m rand_core v0.9.3
+2026-10-20T15:52:42.6707130Z [1m[92m   Compiling[0m idna_adapter v1.2.1
+2026-10-20T15:52:42.7530700Z [1m[92m   Compiling[0m emath v0.31.1
+2026-10-20T15:52:43.1899240Z [1m[92m   Compiling[0m utf8_iter v1.0.4
+2026-10-20T15:52:43.3056920Z [1m[92m   Compiling[0m idna v1.0.3
+2026-10-20T15:52:43.4283750Z [1m[92m   Compiling[0m ecolor v0.31.1
+2026-10-20T15:52:43.9150590Z [1m[92m   Compiling[0m rand_chacha v0.9.0
+2026-10-20T15:52:46.1480540Z [1m[92m   Compiling[0m form_urlencoded v1.2.1
+2026-10-20T15:52:46.3983120Z [1m[92m   Compiling[0m objc2-foundation v0.3.1
+2026-10-20T15:52:46.6040110Z [1m[92m   Compiling[0m objc2-core-graphics v0.3.1
+2026-10-20T15:52:47.0893760Z [1m[92m   Compiling[0m epaint_default_fonts v0.31.1
+2026-10-20T15:52:47.2040860Z [1m[92m   Compiling[0m epaint v0.31.1
+2026-10-20T15:52:51.2274670Z [1m[92m   Compiling[0m objc2-app-kit v0.3.1
+2026-10-20T15:52:52.1471980Z [1m[92m   Compiling[0m url v2.5.4
+2026-10-20T15:52:55.2643800Z [1m[92m   Compiling[0m rand v0.9.2
+2026-10-20T15:52:56.1026230Z [1m[92m   Compiling[0m webbrowser v1.0.5
+2026-10-20T15:52:56.4024540Z [1m[92m   Compiling[0m arboard v3.6.0
+2026-10-20T15:52:56.6155020Z [1m[92m   Compiling[0m egui v0.31.1
+2026-10-20T15:53:03.2171510Z [1m[92m   Compiling[0m winnow v0.7.12
+2026-10-20T15:53:04.8558630Z [1m[92m   Compiling[0m toml_parser v1.0.1
+2026-10-20T15:53:06.3503120Z [1m[92m   Compiling[0m bevy_egui v0.35.1
+2026-10-20T15:53:28.9496080Z [1m[92m   Compiling[0m tooling v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T15:53:30.5840140Z [1m[92m   Compiling[0m engine-common v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T15:53:40.4772110Z [1m[92m   Compiling[0m serde_spanned v1.0.0
+2026-10-20T15:53:40.6175630Z [1m[92m   Compiling[0m toml_datetime v0.7.0
+2026-10-20T15:53:41.0474430Z [1m[92m   Compiling[0m color_quant v1.1.0
+2026-10-20T15:53:41.3609390Z [1m[92m   Compiling[0m toml_writer v1.0.2
+2026-10-20T15:53:41.6309000Z [1m[92m   Compiling[0m toml v0.9.3
+2026-10-20T15:53:47.9986090Z [1m[92m   Compiling[0m gif v0.13.3
+2026-10-20T15:53:49.1240730Z [1m[92m   Compiling[0m engine-gpu v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T15:53:50.0370290Z [1m[92m   Compiling[0m models v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T15:54:01.5126400Z [1m[92m   Compiling[0m engine-render v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T15:54:06.3024020Z [1m[92m   Compiling[0m anstyle v1.0.14
+2026-10-20T15:54:06.5169350Z [1m[92m   Compiling[0m clap_lex v1.1.1
+2026-10-20T15:54:06.8490070Z [1m[92m   Compiling[0m ciborium-io v0.2.2
+2026-10-20T15:54:06.8929230Z [1m[92m   Compiling[0m ciborium-ll v0.2.2
+2026-10-20T15:54:07.0677370Z [1m[92m   Compiling[0m clap_builder v4.6.7
+2026-10-20T15:54:14.4073670Z [1m[92m   Compiling[0m itertools v0.10.5
+2026-10-20T15:54:16.0708200Z [1m[92m   Compiling[0m same-file v1.0.6
+2026-10-20T15:54:16.2439780Z [1m[92m   Compiling[0m emath v0.32.0
+2026-10-20T15:54:16.8594720Z [1m[92m   Compiling[0m cast v0.3.0
+2026-10-20T15:54:17.0031120Z [1m[92m   Compiling[0m criterion-plot v0.5.0
+2026-10-20T15:54:18.3546880Z [1m[92m   Compiling[0m ecolor v0.32.0
+2026-10-20T15:54:18.3776250Z [1m[92m   Compiling[0m walkdir v2.5.0
+2026-10-20T15:54:18.8687690Z [1m[92m   Compiling[0m clap v4.6.7
+2026-10-20T15:54:18.9156530Z [1m[92m   Compiling[0m ciborium v0.2.2
+2026-10-20T15:54:19.4952900Z [1m[92m   Compiling[0m tinytemplate v1.2.1
+2026-10-20T15:54:19.9141310Z [1m[92m   Compiling[0m is-terminal v0.4.17
+2026-10-20T15:54:19.9686830Z [1m[92m   Compiling[0m oorandom v11.1.5
+2026-10-20T15:54:20.0902040Z [1m[92m   Compiling[0m epaint_default_fonts v0.32.0
+2026-10-20T15:54:20.2032500Z [1m[92m   Compiling[0m anes v0.1.6
+2026-10-20T15:54:20.4648590Z [1m[92m   Compiling[0m criterion v0.5.1
+2026-10-20T15:54:21.1684920Z [1m[92m   Compiling[0m epaint v0.32.0
+2026-10-20T15:54:30.2063170Z [1m[92m   Compiling[0m ui v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T15:54:41.1174320Z [1m[92m   Compiling[0m egui v0.32.0
+2026-10-20T15:54:52.3708010Z [1m[92m   Compiling[0m tests v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tests)
+2026-10-20T15:55:22.9848260Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T15:55:45.5177640Z [1m[92m    Finished[0m `test` profile [optimized] target(s) in 17m 00s
+2026-10-20T15:55:45.6842880Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_common-72bd0670c44b6807)
+2026-10-20T15:55:45.7605690Z 
+2026-10-20T15:55:45.7627450Z running 7 tests
+2026-10-20T15:55:45.7638660Z test controls::camera::manager::stage::tests::degenerate_stage_has_no_viewport ... ok
+2026-10-20T15:55:45.7641540Z test controls::camera::manager::stage::tests::input_gates_default_open_without_a_lab ... ok
+2026-10-20T15:55:45.7643420Z test controls::camera::manager::stage::tests::logical_rect_maps_to_physical_pixels ... ok
+2026-10-20T15:55:45.8048400Z test controls::camera::manager::stage::tests::stage_applies_only_while_a_world_is_shown ... ok
+2026-10-20T15:55:45.8064370Z test controls::camera::manager::stage::tests::viewport_is_clamped_inside_the_window ... ok
+2026-10-20T15:55:45.8072520Z test controls::camera::manager::stage::tests::frame_selected_centres_on_the_slice_and_ignores_missing_slice ... ok
+2026-10-20T15:55:45.8128900Z test controls::camera::manager::stage::tests::hidden_world_keeps_stage_cameras_running_in_one_pixel ... ok
+2026-10-20T15:55:45.8144220Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_core-3348922d05c4c07a)
+2026-10-20T15:55:45.8144630Z 
+2026-10-20T15:55:45.8163590Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+2026-10-20T15:55:45.8166260Z 
+2026-10-20T15:55:45.8315480Z 
+2026-10-20T15:55:45.8316680Z running 18 tests
+2026-10-20T15:55:45.8317180Z test automata::channel::clock::tests::step_clock_passes_through_at_base_rate ... ok
+2026-10-20T15:55:45.8317720Z test automata::channel::colour::tests::linear_conversion_hits_known_points ... ok
+2026-10-20T15:55:45.8318320Z test automata::channel::clock::tests::step_clock_divides_exactly_with_integer_carry ... ok
+2026-10-20T15:55:45.8318940Z test automata::channel::colour::tests::ramp_keeps_the_chosen_colour_as_its_third_stop ... ok
+2026-10-20T15:55:45.8319450Z test automata::channel::colour::tests::ramp_lightness_is_strictly_increasing ... ok
+2026-10-20T15:55:45.8320580Z test automata::channel::metrics::tests::mass_is_density_sum_over_255 ... ok
+2026-10-20T15:55:45.8341960Z test automata::channel::metrics::trace::tests::evicts_oldest_beyond_capacity ... ok
+2026-10-20T15:55:45.8343000Z test automata::channel::metrics::tests::record_requires_declaration_and_tracks_latest ... ok
+2026-10-20T15:55:45.8343810Z test automata::channel::metrics::trace::tests::newer_epoch_clears_and_older_epoch_is_rejected ... ok
+2026-10-20T15:55:45.8345190Z test automata::channel::metrics::trace::tests::range_spans_min_and_max ... ok
+2026-10-20T15:55:45.8349760Z test automata::channel::metrics::trace::tests::same_tick_replaces_and_older_tick_is_rejected ... ok
+2026-10-20T15:55:45.8350490Z test automata::channel::tests::ids_are_never_reused_and_capacity_is_shared ... ok
+2026-10-20T15:55:45.8351080Z test automata::channel::tests::publish_replaces_one_backend_and_keeps_creation_order ... ok
+2026-10-20T15:55:45.8351610Z test automata::channel::tests::rate_presets_span_one_to_sixty_hertz ... ok
+2026-10-20T15:55:45.8352130Z test automata::channel::tests::select_command_targets_only_existing_rows ... ok
+2026-10-20T15:55:45.8352660Z test automata::channel::tests::settle_selects_predecessor_after_removal ... ok
+2026-10-20T15:55:45.8353230Z test automata::lenia::tests::lenia_controls_pause_step_reset_parameters_and_ignore_stale_entities ... ok
+2026-10-20T15:55:45.8422810Z test automata::lenia::tests::continuous_model_reset_validation_and_exact_serialization ... ok
+2026-10-20T15:55:45.8434710Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/engine_render-d46b32e26ab3d857)
+2026-10-20T15:55:45.8435680Z 
+2026-10-20T15:55:45.8527060Z test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T15:55:45.8527860Z 
+2026-10-20T15:55:45.8602890Z 
+2026-10-20T15:55:45.8603990Z running 0 tests
+2026-10-20T15:55:45.8604560Z 
+2026-10-20T15:55:45.8605610Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:45.8606720Z 
+2026-10-20T15:55:45.8611270Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/models-980afdffd293205c)
+2026-10-20T15:55:45.8760910Z 
+2026-10-20T15:55:45.8762550Z running 42 tests
+2026-10-20T15:55:45.8773510Z test automata::dynamical::lenia::tests::invalid_growth_parameters_leave_model_state_unchanged ... ok
+2026-10-20T15:55:45.8798450Z test plugin::tests::model_registration_runs_without_a_renderer_or_window ... ok
+2026-10-20T15:55:45.8806170Z test workbench::catalog::scenarios::tests::scenarios_are_repeatable_and_paused ... ok
+2026-10-20T15:55:45.8807460Z test workbench::catalog::scenarios::tests::scenarios_reveal_their_documented_outcomes ... ok
+2026-10-20T15:55:45.8875530Z test workbench::catalog::tests::copy_keeps_contract_disclaimers ... ok
+2026-10-20T15:55:45.8881660Z test workbench::catalog::tests::every_family_and_lenia_has_exactly_one_entry ... ok
+2026-10-20T15:55:45.8888490Z test workbench::catalog::tests::fields_are_present_and_dois_valid ... ok
+2026-10-20T15:55:45.8894420Z test workbench::catalog::tests::figure_numbers_follow_file_order ... ok
+2026-10-20T15:55:45.8897200Z test workbench::catalog::tests::metric_names_match_the_metric_sources ... ok
+2026-10-20T15:55:45.8899600Z test workbench::evolution::agents::tests::a_carrying_ant_returns_home_and_evaporation_removes_exhausted_trails ... ok
+2026-10-20T15:55:45.8903510Z test workbench::catalog::tests::doi_syntax_and_unknown_groups ... ok
+2026-10-20T15:55:45.8905630Z test workbench::evolution::agents::tests::flock_update_is_order_independent_and_respects_speed_and_arena_bounds ... ok
+2026-10-20T15:55:45.8907420Z test workbench::evolution::grid::editing::tests::invalid_strokes_are_atomic_and_running_worlds_refuse_edits ... ok
+2026-10-20T15:55:45.8911470Z test workbench::evolution::grid::editing::tests::old_projects_default_worlds_and_new_world_limits_validate ... ok
+2026-10-20T15:55:45.8912800Z test workbench::evolution::grid::editing::tests::stroke_undo_redo_reset_and_loaded_continuation ... ok
+2026-10-20T15:55:45.8915760Z test workbench::evolution::grid::gas_tests::hpp_particles_keep_direction_and_head_on_collisions_turn_perpendicularly ... ok
+2026-10-20T15:55:45.8919280Z test automata::dynamical::lenia::tests::serial_and_parallel_models_match_reference_over_many_ticks ... ok
+2026-10-20T15:55:45.8921210Z test workbench::evolution::grid::tests::elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions ... ok
+2026-10-20T15:55:45.8928810Z test workbench::evolution::agents::tests::ant_rng_reset_replays_food_deliveries_and_bounded_trails ... ok
+2026-10-20T15:55:45.8948840Z test workbench::evolution::symbolic::tests::languages::bounded_languages_match_exhaustive_short_words_and_reject_unicode ... ok
+2026-10-20T15:55:45.8956640Z test workbench::evolution::symbolic::tests::languages::bounded_tape_never_allocates_outside_its_input ... ok
+2026-10-20T15:55:45.8961060Z test workbench::evolution::symbolic::tests::languages::pushdown_stack_tracks_nesting_and_rejects_nonparenthesis_symbols ... ok
+2026-10-20T15:55:45.9027650Z test workbench::evolution::grid::tests::life_blinker_period_and_glider_displacement_are_correct ... ok
+2026-10-20T15:55:45.9029970Z test workbench::evolution::symbolic::tests::machines::lsystem_rewrites_in_parallel_and_stops_before_exceeding_its_bound ... ok
+2026-10-20T15:55:45.9031880Z test workbench::evolution::symbolic::tests::machines::nfa_epsilon_cycles_and_branching_remain_closed ... ok
+2026-10-20T15:55:45.9039660Z test workbench::evolution::symbolic::tests::machines::turing_rewrites_halts_rejects_and_extends_both_tape_ends ... ok
+2026-10-20T15:55:45.9139580Z test workbench::operations::channels::tests::every_kind_has_a_named_metric ... ok
+2026-10-20T15:55:45.9140850Z test workbench::operations::channels::analysis::tests::error_measures_and_projection_include_every_z_plane ... ok
+2026-10-20T15:55:45.9146210Z test workbench::operations::channels::tests::koch_length_symbolic_steps_boids_and_ants ... ok
+2026-10-20T15:55:45.9147050Z test workbench::operations::channels::tests::life_counts_the_glider_and_rule30_its_newest_row ... ok
+2026-10-20T15:55:45.9147930Z test workbench::operations::channels::tests::hpp_particle_count_is_conserved_before_walls_reach_edges ... ok
+2026-10-20T15:55:45.9149930Z test workbench::operations::experiment::tests::settings::agent_population_edits_require_reset_and_controls_are_finite ... ok
+2026-10-20T15:55:45.9152110Z test workbench::operations::experiment::tests::settings::seeded_patterns_reproduce_and_live_rules_keep_state ... ok
+2026-10-20T15:55:46.0133700Z test workbench::operations::experiment::tests::export::export_decodes_and_preserves_live_state ... ok
+2026-10-20T15:55:46.0225650Z test workbench::operations::project::library::tests::names_and_invalid_imports_do_not_escape_or_create_entries ... ok
+2026-10-20T15:55:46.0283620Z test workbench::operations::project::library::tests::published_gpu_specimen_preserves_kernel_seed_and_exact_float_state ... ok
+2026-10-20T15:55:46.0484410Z test workbench::operations::project::library::tests::imported_and_duplicated_specimens_preserve_every_family ... ok
+2026-10-20T15:55:46.0586090Z test workbench::operations::project::tests::continuation::live_edit_reset_and_fractional_clock_contract ... ok
+2026-10-20T15:55:46.0687620Z test workbench::operations::project::tests::rejection::file_roundtrip_and_unknown_fields ... ok
+2026-10-20T15:55:46.0783070Z test workbench::operations::project::tests::rejection::malformed_projects_fail_before_mutation ... ok
+2026-10-20T15:55:46.2108220Z test workbench::operations::project::tests::continuation::every_family_continues_after_roundtrip ... ok
+2026-10-20T15:55:46.7363610Z test workbench::evolution::grid::tests::cellular_histories_and_parallel_updates_preserve_snapshot_semantics ... ok
+2026-10-20T15:55:46.7368400Z 
+2026-10-20T15:55:46.7370690Z test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.86s
+2026-10-20T15:55:46.7371550Z 
+2026-10-20T15:55:46.7389360Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/simulation_kernel-7c91ae705a6539d3)
+2026-10-20T15:55:46.7461900Z 
+2026-10-20T15:55:46.7462470Z running 10 tests
+2026-10-20T15:55:46.7465830Z test core::lenia::tests::boundaries_are_zero_and_z_planes_are_independent ... ok
+2026-10-20T15:55:46.7467180Z test core::lenia::tests::every_xy_neighbor_uses_its_original_offset ... ok
+2026-10-20T15:55:46.7473220Z test core::lenia::tests::growth_clamps_quantizes_and_preserves_zero_dt ... ok
+2026-10-20T15:55:46.7478040Z test core::lenia::tests::numerical::fixtures_are_safe_for_small_shapes_and_distinct ... ok
+2026-10-20T15:55:46.7481140Z test core::lenia::tests::parameters_and_shape_fail_closed ... ok
+2026-10-20T15:55:46.7485200Z test stepper::sparse::benchmark::sparse_benchmark ... ignored, measurement benchmark: set SOUL_BENCH_REPORT to retain JSON
+2026-10-20T15:55:46.7492400Z test core::lenia::tests::numerical::seeded_multitick_reference_matches_independent_numerics ... ok
+2026-10-20T15:55:46.7494620Z test stepper::sparse::tests::unbounded_births_and_coordinate_extremes ... ok
+2026-10-20T15:55:46.7512650Z test stepper::sparse::tests::finite_serial_parallel_dense_sparse_parity ... ok
+2026-10-20T15:55:48.3775400Z test core::lenia::continuous::qualification::published_orbium_matches_fft_reference_through_one_hundred_ticks ... ok
+2026-10-20T15:55:48.3778160Z 
+2026-10-20T15:55:48.3779350Z test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.63s
+2026-10-20T15:55:48.3779950Z 
+2026-10-20T15:55:48.3791460Z [1m[92m     Running[0m unittests src/main.rs (target/debug/deps/swarm_orchestrator_for_autonomous_learners-b3acca2c40387473)
+2026-10-20T15:55:48.4181950Z 
+2026-10-20T15:55:48.4185320Z running 3 tests
+2026-10-20T15:55:48.4188060Z test app::preview::automata::flow::stage_check::tests::warm_pixels_need_hue_and_saturation ... ok
+2026-10-20T15:55:48.4189980Z test app::preview::automata::flow::stage_check::tests::counts_only_matching_pixels_inside_the_stage ... ok
+2026-10-20T15:55:48.4191830Z test app::preview::automata::flow::stage_check::tests::detects_panel_fill_inside_the_stage_edge ... ok
+2026-10-20T15:55:48.4192660Z 
+2026-10-20T15:55:48.4193300Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:48.4194540Z 
+2026-10-20T15:55:48.4198610Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/tests-05b0b83fd7d79014)
+2026-10-20T15:55:48.4449250Z 
+2026-10-20T15:55:48.4453270Z running 23 tests
+2026-10-20T15:55:48.4526930Z test channels::cpu::colour_input_and_configuration_apply ... ok
+2026-10-20T15:55:48.4535940Z test channels::cpu::halted_machines_report_halted_and_refuse_resume ... ok
+2026-10-20T15:55:48.4537890Z test channels::cpu::remove_releases_shared_capacity ... ok
+2026-10-20T15:55:48.4552520Z test channels::cpu::spawn_publishes_a_paused_selected_row ... ok
+2026-10-20T15:55:48.4624560Z test channels::cpu::replaced_sessions_are_adopted_and_old_ids_released ... ok
+2026-10-20T15:55:48.4741500Z test channels::gpu::lenia_rows_publish_as_gpu_channels ... ok
+2026-10-20T15:55:48.4930650Z test channels::gpu::lenia_spawn_allocates_a_selected_channel ... ok
+2026-10-20T15:55:48.5055380Z test channels::cpu::step_only_while_paused_and_reset_bumps_epoch ... ok
+2026-10-20T15:55:48.5058440Z test channels::gpu::lenia_spawn_refused_when_full ... ok
+2026-10-20T15:55:48.5101270Z test channels::gpu::remove_emits_automaton_removed_and_releases_the_id ... ok
+2026-10-20T15:55:48.5146400Z test channels::gpu::lifecycle_actions_map_to_lenia_actions ... ok
+2026-10-20T15:55:48.5345820Z test channels::cpu::running_channels_advance_at_their_own_rate ... ok
+2026-10-20T15:55:48.5367980Z test channels::mass::busy_mailbox_suspends_sampling ... ok
+2026-10-20T15:55:48.5372770Z test channels::mass::enabled_requests_are_throttled_and_results_recorded ... ok
+2026-10-20T15:55:48.5388500Z test channels::mass::off_by_default_declares_opt_in_and_never_requests ... ok
+2026-10-20T15:55:48.5390190Z test channels::mass::readback_error_becomes_unavailable ... ok
+2026-10-20T15:55:48.5399790Z test channels::mass::stale_epoch_snapshots_are_dropped ... ok
+2026-10-20T15:55:48.5400860Z test families::capacity_and_invalid_inputs_do_not_mutate_other_sessions ... ok
+2026-10-20T15:55:48.5441140Z test families::every_family_plugin_registers_and_native_spawn_clear_commands_execute ... ok
+2026-10-20T15:55:48.5445810Z test families::all_families_pause_step_reset_and_hold_terminal_states ... ok
+2026-10-20T15:55:48.5451040Z test sim_loop::spiral_guard_caps_work_and_discards_excess_lag ... ok
+2026-10-20T15:55:48.5469770Z test channels::mass::stalled_readback_times_out ... ok
+2026-10-20T15:55:48.5471340Z test sim_loop::accumulator_emits_correct_steps ... ok
+2026-10-20T15:55:48.5472000Z 
+2026-10-20T15:55:48.5472530Z test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+2026-10-20T15:55:48.5473720Z 
+2026-10-20T15:55:48.5483920Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/tooling-c8fbd49952bad474)
+2026-10-20T15:55:48.5711500Z 
+2026-10-20T15:55:48.5717160Z running 0 tests
+2026-10-20T15:55:48.5717980Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/ui-2dbe63a4e436a081)
+2026-10-20T15:55:48.5718310Z 
+2026-10-20T15:55:48.5718580Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:48.5718950Z 
+2026-10-20T15:55:48.5912770Z 
+2026-10-20T15:55:48.5914140Z running 49 tests
+2026-10-20T15:55:48.5949180Z test lab::chrome::drawers::compare::export::tests::csv_bundle_preserves_samples_fields_metadata_and_refuses_overwrite ... ok
+2026-10-20T15:55:48.5953160Z test lab::chrome::drawers::compare::tests::pairs_must_be_distinct_and_able_to_advance ... ok
+2026-10-20T15:55:48.5956780Z test lab::chrome::drawers::compare::tests::the_pair_follows_its_channels_when_tabs_close ... ok
+2026-10-20T15:55:48.5961280Z test lab::chrome::drawers::compare::capture::tests::step_waits_for_completed_states_and_compares_exact_ticks ... ok
+2026-10-20T15:55:48.5970470Z test lab::chrome::drawers::library::tests::filter_matches_title_subtitle_and_group_case_insensitively ... ok
+2026-10-20T15:55:48.5974910Z test lab::chrome::drawers::library::tests::groups_follow_library_order_and_hide_unavailable_specimens ... ok
+2026-10-20T15:55:48.5978610Z test lab::chrome::transport::tests::flat_or_short_traces ... ok
+2026-10-20T15:55:48.5985320Z test lab::chrome::transport::tests::rate_presets_mark_the_nearest_rate ... ok
+2026-10-20T15:55:48.5988110Z test lab::chrome::transport::tests::sparkline_spans_the_rect_with_max_at_the_top ... ok
+2026-10-20T15:55:48.5989830Z test lab::inspector::machine::tests::summaries_name_state_and_result ... ok
+2026-10-20T15:55:48.5991500Z test lab::inspector::machine::tests::turing_table_lists_every_transition_sorted ... ok
+2026-10-20T15:55:48.5993590Z test lab::inspector::parameters::tests::actions_become_configure_requests ... ok
+2026-10-20T15:55:48.5995310Z test lab::inspector::parameters::tests::drafts_survive_frames_and_follow_external_changes ... ok
+2026-10-20T15:55:48.6003580Z test lab::inspector::sections::tests::arenas_describe_size_and_edges ... ok
+2026-10-20T15:55:48.6005360Z test lab::inspector::sections::tests::edited_rules_and_populations_are_customised ... ok
+2026-10-20T15:55:48.6006880Z test lab::inspector::sections::tests::input_note_warns_beyond_the_bound ... ok
+2026-10-20T15:55:48.6009380Z test lab::inspector::sections::tests::metric_values_format_by_kind ... ok
+2026-10-20T15:55:48.6017790Z test lab::stage::painters::symbolic::tests::tape_window_keeps_the_head_visible ... ok
+2026-10-20T15:55:48.6019310Z test lab::stage::painters::symbolic::tests::tapes_are_sized_to_their_visible_window ... ok
+2026-10-20T15:55:48.6019980Z test lab::stage::painters::tests::ramp_colour_hits_stops_at_thirds ... ok
+2026-10-20T15:55:48.6020450Z test lab::stage::view::tests::content_is_centred_and_fitted ... ok
+2026-10-20T15:55:48.6020990Z test lab::chrome::drawers::compare::capture::tests::reset_and_closed_channels_cancel_a_pending_pair ... ok
+2026-10-20T15:55:48.6022370Z test lab::stage::view::tests::cursor_maps_back_to_cells ... ok
+2026-10-20T15:55:48.6023150Z test lab::stage::view::tests::zoom_is_clamped ... ok
+2026-10-20T15:55:48.6023780Z test lab::stage::voxels::tests::stack_voxels_and_end_of_tape_heads_remain_visible ... ok
+2026-10-20T15:55:48.6024560Z test lab::state::tests::inspector_width_is_clamped ... ok
+2026-10-20T15:55:48.6025450Z test lab::state::tests::launch_library_steps_aside_once_a_channel_opens ... ok
+2026-10-20T15:55:48.6025990Z test lab::state::tests::library_opens_on_first_launch_and_drawers_toggle ... ok
+2026-10-20T15:55:48.6026740Z test lab::state::tests::presenter_transport_fades_after_two_idle_seconds ... ok
+2026-10-20T15:55:48.6027900Z test lab::tests::escape_closes_the_settings_popover_first ... ok
+2026-10-20T15:55:48.6028900Z test lab::tests::escape_is_swallowed_only_when_lab_consumes_it ... ok
+2026-10-20T15:55:48.6036740Z test lab::stage::editing::tests::pointer_strokes_generate_one_undo_group_and_fill_drag_gaps ... ok
+2026-10-20T15:55:48.6040600Z test lab::tests::keys_map_to_shortcuts ... ok
+2026-10-20T15:55:48.6042650Z test lab::tests::frame_input_reads_keys_without_relocking_the_context ... ok
+2026-10-20T15:55:48.6043970Z test lab::tests::legacy_ui_modules_are_gone ... ok
+2026-10-20T15:55:48.6044660Z test lab::tests::run_pause_step_reset_target_the_selected_channel ... ok
+2026-10-20T15:55:48.6046270Z test lab::tests::toggles ... ok
+2026-10-20T15:55:48.6048800Z test theme::fonts::tests::every_family_leads_with_libertinus_and_keeps_fallbacks ... ok
+2026-10-20T15:55:48.6068110Z test lab::tests::tab_titles_stop_claiming_the_catalog_specimen_once_customised ... ok
+2026-10-20T15:55:48.6082510Z test theme::fonts::tests::fonts_load_and_cover_lab_glyphs ... ok
+2026-10-20T15:55:48.6083490Z test theme::tokens::tests::signal_matches_the_channel_default_colour ... ok
+2026-10-20T15:55:48.6084890Z test theme::tokens::tests::text_tokens_meet_wcag_aa_on_both_surfaces ... ok
+2026-10-20T15:55:48.6087310Z test theme::visuals::tests::no_widget_or_window_draws_a_hairline ... ok
+2026-10-20T15:55:48.6101800Z test theme::visuals::tests::type_scale_uses_spec_sizes ... ok
+2026-10-20T15:55:48.6108980Z test theme::widgets::tests::colour_rules ... ok
+2026-10-20T15:55:48.6115840Z test theme::widgets::tests::ticks_are_zero_padded_to_six_digits ... ok
+2026-10-20T15:55:48.6118410Z test theme::fonts::tests::named_families_are_ready_only_from_the_pass_after_install ... ok
+2026-10-20T15:55:48.6149650Z test theme::widgets::tests::widgets_render_headless_without_panicking ... ok
+2026-10-20T15:55:48.6342750Z test lab::stage::voxels::tests::selected_tape_creates_meshes_steps_and_cleans_up ... ok
+2026-10-20T15:55:48.6344090Z 
+2026-10-20T15:55:48.6346010Z test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+2026-10-20T15:55:48.6349100Z 
+2026-10-20T15:55:48.6357120Z [1m[92m   Doc-tests[0m engine_common
+2026-10-20T15:55:50.2027210Z 
+2026-10-20T15:55:50.2028310Z running 4 tests
+2026-10-20T15:55:50.2030250Z test lib/engine/engine-common/src/controls/camera/plugin_bundle.rs - controls::camera::plugin_bundle::CameraPluginBundle (line 13) - compile ... ok
+2026-10-20T15:55:50.2032420Z test lib/engine/engine-common/src/lib.rs - (line 7) - compile ... ok
+2026-10-20T15:55:50.2033370Z test lib/engine/engine-common/src/plugin.rs - plugin (line 7) - compile ... ok
+2026-10-20T15:55:50.2158930Z test lib/engine/engine-common/src/prelude.rs - prelude (line 3) ... ok
+2026-10-20T15:55:50.2160420Z 
+2026-10-20T15:55:50.2162450Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T15:55:50.2164180Z 
+2026-10-20T15:55:50.2176790Z all doctests ran in 1.27s; merged doctests compilation took 1.24s
+2026-10-20T15:55:50.2212180Z [1m[92m   Doc-tests[0m engine_core
+2026-10-20T15:55:51.2657720Z 
+2026-10-20T15:55:51.2658970Z running 1 test
+2026-10-20T15:55:51.2801730Z test lib/engine/engine-core/src/systems/execution/simulation/mod.rs - systems::execution::simulation (line 16) ... ok
+2026-10-20T15:55:51.2802980Z 
+2026-10-20T15:55:51.2804000Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-10-20T15:55:51.2804930Z 
+2026-10-20T15:55:51.2831440Z all doctests ran in 0.96s; merged doctests compilation took 0.92s
+2026-10-20T15:55:51.2872600Z [1m[92m   Doc-tests[0m engine_render
+2026-10-20T15:55:51.4247720Z 
+2026-10-20T15:55:51.4349380Z [1m[92m   Doc-tests[0m models
+2026-10-20T15:55:51.4350080Z running 0 tests
+2026-10-20T15:55:51.4442990Z 
+2026-10-20T15:55:51.4458430Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:51.4460230Z 
+2026-10-20T15:55:52.6822760Z 
+2026-10-20T15:55:52.6832790Z running 4 tests
+2026-10-20T15:55:52.6834160Z test lib/models/src/plugin.rs - plugin (line 20) - compile ... ok
+2026-10-20T15:55:52.6852280Z test lib/models/src/plugin.rs - plugin::ComputationalIntelligencePlugin (line 52) - compile ... ok
+2026-10-20T15:55:52.7097750Z test lib/models/src/prelude.rs - prelude (line 3) ... ok
+2026-10-20T15:55:52.7119860Z test lib/models/src/lib.rs - (line 5) ... ok
+2026-10-20T15:55:52.7121050Z 
+2026-10-20T15:55:52.7122710Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+2026-10-20T15:55:52.7123600Z 
+2026-10-20T15:55:52.7139610Z all doctests ran in 1.01s; merged doctests compilation took 0.95s
+2026-10-20T15:55:52.7188770Z [1m[92m   Doc-tests[0m simulation_kernel
+2026-10-20T15:55:52.8036530Z 
+2026-10-20T15:55:52.8037460Z running 0 tests
+2026-10-20T15:55:52.8038160Z 
+2026-10-20T15:55:52.8039060Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:52.8039970Z 
+2026-10-20T15:55:52.8050240Z [1m[92m   Doc-tests[0m tests
+2026-10-20T15:55:52.9227370Z 
+2026-10-20T15:55:52.9228800Z running 0 tests
+2026-10-20T15:55:52.9229140Z 
+2026-10-20T15:55:52.9229970Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:52.9230450Z 
+2026-10-20T15:55:52.9265270Z [1m[92m   Doc-tests[0m tooling
+2026-10-20T15:55:53.0351160Z 
+2026-10-20T15:55:53.0352080Z running 0 tests
+2026-10-20T15:55:53.0353020Z 
+2026-10-20T15:55:53.0353990Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:53.0355170Z 
+2026-10-20T15:55:53.0381070Z [1m[92m   Doc-tests[0m ui
+2026-10-20T15:55:53.2771970Z 
+2026-10-20T15:55:53.2773000Z running 0 tests
+2026-10-20T15:55:53.2773420Z 
+2026-10-20T15:55:53.2774100Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-10-20T15:55:53.2774890Z 
+2026-10-20T15:55:53.3188920Z ##[group]Run cargo build --locked --workspace --all-features
+2026-10-20T15:55:53.3190730Z [36;1mcargo build --locked --workspace --all-features[0m
+2026-10-20T15:55:53.3593900Z shell: /bin/bash -e {0}
+2026-10-20T15:55:53.3594750Z env:
+2026-10-20T15:55:53.3595170Z   CARGO_BUILD_JOBS: 2
+2026-10-20T15:55:53.3595530Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T15:55:53.3595800Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T15:55:53.3596110Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T15:55:53.3596370Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T15:55:53.3596670Z   RUST_MIN_STACK: 67108864
+2026-10-20T15:55:53.3597000Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T15:55:53.3597350Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:55:53.3597890Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T15:55:53.3598350Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:55:53.3599670Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:55:53.3600150Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T15:55:53.3600580Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T15:55:53.3600800Z   CARGO_INCREMENTAL: 0
+2026-10-20T15:55:53.3601060Z   CARGO_TERM_COLOR: always
+2026-10-20T15:55:53.3601280Z ##[endgroup]
+2026-10-20T15:55:55.2039510Z [1m[92m   Compiling[0m hashbrown v0.15.4
+2026-10-20T15:55:55.2564040Z [1m[92m   Compiling[0m half v2.6.0
+2026-10-20T15:55:56.0419830Z [1m[92m   Compiling[0m spirv v0.3.0+sdk-1.3.268.0
+2026-10-20T15:55:56.1554970Z [1m[92m   Compiling[0m indexmap v2.10.0
+2026-10-20T15:55:56.9452910Z [1m[92m   Compiling[0m bevy_platform v0.16.1
+2026-10-20T15:55:57.1041720Z [1m[92m   Compiling[0m bevy_utils v0.16.1
+2026-10-20T15:55:57.1744510Z [1m[92m   Compiling[0m petgraph v0.7.1
+2026-10-20T15:55:58.3721160Z [1m[92m   Compiling[0m bevy_tasks v0.16.1
+2026-10-20T15:56:00.2852460Z [1m[92m   Compiling[0m bevy_reflect v0.16.1
+2026-10-20T15:56:00.6853470Z [1m[92m   Compiling[0m naga v24.0.0
+2026-10-20T15:56:39.9745370Z [1m[92m   Compiling[0m bevy_ecs v0.16.1
+2026-10-20T15:56:54.4346160Z [1m[92m   Compiling[0m bevy_app v0.16.1
+2026-10-20T15:57:02.7146860Z [1m[92m   Compiling[0m bevy_math v0.16.1
+2026-10-20T15:57:25.5612780Z [1m[92m   Compiling[0m bevy_input v0.16.1
+2026-10-20T15:57:34.7452680Z [1m[92m   Compiling[0m bevy_asset v0.16.1
+2026-10-20T15:57:58.4936320Z [1m[92m   Compiling[0m bevy_log v0.16.1
+2026-10-20T15:58:01.6192550Z [1m[92m   Compiling[0m gpu-alloc-types v0.3.0
+2026-10-20T15:58:02.0194650Z [1m[92m   Compiling[0m gpu-descriptor-types v0.2.0
+2026-10-20T15:58:02.2490200Z [1m[92m   Compiling[0m gpu-descriptor v0.3.2
+2026-10-20T15:58:02.5913150Z [1m[92m   Compiling[0m gpu-alloc v0.6.0
+2026-10-20T15:58:03.4712700Z [1m[92m   Compiling[0m bevy_color v0.16.2
+2026-10-20T15:58:12.9954750Z [1m[92m   Compiling[0m ash v0.38.0+1.3.281
+2026-10-20T15:58:15.4584380Z [1m[92m   Compiling[0m ordered-float v4.6.0
+2026-10-20T15:58:15.7693210Z [1m[92m   Compiling[0m bevy_image v0.16.1
+2026-10-20T15:58:25.7320630Z [1m[92m   Compiling[0m wgpu-hal v24.0.4
+2026-10-20T15:58:38.6918150Z [1m[92m   Compiling[0m bevy_transform v0.16.1
+2026-10-20T15:58:49.5169030Z [1m[92m   Compiling[0m bevy_window v0.16.1
+2026-10-20T15:58:52.4139710Z [1m[92m   Compiling[0m bevy_time v0.16.1
+2026-10-20T15:59:03.1286050Z [1m[92m   Compiling[0m wgpu-core v24.0.5
+2026-10-20T15:59:20.9202180Z [1m[92m   Compiling[0m bevy_diagnostic v0.16.1
+2026-10-20T15:59:24.1677940Z [1m[92m   Compiling[0m wgpu v24.0.5
+2026-10-20T15:59:30.6271470Z [1m[92m   Compiling[0m bevy_mesh v0.16.1
+2026-10-20T15:59:31.1126380Z [1m[92m   Compiling[0m naga_oil v0.17.1
+2026-10-20T15:59:42.3881060Z [1m[92m   Compiling[0m bevy_render v0.16.1
+2026-10-20T15:59:57.4038760Z [1m[92m   Compiling[0m accesskit_consumer v0.27.0
+2026-10-20T16:00:01.6239740Z [1m[92m   Compiling[0m accesskit_macos v0.19.0
+2026-10-20T16:00:04.5598900Z [1m[92m   Compiling[0m bevy_core_pipeline v0.16.1
+2026-10-20T16:01:39.7148700Z [1m[92m   Compiling[0m bevy_picking v0.16.1
+2026-10-20T16:01:43.2603530Z [1m[92m   Compiling[0m bevy_a11y v0.16.1
+2026-10-20T16:01:48.8825000Z [1m[92m   Compiling[0m bevy_sprite v0.16.1
+2026-10-20T16:02:34.5861750Z [1m[92m   Compiling[0m bevy_pbr v0.16.1
+2026-10-20T16:03:14.7071180Z [1m[92m   Compiling[0m accesskit_winit v0.25.0
+2026-10-20T16:03:15.0325210Z [1m[92m   Compiling[0m bevy_input_focus v0.16.1
+2026-10-20T16:03:27.9005090Z [1m[92m   Compiling[0m bevy_winit v0.16.1
+2026-10-20T16:03:47.3672400Z [1m[92m   Compiling[0m bevy_text v0.16.1
+2026-10-20T16:04:22.3656780Z [1m[92m   Compiling[0m bevy_scene v0.16.1
+2026-10-20T16:04:44.1154440Z [1m[92m   Compiling[0m bevy_animation v0.16.1
+2026-10-20T16:05:27.3981570Z [1m[92m   Compiling[0m bevy_gltf v0.16.1
+2026-10-20T16:06:03.2930230Z [1m[92m   Compiling[0m bevy_state v0.16.1
+2026-10-20T16:06:06.7575380Z [1m[92m   Compiling[0m bevy_gizmos v0.16.1
+2026-10-20T16:06:17.2637610Z [1m[92m   Compiling[0m bevy_ui v0.16.1
+2026-10-20T16:06:47.7668180Z [1m[92m   Compiling[0m bevy_audio v0.16.1
+2026-10-20T16:07:17.1454870Z [1m[92m   Compiling[0m bevy_gilrs v0.16.1
+2026-10-20T16:07:21.5275600Z [1m[92m   Compiling[0m bevy_internal v0.16.1
+2026-10-20T16:07:33.2159710Z [1m[92m   Compiling[0m link-cplusplus v1.0.10
+2026-10-20T16:07:33.2854630Z [1m[92m   Compiling[0m codespan-reporting v0.12.0
+2026-10-20T16:07:34.6509030Z [1m[92m   Compiling[0m pp-rs v0.2.1
+2026-10-20T16:07:36.9462500Z [1m[92m   Compiling[0m naga v25.0.1
+2026-10-20T16:07:41.9785460Z [1m[92m   Compiling[0m bevy_dylib v0.16.1
+2026-10-20T16:07:51.5175880Z [1m[92m   Compiling[0m bevy v0.16.1
+2026-10-20T16:07:51.6954820Z [1m[92m   Compiling[0m engine-core v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-core)
+2026-10-20T16:07:57.4125440Z [1m[92m   Compiling[0m shaderc-sys v0.9.1
+2026-10-20T16:07:57.6048280Z [1m[92m   Compiling[0m bevy_egui v0.35.1
+2026-10-20T16:08:27.1216970Z [1m[92m   Compiling[0m shaderc v0.9.1
+2026-10-20T16:08:27.4948930Z [1m[92m   Compiling[0m naga_oil v0.18.0
+2026-10-20T16:08:30.0552080Z [1m[92m   Compiling[0m engine-gpu v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-gpu)
+2026-10-20T16:08:39.5795030Z [1m[92m   Compiling[0m tooling v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tooling)
+2026-10-20T16:08:41.2332080Z [1m[92m   Compiling[0m engine-common v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-common)
+2026-10-20T16:08:42.6218210Z [1m[92m   Compiling[0m engine-render v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/engine/engine-render)
+2026-10-20T16:08:46.3053740Z [1m[92m   Compiling[0m models v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T16:08:48.7657880Z [1m[92m   Compiling[0m ui v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T16:09:02.3982410Z [1m[92m   Compiling[0m tests v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/tests)
+2026-10-20T16:09:02.5472380Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:09:07.8636840Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 13m 14s
+2026-10-20T16:09:07.9531370Z ##[group]Run cargo run --locked --all-features -- --automata-demo
+2026-10-20T16:09:07.9532350Z [36;1mcargo run --locked --all-features -- --automata-demo[0m
+2026-10-20T16:09:08.0146000Z shell: /bin/bash -e {0}
+2026-10-20T16:09:08.0146330Z env:
+2026-10-20T16:09:08.0146740Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:09:08.0146980Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:09:08.0147370Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:09:08.0147650Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:09:08.0147980Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:09:08.0148420Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:09:08.0148800Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:09:08.0149130Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:08.0149710Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T16:09:08.0150260Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:08.0150780Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:08.0151280Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:08.0151780Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T16:09:08.0152030Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:09:08.0152370Z   CARGO_TERM_COLOR: always
+2026-10-20T16:09:08.0152670Z   SOUL_BOOT_VERIFY: native-boot
+2026-10-20T16:09:08.0152970Z ##[endgroup]
+2026-10-20T16:09:09.4387420Z [1m[92m   Compiling[0m models v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/models)
+2026-10-20T16:09:10.8234960Z [1m[92m   Compiling[0m ui v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l/lib/ui)
+2026-10-20T16:09:23.2000690Z [1m[92m   Compiling[0m swarm_orchestrator_for_autonomous_learners v0.1.0 (/Users/runner/work/s-o-u-l/s-o-u-l)
+2026-10-20T16:09:27.7798390Z [1m[92m    Finished[0m `dev` profile [optimized] target(s) in 19.65s
+2026-10-20T16:09:27.8052150Z [1m[92m     Running[0m `target/debug/swarm_orchestrator_for_autonomous_learners --automata-demo`
+2026-10-20T16:09:28.0279800Z [2m2026-10-20T16:09:28.026228Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "Apple Paravirtual device", vendor: 0, device: 0, device_type: IntegratedGpu, driver: "", driver_info: "", backend: Metal }
+2026-10-20T16:09:29.4765320Z [2m2026-10-20T16:09:29.475809Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+2026-10-20T16:09:30.2924020Z [2m2026-10-20T16:09:30.292023Z[0m [32m INFO[0m [2mbevy_winit::system[0m[2m:[0m Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T16:09:35.8656080Z [2m2026-10-20T16:09:35.863714Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to native-boot/boot.png
+2026-10-20T16:09:36.0604200Z ##[group]Run python -c "from pathlib import Path; assert Path('native-boot/SUCCESS').is_file(); assert Path('native-boot/boot.png').stat().st_size > 1000"
+2026-10-20T16:09:36.0605660Z [36;1mpython -c "from pathlib import Path; assert Path('native-boot/SUCCESS').is_file(); assert Path('native-boot/boot.png').stat().st_size > 1000"[0m
+2026-10-20T16:09:36.0663220Z shell: /bin/bash -e {0}
+2026-10-20T16:09:36.0663530Z env:
+2026-10-20T16:09:36.0663790Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:09:36.0664030Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:09:36.0664320Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:09:36.0664640Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:09:36.0664920Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:09:36.0665250Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:09:36.0665480Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:09:36.0665890Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.0666470Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T16:09:36.0667060Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.0667560Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.0668120Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.0668450Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T16:09:36.0668750Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:09:36.0668980Z   CARGO_TERM_COLOR: always
+2026-10-20T16:09:36.0669300Z ##[endgroup]
+2026-10-20T16:09:36.2297120Z ##[group]Run actions/upload-artifact@v7
+2026-10-20T16:09:36.2297460Z with:
+2026-10-20T16:09:36.2297830Z   name: native-macos-15-c21b634e89779eacafd4c29546648429093be4eb
+2026-10-20T16:09:36.2298550Z   path: native-boot
+2026-10-20T16:09:36.2299040Z   if-no-files-found: warn
+2026-10-20T16:09:36.2299310Z   compression-level: 6
+2026-10-20T16:09:36.2299970Z   overwrite: false
+2026-10-20T16:09:36.2300270Z   include-hidden-files: false
+2026-10-20T16:09:36.2300620Z   archive: true
+2026-10-20T16:09:36.2300850Z env:
+2026-10-20T16:09:36.2301030Z   CARGO_BUILD_JOBS: 2
+2026-10-20T16:09:36.2301750Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-10-20T16:09:36.2302080Z   CMAKE_POLICY_VERSION_MINIMUM: 3.5
+2026-10-20T16:09:36.2302500Z   CARGO_PROFILE_DEV_DEBUG: 0
+2026-10-20T16:09:36.2302690Z   CARGO_PROFILE_TEST_DEBUG: 0
+2026-10-20T16:09:36.2302900Z   RUST_MIN_STACK: 67108864
+2026-10-20T16:09:36.2303110Z   RUSTDOCFLAGS: -C rpath=yes
+2026-10-20T16:09:36.2303630Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.2304230Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.13.15/arm64/lib/pkgconfig
+2026-10-20T16:09:36.2304710Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.2305330Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.2311470Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.13.15/arm64
+2026-10-20T16:09:36.2311760Z   CARGO_HOME: /Users/runner/.cargo
+2026-10-20T16:09:36.2312030Z   CARGO_INCREMENTAL: 0
+2026-10-20T16:09:36.2312260Z   CARGO_TERM_COLOR: always
+2026-10-20T16:09:36.2312510Z ##[endgroup]
+2026-10-20T16:09:36.6866890Z With the provided path, there will be 2 files uploaded
+2026-10-20T16:09:36.6869540Z Artifact name is valid!
+2026-10-20T16:09:36.6870670Z Root directory input is valid!
+2026-10-20T16:09:37.0149120Z Uploading artifact: native-macos-15-c21b634e89779eacafd4c29546648429093be4eb.zip
+2026-10-20T16:09:37.0201840Z Beginning upload of artifact content to blob storage
+2026-10-20T16:09:37.2610730Z Uploaded bytes 101104
+2026-10-20T16:09:37.2983550Z Finished uploading artifact content to blob storage!
+2026-10-20T16:09:37.2985570Z SHA256 digest of uploaded artifact is 59e17df7b9d4810fc0fd5f702f8be79b2e512c44708731306a10565a3fdf7bba
+2026-10-20T16:09:37.2986150Z Finalizing artifact upload
+2026-10-20T16:09:37.6393040Z Artifact native-macos-15-c21b634e89779eacafd4c29546648429093be4eb successfully finalized. Artifact ID 12280855408
+2026-10-20T16:09:37.6399100Z Artifact native-macos-15-c21b634e89779eacafd4c29546648429093be4eb has been successfully uploaded! Final size is 101104 bytes. Artifact ID is 12280855408
+2026-10-20T16:09:37.6413330Z Artifact download URL: https://github.com/JonTDean/s-o-u-l/actions/runs/39448697285/artifacts/12280855408
+2026-10-20T16:09:38.3451980Z Post job cleanup.
+2026-10-20T16:09:38.4980440Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/s-o-u-l/s-o-u-l --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+2026-10-20T16:09:54.2126060Z Sent 0 of 962904268 (0.0%), 0.0 MBs/sec
+2026-10-20T16:09:55.2209690Z Sent 0 of 962904268 (0.0%), 0.0 MBs/sec
+2026-10-20T16:09:56.2109580Z Sent 0 of 962904268 (0.0%), 0.0 MBs/sec
+2026-10-20T16:09:57.2121230Z Sent 335544320 of 962904268 (34.8%), 79.7 MBs/sec
+2026-10-20T16:09:58.2120650Z Sent 469762048 of 962904268 (48.8%), 89.3 MBs/sec
+2026-10-20T16:09:59.2124110Z Sent 603979776 of 962904268 (62.7%), 95.8 MBs/sec
+2026-10-20T16:10:00.2128190Z Sent 761577676 of 962904268 (79.1%), 103.5 MBs/sec
+2026-10-20T16:10:01.2186960Z Sent 895795404 of 962904268 (93.0%), 106.5 MBs/sec
+2026-10-20T16:10:02.2187580Z Sent 895795404 of 962904268 (93.0%), 94.7 MBs/sec
+2026-10-20T16:10:03.2198870Z Sent 895795404 of 962904268 (93.0%), 85.2 MBs/sec
+2026-10-20T16:10:03.7691940Z Sent 962904268 of 962904268 (100.0%), 86.9 MBs/sec
+2026-10-20T16:10:04.0298590Z Cache saved with key: macOS-soul-rust1941-debug0-fea1440cb415d4f1ff94474864a45954fdd7995af0bfd678716c5eb8b69a9876
+2026-10-20T16:10:04.0740080Z Post job cleanup.
+2026-10-20T16:10:04.2632690Z Post job cleanup.
+2026-10-20T16:10:04.3645620Z [command]/opt/homebrew/bin/git version
+2026-10-20T16:10:04.3853660Z git version 2.55.0
+2026-10-20T16:10:04.3871400Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/9b49fdfd-10f8-4a6e-a661-1cbfe683e554/.gitconfig'
+2026-10-20T16:10:04.3884070Z Temporarily overriding HOME='/Users/runner/work/_temp/9b49fdfd-10f8-4a6e-a661-1cbfe683e554' before making global git config changes
+2026-10-20T16:10:04.3886190Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T16:10:04.3889280Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/s-o-u-l/s-o-u-l
+2026-10-20T16:10:04.4001060Z Removing SSH command configuration
+2026-10-20T16:10:04.4001550Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T16:10:04.4062520Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T16:10:04.4851580Z Removing HTTP extra header
+2026-10-20T16:10:04.4855140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T16:10:04.4909070Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T16:10:04.5588880Z Removing includeIf entries pointing to credentials config files
+2026-10-20T16:10:04.5597380Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T16:10:04.5644100Z includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git.path
+2026-10-20T16:10:04.5644630Z includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path
+2026-10-20T16:10:04.5645070Z includeif.gitdir:/github/workspace/.git.path
+2026-10-20T16:10:04.5645430Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T16:10:04.5650070Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git.path
+2026-10-20T16:10:04.5693140Z /Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T16:10:04.5699210Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-fbab3d91\-e819\-47eb\-8018\-e7310de33880\.config
+2026-10-20T16:10:04.5753420Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path
+2026-10-20T16:10:04.5798130Z /Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T16:10:04.5804430Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/s-o-u-l/s-o-u-l/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-fbab3d91\-e819\-47eb\-8018\-e7310de33880\.config
+2026-10-20T16:10:04.5852130Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-20T16:10:04.5902950Z /github/runner_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T16:10:04.6040370Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-fbab3d91\-e819\-47eb\-8018\-e7310de33880\.config
+2026-10-20T16:10:04.6041810Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T16:10:04.6062250Z /github/runner_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config
+2026-10-20T16:10:04.6068490Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-fbab3d91\-e819\-47eb\-8018\-e7310de33880\.config
+2026-10-20T16:10:04.6133810Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T16:10:04.6990100Z Removing credentials config '/Users/runner/work/_temp/git-credentials-fbab3d91-e819-47eb-8018-e7310de33880.config'
+2026-10-20T16:10:04.7112360Z Cleaning up orphan processes
