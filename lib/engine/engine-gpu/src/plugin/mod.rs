@@ -68,6 +68,7 @@ impl Plugin for GpuAutomataComputePlugin {
         render_app
             .insert_resource(GlobalVoxelAtlas { atlas, signal })
             .init_resource::<crate::graph::ExtractedGpuSlices>()
+            .init_resource::<drawing::palette::VoxelPalette>()
             .init_resource::<crate::compute::lenia::runtime::LiveSimulations>()
             .init_resource::<crate::compute::lenia::runtime::GpuSimulations>()
             .init_resource::<crate::pipelines::GpuPipelineCache>()
@@ -78,6 +79,7 @@ impl Plugin for GpuAutomataComputePlugin {
                 ExtractSchedule,
                 (
                     crate::graph::extract_gpu_slices,
+                    drawing::palette::extract,
                     crate::compute::lenia::runtime::extract,
                     setup::extract_steps_this_frame,
                 ),

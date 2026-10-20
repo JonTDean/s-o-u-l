@@ -51,13 +51,26 @@ impl ViewNode for VoxelDrawNode {
         let Some(binding) = uniforms.uniforms.binding() else {
             return Ok(());
         };
-        let group = world.resource::<RenderDevice>().create_bind_group(
+        let device = world.resource::<RenderDevice>();
+        let palette = world.resource::<super::palette::VoxelPalette>();
+        let palette = device.create_buffer_with_data(&BufferInitDescriptor {
+            label: Some("voxel.palette"),
+            contents: bytemuck::bytes_of(&palette.0),
+            usage: BufferUsages::UNIFORM,
+        });
+        let group = device.create_bind_group(
             "voxel.view.bind",
             &pipeline.layout,
-            &[BindGroupEntry {
-                binding: 0,
-                resource: binding,
-            }],
+            &[
+                BindGroupEntry {
+                    binding: 0,
+                    resource: binding,
+                },
+                BindGroupEntry {
+                    binding: 1,
+                    resource: palette.as_entire_binding(),
+                },
+            ],
         );
         let mesh = world.resource::<MeshletBuffers>();
         let attachments = [Some(target.get_color_attachment())];

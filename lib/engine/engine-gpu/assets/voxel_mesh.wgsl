@@ -48,7 +48,7 @@ fn ramp_at(world: vec2<f32>, density: f32) -> vec3<f32> {
 fn fragment(in: VSOut) -> @location(0) vec4<f32> {
     let light = 0.35 + 0.65 * max(dot(normalize(in.normal), normalize(vec3<f32>(0.4, 0.8, 0.6))), 0.0);
     let band = 0.8 + 0.2 * sin(in.world_pos.y * 0.12);
-    // Lift low surface densities so the ramp's colour stop dominates the silhouette.
-    let shade = ramp_at(in.world_pos.xy, 0.35 + 0.65 * in.density);
+    // Full density sits just past the colour stop (2/3); sparse surfaces fade toward dim.
+    let shade = ramp_at(in.world_pos.xy, 0.3 + 0.4 * in.density);
     return vec4<f32>(shade * light * band, 1.0);
 }
