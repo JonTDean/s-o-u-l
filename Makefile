@@ -39,3 +39,12 @@ verify-experiment:
 
 benchmark-sparse:
 	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo test -p simulation_kernel --release sparse_benchmark -- --ignored --nocapture
+
+verify-authoring:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_AUTHORING_VERIFY="$${SOUL_AUTHORING_VERIFY:-/tmp/soul-authoring-verification}" cargo run -- --experiment-demo
+
+verify-boot:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_BOOT_VERIFY="$${SOUL_BOOT_VERIFY:-/tmp/soul-boot-verification}" cargo run -- --automata-demo
+
+benchmark-steppers:
+	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo bench -p simulation_kernel --bench steppers -- --noplot

@@ -1,0 +1,5 @@
+channel,kind,metric,unit,epoch,tick,value
+3,"life:conway","population","cells",0,0,3
+3,"life:conway","population","cells",0,1,0
+4,"life:conway","population","cells",0,0,3
+4,"life:conway","population","cells",0,1,3

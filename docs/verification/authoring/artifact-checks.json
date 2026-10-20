@@ -1,0 +1,72 @@
+{
+  "rtx3090": {
+    "window": {
+      "pid": 81927,
+      "exit_code": 0,
+      "windows": [
+        "0x7a00002 \"S.O.U.L. \u2013 Swarm Orchestrator for Autonomous Learners\": (\"swarm_orchestrator_for_autonomous_learners\" \"swarm_orchestrator_for_autonomous_learners\")  1760x960+0+0  +81+116"
+      ]
+    },
+    "orbium_tick10_max_abs_error": 5.109466318223288e-06,
+    "exports": {
+      "animation": {
+        "frames": 2,
+        "duration_ms": [
+          100,
+          100
+        ],
+        "size": [
+          256,
+          256
+        ]
+      },
+      "orbium-animation": {
+        "frames": 2,
+        "duration_ms": [
+          100,
+          100
+        ],
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    "comparison_rows": 256
+  },
+  "mesa": {
+    "window": {
+      "pid": 89745,
+      "exit_code": 0,
+      "windows": [
+        "0x7a00002 \"S.O.U.L. \u2013 Swarm Orchestrator for Autonomous Learners\": (\"swarm_orchestrator_for_autonomous_learners\" \"swarm_orchestrator_for_autonomous_learners\")  1760x960+0+0  +81+116"
+      ]
+    },
+    "orbium_tick10_max_abs_error": 5.79491973314028e-06,
+    "exports": {
+      "animation": {
+        "frames": 2,
+        "duration_ms": [
+          100,
+          100
+        ],
+        "size": [
+          256,
+          256
+        ]
+      },
+      "orbium-animation": {
+        "frames": 2,
+        "duration_ms": [
+          100,
+          100
+        ],
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    "comparison_rows": 256
+  }
+}

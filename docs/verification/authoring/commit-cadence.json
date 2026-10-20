@@ -1,0 +1,256 @@
+{
+  "base": "cdf6f59",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "3e6388754f83cb3cb5bac82a782d56e9eb336d18",
+      "changed_sloc": 0,
+      "subject": "docs: define authoring guided experiment and release qualification scope"
+    },
+    {
+      "commit": "842eed84d4b8d3d2206f8ff2a02ff2bb173c7830",
+      "changed_sloc": 67,
+      "subject": "feat: add validated named specimen storage and portable import export"
+    },
+    {
+      "commit": "4ed9aaaf421c440be4442f00aee1228dcfd5f031",
+      "changed_sloc": 57,
+      "subject": "feat: capture selected CPU or GPU channels into specimen checkpoints"
+    },
+    {
+      "commit": "7e03f746d3ffa286f9d6349c8b6fed4935ad058f",
+      "changed_sloc": 58,
+      "subject": "feat: add specimen library save duplicate import and export controls"
+    },
+    {
+      "commit": "c9e470ec4db218ebf20f34beeb4e135012099dbf",
+      "changed_sloc": 75,
+      "subject": "feat: connect authored specimens to the lab library and user data directory"
+    },
+    {
+      "commit": "da5689d477aae9d811f5a306fedb61439fd72b68",
+      "changed_sloc": 52,
+      "subject": "test: verify specimen roundtrip continuation naming and import rejection"
+    },
+    {
+      "commit": "4a9947f6b77f1a63934f6960b3b0000cca9d7cb7",
+      "changed_sloc": 84,
+      "subject": "feat: define reproducible elementary boundary and language experiments"
+    },
+    {
+      "commit": "61e7caa2939527a6fa6ebb2d80f6d579ff43729f",
+      "changed_sloc": 59,
+      "subject": "feat: add guided scenario launcher and presenter experiment cues"
+    },
+    {
+      "commit": "7c6c417c7fa54ac3f9fe1e4bfcfceb841a33b0a3",
+      "changed_sloc": 48,
+      "subject": "feat: integrate experiment guides into library and presenter modes"
+    },
+    {
+      "commit": "5fb01f8e3ac5daab6acd115f4c7c3164030c32d3",
+      "changed_sloc": 48,
+      "subject": "feat: map simple automata tape heads and stacks to voxel entities"
+    },
+    {
+      "commit": "d27cfe79a140898fb23a6f200c58c6fbeba9fea9",
+      "changed_sloc": 47,
+      "subject": "feat: render symbolic automata with real mesh entities and a stage camera"
+    },
+    {
+      "commit": "39d5d7a268bd40dc77d1f7c9abf5c4b59ed1e69d",
+      "changed_sloc": 10,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "abec5a37ee99877a5ddb043462386e68a77acb1a",
+      "changed_sloc": 23,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "5717af6a14aecb04e4d800190ce58c3574c7d0d7",
+      "changed_sloc": 8,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "42577191c473b9704c01713cf0b7cc9deea4a26b",
+      "changed_sloc": 5,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "77aa3553493769b21040077be2306b2cd465daae",
+      "changed_sloc": 27,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "4c0e8f028cb77dd428196f8fee2ecf10406f20e3",
+      "changed_sloc": 35,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "f668a30af4222be55d63a000eac921b78362a617",
+      "changed_sloc": 1,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "e5d40ec90cf69129a6c2089a14551f587758a6a6",
+      "changed_sloc": 1,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "def017218ca3b297b097204ddc2621bb3f6676f8",
+      "changed_sloc": 21,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "07e09f0b25428121697eb6e20154740e956d54c4",
+      "changed_sloc": 13,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "993efb88a447e15f3d3ed9e05f93474932073887",
+      "changed_sloc": 1,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "4c3b3d72da231fe351a00be33161a819df5c0d8f",
+      "changed_sloc": 1,
+      "subject": "style: format voxel presentation within source checkpoint limits"
+    },
+    {
+      "commit": "c6538b231e5b7e8a7c56289035c1ffcff093fc59",
+      "changed_sloc": 31,
+      "subject": "feat: show voxel automata on the stage and symbol keys in the inspector"
+    },
+    {
+      "commit": "83708ed4b55720ed345c5ee79bf652edc6832589",
+      "changed_sloc": 46,
+      "subject": "feat: implement published Orbium polynomial XY convolution and growth"
+    },
+    {
+      "commit": "bcb4d1555403106f32e0b146a9d804249e3a3568",
+      "changed_sloc": 47,
+      "subject": "feat: retain licensed published Orbium seed without density quantization"
+    },
+    {
+      "commit": "71ce15a6b56424e4c51580db11ff302015434169",
+      "changed_sloc": 38,
+      "subject": "feat: expose published Orbium controls and light symbolic voxel geometry"
+    },
+    {
+      "commit": "eea3255794146ccee78fba43894be926526bf81b",
+      "changed_sloc": 30,
+      "subject": "feat: launch the published Orbium specimen from the library"
+    },
+    {
+      "commit": "76af968a422351e401a2daca25456b6ed24c7602",
+      "changed_sloc": 32,
+      "subject": "test: add independent FFT reference and long-run Orbium phenotype fixture"
+    },
+    {
+      "commit": "00bb97b0ba3ba13fe5c99278e1e8dfb4ddf64e8e",
+      "changed_sloc": 77,
+      "subject": "test: qualify CPU and GPU Orbium against the published model FFT trajectory"
+    },
+    {
+      "commit": "8829cee12a74762f3fcb406bb703c30e6d83e92f",
+      "changed_sloc": 45,
+      "subject": "perf: add deterministic dense and sparse benchmark workloads"
+    },
+    {
+      "commit": "44c06b28233c3c17c9957186cc840f9ea84acfd1",
+      "changed_sloc": 95,
+      "subject": "perf: benchmark dense sparse parallel and Lenia steppers with Criterion"
+    },
+    {
+      "commit": "c84e5280ccdc1a8907a37c127f06dfd3e0d7a969",
+      "changed_sloc": 84,
+      "subject": "test: add portable native window boot gate and durable Windows project writes"
+    },
+    {
+      "commit": "758afb2ddb3bd45bd9735e82616592cd62ca521c",
+      "changed_sloc": 0,
+      "subject": "ci: qualify Linux Windows and macOS builds contracts and native boots"
+    },
+    {
+      "commit": "944426ffae15cc146a94cd5bf4c0aad275fee234",
+      "changed_sloc": 57,
+      "subject": "test: verify voxel entity lifecycle head motion stack and channel cleanup"
+    },
+    {
+      "commit": "31eb8e96dac1866b0b2a1892f6d04ca552a80f3d",
+      "changed_sloc": 0,
+      "subject": "chore: record GPU reference test dependency in lockfile"
+    },
+    {
+      "commit": "34861f77242f7bf8bbe1e9e0f8f5962aedd0b746",
+      "changed_sloc": 68,
+      "subject": "test: add native authoring qualification driver and screenshot capture"
+    },
+    {
+      "commit": "bb7d9025a820b438d9130f61da839c56128d0b70",
+      "changed_sloc": 83,
+      "subject": "test: exercise scenario comparison specimen capture duplication and export natively"
+    },
+    {
+      "commit": "51774ee3c8d3f82cee853cfc40d7ab3f1a0285c6",
+      "changed_sloc": 82,
+      "subject": "test: verify visible voxel entities and exact native GPU Orbium specimen capture"
+    },
+    {
+      "commit": "25f783bb273fc123cf9a2140688d1725bc67d775",
+      "changed_sloc": 49,
+      "subject": "test: qualify scenario outcomes GPU specimen fidelity and collision-safe publication"
+    },
+    {
+      "commit": "87247bfd0dbd5371ff91bdd008e0c2a127c7be72",
+      "changed_sloc": 53,
+      "subject": "fix: fit voxel cameras to content and label Orbium model accurately"
+    },
+    {
+      "commit": "d944a86ce22cc658f94d0e9a08d60a4d60bc6408",
+      "changed_sloc": 57,
+      "subject": "test: verify native Orbium evolution against FFT data and show its model contract"
+    },
+    {
+      "commit": "278bb9b2031f958e69a67810525553572579fc5d",
+      "changed_sloc": 30,
+      "subject": "test: reopen saved CPU and GPU specimens through production load controls"
+    },
+    {
+      "commit": "85ffb165a54af700ab120be9a9cf95def0d95e2d",
+      "changed_sloc": 12,
+      "subject": "perf: exclude fixture allocation and destruction from stepper timings"
+    },
+    {
+      "commit": "89199e7ee352f7df4faa9353d65bfc520d54d85d",
+      "changed_sloc": 30,
+      "subject": "refactor: share distinct symbol voxel colors across presentation and exports"
+    },
+    {
+      "commit": "726383ef8db247007eea7e7af2182597f1ed8489",
+      "changed_sloc": 48,
+      "subject": "fix: use voxel thumbnails instead of glyph tiles in symbolic comparisons"
+    },
+    {
+      "commit": "abbd0cfbc36bba0722048d3530e239979795a12c",
+      "changed_sloc": 38,
+      "subject": "fix: export symbolic automata as colored voxel cells instead of letter glyphs"
+    },
+    {
+      "commit": "bb4e1c7599dfa94f1efdb9799af331c433469349",
+      "changed_sloc": 7,
+      "subject": "test: recognize all semantic voxel colors in native family screenshots"
+    },
+    {
+      "commit": "669de147dd4db280e0ca1442c932d4920005b911",
+      "changed_sloc": 0,
+      "subject": "ci: support CMake 4 on hosted runners and bound build memory and cache costs"
+    },
+    {
+      "commit": "091fb82b20ee4063c4fb3413fa1d3cb834c10270",
+      "changed_sloc": 4,
+      "subject": "test: retain native library authoring and scenario launcher screenshot"
+    }
+  ]
+}
