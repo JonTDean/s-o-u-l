@@ -36,8 +36,12 @@ pub fn sync(mut commands: Commands, bench: Res<Workbench>, channels: Res<Channel
         camera.viewport = windows.single().ok().and_then(|w| physical_viewport(&rect, w.physical_size()));
         camera.is_active = !cells.is_empty() && rect.managed && camera.viewport.is_some();
     }
-    if *previous == cells { return; }
-    for entity in &entities { commands.entity(entity).despawn(); }
+    if *previous == cells {
+        return;
+    }
+    for entity in &entities {
+        commands.entity(entity).despawn();
+    }
     for cell in &cells {
         let material = assets
             .materials
