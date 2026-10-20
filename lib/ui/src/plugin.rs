@@ -2,8 +2,7 @@
 //! active-grid renderer.
 
 use crate::{
-    components::plugin::ComponentsPlugin, overlays::plugin::OverlaysPlugin,
-    styles::plugin::StylesPlugin,
+    components::plugin::ComponentsPlugin, overlays::plugin::OverlaysPlugin, theme::ThemePlugin,
 };
 use bevy::prelude::*;
 
@@ -27,6 +26,6 @@ pub struct OutputPlugin;
 */
 impl Plugin for OutputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((StylesPlugin, ComponentsPlugin, OverlaysPlugin));
+        app.add_plugins((ThemePlugin, ComponentsPlugin, OverlaysPlugin));
     }
 }

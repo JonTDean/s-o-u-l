@@ -16,7 +16,7 @@
 //! ### Styling
 //! * Background: `rgba(0,0,0,180)` (≈ 70 % opacity) for unobtrusive contrast.
 //! * Text colour: `Color32::LIGHT_GREEN` — matches debug-overlay palette.
-//! * Padding & margins follow the global `styles::BOTTOM_PAD` constant.
+//! * Padding & margins follow the global `theme::BOTTOM_PAD` constant.
 
 use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};

@@ -5,7 +5,7 @@ use engine_core::prelude::AppState;
 
 use crate::{
     components::menus::{MenuScreen, menu_runner},
-    styles,
+    theme,
 };
 
 #[derive(Resource, Default)]
@@ -14,12 +14,12 @@ pub struct PauseMenu;
 impl MenuScreen for PauseMenu {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
         egui::CentralPanel::default()
-            .frame(styles::fullscreen_bg())
+            .frame(theme::fullscreen_bg())
             .show(ctx, |ui| {
                 egui::Window::new("Paused")
                     .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
                     .resizable(false)
-                    .frame(styles::fullscreen_bg())
+                    .frame(theme::fullscreen_bg())
                     .show(ui.ctx(), |ui| {
                         ui.vertical_centered(|ui| {
                             if ui.button("Resume").clicked() {

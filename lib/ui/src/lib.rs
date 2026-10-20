@@ -3,4 +3,4 @@ pub mod presentation;
 pub use presentation::{overlays, panels};
 
 pub mod plugin;
-pub mod styles;
+pub mod theme;
