@@ -69,7 +69,7 @@ pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut
             && pair[0].stamp.id == l
             && pair[1].stamp.id == r
         {
-            super::plots::difference(ui, pair);
+            super::plots::difference(ui, pair, &mut state.heatmap);
         }
         super::export::show(ui, state, data);
         note(ui, &state.status, false);

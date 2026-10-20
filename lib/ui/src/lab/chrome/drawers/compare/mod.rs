@@ -19,6 +19,8 @@ mod plots;
 /// Selected pair (by channel), export folder, status line and running export.
 #[derive(Resource)]
 pub struct Comparison {
+    /// Retained texture handle so egui can upload and render the heatmap.
+    pub heatmap: Option<bevy_egui::egui::TextureHandle>,
     /// Completed comparison and any pending capture.
     pub capture: capture::Capture,
     /// Left channel; `None` once closed until the viewer picks again.
@@ -36,6 +38,7 @@ pub struct Comparison {
 impl Default for Comparison {
     fn default() -> Self {
         Self {
+            heatmap: None,
             capture: Default::default(),
             left: None,
             right: None,

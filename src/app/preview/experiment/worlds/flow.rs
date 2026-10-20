@@ -38,7 +38,7 @@ fn run(world: &mut World, v: &mut Verification) {
             scenario::select(world, [ids[0], ids[1]]);
             v.phase = 1;
         }
-        1 => {
+        1 if v.frames > 120 => {
             let c = world.resource::<Comparison>();
             let Some(pair) = &c.capture.result else {
                 return;
@@ -71,13 +71,20 @@ fn run(world: &mut World, v: &mut Verification) {
             v.phase = 6;
         }
         6 if checkpoint::compare(world, v, true) => {
-            scenario::capture(world, v, "continuous-comparison.png");
+            world
+                .resource_mut::<engine_core::automata::channel::Channels>()
+                .selected = Some(owners[0].1);
+            v.capture_at = v.frames + 60;
             v.phase = 7;
         }
-        7 if v.captured.load(std::sync::atomic::Ordering::Acquire) => {
+        7 if v.frames >= v.capture_at => {
+            scenario::capture(world, v, "continuous-comparison.png");
+            v.phase = 8;
+        }
+        8 if v.captured.load(std::sync::atomic::Ordering::Acquire) => {
             std::fs::write(v.output.join("SUCCESS"),"Edited periodic worlds, undo/redo, completed CPU/GPU comparison, CSV, exact float project restoration, CPU oracle continuation and native screenshots passed.\n").unwrap();
             world.send_event(AppExit::Success);
-            v.phase = 8;
+            v.phase = 9;
         }
         _ => {}
     }

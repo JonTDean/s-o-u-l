@@ -1,7 +1,11 @@
 use super::super::capture::Frame;
 use super::*;
 use bevy_egui::egui::Color32;
-pub(crate) fn difference(ui: &mut Ui, pair: &[Frame; 2]) {
+pub(crate) fn difference(
+    ui: &mut Ui,
+    pair: &[Frame; 2],
+    texture: &mut Option<egui::TextureHandle>,
+) {
     note(
         ui,
         &format!(
@@ -43,11 +47,17 @@ pub(crate) fn difference(ui: &mut Ui, pair: &[Frame; 2]) {
     let size = pair[0].field.size;
     let image =
         egui::ColorImage::from_rgba_unmultiplied([size[0] as usize, size[1] as usize], &pixels);
-    let texture = ui.ctx().load_texture(
-        "comparison difference",
-        image,
-        egui::TextureOptions::NEAREST,
-    );
+    match texture {
+        Some(handle) => handle.set(image, egui::TextureOptions::NEAREST),
+        None => {
+            *texture = Some(ui.ctx().load_texture(
+                "comparison difference",
+                image,
+                egui::TextureOptions::NEAREST,
+            ))
+        }
+    }
+    let texture = texture.as_ref().expect("heatmap texture");
     let width = ui.available_width().min(256.0);
     ui.image((
         texture.id(),
