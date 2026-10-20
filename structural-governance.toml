@@ -7,6 +7,7 @@ roots = [
     "lib/engine/engine-render/src",
     "lib/models/src",
     "lib/simulation_kernel/src",
+    "lib/simulation_kernel/benches",
     "lib/tests/src",
     "lib/tooling/src",
     "lib/ui/src",
