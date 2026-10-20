@@ -21,6 +21,8 @@ pub enum Model {
 #[derive(serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Session {
+    #[serde(skip)]
+    pub edits: super::grid::editing::History,
     pub kind: Kind,
     pub input: String,
     pub model: Model,
@@ -66,6 +68,7 @@ impl Session {
         let input = kind.input().to_string();
         let settings = Settings::for_kind(kind);
         Self {
+            edits: Default::default(),
             kind,
             model: Self::initial(kind, &input, &settings),
             input,
@@ -94,6 +97,7 @@ impl Session {
         if self.input.chars().count() > 256 {
             return Err("Input is limited to 256 symbols");
         }
+        self.edits = Default::default();
         self.model = Self::initial(self.kind, &self.input, &self.settings);
         self.ticks = 0;
         self.elapsed = 0.0;

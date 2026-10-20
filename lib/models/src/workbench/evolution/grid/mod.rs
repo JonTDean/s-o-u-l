@@ -13,10 +13,11 @@ use simulation_kernel::{
 };
 use std::collections::VecDeque;
 mod configuration;
+pub mod editing;
 use crate::workbench::experiment::config::Settings;
 
 /// A finite grid with dead boundaries and snapshot update semantics.
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GridSession {
     pub grid: DenseGrid,
@@ -71,7 +72,9 @@ impl GridSession {
 
     /// Advances from a complete prior grid, then retains at most 64 time rows.
     pub fn step(&mut self) {
-        self.step_with_settings(&Settings::for_kind(self.kind));
+        let mut settings = Settings::for_kind(self.kind);
+        settings.world.boundary = self.boundary;
+        self.step_with_settings(&settings);
     }
 
     /// Apply validated live rule settings to the next snapshot update.
