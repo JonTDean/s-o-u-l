@@ -1,3 +1,4 @@
+pub mod authored;
 pub mod world;
 use crate::workbench::catalog::Kind;
 use engine_core::automata::channel::Srgb;
