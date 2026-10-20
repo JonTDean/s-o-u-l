@@ -12,3 +12,26 @@ fn scenarios_are_repeatable_and_paused() {
         assert!(a.sessions.iter().all(|s| s.paused && s.ticks == 0));
     }
 }
+#[test]
+fn scenarios_reveal_their_documented_outcomes() {
+    let mut boundaries = Scenario::Boundaries.project().unwrap();
+    for s in &mut boundaries.sessions {
+        s.step();
+    }
+    assert_ne!(
+        serde_json::to_value(&boundaries.sessions[0].model).unwrap(),
+        serde_json::to_value(&boundaries.sessions[1].model).unwrap()
+    );
+    let mut languages = Scenario::Languages.project().unwrap();
+    for s in &mut languages.sessions {
+        for _ in 0..16 {
+            s.step();
+        }
+    }
+    for (session, accepted) in languages.sessions.iter().zip([true, false]) {
+        let crate::workbench::session::Model::Symbolic(machine) = &session.model else {
+            panic!()
+        };
+        assert_eq!(machine.result(), Some(accepted));
+    }
+}

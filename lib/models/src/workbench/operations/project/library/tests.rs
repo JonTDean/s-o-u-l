@@ -51,3 +51,19 @@ fn names_and_invalid_imports_do_not_escape_or_create_entries() {
     bench.spawn(Kind::Rule30);
     assert!(validate(&Project::capture(&bench, Vec::new()).unwrap()).is_err());
 }
+#[test]
+fn published_gpu_specimen_preserves_kernel_seed_and_exact_float_state() {
+    let project = Project::capture(&Workbench::default(), vec![orbium::specimen()]).unwrap();
+    validate(&project).unwrap();
+    let restored: Project = serde_json::from_slice(&serde_json::to_vec(&project).unwrap()).unwrap();
+    validate(&restored).unwrap();
+    assert_eq!(
+        restored.lenia[0].continuous.as_ref().unwrap().values,
+        project.lenia[0].continuous.as_ref().unwrap().values
+    );
+    assert_eq!(restored.lenia[0].params, project.lenia[0].params);
+    assert_eq!(
+        restored.lenia[0].continuous.as_ref().unwrap().kernel,
+        project.lenia[0].continuous.as_ref().unwrap().kernel
+    );
+}

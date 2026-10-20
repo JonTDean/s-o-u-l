@@ -18,7 +18,9 @@ pub fn path(root: &Path, name: &str) -> Result<PathBuf, String> {
         return Err("Use 1–64 letters, digits, spaces, hyphens or underscores".into());
     }
     let stem = name.split('.').next().unwrap().to_ascii_uppercase();
-    if ["CON", "PRN", "AUX", "NUL", "COM1", "LPT1"].contains(&stem.as_str()) {
+    if ["CON", "PRN", "AUX", "NUL"].contains(&stem.as_str())
+        || (1..=9).any(|n| stem == format!("COM{n}") || stem == format!("LPT{n}"))
+    {
         return Err("Reserved filename".into());
     }
     Ok(root.join(format!("{name}.json")))
@@ -70,7 +72,14 @@ pub fn create(destination: &Path, project: &Project) -> Result<(), String> {
     if let Some(parent) = destination.parent().filter(|p| !p.as_os_str().is_empty()) {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
-    write(destination, project)
+    // Publish without replacing a concurrently created entry.
+    static SEQUENCE: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+    let id = SEQUENCE.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    let temporary = destination.with_extension(format!("specimen-{}-{id}", std::process::id()));
+    write(&temporary, project)?;
+    let result = fs::hard_link(&temporary, destination).map_err(|e| e.to_string());
+    let _ = fs::remove_file(temporary);
+    result
 }
 
 /// Stable per-user location; override permits isolated tests and portable installations.
