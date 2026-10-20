@@ -61,7 +61,7 @@ impl Plugin for CameraManagerPlugin {
                 (stage::frame_selected, stage::apply_stage)
                     .chain()
                     .in_set(ChannelSet::Settle)
-                    .run_if(resource_exists::<Channels>),
+                    .run_if(resource_exists::<Channels>.and(stage::stage_active)),
             )
             /* optional perspective free-cam ----------------------------- */
             .add_plugins(FreeCamPlugin);
