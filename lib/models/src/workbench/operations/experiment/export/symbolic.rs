@@ -25,29 +25,23 @@ pub(super) fn draw(image: &mut RgbaImage, machine: &Symbolic) {
                 image.put_pixel((x + dx) as u32, (y + 14) as u32, Rgba([255, 180, 40, 255]));
             }
         }
-        let rows = glyph(*symbol);
-        for (dy, bits) in rows.iter().enumerate() {
-            for dx in 0..5 {
-                if bits & (1 << (4 - dx)) != 0 {
-                    image.put_pixel((x + dx + 3) as u32, (y + dy + 3) as u32, INK);
-                }
-            }
-        }
+        voxel(image, x as u32 + 2, y as u32 + 2, *symbol);
     }
 }
-fn glyph(symbol: char) -> [u8; 7] {
-    match symbol {
-        'a' => [0, 0, 14, 1, 15, 17, 15],
-        'b' => [16, 16, 30, 17, 17, 17, 30],
-        'c' => [0, 0, 14, 17, 16, 17, 14],
-        'A' => [14, 17, 17, 31, 17, 17, 17],
-        'B' => [30, 17, 17, 30, 17, 17, 30],
-        'C' => [14, 17, 16, 16, 16, 17, 14],
-        'X' => [17, 17, 10, 4, 10, 17, 17],
-        '(' => [2, 4, 8, 8, 8, 4, 2],
-        ')' => [8, 4, 2, 2, 2, 4, 8],
-        ' ' => [0; 7],
-        _ => [31, 17, 1, 2, 4, 0, 4],
+fn voxel(image: &mut RgbaImage, x: u32, y: u32, symbol: char) {
+    let (rgb, _) = crate::workbench::symbolic::presentation::colour(symbol);
+    for dy in 0..11 {
+        for dx in 0..11 {
+            let shade = if dy < 2 {
+                1.15
+            } else if dx > 8 {
+                0.65
+            } else {
+                1.0
+            };
+            let [r, g, b] = rgb.map(|v| (v as f32 * shade).min(255.0) as u8);
+            image.put_pixel(x + dx, y + dy, Rgba([r, g, b, 255]));
+        }
     }
 }
 fn koch(image: &mut RgbaImage, word: &str) {
