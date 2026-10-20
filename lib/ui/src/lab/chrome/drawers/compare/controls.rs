@@ -25,7 +25,7 @@ pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut
             let shown = rows
                 .iter()
                 .find(|r| Some(r.id) == *side)
-                .map_or("choose channel".into(), |r| title(r));
+                .map_or("choose channel".into(), &title);
             egui::ComboBox::from_id_salt(("lab.compare", label))
                 .selected_text(shown)
                 .show_ui(ui, |ui| {

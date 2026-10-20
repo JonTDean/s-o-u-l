@@ -1,4 +1,4 @@
-use super::super::{super::LeniaBuffers, device::Gpu};
+use super::{super::LeniaBuffers, device::Gpu};
 use bevy::render::render_resource::*;
 use simulation_kernel::core::{
     boundary::Boundary,
