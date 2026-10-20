@@ -29,8 +29,22 @@ pub fn show(ui: &mut Ui, state: &mut Comparison, bench: &Workbench, saved_path: 
             false,
         );
         let idle = state.job.is_none();
-        if pill(ui, "Export comparison", false, idle).clicked() {
-            let project = state.pair(&bench.sessions).map_or_else(
+        let cpu_pair = state.left.zip(state.right).and_then(|(left, right)| {
+            if left == right {
+                return None;
+            }
+            let find = |id| bench.sessions.iter().position(|s| s.channel == id);
+            find(left).zip(find(right))
+        });
+        if pill(
+            ui,
+            "Export CPU pair (PNG/GIF)",
+            false,
+            idle && cpu_pair.is_some(),
+        )
+        .clicked()
+        {
+            let project = cpu_pair.map_or_else(
                 || Err("Choose two different sessions".into()),
                 |(l, r)| pair_project(bench, l, r),
             );
