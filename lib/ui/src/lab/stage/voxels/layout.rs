@@ -25,11 +25,22 @@ pub fn cells(machine: &Symbolic) -> Vec<Cell> {
         head: index == head,
     }).collect();
     if let Symbolic::Pushdown(m) = machine {
-        cells.extend(m.stack.iter().rev().take(12).enumerate().map(|(depth, symbol)| Cell {
-            symbol: *symbol,
-            position: Vec3::new((head.saturating_sub(start) as f32 - centre) * 3.0, -3.0 * (depth + 1) as f32, 0.0),
-            head: false,
-        }));
+        cells.extend(
+            m.stack
+                .iter()
+                .rev()
+                .take(12)
+                .enumerate()
+                .map(|(depth, symbol)| Cell {
+                    symbol: *symbol,
+                    position: Vec3::new(
+                        (head.saturating_sub(start) as f32 - centre) * 3.0,
+                        -3.0 * (depth + 1) as f32,
+                        0.0,
+                    ),
+                    head: false,
+                }),
+        );
     }
     cells
 }
