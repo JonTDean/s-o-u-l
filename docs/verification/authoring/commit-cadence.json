@@ -251,6 +251,11 @@
       "commit": "091fb82b20ee4063c4fb3413fa1d3cb834c10270",
       "changed_sloc": 4,
       "subject": "test: retain native library authoring and scenario launcher screenshot"
+    },
+    {
+      "commit": "ce69c3745a0e547ced90464e706e98b9c687e230",
+      "changed_sloc": 0,
+      "subject": "docs: retain authoring acceptance evidence and refresh the remaining roadmap"
     }
   ]
 }

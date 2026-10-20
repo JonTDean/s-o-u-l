@@ -1,35 +1,24 @@
 python3 -m unittest discover -s tools/structure/tests -t tools/structure
 ....................
 ----------------------------------------------------------------------
-Ran 20 tests in 0.147s
+Ran 20 tests in 0.140s
 
 OK
 python3 tools/structure/audit.py
 Structural governance: 0 violation(s).
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
-    Checking bevy_egui v0.35.1
-    Checking models v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/models)
-    Checking engine-gpu v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/engine/engine-gpu)
-    Checking engine-render v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/engine/engine-render)
-    Checking ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/ui)
-    Checking tests v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/tests)
     Checking swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring)
-    Finished `dev` profile [optimized + debuginfo] target(s) in 8.39s
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.88s
 RUSTDOCFLAGS="${RUSTDOCFLAGS:-} -C rpath=yes" cargo test --workspace --all-features
    Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring)
-   Compiling tests v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/tests)
-   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/ui)
-   Compiling models v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/models)
-   Compiling engine-render v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/engine/engine-render)
-   Compiling engine-gpu v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-authoring/lib/engine/engine-gpu)
-    Finished `test` profile [optimized + debuginfo] target(s) in 22.50s
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.95s
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/engine_common-60d8e8542649e540)
 
 running 7 tests
 test controls::camera::manager::stage::tests::degenerate_stage_has_no_viewport ... ok
-test controls::camera::manager::stage::tests::input_gates_default_open_without_a_lab ... ok
 test controls::camera::manager::stage::tests::logical_rect_maps_to_physical_pixels ... ok
+test controls::camera::manager::stage::tests::input_gates_default_open_without_a_lab ... ok
 test controls::camera::manager::stage::tests::viewport_is_clamped_inside_the_window ... ok
 test controls::camera::manager::stage::tests::frame_selected_centres_on_the_slice_and_ignores_missing_slice ... ok
 test controls::camera::manager::stage::tests::hidden_world_keeps_stage_cameras_running_in_one_pixel ... ok
@@ -40,12 +29,12 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/engine_core-1018765729ba2b36)
 
 running 18 tests
-test automata::channel::clock::tests::step_clock_divides_exactly_with_integer_carry ... ok
 test automata::channel::clock::tests::step_clock_passes_through_at_base_rate ... ok
 test automata::channel::colour::tests::linear_conversion_hits_known_points ... ok
+test automata::channel::clock::tests::step_clock_divides_exactly_with_integer_carry ... ok
+test automata::channel::metrics::tests::mass_is_density_sum_over_255 ... ok
 test automata::channel::colour::tests::ramp_keeps_the_chosen_colour_as_its_third_stop ... ok
 test automata::channel::colour::tests::ramp_lightness_is_strictly_increasing ... ok
-test automata::channel::metrics::tests::mass_is_density_sum_over_255 ... ok
 test automata::channel::metrics::tests::record_requires_declaration_and_tracks_latest ... ok
 test automata::channel::metrics::trace::tests::evicts_oldest_beyond_capacity ... ok
 test automata::channel::metrics::trace::tests::newer_epoch_clears_and_older_epoch_is_rejected ... ok
@@ -54,8 +43,8 @@ test automata::channel::metrics::trace::tests::same_tick_replaces_and_older_tick
 test automata::channel::tests::ids_are_never_reused_and_capacity_is_shared ... ok
 test automata::channel::tests::publish_replaces_one_backend_and_keeps_creation_order ... ok
 test automata::channel::tests::rate_presets_span_one_to_sixty_hertz ... ok
-test automata::channel::tests::settle_selects_predecessor_after_removal ... ok
 test automata::channel::tests::select_command_targets_only_existing_rows ... ok
+test automata::channel::tests::settle_selects_predecessor_after_removal ... ok
 test automata::lenia::tests::lenia_controls_pause_step_reset_parameters_and_ignore_stale_entities ... ok
 test automata::lenia::tests::continuous_model_reset_validation_and_exact_serialization ... ok
 
@@ -66,27 +55,27 @@ test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 running 21 tests
 test plugin::drawing::palette::tests::build_stores_linear_ramp_stops_and_caps_at_eight ... ok
 test plugin::drawing::palette::tests::layout_is_656_bytes_with_eighty_byte_entries ... ok
-test plugin::drawing::palette::tests::rect_matches_surface_world_mapping ... ok
 test plugin::drawing::palette::tests::shader_default_ramp_matches_signal ... ok
+test plugin::drawing::palette::tests::rect_matches_surface_world_mapping ... ok
 test render::compute::lenia::tests::continuous::oracle::normalized_periodic_field_and_z_coupling ... ok
 test render::compute::voxel::tests::active_shaders_validate ... ok
 test plugin::setup::ticks::tests::paced_lenia_owner_requests_ticks_at_its_channel_rate ... ok
 test plugin::setup::ticks::tests::lenia_fixed_ticks_respect_both_pause_layers ... ok
-test render::compute::voxel::tests::surfaces::overflow_clamps_indirect_draw_to_whole_faces ... ok
-test render::compute::voxel::tests::surfaces::empty_region_emits_no_vertices ... ok
-test render::compute::voxel::tests::surfaces::adjacent_voxels_cull_their_shared_face ... ok
-test render::compute::lenia::tests::evolution::isolation::gpu_lenia_slices_keep_independent_parameters_state_and_atlas_regions ... ok
-test render::compute::lenia::tests::evolution::ownership::gpu_lenia_reset_removal_and_entity_reuse_discard_prior_state ... ok
 test render::compute::lenia::tests::evolution::transition::gpu_lenia_parameter_changes_apply_to_subsequent_ticks_without_reseeding ... ok
-test render::compute::voxel::tests::surfaces::subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream ... ok
-test render::compute::voxel::tests::surfaces::one_voxel_has_six_outward_faces_at_the_requested_world_transform ... ok
+test render::compute::lenia::tests::evolution::isolation::gpu_lenia_slices_keep_independent_parameters_state_and_atlas_regions ... ok
 test render::compute::lenia::tests::evolution::gpu_lenia_matches_cpu_for_odd_and_even_tick_batches ... ok
+test render::compute::voxel::tests::surfaces::adjacent_voxels_cull_their_shared_face ... ok
 test render::compute::lenia::tests::evolution::packing::gpu_lenia_publishes_odd_width_rows_at_nonzero_atlas_origin ... ok
+test render::compute::lenia::tests::evolution::ownership::gpu_lenia_reset_removal_and_entity_reuse_discard_prior_state ... ok
+test render::compute::voxel::tests::surfaces::overflow_clamps_indirect_draw_to_whole_faces ... ok
+test render::compute::voxel::tests::surfaces::one_voxel_has_six_outward_faces_at_the_requested_world_transform ... ok
 test render::compute::voxel::tests::surfaces::preview_volume_matches_a_cpu_exposed_face_oracle ... ok
 test render::compute::lenia::tests::continuous::orbium::published_orbium_gpu_matches_pinned_fft_trajectory ... ok
+test render::compute::voxel::tests::surfaces::subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream ... ok
+test render::compute::voxel::tests::surfaces::empty_region_emits_no_vertices ... ok
 test render::compute::lenia::tests::continuous::continuous_gpu_matches_independent_oracle_and_restored_continuation ... ok
 
-test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.01s
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.87s
 
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/engine_render-6ad70ee1369630c1)
 
@@ -101,38 +90,38 @@ test automata::dynamical::lenia::tests::invalid_growth_parameters_leave_model_st
 test workbench::catalog::tests::doi_syntax_and_unknown_groups ... ok
 test workbench::catalog::tests::copy_keeps_contract_disclaimers ... ok
 test workbench::evolution::agents::tests::a_carrying_ant_returns_home_and_evaporation_removes_exhausted_trails ... ok
-test workbench::catalog::tests::metric_names_match_the_metric_sources ... ok
 test workbench::catalog::tests::every_family_and_lenia_has_exactly_one_entry ... ok
 test workbench::catalog::tests::figure_numbers_follow_file_order ... ok
-test workbench::catalog::tests::fields_are_present_and_dois_valid ... ok
+test workbench::catalog::tests::metric_names_match_the_metric_sources ... ok
 test workbench::evolution::grid::editing::tests::invalid_strokes_are_atomic_and_running_worlds_refuse_edits ... ok
+test workbench::catalog::tests::fields_are_present_and_dois_valid ... ok
 test workbench::evolution::grid::editing::tests::old_projects_default_worlds_and_new_world_limits_validate ... ok
-test workbench::evolution::grid::tests::elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions ... ok
 test workbench::evolution::grid::gas_tests::hpp_particles_keep_direction_and_head_on_collisions_turn_perpendicularly ... ok
+test workbench::evolution::grid::tests::elementary_rules_match_all_eight_binary_neighborhoods_in_three_dimensions ... ok
 test workbench::evolution::symbolic::tests::languages::bounded_tape_never_allocates_outside_its_input ... ok
-test workbench::catalog::scenarios::tests::scenarios_reveal_their_documented_outcomes ... ok
 test workbench::evolution::symbolic::tests::languages::pushdown_stack_tracks_nesting_and_rejects_nonparenthesis_symbols ... ok
 test workbench::evolution::symbolic::tests::machines::lsystem_rewrites_in_parallel_and_stops_before_exceeding_its_bound ... ok
-test workbench::evolution::symbolic::tests::machines::turing_rewrites_halts_rejects_and_extends_both_tape_ends ... ok
-test workbench::evolution::agents::tests::flock_update_is_order_independent_and_respects_speed_and_arena_bounds ... ok
-test workbench::operations::channels::analysis::tests::error_measures_and_projection_include_every_z_plane ... ok
 test workbench::evolution::symbolic::tests::machines::nfa_epsilon_cycles_and_branching_remain_closed ... ok
+test workbench::evolution::symbolic::tests::machines::turing_rewrites_halts_rejects_and_extends_both_tape_ends ... ok
+test workbench::operations::channels::analysis::tests::error_measures_and_projection_include_every_z_plane ... ok
 test workbench::operations::channels::tests::every_kind_has_a_named_metric ... ok
 test workbench::operations::channels::tests::koch_length_symbolic_steps_boids_and_ants ... ok
-test workbench::operations::channels::tests::life_counts_the_glider_and_rule30_its_newest_row ... ok
-test workbench::operations::experiment::tests::settings::agent_population_edits_require_reset_and_controls_are_finite ... ok
+test workbench::evolution::agents::tests::flock_update_is_order_independent_and_respects_speed_and_arena_bounds ... ok
 test workbench::evolution::grid::editing::tests::stroke_undo_redo_reset_and_loaded_continuation ... ok
+test workbench::operations::experiment::tests::settings::agent_population_edits_require_reset_and_controls_are_finite ... ok
+test workbench::catalog::scenarios::tests::scenarios_reveal_their_documented_outcomes ... ok
+test workbench::operations::channels::tests::life_counts_the_glider_and_rule30_its_newest_row ... ok
 test workbench::operations::project::tests::rejection::file_roundtrip_and_unknown_fields ... ok
 test workbench::catalog::scenarios::tests::scenarios_are_repeatable_and_paused ... ok
-test plugin::tests::model_registration_runs_without_a_renderer_or_window ... ok
-test workbench::operations::experiment::tests::settings::seeded_patterns_reproduce_and_live_rules_keep_state ... ok
 test workbench::evolution::symbolic::tests::languages::bounded_languages_match_exhaustive_short_words_and_reject_unicode ... ok
-test workbench::evolution::grid::tests::life_blinker_period_and_glider_displacement_are_correct ... ok
+test workbench::operations::experiment::tests::settings::seeded_patterns_reproduce_and_live_rules_keep_state ... ok
 test workbench::operations::project::library::tests::published_gpu_specimen_preserves_kernel_seed_and_exact_float_state ... ok
-test automata::dynamical::lenia::tests::serial_and_parallel_models_match_reference_over_many_ticks ... ok
+test plugin::tests::model_registration_runs_without_a_renderer_or_window ... ok
+test workbench::evolution::grid::tests::life_blinker_period_and_glider_displacement_are_correct ... ok
 test workbench::evolution::agents::tests::ant_rng_reset_replays_food_deliveries_and_bounded_trails ... ok
-test workbench::operations::project::tests::rejection::malformed_projects_fail_before_mutation ... ok
+test automata::dynamical::lenia::tests::serial_and_parallel_models_match_reference_over_many_ticks ... ok
 test workbench::operations::project::library::tests::names_and_invalid_imports_do_not_escape_or_create_entries ... ok
+test workbench::operations::project::tests::rejection::malformed_projects_fail_before_mutation ... ok
 test workbench::operations::channels::tests::hpp_particle_count_is_conserved_before_walls_reach_edges ... ok
 test workbench::operations::project::tests::continuation::live_edit_reset_and_fractional_clock_contract ... ok
 test workbench::operations::project::library::tests::imported_and_duplicated_specimens_preserve_every_family ... ok
@@ -140,29 +129,29 @@ test workbench::operations::experiment::tests::export::export_decodes_and_preser
 test workbench::operations::project::tests::continuation::every_family_continues_after_roundtrip ... ok
 test workbench::evolution::grid::tests::cellular_histories_and_parallel_updates_preserve_snapshot_semantics ... ok
 
-test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
 
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/simulation_kernel-a778a73ad05190c4)
 
 running 10 tests
 test core::lenia::tests::boundaries_are_zero_and_z_planes_are_independent ... ok
-test core::lenia::tests::growth_clamps_quantizes_and_preserves_zero_dt ... ok
 test core::lenia::tests::every_xy_neighbor_uses_its_original_offset ... ok
+test core::lenia::tests::growth_clamps_quantizes_and_preserves_zero_dt ... ok
+test core::lenia::tests::numerical::fixtures_are_safe_for_small_shapes_and_distinct ... ok
 test stepper::sparse::benchmark::sparse_benchmark ... ignored, measurement benchmark: set SOUL_BENCH_REPORT to retain JSON
 test core::lenia::tests::parameters_and_shape_fail_closed ... ok
-test core::lenia::tests::numerical::fixtures_are_safe_for_small_shapes_and_distinct ... ok
 test stepper::sparse::tests::unbounded_births_and_coordinate_extremes ... ok
 test core::lenia::tests::numerical::seeded_multitick_reference_matches_independent_numerics ... ok
 test stepper::sparse::tests::finite_serial_parallel_dense_sparse_parity ... ok
 test core::lenia::continuous::qualification::published_orbium_matches_fft_reference_through_one_hundred_ticks ... ok
 
-test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 3.23s
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 3.25s
 
      Running unittests src/main.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/swarm_orchestrator_for_autonomous_learners-e6138a3ce9b89023)
 
 running 3 tests
-test app::preview::automata::flow::stage_check::tests::counts_only_matching_pixels_inside_the_stage ... ok
 test app::preview::automata::flow::stage_check::tests::detects_panel_fill_inside_the_stage_edge ... ok
+test app::preview::automata::flow::stage_check::tests::counts_only_matching_pixels_inside_the_stage ... ok
 test app::preview::automata::flow::stage_check::tests::warm_pixels_need_hue_and_saturation ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -172,29 +161,29 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 23 tests
 test families::capacity_and_invalid_inputs_do_not_mutate_other_sessions ... ok
 test sim_loop::spiral_guard_caps_work_and_discards_excess_lag ... ok
-test sim_loop::accumulator_emits_correct_steps ... ok
 test channels::gpu::lenia_rows_publish_as_gpu_channels ... ok
+test sim_loop::accumulator_emits_correct_steps ... ok
 test channels::gpu::remove_emits_automaton_removed_and_releases_the_id ... ok
 test channels::gpu::lifecycle_actions_map_to_lenia_actions ... ok
-test channels::gpu::lenia_spawn_refused_when_full ... ok
 test channels::gpu::lenia_spawn_allocates_a_selected_channel ... ok
-test channels::mass::readback_error_becomes_unavailable ... ok
-test channels::mass::stale_epoch_snapshots_are_dropped ... ok
+test channels::gpu::lenia_spawn_refused_when_full ... ok
 test channels::cpu::spawn_publishes_a_paused_selected_row ... ok
-test channels::cpu::replaced_sessions_are_adopted_and_old_ids_released ... ok
-test channels::mass::busy_mailbox_suspends_sampling ... ok
+test channels::mass::stale_epoch_snapshots_are_dropped ... ok
+test channels::mass::readback_error_becomes_unavailable ... ok
 test channels::mass::off_by_default_declares_opt_in_and_never_requests ... ok
+test channels::mass::busy_mailbox_suspends_sampling ... ok
 test channels::mass::enabled_requests_are_throttled_and_results_recorded ... ok
+test channels::cpu::replaced_sessions_are_adopted_and_old_ids_released ... ok
 test channels::cpu::colour_input_and_configuration_apply ... ok
-test channels::cpu::halted_machines_report_halted_and_refuse_resume ... ok
 test families::every_family_plugin_registers_and_native_spawn_clear_commands_execute ... ok
+test channels::cpu::halted_machines_report_halted_and_refuse_resume ... ok
 test channels::cpu::remove_releases_shared_capacity ... ok
-test families::all_families_pause_step_reset_and_hold_terminal_states ... ok
 test channels::mass::stalled_readback_times_out ... ok
+test families::all_families_pause_step_reset_and_hold_terminal_states ... ok
 test channels::cpu::step_only_while_paused_and_reset_bumps_epoch ... ok
 test channels::cpu::running_channels_advance_at_their_own_rate ... ok
 
-test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
 
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/tooling-1da32cfe2ec6a53b)
 
@@ -205,38 +194,38 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running unittests src/lib.rs (/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/deps/ui-24ec53f0d1ac55fc)
 
 running 49 tests
-test lab::chrome::transport::tests::rate_presets_mark_the_nearest_rate ... ok
-test lab::chrome::drawers::compare::tests::pairs_must_be_distinct_and_able_to_advance ... ok
-test lab::chrome::drawers::library::tests::filter_matches_title_subtitle_and_group_case_insensitively ... ok
-test lab::chrome::drawers::library::tests::groups_follow_library_order_and_hide_unavailable_specimens ... ok
+test lab::chrome::transport::tests::flat_or_short_traces ... ok
 test lab::chrome::drawers::compare::export::tests::csv_bundle_preserves_samples_fields_metadata_and_refuses_overwrite ... ok
 test lab::chrome::drawers::compare::tests::the_pair_follows_its_channels_when_tabs_close ... ok
-test lab::chrome::transport::tests::flat_or_short_traces ... ok
-test lab::chrome::transport::tests::sparkline_spans_the_rect_with_max_at_the_top ... ok
-test lab::inspector::parameters::tests::actions_become_configure_requests ... ok
+test lab::chrome::drawers::compare::tests::pairs_must_be_distinct_and_able_to_advance ... ok
+test lab::chrome::drawers::library::tests::groups_follow_library_order_and_hide_unavailable_specimens ... ok
+test lab::chrome::transport::tests::rate_presets_mark_the_nearest_rate ... ok
+test lab::chrome::drawers::library::tests::filter_matches_title_subtitle_and_group_case_insensitively ... ok
 test lab::inspector::machine::tests::summaries_name_state_and_result ... ok
+test lab::chrome::transport::tests::sparkline_spans_the_rect_with_max_at_the_top ... ok
 test lab::inspector::machine::tests::turing_table_lists_every_transition_sorted ... ok
+test lab::inspector::parameters::tests::actions_become_configure_requests ... ok
 test lab::inspector::parameters::tests::drafts_survive_frames_and_follow_external_changes ... ok
-test lab::inspector::sections::tests::input_note_warns_beyond_the_bound ... ok
 test lab::inspector::sections::tests::edited_rules_and_populations_are_customised ... ok
-test lab::inspector::sections::tests::metric_values_format_by_kind ... ok
+test lab::inspector::sections::tests::input_note_warns_beyond_the_bound ... ok
 test lab::inspector::sections::tests::arenas_describe_size_and_edges ... ok
+test lab::inspector::sections::tests::metric_values_format_by_kind ... ok
 test lab::stage::painters::symbolic::tests::tape_window_keeps_the_head_visible ... ok
-test lab::stage::painters::symbolic::tests::tapes_are_sized_to_their_visible_window ... ok
 test lab::stage::painters::tests::ramp_colour_hits_stops_at_thirds ... ok
-test lab::stage::view::tests::content_is_centred_and_fitted ... ok
+test lab::stage::painters::symbolic::tests::tapes_are_sized_to_their_visible_window ... ok
 test lab::stage::view::tests::cursor_maps_back_to_cells ... ok
+test lab::stage::view::tests::content_is_centred_and_fitted ... ok
 test lab::stage::view::tests::zoom_is_clamped ... ok
-test lab::state::tests::inspector_width_is_clamped ... ok
 test lab::stage::voxels::tests::stack_voxels_and_end_of_tape_heads_remain_visible ... ok
+test lab::state::tests::inspector_width_is_clamped ... ok
 test lab::state::tests::launch_library_steps_aside_once_a_channel_opens ... ok
 test lab::state::tests::library_opens_on_first_launch_and_drawers_toggle ... ok
 test lab::state::tests::presenter_transport_fades_after_two_idle_seconds ... ok
 test lab::tests::escape_closes_the_settings_popover_first ... ok
 test lab::tests::escape_is_swallowed_only_when_lab_consumes_it ... ok
-test lab::tests::run_pause_step_reset_target_the_selected_channel ... ok
 test lab::tests::keys_map_to_shortcuts ... ok
 test lab::tests::legacy_ui_modules_are_gone ... ok
+test lab::tests::run_pause_step_reset_target_the_selected_channel ... ok
 test lab::tests::toggles ... ok
 test theme::fonts::tests::every_family_leads_with_libertinus_and_keeps_fallbacks ... ok
 test lab::tests::tab_titles_stop_claiming_the_catalog_specimen_once_customised ... ok
@@ -247,8 +236,8 @@ test theme::visuals::tests::type_scale_uses_spec_sizes ... ok
 test theme::widgets::tests::colour_rules ... ok
 test theme::widgets::tests::ticks_are_zero_padded_to_six_digits ... ok
 test lab::stage::voxels::tests::selected_tape_creates_meshes_steps_and_cleans_up ... ok
-test lab::stage::editing::tests::pointer_strokes_generate_one_undo_group_and_fill_drag_gaps ... ok
 test lab::tests::frame_input_reads_keys_without_relocking_the_context ... ok
+test lab::stage::editing::tests::pointer_strokes_generate_one_undo_group_and_fill_drag_gaps ... ok
 test theme::fonts::tests::fonts_load_and_cover_lab_glyphs ... ok
 test theme::widgets::tests::widgets_render_headless_without_panicking ... ok
 test theme::fonts::tests::named_families_are_ready_only_from_the_pass_after_install ... ok
@@ -261,13 +250,13 @@ test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 
 running 4 tests
 test lib/engine/engine-common/src/controls/camera/plugin_bundle.rs - controls::camera::plugin_bundle::CameraPluginBundle (line 13) - compile ... ok
-test lib/engine/engine-common/src/plugin.rs - plugin (line 7) - compile ... ok
 test lib/engine/engine-common/src/lib.rs - (line 7) - compile ... ok
+test lib/engine/engine-common/src/plugin.rs - plugin (line 7) - compile ... ok
 test lib/engine/engine-common/src/prelude.rs - prelude (line 3) ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-all doctests ran in 0.75s; merged doctests compilation took 0.74s
+all doctests ran in 0.76s; merged doctests compilation took 0.75s
    Doc-tests engine_core
 
 running 1 test
@@ -275,7 +264,7 @@ test lib/engine/engine-core/src/systems/execution/simulation/mod.rs - systems::e
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
-all doctests ran in 0.61s; merged doctests compilation took 0.58s
+all doctests ran in 0.65s; merged doctests compilation took 0.62s
    Doc-tests engine_gpu
 
 running 0 tests
@@ -298,7 +287,7 @@ test lib/models/src/lib.rs - (line 5) ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
-all doctests ran in 0.52s; merged doctests compilation took 0.49s
+all doctests ran in 0.56s; merged doctests compilation took 0.52s
    Doc-tests simulation_kernel
 
 running 0 tests

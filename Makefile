@@ -1,4 +1,4 @@
-.PHONY: check governance format-check lint test preview lenia verify-lenia automata verify-automata
+.PHONY: check governance format-check lint test preview lenia verify-lenia automata verify-automata experiment verify-experiment benchmark-sparse verify-authoring verify-boot benchmark-steppers
 
 check: governance format-check lint test
 
