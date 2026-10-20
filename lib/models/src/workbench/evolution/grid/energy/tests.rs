@@ -83,3 +83,76 @@ fn costs_require_both_pools_and_only_successful_candidates_pay() {
             .all(|p| *p == [6, 0])
     );
 }
+#[test]
+fn reset_only_configuration_paint_and_undo_preserve_pool_contract() {
+    let mut s = fixture(Boundary::Periodic);
+    grid(&mut s).energy.as_mut().unwrap()[0] = [400, 200];
+    s.step();
+    let before = serde_json::to_value(&s).unwrap();
+    let mut changed = s.settings.clone();
+    changed.energy.as_mut().unwrap().decay = [1; 2];
+    assert!(s.configure(changed.clone(), false).is_err());
+    assert_eq!(serde_json::to_value(&s).unwrap(), before);
+    s.paint(&[[2, 2]], 255, true).unwrap();
+    assert!(
+        grid(&mut s)
+            .energy
+            .as_ref()
+            .unwrap()
+            .iter()
+            .all(|p| *p == [0, 0])
+    );
+    s.undo_paint(false).unwrap();
+    assert_eq!(serde_json::to_value(&s).unwrap(), before);
+    s.undo_paint(true).unwrap();
+    s.configure(changed, true).unwrap();
+    assert_eq!(s.ticks, 0);
+}
+#[test]
+fn decay_then_recharge_clamps_and_survival_exhausts() {
+    let mut s = fixture(Boundary::Periodic);
+    let mut settings = s.settings.clone();
+    settings.world.seed = Some(vec![255; 64]);
+    settings.survival = 1 << 8;
+    let e = settings.energy.as_mut().unwrap();
+    e.initial = [3; 2];
+    e.diffusion = [0; 2];
+    e.decay = [2; 2];
+    e.recharge = [1; 2];
+    e.survival_cost = [2; 2];
+    s.configure(settings.clone(), true).unwrap();
+    s.step();
+    assert!(grid(&mut s).bytes().iter().all(|v| *v == 255));
+    assert!(
+        grid(&mut s)
+            .energy
+            .as_ref()
+            .unwrap()
+            .iter()
+            .all(|p| *p == [0, 0])
+    );
+    s.step();
+    assert!(grid(&mut s).bytes().iter().all(|v| *v == 0));
+    assert!(
+        grid(&mut s)
+            .energy
+            .as_ref()
+            .unwrap()
+            .iter()
+            .all(|p| *p == [1, 1])
+    );
+    let e = settings.energy.as_mut().unwrap();
+    e.initial = [512; 2];
+    e.recharge = [512; 2];
+    e.survival_cost = [0; 2];
+    s.configure(settings, true).unwrap();
+    s.step();
+    assert!(
+        grid(&mut s)
+            .energy
+            .as_ref()
+            .unwrap()
+            .iter()
+            .all(|p| *p == [512, 512])
+    );
+}
