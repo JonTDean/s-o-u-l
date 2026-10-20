@@ -55,7 +55,7 @@ pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
                     egui::TextEdit::multiline(&mut editor.text)
                         .code_editor()
                         .desired_rows(10)
-                        .desired_width(240.0)
+                        .desired_width(ui.available_width().min(240.0))
                         .char_limit(storage::MAX_BYTES),
                 );
             });

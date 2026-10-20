@@ -48,3 +48,33 @@ impl Energy {
         Ok(())
     }
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn pool_contract_rejects_every_out_of_range_quantity() {
+        Energy::default().validate().unwrap();
+        for pool in 0..2 {
+            let mut e = Energy::default();
+            e.capacity[pool] = 0;
+            assert!(e.validate().is_err());
+            e.capacity[pool] = 4097;
+            assert!(e.validate().is_err());
+            e = Energy::default();
+            e.diffusion[pool] = 1001;
+            assert!(e.validate().is_err());
+            for field in [
+                "initial",
+                "decay",
+                "recharge",
+                "birth_cost",
+                "survival_cost",
+            ] {
+                let mut value = serde_json::to_value(Energy::default()).unwrap();
+                value[field][pool] = serde_json::json!(4097);
+                let e: Energy = serde_json::from_value(value).unwrap();
+                assert!(e.validate().is_err(), "{field} pool {pool}");
+            }
+        }
+    }
+}
