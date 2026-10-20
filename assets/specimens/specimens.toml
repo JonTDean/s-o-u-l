@@ -1,0 +1,145 @@
+# Specimen copy shown by the lab: caption under the stage, explanation and
+# citation in the inspector footnote. Keep claims within the family contracts.
+
+[[specimen]]
+id          = "wolfram:rule30"
+title       = "Rule 30"
+group       = "cellular"
+subtitle    = "elementary, chaotic"
+caption     = "Space-time diagram grown from one live cell; time runs downward."
+explanation = "Each cell's next state depends on itself and its two neighbours through the update table 00011110."
+metric      = "live_cells"
+citation    = "S. Wolfram, \"Statistical mechanics of cellular automata\", Reviews of Modern Physics 55(3), 601–644 (1983)."
+doi         = "10.1103/RevModPhys.55.601"
+
+[[specimen]]
+id          = "wolfram:rule110"
+title       = "Rule 110"
+group       = "cellular"
+subtitle    = "elementary, universal"
+caption     = "Space-time diagram grown from one live cell; time runs downward."
+explanation = "Update table 01101110. Cook proved that this elementary rule can emulate any computation."
+metric      = "live_cells"
+citation    = "M. Cook, \"Universality in Elementary Cellular Automata\", Complex Systems 15(1), 1–40 (2004)."
+doi         = "10.25088/ComplexSystems.15.1.1"
+
+[[specimen]]
+id          = "life:conway"
+title       = "Conway's Game of Life"
+group       = "cellular"
+subtitle    = "B3/S23"
+caption     = "A glider crossing a bounded 64 × 64 field with dead edges."
+explanation = "A dead cell with exactly three live neighbours is born; a live cell with two or three survives."
+metric      = "population"
+citation    = "M. Gardner, \"Mathematical Games\", Scientific American 223(4), 120–123 (1970)."
+doi         = "10.1038/scientificamerican1070-120"
+
+[[specimen]]
+id          = "particle:hpp"
+title       = "HPP lattice gas"
+group       = "cellular"
+subtitle    = "lattice gas, collisions"
+caption     = "Two opposing particle walls meet on a 64 × 64 lattice."
+explanation = "Particles hop along four lattice directions; head-on pairs scatter at right angles, conserving particle number and momentum."
+metric      = "particles"
+citation    = "J. Hardy, Y. Pomeau, O. de Pazzis, \"Time evolution of a two-dimensional model system. I.\", Journal of Mathematical Physics 14(12), 1746–1759 (1973)."
+doi         = "10.1063/1.1666248"
+
+[[specimen]]
+id          = "lenia"
+title       = "Lenia"
+group       = "cellular"
+subtitle    = "continuous, quantized planes"
+caption     = "Density evolving on independent XY planes of a 64 × 64 × 8 volume."
+explanation = "Density in 0–255 evolves under a finite 3 × 3 Gaussian kernel with zero boundaries; each XY plane is independent. A bounded variant, not isotropic 3-D Lenia."
+metric      = "mass"
+citation    = "B. W.-C. Chan, \"Lenia: Biology of Artificial Life\", Complex Systems 28(3), 251–286 (2019)."
+doi         = "10.25088/ComplexSystems.28.3.251"
+
+[[specimen]]
+id          = "regular:nfa"
+title       = "Finite automaton"
+group       = "machines"
+subtitle    = "a*b"
+caption     = "Input tape read one symbol per step."
+explanation = "Tracks every reachable state at once and accepts any number of a's followed by a single b."
+metric      = "steps"
+citation    = "M. O. Rabin, D. Scott, \"Finite Automata and Their Decision Problems\", IBM Journal of Research and Development 3(2), 114–125 (1959)."
+doi         = "10.1147/rd.32.0114"
+
+[[specimen]]
+id          = "context-free:anbn"
+title       = "Pushdown automaton"
+group       = "machines"
+subtitle    = "aⁿbⁿ"
+caption     = "Input tape with the stack it builds."
+explanation = "Pushes on each a and pops on each b; accepts when the stack empties exactly at the end of the input."
+metric      = "steps"
+citation    = "N. Chomsky, \"Three models for the description of language\", IRE Transactions on Information Theory 2(3), 113–124 (1956)."
+doi         = "10.1109/TIT.1956.1056813"
+
+[[specimen]]
+id          = "context-free:parentheses"
+title       = "Balanced parentheses"
+group       = "machines"
+subtitle    = "pushdown"
+caption     = "Input tape with the stack it builds."
+explanation = "Pushes on each opening parenthesis and pops on each closing one; accepts when every parenthesis is matched."
+metric      = "steps"
+citation    = "N. Chomsky, \"Three models for the description of language\", IRE Transactions on Information Theory 2(3), 113–124 (1956)."
+doi         = "10.1109/TIT.1956.1056813"
+
+[[specimen]]
+id          = "context-sensitive:anbncn"
+title       = "Linear-bounded automaton"
+group       = "machines"
+subtitle    = "aⁿbⁿcⁿ"
+caption     = "The machine's tape never grows beyond its input."
+explanation = "Marks one a, b and c per pass within the original tape; accepts when every symbol is matched."
+metric      = "steps"
+citation    = "S.-Y. Kuroda, \"Classes of languages and linear-bounded automata\", Information and Control 7(2), 207–223 (1964)."
+doi         = "10.1016/S0019-9958(64)90120-2"
+
+[[specimen]]
+id          = "turing:replace-a"
+title       = "Turing machine"
+group       = "machines"
+subtitle    = "a → X"
+caption     = "Tape and head after each transition."
+explanation = "Scans right rewriting each a as X and accepts at the first blank. A small example, not a universal machine."
+metric      = "steps"
+citation    = "A. M. Turing, \"On Computable Numbers, with an Application to the Entscheidungsproblem\", Proceedings of the London Mathematical Society s2-42(1), 230–265 (1937)."
+doi         = "10.1112/plms/s2-42.1.230"
+
+[[specimen]]
+id          = "context-free:koch"
+title       = "Koch curve"
+group       = "grammars"
+subtitle    = "L-system F → F+F--F+F"
+caption     = "Turtle path of the rewritten word."
+explanation = "Every F is rewritten in parallel each step; expansion stops at a 4096-symbol bound."
+metric      = "length"
+citation    = "A. Lindenmayer, \"Mathematical models for cellular interactions in development I\", Journal of Theoretical Biology 18(3), 280–299 (1968)."
+doi         = "10.1016/0022-5193(68)90079-9"
+
+[[specimen]]
+id          = "swarm:boids"
+title       = "Boids"
+group       = "agents"
+subtitle    = "flocking"
+caption     = "24 boids in a 64 × 64 arena that wraps at its edges."
+explanation = "Each boid steers by separation, alignment and cohesion with neighbours inside its radius."
+metric      = "polarisation"
+citation    = "C. W. Reynolds, \"Flocks, herds and schools: A distributed behavioral model\", ACM SIGGRAPH Computer Graphics 21(4), 25–34 (1987)."
+doi         = "10.1145/37402.37406"
+
+[[specimen]]
+id          = "swarm:ants"
+title       = "Ant foraging"
+group       = "agents"
+subtitle    = "trail laying"
+caption     = "32 ants, two food sites and evaporating pheromone trails."
+explanation = "Ants wander from the nest, return food along their trail and reinforce it; unused trails evaporate."
+metric      = "food"
+citation    = "J.-L. Deneubourg, S. Aron, S. Goss, J. M. Pasteels, \"The self-organizing exploratory pattern of the argentine ant\", Journal of Insect Behavior 3(2), 159–168 (1990)."
+doi         = "10.1007/BF01417909"

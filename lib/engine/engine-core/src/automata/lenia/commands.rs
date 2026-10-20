@@ -22,6 +22,8 @@ pub enum LeniaAction {
     Reset,
     /// Apply validated growth parameters without resetting density.
     Parameters(LeniaParams),
+    /// Select a model/kernel and reset; invalid kernels leave the instance unchanged.
+    Kernel(Option<simulation_kernel::core::lenia::continuous::Kernel>),
     /// Select and restore a new seed.
     Seed(LeniaSeed),
 }
@@ -31,8 +33,11 @@ pub struct LeniaControlPlugin;
 
 impl Plugin for LeniaControlPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<LeniaCommand>()
-            .add_systems(Update, apply_commands);
+        crate::automata::channel::ensure_plugin(app);
+        app.add_event::<LeniaCommand>().add_systems(
+            Update,
+            apply_commands.in_set(crate::automata::channel::ChannelSet::Tick),
+        );
     }
 }
 
@@ -52,6 +57,12 @@ fn apply_commands(
             LeniaAction::Parameters(params) => {
                 if let Ok(params) = params.validate() {
                     sim.params = params;
+                }
+            }
+            LeniaAction::Kernel(kernel) => {
+                if kernel.is_none_or(|k| k.validate().is_ok()) {
+                    sim.kernel = kernel;
+                    sim.reset();
                 }
             }
             LeniaAction::Seed(seed) => {

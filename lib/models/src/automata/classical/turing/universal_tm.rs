@@ -1,12 +1,13 @@
 //! A simple example Turing machine (not truly universal, but illustrative).
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub enum Direction {
     Left,
     Right,
 }
 
 /// A single transition rule for a Turing machine.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct TMTransition {
     pub write: char,
     pub new_state: usize,
@@ -14,12 +15,14 @@ pub struct TMTransition {
 }
 
 /// A deterministic Turing machine with a tape that can grow on either side.
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct TuringMachine {
     pub tape: Vec<char>,
     pub head: usize,
     pub state: usize,
     pub accept_state: usize,
     pub reject_state: usize,
+    #[serde(with = "crate::workbench::project::maps")]
     pub transitions: std::collections::HashMap<(usize, char), TMTransition>,
 }
 

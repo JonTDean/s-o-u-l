@@ -1,0 +1,43 @@
+{
+  "roots": [
+    "src",
+    "lib/engine/engine-common/src",
+    "lib/engine/engine-core/src",
+    "lib/engine/engine-gpu/src",
+    "lib/engine/engine-render/src",
+    "lib/models/src",
+    "lib/simulation_kernel/src",
+    "lib/tests/src",
+    "lib/tooling/src",
+    "lib/ui/src",
+    "assets/shaders",
+    "lib/engine/engine-gpu/assets",
+    "scripts",
+    "tools/structure"
+  ],
+  "source_files": 330,
+  "maximum_sloc": 144,
+  "largest_files": [
+    [
+      144,
+      "lib/engine/engine-gpu/src/render/graph.rs"
+    ],
+    [
+      144,
+      "lib/engine/engine-common/src/controls/camera/manager/mod.rs"
+    ],
+    [
+      141,
+      "lib/engine/engine-common/src/controls/camera/motion/controller/mod.rs"
+    ],
+    [
+      135,
+      "lib/engine/engine-render/src/command_executor/mod.rs"
+    ],
+    [
+      133,
+      "src/app/builder/config.rs"
+    ]
+  ],
+  "violations": 0
+}

@@ -1,173 +1,267 @@
 # S.O.U.L. — Swarm Orchestrator for Autonomous Learners
 
-A Bevy workbench for cellular automata and volumetric simulation experiments.
-The current renderer uses portable GPU surface extraction and indirect drawing.
-Quantized Lenia evolution is verified on NVIDIA and Mesa Vulkan. The optional
-ash/Vulkan mesh-shader backend remains experimental.
+**An automata laboratory built on Bevy.** Cellular automata, formal-language
+machines, rewriting systems, agent swarms and GPU Lenia run side by side as
+independent *channels* in one workbench. You can step, measure, compare, save
+and present them, and every specimen cites its source.
 
-## Run
+![Lenia evolving on the GPU in the S.O.U.L. lab](docs/verification/lenia/rtx3090/lenia-phase-3.png)
 
-Use the stable Rust toolchain, Python 3.11+, and native Bevy build dependencies.
+| Rule 30 | Turing machine | Ant foraging |
+| --- | --- | --- |
+| ![Rule 30 space-time diagram](docs/verification/automata/rtx3090/wolfram-rule30.png) | ![Turing machine tape](docs/verification/automata/rtx3090/turing-replace-a.png) | ![Ant foraging arena](docs/verification/automata/rtx3090/swarm-ants.png) |
 
-```sh
-cargo run
-```
+## Contents
 
-Start the verified Lenia workbench, paused with a deterministic blob:
+- [Highlights](#highlights)
+- [Quick start](#quick-start)
+- [Using the lab](#using-the-lab)
+- [Specimen catalog](#specimen-catalog)
+- [Architecture](#architecture)
+- [Verification](#verification)
+- [Development](#development)
+- [Roadmap](#roadmap)
+- [License](#license)
 
-```sh
-make lenia
-```
+## Highlights
 
-Use Pause/Resume, Single step, Reset, Blob/Ring, growth parameter sliders, and
-Restore growth defaults in the Lenia panel. The spawner also supports clearing
-all automata and spawning new instances. Each instance owns its state and clock.
-The window opens on monitor 1 at (80, 80), sized 1280 × 720.
+- **One lab, many models.** Up to eight channels, CPU and GPU together, each
+  with its own state, clock, rate (1–60 steps/s) and colour.
+- **Instrument-grade presentation.** A full-bleed stage, a margin inspector,
+  status-lamp tabs, a transport with a live metric trace, and a presenter mode
+  for live demonstrations.
+- **Experiments, not just animations.** Live rule and parameter edits, a
+  side-by-side comparison with synchronised stepping, PNG/GIF/project exports,
+  and project save and restore that includes completed GPU state.
+- **Honest science.** Captions state each model's bounds, and every specimen
+  links to its primary source by DOI. Variants are labelled as variants.
+- **Qualified on real and software GPUs.** Scripted native runs check every
+  family on an NVIDIA RTX 3090 and on Mesa lavapipe. GPU Lenia is checked
+  against a CPU reference.
 
-This variant stores density in 0..255 and evolves independent XY planes using a
-finite 3×3 Gaussian kernel with zero boundaries. GPU buffers swap every tick;
-the final density feeds voxel extraction and shading. The bounded ring fixture
-is not a qualified published Orbium organism or isotropic 3-D Lenia.
+## Quick start
 
-Run the automated native workbench qualification and save screenshots/readbacks:
-
-```sh
-make verify-lenia
-# Force software Vulkan on this Linux workstation:
-VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json make verify-lenia
-```
-
-Set `SOUL_LENIA_VERIFY` to change the default `/tmp/soul-lenia-verification`
-output directory. Qualification exits after spawn, step, pause, parameter edit,
-reset, seed change, resume, clear, and respawn have matched the CPU reference.
-See the [Lenia evidence](docs/verification/lenia/README.md) for captured results.
-
-Open the complete family catalog with a populated Rule 30 history:
-
-```sh
-make automata
-make verify-automata
-```
-
-The Automata workbench provides isolated CPU sessions for Rule 30/110, Conway
-Life, HPP, finite/stack/bounded-tape/Turing machines, Koch rewriting, boids and
-ants. Select a family in the spawner, then resume, single-step, reset or remove
-its session. Symbolic input is editable before Reset. Up to eight CPU sessions
-can coexist, with separate clocks and state. Clear all affects CPU and Lenia
-sessions. See the [family contracts](docs/kanban/automata-families.md) and
-[qualification evidence](docs/verification/automata/README.md).
-
-The normal application starts at the main menu. To inspect a deterministic
-16 × 16 × 16 voxel volume without navigating the scenario menus:
+**Requirements:** stable Rust (CI pins 1.94.1), Python 3.11 or newer, a Vulkan
+driver, and Bevy's native build dependencies (on Debian/Ubuntu:
+`libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev cmake ninja-build`).
 
 ```sh
-make preview
+cargo run            # main menu → scenarios → lab
+make automata        # straight into the lab with Rule 30 at tick 32
+make lenia           # straight into the lab with GPU Lenia, paused
+make experiment      # Lenia, Life and Rule 30 with comparison and projects
+make preview         # static 16³ voxel rendering fixture
 ```
 
-The preview is a static rendering fixture. It opens a resizable 1280 × 720 window
-at desktop position (80, 80), leaving the second display available. The Make
-target uses X11/Xwayland so the compositor honors this placement. It exercises
-atlas offsets, exposed-face extraction, world transforms, depth testing, and the
-indirect draw path. It does not demonstrate automaton evolution.
+Windows open at (80, 80) on the first monitor, at 1280 × 720. The Make targets
+force X11/Xwayland so the compositor honours that placement. To use software
+Vulkan, prefix a target with
+`VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json`.
 
-To save an image of only the application window after the renderer records its
-first ready voxel draw:
+## Using the lab
 
-```sh
-SOUL_SCREENSHOT=/tmp/soul-preview.png make preview
-```
+![The lab: rail, tabs, stage, inspector and transport](docs/verification/experiments/rtx3090/experiment.png)
 
-The portable backend is the default. The `engine-gpu/mesh_shaders` feature keeps
-experimental Vulkan code available for development; it is not registered in the
-portable render graph and has not qualified for runtime use.
-
-## Source ownership
-
-| Source root | Responsibility |
+| Region | What it does |
 | --- | --- |
-| `src/app` | Runtime configuration, plugin registration, scheduling, preview |
-| `lib/simulation_kernel/src` | Rule interfaces, cell storage, CPU steppers |
-| `lib/engine/engine-core/src` | Registries, world metadata, application state |
-| `lib/engine/engine-common/src` | Scene flow, camera input and motion |
-| `lib/engine/engine-gpu/src` | GPU storage, extraction, compute and draw stages |
-| `lib/engine/engine-render/src` | Render orchestration and automaton commands |
-| `lib/models/src` | Automaton families, rule registration, analytics |
-| `lib/ui/src` | Menus, styling, panels and overlays |
-| `lib/tooling/src` | Debugging, logging and monitoring |
-| `lib/tests/src` | Cross-crate native behavior tests |
-| `tools/structure` | Structural enforcement and its self-tests |
+| **Rail** | The library, compare (≡) and project (§) drawers, and settings (⁂): presenter mode and the GPU debug marker. |
+| **Library** | Specimens grouped as cellular, machines, grammars and agents, with a filter. Click one to open a channel. |
+| **Tabs** | One per channel, with a status lamp: green running, amber paused, red halted. Close with ×, add with +. |
+| **Stage** | The selected channel with a figure caption and an arena/zoom/cursor readout. On CPU stages, scroll to zoom, drag to pan and double-click to reset; GPU Lenia renders through the 3-D camera. |
+| **Inspector** | Tick and headline metric, experiment parameters (*Apply live*, *Apply and reset*, *Defaults*), machine state and transition table, symbolic input, arena, channel colour, and a cited footnote with a DOI link. Drag it between 220 and 420 px, or collapse it. |
+| **Transport** | Run/Pause, Step, Reset, the metric trace, and the 1 / 10 / 30 / 60 steps/s presets. |
 
-Modules have one responsibility and expose deliberate façades. Bevy plugins own
-registration; systems communicate through resources, components and events.
-Keep simulation logic separate from presentation and make schedule ordering
-explicit where one system depends on another.
+| Key | Action |
+| --- | --- |
+| <kbd>Space</kbd> | Run or pause the selected channel (handed to the free camera while it is active) |
+| <kbd>.</kbd> | Step once while paused |
+| <kbd>R</kbd> | Reset |
+| <kbd>1</kbd>–<kbd>8</kbd> | Select a tab |
+| <kbd>P</kbd> | Presenter mode: full-window stage, HUD readouts, fading transport |
+| <kbd>N</kbd> | Show or hide the inspector |
+| <kbd>L</kbd> | Library |
+| <kbd>Esc</kbd> | Close the popover or drawer, or leave presenter mode; otherwise open the pause menu |
 
-## Structural governance
+The arrow keys, WASD and Z/X stay with the camera. Shortcuts are suspended
+while a text field has focus.
 
-`structural-governance.toml` defines every governed source root, including
-Rust tests, WGSL shaders, PowerShell scripts, Python tooling and the checker.
-Every governed directory must contain:
+**Measurements.** Each family publishes a headline metric (population, live
+cells, particles, steps, length, order or food) into a 200-sample trace.
+Lenia's mass comes from GPU readbacks, so it is opt-in (inspector → *sample*).
+It is sampled at 4 Hz and yields to project saves.
 
-- Zero to three direct governed child directories.
-- One to four direct source files, including `mod.rs` and export façades.
-- No source file above 200 non-comment source lines.
+**World authoring.** Cellular channels support dimensions from 8 to 256 and dead
+or periodic boundaries. Pause to paint or erase on the stage; undo/redo groups
+whole strokes. Edited fields become Reset seeds and survive project save/load.
 
-Language-aware tokenization excludes blanks and comment-only lines. Code with
-trailing comments counts once; comment markers inside strings remain code.
-There are no source-path exceptions. Binary assets, dependency/build output,
-repository metadata and data-only files are outside the source boundary.
-The checker also reports tracked or new source files outside the declared roots.
+**Comparison and projects.** The Compare drawer selects CPU or GPU channels and
+waits for completed states when stepping. Compatible fields show error statistics
+and difference heatmaps; metric traces and CSV exports retain epochs, ticks and
+units. PNG/GIF/project exports evolve isolated copies. The Project drawer saves
+paused channels, including exact completed GPU state. Loading replaces every
+channel. See the [worlds and comparison guide](docs/verification/worlds/README.md).
 
-Use semantic `snake_case` filenames and modules, `PascalCase` Rust types, and
-`SCREAMING_SNAKE_CASE` constants. Group related modules by ownership rather than
-adding artificial nesting. Preserve public import paths with meaningful
-re-exports when moving implementations. Document public types and functions;
-explain invariants, synchronization and unsafe prerequisites in comments.
+## Specimen catalog
 
-## Verify and contribute
+| Specimen | Group | What the lab shows | Source |
+| --- | --- | --- | --- |
+| Rule 30 | cellular | Elementary CA, 64 cells, 64-row history | [Wolfram 1983](https://doi.org/10.1103/RevModPhys.55.601) |
+| Rule 110 | cellular | Elementary CA, the rule proven universal | [Cook 2004](https://doi.org/10.25088/ComplexSystems.15.1.1) |
+| Conway's Game of Life | cellular | B3/S23 on a bounded 64 × 64 field | [Gardner 1970](https://doi.org/10.1038/scientificamerican1070-120) |
+| HPP lattice gas | cellular | Four-direction particles with head-on scattering | [Hardy, Pomeau & de Pazzis 1973](https://doi.org/10.1063/1.1666248) |
+| Lenia (GPU) | cellular | Quantized density on independent XY planes of a 64 × 64 × 8 volume | [Chan 2019](https://doi.org/10.25088/ComplexSystems.28.3.251) |
+| Finite automaton | machines | NFA for `a*b`, tracking every reachable state | [Rabin & Scott 1959](https://doi.org/10.1147/rd.32.0114) |
+| Pushdown automaton | machines | aⁿbⁿ with its stack | [Chomsky 1956](https://doi.org/10.1109/TIT.1956.1056813) |
+| Balanced parentheses | machines | Pushdown recogniser | [Chomsky 1956](https://doi.org/10.1109/TIT.1956.1056813) |
+| Linear-bounded automaton | machines | aⁿbⁿcⁿ within the input tape | [Kuroda 1964](https://doi.org/10.1016/S0019-9958(64)90120-2) |
+| Turing machine | machines | Rewrites each `a` as `X` and halts at the first blank | [Turing 1937](https://doi.org/10.1112/plms/s2-42.1.230) |
+| Koch curve | grammars | L-system `F → F+F--F+F`, bounded at 4096 symbols | [Lindenmayer 1968](https://doi.org/10.1016/0022-5193(68)90079-9) |
+| Boids | agents | 24 flocking agents in a wrapping arena | [Reynolds 1987](https://doi.org/10.1145/37402.37406) |
+| Ant foraging | agents | 32 ants, two food sites, evaporating pheromone | [Deneubourg et al. 1990](https://doi.org/10.1007/BF01417909) |
+
+**Scope notes.**
+
+- *Lenia.* The default quantized model stores density in 0–255, with independent
+  XY planes, a finite 3 × 3 kernel and zero edges. The inspector also offers
+  continuous XYZ: float density, normalized Gaussian/shell kernels, configurable
+  radius, dead/periodic boundaries and coupling across all axes. Model changes
+  reset the field. Neither fixture is claimed to reproduce published Orbium.
+- *Machines.* The linear-bounded automaton never grows its tape. The Turing
+  machine is a small transition table, not a universal machine.
+
+Editing a specimen's rule, seed pattern or population retitles its channel
+(for example, *Rule 90 · space-time*) and marks the catalog text as describing
+the original. Specimen copy lives in
+[`assets/specimens/specimens.toml`](assets/specimens/specimens.toml). The
+family contracts are in [`docs/kanban/automata-families.md`](docs/kanban/automata-families.md).
+
+## Architecture
+
+The lab is built around one **channel contract**
+(`engine_core::automata::channel`). Backends own simulation state and publish
+read-only rows; the UI reads those rows and writes commands. Neither side
+reaches into the other.
+
+```
+ ui::lab ──ChannelCommand / AutomataCommand / ConfigureSession──▶ backends
+    ▲                                                          │
+    └──────────── Channels · Metrics (read-only snapshots) ◀────┘
+                     CPU: models::workbench   GPU: engine-render + engine-gpu
+```
+
+- **Ids and capacity.** `ChannelIds` hands out ids that are never reused, and
+  caps open channels at eight across both backends.
+- **Ordering.** `ChannelSet::{Route, Tick, Publish, Settle}` runs after input,
+  so a command lands, the channel steps, its row publishes and the selection
+  is repaired in the same frame.
+- **Pacing.** `StepClock` paces each channel on its own. Colours become
+  four-stop Oklab ramps, which the voxel shader looks up per instance.
+
+| Crate / root | Responsibility |
+| --- | --- |
+| `src/app` | Runtime configuration, plugin registration, scripted previews and qualification |
+| `lib/simulation_kernel` | Rule interfaces, cell storage, CPU steppers, Lenia reference |
+| `lib/engine/engine-core` | Channel contract, registries, events, application state |
+| `lib/engine/engine-common` | Scene flow, cameras, stage viewport and input gating |
+| `lib/engine/engine-gpu` | GPU storage, surface extraction, compute and indirect draw |
+| `lib/engine/engine-render` | Automaton commands, GPU channel routing, readback sampling |
+| `lib/models` | Automaton families, workbench sessions, experiments, projects, specimens |
+| `lib/ui` | Instrument theme (tokens, Libertinus type, widgets), the lab shell, meta menus |
+| `lib/tooling` | Debugging, logging and monitoring |
+| `lib/tests` | Cross-crate native behaviour tests |
+| `tools/structure` | Structural-governance checker and its self-tests |
+
+The portable renderer extracts exposed voxel faces on the GPU and draws them
+indirectly. The optional `engine-gpu/mesh_shaders` feature keeps an
+experimental ash/Vulkan mesh-shader path for development. That path is not in
+the portable render graph and has not qualified for runtime use.
+
+## Verification
+
+```sh
+make check              # governance + rustfmt + strict Clippy + native and GPU tests
+make verify-automata    # all 12 CPU families, screenshots and image checks
+make verify-lenia       # GPU Lenia against the CPU reference, lifecycle and channels
+make verify-experiment  # parameters, comparison, project round-trip, export
+```
+
+Each `verify-*` target writes evidence to `/tmp/soul-*-verification`. Override
+the path with `SOUL_AUTOMATA_VERIFY`, `SOUL_LENIA_VERIFY` or
+`SOUL_EXPERIMENT_VERIFY`. The harness refuses a directory that already holds a
+success marker. The runs drive the production command path, including a
+`ChannelCommand` pass for every family. Every screenshot must show specimen
+pixels inside the published stage rectangle with no panel overlapping it.
+
+| Evidence | RTX 3090 (NVIDIA 550, Vulkan) and Mesa lavapipe |
+| --- | --- |
+| Automata families | [Record](docs/verification/automata/README.md) |
+| GPU Lenia | [Record](docs/verification/lenia/README.md) |
+| Experiments | [Record](docs/verification/experiments/README.md) |
+| Static voxel baseline | [Before](docs/verification/voxel-before.png) / [after](docs/verification/voxel-after.png) |
+
+The GPU tests need a Vulkan adapter; CI installs Mesa for software execution.
+They exercise production buffers, pipelines and bindings, and compare Lenia
+densities and surface counts with CPU references.
+
+## Development
 
 ```sh
 python3 -m pip install -r tools/structure/requirements.txt
 make check
 ```
 
-`make check` runs the governance self-tests and complete audit, Rust formatting,
-workspace Clippy with all targets/features and warnings denied, and native tests.
-The GPU tests require a Vulkan adapter; CI installs Mesa for software execution.
-They use production buffers, pipelines and bindings to compare Lenia densities
-and surface counts with CPU references. Coverage includes tick parity, boundaries,
-independent allocations, reset/removal/reuse, row packing, adjacency, transforms,
-empty regions, low-density visibility and bounded overflow.
+`make check` runs on every push and pull request
+([workflow](.github/workflows/check.yml)). A passing local check does not imply
+a hosted run.
 
-Pick a task from `docs/kanban/v0-0-2.md`, keep its status current, and include
-before/after screenshots or GIFs for rendering changes. Keep structural and behavioral changes
-reviewable and preserve unrelated working-tree changes. Commit at every 100
-changed source lines (added plus removed nonblank, non-comment lines), or sooner.
-CI runs `make check`; local passing checks do not imply a hosted CI run.
+**Structural governance.** [`structural-governance.toml`](structural-governance.toml)
+declares every source root: Rust, WGSL, Python, PowerShell and the checker
+itself. In every governed directory:
 
-## Verified rendering baseline
+- at most three child directories;
+- one to four source files;
+- no file above 200 non-comment source lines.
 
-GPU-003 verifies a static volumetric preview and structural compliance.
-The [before image](docs/verification/voxel-before.png) records the initial blank
-preview capture; the [after image](docs/verification/voxel-after.png) shows the
-ready renderer. Capture waits for the first voxel draw instead of assuming
-shader compilation has finished. Owned scene/UI cameras use one sample;
-multisample pipeline specialization remains future work.
+There are no exceptions. The checker also reports source files outside the
+declared roots.
 
-Structural extraction groups camera motion and translation, engine execution,
-GPU rendering/storage/setup/drawing, formal grammars, individuality analytics,
-UI presentation, and tooling telemetry. Existing consumer import paths are
-re-exported where implementations moved.
+**Conventions.**
 
-On 2026-10-18, `CARGO_BUILD_JOBS=2 CMAKE_BUILD_PARALLEL_LEVEL=2 make check` passed
-20 governance self-tests, 25 native tests, and 9 documentation tests, with zero
-structural violations across 261 source files in all 14 roots (largest: 144 SLOC).
-GPU checks and the complete Lenia workbench qualification passed on RTX 3090 and
-Mesa software Vulkan. CI selects Python 3.13 and Rust 1.94.1 for consistency with
-the verified local tools. See the [qualification record](docs/verification/lenia/README.md).
+- Use `snake_case` modules, `PascalCase` types and `SCREAMING_SNAKE_CASE`
+  constants.
+- Bevy plugins own registration. Systems communicate through resources,
+  components and events, with explicit schedule ordering.
+- Keep simulation separate from presentation.
+- Document public items, and explain invariants and synchronisation in
+  comments.
+- When moving code, keep public paths stable with re-exports.
 
-The 2026-10-19 family expansion passes 41 native tests, 9 documentation tests and
-20 governance tests across 287 files in the same 14 roots; the largest source
-file remains 144 SLOC. The [family evidence](docs/verification/automata/README.md)
-records the current catalog and native qualification separately from GPU-003
-and the earlier Lenia milestone.
+**Contributing.**
+
+- Pick a card from [`docs/kanban/v0-0-2.md`](docs/kanban/v0-0-2.md) and keep
+  its status current.
+- Commit at least every 100 changed source lines.
+- Attach before/after screenshots or GIFs for rendering changes.
+- Keep structural and behavioural changes reviewable.
+
+Design specs and implementation plans live in [`docs/superpowers`](docs/superpowers).
+
+## Roadmap
+
+The lab shell and visual language (sub-projects 1 and 2) are complete. Next:
+
+1. **Guided layer.** Self-guided tours and presenter scripts.
+2. **Experiment tooling, and the menu and scenario flow.**
+3. **Authoring.** User-defined specimens and rules.
+
+Authored cellular worlds, quantitative comparison and continuous XYZ Lenia are
+implemented; see their [contract and qualification](docs/verification/worlds/README.md).
+Further goals include published-organism qualification, expanded benchmark tooling,
+and hosted CI on Windows and macOS. See the
+[kanban](docs/kanban/v0-0-2.md).
+
+## License
+
+S.O.U.L. is distributed under the [Elastic License 2.0](LICENSE.md). The
+bundled Libertinus fonts are © the Libertinus authors under the
+[SIL Open Font License 1.1](assets/fonts/libertinus/OFL.txt).

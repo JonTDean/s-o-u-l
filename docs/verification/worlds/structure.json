@@ -1,0 +1,70 @@
+{
+  "source": "16323577f225dc13951526e7302b5dd0899d8a26",
+  "roots": [
+    "src",
+    "lib/engine/engine-common/src",
+    "lib/engine/engine-core/src",
+    "lib/engine/engine-gpu/src",
+    "lib/engine/engine-render/src",
+    "lib/models/src",
+    "lib/simulation_kernel/src",
+    "lib/tests/src",
+    "lib/tooling/src",
+    "lib/ui/src",
+    "assets/shaders",
+    "lib/engine/engine-gpu/assets",
+    "scripts",
+    "tools/structure"
+  ],
+  "limits": {
+    "directories": 3,
+    "files_min": 1,
+    "files_max": 4,
+    "sloc": 200
+  },
+  "files": 379,
+  "maximum_sloc": 185,
+  "largest_files": [
+    [
+      185,
+      "lib/ui/src/lab/tests.rs"
+    ],
+    [
+      184,
+      "lib/engine/engine-render/src/command_executor/mod.rs"
+    ],
+    [
+      172,
+      "lib/ui/src/lab/inspector/mod.rs"
+    ],
+    [
+      160,
+      "lib/tests/src/channels/cpu.rs"
+    ],
+    [
+      155,
+      "lib/ui/src/lab/mod.rs"
+    ],
+    [
+      153,
+      "lib/tests/src/channels/mass.rs"
+    ],
+    [
+      153,
+      "lib/models/src/workbench/session.rs"
+    ],
+    [
+      151,
+      "lib/engine/engine-core/src/automata/channel/mod.rs"
+    ],
+    [
+      148,
+      "lib/ui/src/lab/chrome/drawers/project/mod.rs"
+    ],
+    [
+      146,
+      "lib/engine/engine-common/src/controls/camera/manager/mod.rs"
+    ]
+  ],
+  "violations": []
+}

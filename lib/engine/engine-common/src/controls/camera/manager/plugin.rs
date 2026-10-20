@@ -7,11 +7,14 @@ use crate::controls::camera::{
     freecam::plugin::FreeCamPlugin,
     manager::{
         CameraMetrics, CameraSet, DragState, ZoomInfo, apply_orbit, begin_drag, drag_pan, end_drag,
-        gather_orbit_input, key_pan, refresh_zoom_info, spawn_cameras, update_camera_metrics,
-        zoom_keyboard, zoom_scroll,
+        gather_orbit_input, key_pan, refresh_zoom_info, spawn_cameras, stage,
+        update_camera_metrics, zoom_keyboard, zoom_scroll,
     },
 };
-use engine_core::prelude::AppState;
+use engine_core::{
+    automata::channel::{ChannelSet, Channels},
+    prelude::AppState,
+};
 
 /// Manages the orthographic cameras plus metrics refresh.
 pub struct CameraManagerPlugin;
@@ -33,17 +36,13 @@ impl Plugin for CameraManagerPlugin {
             .add_systems(
                 Update,
                 (
-                    // zoom
-                    zoom_scroll,
-                    zoom_keyboard,
-                    // drag
-                    begin_drag,
-                    drag_pan,
+                    // pointer: zoom, drag, orbit — only while the pointer is over the stage
+                    (zoom_scroll, begin_drag, drag_pan, gather_orbit_input)
+                        .run_if(stage::stage_pointer_allowed),
+                    // a drag released outside the stage must still end
                     end_drag,
-                    // pan
-                    key_pan,
-                    // orbit (optional)
-                    gather_orbit_input,
+                    // keyboard: zoom and pan — not while a text field has focus
+                    (zoom_keyboard, key_pan).run_if(stage::stage_keys_allowed),
                 )
                     .in_set(CameraSet::Input)
                     .run_if(in_state(AppState::InGame)),
@@ -54,6 +53,15 @@ impl Plugin for CameraManagerPlugin {
                 (refresh_zoom_info, update_camera_metrics, apply_orbit)
                     .in_set(CameraSet::Heavy)
                     .run_if(in_state(AppState::InGame)),
+            )
+            /* lab stage: viewport, activity and framing ------------------ */
+            .init_resource::<stage::StageRect>()
+            .add_systems(
+                Update,
+                (stage::frame_selected, stage::apply_stage)
+                    .chain()
+                    .in_set(ChannelSet::Settle)
+                    .run_if(resource_exists::<Channels>.and(stage::stage_active)),
             )
             /* optional perspective free-cam ----------------------------- */
             .add_plugins(FreeCamPlugin);

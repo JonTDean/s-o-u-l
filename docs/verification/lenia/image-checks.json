@@ -1,62 +1,170 @@
 [
   {
-    "adapter": "rtx3090",
-    "phase": 0,
-    "cyan_model_pixels": 164107
+    "height": 720,
+    "image": "rtx3090/lenia-phase-0.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 72692,
+    "width": 1280
   },
   {
-    "adapter": "rtx3090",
-    "phase": 3,
-    "cyan_model_pixels": 169170
+    "height": 720,
+    "image": "rtx3090/lenia-phase-3.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 74220,
+    "width": 1280
   },
   {
-    "adapter": "rtx3090",
-    "phase": 6,
-    "cyan_model_pixels": 169719
+    "height": 720,
+    "image": "rtx3090/lenia-phase-6.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 75205,
+    "width": 1280
   },
   {
-    "adapter": "rtx3090",
-    "phase": 7,
-    "cyan_model_pixels": 161846
+    "height": 720,
+    "image": "rtx3090/lenia-phase-7.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 71826,
+    "width": 1280
   },
   {
-    "adapter": "rtx3090",
-    "phase": 8,
-    "cyan_model_pixels": 0
+    "height": 720,
+    "image": "rtx3090/lenia-phase-8.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1028,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
   },
   {
-    "adapter": "rtx3090",
-    "phase": 9,
-    "cyan_model_pixels": 161846
+    "height": 720,
+    "image": "rtx3090/lenia-phase-9.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1008,
+      652
+    ],
+    "warm_pixels": 70755,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 0,
-    "cyan_model_pixels": 164107
+    "height": 720,
+    "image": "mesa/lenia-phase-0.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 72692,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 3,
-    "cyan_model_pixels": 169170
+    "height": 720,
+    "image": "mesa/lenia-phase-3.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 74225,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 6,
-    "cyan_model_pixels": 169719
+    "height": 720,
+    "image": "mesa/lenia-phase-6.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 75205,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 7,
-    "cyan_model_pixels": 161846
+    "height": 720,
+    "image": "mesa/lenia-phase-7.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 71826,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 8,
-    "cyan_model_pixels": 0
+    "height": 720,
+    "image": "mesa/lenia-phase-8.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1028,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
   },
   {
-    "adapter": "mesa",
-    "phase": 9,
-    "cyan_model_pixels": 161846
+    "height": 720,
+    "image": "mesa/lenia-phase-9.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1008,
+      652
+    ],
+    "warm_pixels": 70755,
+    "width": 1280
   }
 ]

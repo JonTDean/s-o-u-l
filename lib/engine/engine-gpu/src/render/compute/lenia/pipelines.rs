@@ -8,6 +8,7 @@ pub(crate) struct LeniaPipelines {
     pub layout: BindGroupLayout,
     pub evolve: ComputePipeline,
     pub pack: ComputePipeline,
+    pub continuous: [ComputePipeline; 2],
 }
 
 impl LeniaPipelines {
@@ -26,7 +27,7 @@ impl LeniaPipelines {
                     },
                     has_dynamic_offset: false,
                     min_binding_size: if binding == 3 {
-                        BufferSize::new(32)
+                        BufferSize::new(48)
                     } else {
                         None
                     },
@@ -62,7 +63,31 @@ impl LeniaPipelines {
                 cache: None,
             })
         };
+        let continuous_shader =
+            device
+                .wgpu_device()
+                .create_shader_module(wgpu::ShaderModuleDescriptor {
+                    label: Some("lenia.continuous"),
+                    source: wgpu::ShaderSource::Wgsl(
+                        include_str!(concat!(
+                            env!("CARGO_MANIFEST_DIR"),
+                            "/../../../assets/shaders/lenia_continuous.wgsl"
+                        ))
+                        .into(),
+                    ),
+                });
+        let continuous = ["evolve", "pack"].map(|name| {
+            device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
+                label: Some(name),
+                layout: Some(&pipeline_layout),
+                module: &continuous_shader,
+                entry_point: Some(name),
+                compilation_options: default(),
+                cache: None,
+            })
+        });
         Self {
+            continuous,
             layout,
             evolve: make("evolve"),
             pack: make("pack"),

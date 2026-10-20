@@ -38,5 +38,11 @@ fn gpu_lenia_matches_cpu_for_odd_and_even_tick_batches() {
             .map(|v| u32::from_le_bytes(v.try_into().unwrap()) as u8)
             .collect();
         assert_eq!(values, expected, "GPU tick {}", state.tick);
+        use engine_core::automata::channel::metrics::mass;
+        assert_eq!(
+            mass(&values),
+            mass(&expected),
+            "GPU mass equals CPU reference mass"
+        );
     }
 }

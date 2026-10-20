@@ -2,6 +2,7 @@
 use bevy::prelude::*;
 mod automata;
 mod capture;
+mod experiment;
 mod lenia;
 mod scene;
 
@@ -9,10 +10,14 @@ pub(super) fn enabled() -> bool {
     std::env::args().any(|argument| argument == "--voxel-demo")
         || lenia::enabled()
         || automata::enabled()
+        || experiment::enabled()
 }
 
 pub(super) fn install(app: &mut App) {
-    if automata::enabled() {
+    if experiment::enabled() {
+        experiment::install(app);
+        app.add_systems(PostStartup, experiment::setup);
+    } else if automata::enabled() {
         automata::install(app);
         app.add_systems(PostStartup, automata::setup);
     } else if lenia::enabled() {

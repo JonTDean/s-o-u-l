@@ -7,7 +7,7 @@ use engine_core::prelude::AppState;
 
 pub mod plugin;
 
-use crate::{components::menus::MenuScreen, styles};
+use crate::{components::menus::MenuScreen, theme};
 use std::path::PathBuf;
 
 /// UI-only state buffer.
@@ -29,7 +29,7 @@ impl LoadScenarioMenuScreen {
 impl MenuScreen for LoadScenarioMenuScreen {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
         CentralPanel::default()
-            .frame(styles::fullscreen_bg())
+            .frame(theme::fullscreen_bg())
             .show(ctx, |_| {});
 
         egui::Area::new("load_scenario_win".into())

@@ -1,7 +1,15 @@
 //! Native command routing and fixed-rate CPU sessions for the family workbench.
-use super::{catalog::Kind, session::Session};
+use super::{
+    catalog::Kind,
+    operations::channels::{self, ConfigureSession},
+    session::Session,
+};
 use bevy::prelude::*;
-use engine_core::{events::AutomataCommand, prelude::AppState};
+use engine_core::{
+    automata::channel::{ChannelId, ChannelIds, ChannelSet, ensure_plugin},
+    events::AutomataCommand,
+    prelude::AppState,
+};
 
 /// At most eight isolated sessions; selection affects presentation only.
 #[derive(Resource, Default)]
@@ -9,7 +17,6 @@ pub struct Workbench {
     pub sessions: Vec<Session>,
     pub selected: usize,
     pub error: Option<String>,
-    elapsed: f32,
 }
 impl Workbench {
     /// Add a paused instance unless the eight-session capacity is exhausted.
@@ -28,48 +35,66 @@ impl Workbench {
         self.sessions.clear();
         self.selected = 0;
         self.error = None;
-        self.elapsed = 0.0;
     }
 }
 
-/// Installs production spawn/clear routing and the ten-hertz CPU update loop.
+/// Shown when the shared eight-channel capacity is exhausted.
+pub const FULL_NOTE: &str = "8 of 8 open — close one to add another";
+
+/// Installs spawn/clear routing, channel commands and per-session rate clocks.
 pub struct WorkbenchPlugin;
 impl Plugin for WorkbenchPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<Workbench>().add_systems(Update, update);
+        ensure_plugin(app);
+        app.init_resource::<Workbench>()
+            .insert_resource(super::catalog::specimens::Specimens::embedded())
+            .add_event::<ConfigureSession>()
+            .add_systems(
+                Update,
+                (
+                    (lifecycle, channels::reconcile, channels::route)
+                        .chain()
+                        .in_set(ChannelSet::Route),
+                    channels::tick.in_set(ChannelSet::Tick),
+                    (channels::publish, channels::metrics::publish).in_set(ChannelSet::Publish),
+                ),
+            );
     }
 }
-fn update(
+fn lifecycle(
     mut commands: EventReader<AutomataCommand>,
     mut bench: ResMut<Workbench>,
-    time: Option<Res<Time>>,
+    ids: Res<ChannelIds>,
     state: Option<Res<State<AppState>>>,
 ) {
     if state
         .as_ref()
         .is_some_and(|s| *s.get() == AppState::MainMenu)
     {
+        commands.clear();
         bench.clear();
         return;
     }
     for command in commands.read() {
         match command {
             AutomataCommand::Clear => bench.clear(),
+            AutomataCommand::RestoreLenia(_) => {}
             AutomataCommand::SeedPattern { id } => {
-                if let Some(kind) = Kind::parse(id) {
+                let Some(kind) = Kind::parse(id) else {
+                    continue;
+                };
+                // Capacity is shared with GPU channels; unadopted spawns count too.
+                let pending = bench
+                    .sessions
+                    .iter()
+                    .filter(|s| s.channel == ChannelId::UNASSIGNED)
+                    .count();
+                if ids.open() + pending >= ChannelIds::CAPACITY {
+                    bench.error = Some(FULL_NOTE.into());
+                } else {
                     bench.spawn(kind);
                 }
             }
         }
-    }
-    if state.as_ref().is_some_and(|s| *s.get() != AppState::InGame) {
-        return;
-    }
-    bench.elapsed += time.map_or(0.0, |time| time.delta_secs()).min(0.5);
-    while bench.elapsed >= 0.1 {
-        for session in &mut bench.sessions {
-            session.advance();
-        }
-        bench.elapsed -= 0.1;
     }
 }

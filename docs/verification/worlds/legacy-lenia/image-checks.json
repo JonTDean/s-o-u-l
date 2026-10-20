@@ -1,0 +1,86 @@
+[
+  {
+    "height": 720,
+    "image": "lenia-phase-0.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 72692,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-3.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 74220,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-6.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 75205,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-7.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      993,
+      652
+    ],
+    "warm_pixels": 71826,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-8.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1028,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-9.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1004,
+      652
+    ],
+    "warm_pixels": 71040,
+    "width": 1280
+  }
+]

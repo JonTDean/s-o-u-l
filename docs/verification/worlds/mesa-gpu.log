@@ -1,0 +1,37 @@
+
+running 20 tests
+test plugin::drawing::palette::tests::build_stores_linear_ramp_stops_and_caps_at_eight ... ok
+test plugin::drawing::palette::tests::layout_is_656_bytes_with_eighty_byte_entries ... ok
+test plugin::drawing::palette::tests::rect_matches_surface_world_mapping ... ok
+test plugin::drawing::palette::tests::shader_default_ramp_matches_signal ... ok
+test render::compute::lenia::tests::continuous::oracle::normalized_periodic_field_and_z_coupling ... ok
+test render::compute::voxel::tests::active_shaders_validate ... ok
+test plugin::setup::ticks::tests::paced_lenia_owner_requests_ticks_at_its_channel_rate ... ok
+test plugin::setup::ticks::tests::lenia_fixed_ticks_respect_both_pause_layers ... ok
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+GPU readback adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+Lenia GPU adapter: AdapterInfo { name: "llvmpipe (LLVM 19.1.7, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, driver: "llvmpipe", driver_info: "Mesa 25.0.7-2+deb13u1 (LLVM 19.1.7)", backend: Vulkan }
+test render::compute::lenia::tests::evolution::packing::gpu_lenia_publishes_odd_width_rows_at_nonzero_atlas_origin ... ok
+test render::compute::voxel::tests::surfaces::overflow_clamps_indirect_draw_to_whole_faces ... ok
+test render::compute::lenia::tests::evolution::isolation::gpu_lenia_slices_keep_independent_parameters_state_and_atlas_regions ... ok
+test render::compute::voxel::tests::surfaces::adjacent_voxels_cull_their_shared_face ... ok
+test render::compute::voxel::tests::surfaces::preview_volume_matches_a_cpu_exposed_face_oracle ... ok
+test render::compute::lenia::tests::evolution::ownership::gpu_lenia_reset_removal_and_entity_reuse_discard_prior_state ... ok
+test render::compute::lenia::tests::evolution::gpu_lenia_matches_cpu_for_odd_and_even_tick_batches ... ok
+test render::compute::voxel::tests::surfaces::subthreshold_lenia_density_remains_visible_and_reaches_the_vertex_stream ... ok
+test render::compute::voxel::tests::surfaces::one_voxel_has_six_outward_faces_at_the_requested_world_transform ... ok
+test render::compute::voxel::tests::surfaces::empty_region_emits_no_vertices ... ok
+test render::compute::lenia::tests::evolution::transition::gpu_lenia_parameter_changes_apply_to_subsequent_ticks_without_reseeding ... ok
+test render::compute::lenia::tests::continuous::continuous_gpu_matches_independent_oracle_and_restored_continuation ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.69s
+

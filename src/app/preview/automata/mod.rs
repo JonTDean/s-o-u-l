@@ -4,7 +4,7 @@ use engine_core::{events::AutomataCommand, prelude::AppState};
 use models::workbench::{catalog::Kind, plugin::Workbench};
 
 mod capture;
-mod flow;
+pub(in crate::app::preview) mod flow;
 mod verification;
 
 pub(super) fn enabled() -> bool {
@@ -27,11 +27,7 @@ pub(super) fn setup(
     events.write(AutomataCommand::SeedPattern {
         id: Kind::Rule30.id().into(),
     });
-    super::scene::camera(
-        &mut commands,
-        Vec3::ZERO,
-        "S.O.U.L. / Automata lab\nChoose a family, then resume, step, or reset its session.",
-    );
+    super::scene::camera(&mut commands, Vec3::ZERO);
 }
 
 fn prepare_example(mut bench: ResMut<Workbench>, mut ready: Local<bool>) {

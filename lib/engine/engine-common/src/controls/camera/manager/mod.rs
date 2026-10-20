@@ -195,6 +195,7 @@ pub fn spawn_cameras(
             ..default()
         },
         WorldCamera,
+        stage::StageCamera,
         Visibility::Hidden,
         ViewportRect::default(),
         layers_world(),
@@ -241,3 +242,4 @@ pub fn fit_or_clamp_camera(
 /* ───────────────────────── sub-module: plugin ─────────────────────── */
 
 pub mod plugin;
+pub mod stage;

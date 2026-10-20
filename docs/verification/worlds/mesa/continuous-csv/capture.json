@@ -1,0 +1,46 @@
+[
+  {
+    "channel": 0,
+    "continuous_kernel": {
+      "boundary": "Periodic",
+      "radius": 2,
+      "shape": "Gaussian"
+    },
+    "cpu_settings": null,
+    "epoch": 1,
+    "lenia_growth": {
+      "dt": 0.05000000074505806,
+      "mu": 0.30000001192092896,
+      "sigma": 0.05999999865889549
+    },
+    "size": [
+      64,
+      64,
+      8
+    ],
+    "tick": 4,
+    "units": "density"
+  },
+  {
+    "channel": 1,
+    "continuous_kernel": {
+      "boundary": "Periodic",
+      "radius": 2,
+      "shape": "Shell"
+    },
+    "cpu_settings": null,
+    "epoch": 1,
+    "lenia_growth": {
+      "dt": 0.05000000074505806,
+      "mu": 0.30000001192092896,
+      "sigma": 0.05999999865889549
+    },
+    "size": [
+      64,
+      64,
+      8
+    ],
+    "tick": 4,
+    "units": "density"
+  }
+]

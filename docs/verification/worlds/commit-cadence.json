@@ -1,0 +1,361 @@
+{
+  "base": "38ea3c1",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "367f2341e22e6edc7533b00e69fb8903c4dc9ee7",
+      "changed_sloc": 0,
+      "subject": "docs: define world authoring comparison and continuous Lenia delivery"
+    },
+    {
+      "commit": "8a916d54204bb5405606572c5cd4e3bdcdbe218b",
+      "changed_sloc": 34,
+      "subject": "feat: add explicit dead and periodic cellular boundary sampling"
+    },
+    {
+      "commit": "a6c3e5c90ca10500eeae4da7fbb63d9fec29b42d",
+      "changed_sloc": 0,
+      "subject": "refactor: group experiment settings with world configuration"
+    },
+    {
+      "commit": "a98e66db448e85d64607dba2fed07af8660808dd",
+      "changed_sloc": 68,
+      "subject": "feat: define validated cellular world sizes boundaries and authored seeds"
+    },
+    {
+      "commit": "8ba323a7a63a51a5247869f8d2452126fb420ff4",
+      "changed_sloc": 0,
+      "subject": "docs: rewrite the README as a professional project overview"
+    },
+    {
+      "commit": "0abc4eba6e73c722c36360694436a280cc851a69",
+      "changed_sloc": 53,
+      "subject": "feat: seed variable cellular domains and migrate validated project geometry"
+    },
+    {
+      "commit": "9ff419c33bb5167aee1bf4130d264a887d91993b",
+      "changed_sloc": 85,
+      "subject": "feat: apply paused paint strokes as reproducible authored seeds"
+    },
+    {
+      "commit": "d87e7dae79fd54175eddf2fe2fa6d0279cae6734",
+      "changed_sloc": 60,
+      "subject": "feat: retain bounded stroke undo and redo snapshots"
+    },
+    {
+      "commit": "9141cd0440de9642731a0a39c3d25c3da880046d",
+      "changed_sloc": 60,
+      "subject": "feat: route authored strokes and expose world dimensions in the lab inspector"
+    },
+    {
+      "commit": "4920f76b3c5f34c90f2509d9a05d73339747dd93",
+      "changed_sloc": 79,
+      "subject": "feat: paint continuous pointer strokes through channel commands"
+    },
+    {
+      "commit": "23e27cb239d7cbf3d84a399909c22170f95a9965",
+      "changed_sloc": 63,
+      "subject": "feat: integrate stage tools and stroke undo with the redesigned lab"
+    },
+    {
+      "commit": "c9518d41940c59720bf8945e1599f6058388831d",
+      "changed_sloc": 28,
+      "subject": "fix: preserve grid tests and describe edited worlds accurately"
+    },
+    {
+      "commit": "502ef30176c72f88d3f423434746fc442094f681",
+      "changed_sloc": 22,
+      "subject": "fix: export variable worlds with preserved aspect ratio"
+    },
+    {
+      "commit": "76dc5c99b1547fbef5d1c494df1667c3f858b7ee",
+      "changed_sloc": 82,
+      "subject": "test: verify authored worlds undo migration and periodic continuation"
+    },
+    {
+      "commit": "58d3a4574817812a14f80420b71f40201c734a28",
+      "changed_sloc": 66,
+      "subject": "feat: define continuous XYZ Lenia kernels and portable density state"
+    },
+    {
+      "commit": "d1d4a86746e20690db010c0dd25980f907dec45a",
+      "changed_sloc": 66,
+      "subject": "feat: implement independent double precision continuous Lenia oracle"
+    },
+    {
+      "commit": "2b9e16f0bd49737ec94c9e8932294e05b0bcb976",
+      "changed_sloc": 19,
+      "subject": "feat: persist and route distinct continuous Lenia model settings"
+    },
+    {
+      "commit": "19b828c2f7c7cc0a31317ca6468304a306721b6b",
+      "changed_sloc": 55,
+      "subject": "feat: add floating point XYZ convolution and display packing shaders"
+    },
+    {
+      "commit": "9243adcf5afdcdfe34e70fbded3025a5dd8a050e",
+      "changed_sloc": 74,
+      "subject": "feat: dispatch continuous Lenia with isolated floating point buffers"
+    },
+    {
+      "commit": "2308c1dc6d2cb00ff5ca4a1b3b048e83891a4864",
+      "changed_sloc": 86,
+      "subject": "feat: restore exact continuous state and expose model kernel controls"
+    },
+    {
+      "commit": "b65de81cb52ce594e1ad1e524952036ea6941f20",
+      "changed_sloc": 86,
+      "subject": "test: compare GPU continuous fields and restored buffers with CPU oracle"
+    },
+    {
+      "commit": "056532cad2cb66b8329203da369a8163c72df5d9",
+      "changed_sloc": 40,
+      "subject": "test: verify normalized kernels and influence across Z planes"
+    },
+    {
+      "commit": "cbf6cd62561dc4e457a28d3c88c6372f14aad574",
+      "changed_sloc": 82,
+      "subject": "fix: preserve continuous precision in metrics exports and model descriptions"
+    },
+    {
+      "commit": "f1323432dcef01e19a18159e11651b81cff97516",
+      "changed_sloc": 34,
+      "subject": "feat: allow comparison to observe completed GPU snapshots without stealing saves"
+    },
+    {
+      "commit": "ad9e23f95342afd63afc1ce7c01d1a4522bf548b",
+      "changed_sloc": 77,
+      "subject": "feat: calculate dimension checked field errors and volume difference projections"
+    },
+    {
+      "commit": "1e204a328e6361eca9fcd6fd1db3e0ded353463a",
+      "changed_sloc": 0,
+      "subject": "refactor: give comparison capture and analysis a dedicated module"
+    },
+    {
+      "commit": "ac56b786bef13f412b25126af75eccad264b7409",
+      "changed_sloc": 65,
+      "subject": "refactor: separate comparison controls from channel selection and exports"
+    },
+    {
+      "commit": "1ea29408150d07f9f35aa478b2ac00ed3df97ee3",
+      "changed_sloc": 43,
+      "subject": "feat: pin comparison fields to channel epochs and completed ticks"
+    },
+    {
+      "commit": "3b07050d95172b80ad1d01234fcacb450e4d073a",
+      "changed_sloc": 75,
+      "subject": "feat: synchronize comparison steps and reject stale GPU results"
+    },
+    {
+      "commit": "6a6eb13c9fc31256bdbcb34832b290cf2334f6b9",
+      "changed_sloc": 38,
+      "subject": "feat: compare CPU and GPU channels in the redesigned drawer"
+    },
+    {
+      "commit": "713f4110adf968229c841e67c4bdd7b84f5677a8",
+      "changed_sloc": 54,
+      "subject": "feat: plot comparison metric histories against actual ticks"
+    },
+    {
+      "commit": "ec4b02a31a1b0a3c8735d02df0010965be27ef7e",
+      "changed_sloc": 60,
+      "subject": "feat: render volumetric absolute difference heatmaps and error statistics"
+    },
+    {
+      "commit": "da072b4dddc4844c3967bd5a07b3133c5146bc50",
+      "changed_sloc": 94,
+      "subject": "feat: export immutable metrics and completed field difference CSV bundles"
+    },
+    {
+      "commit": "6afa5df72ebc6ddae190132720d7940f0c39f20e",
+      "changed_sloc": 9,
+      "subject": "feat: schedule completed comparisons before drawing the lab"
+    },
+    {
+      "commit": "a0c7167232f48f4181d2447f6e7e107f207369eb",
+      "changed_sloc": 37,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "8722644144635fe26739f70450db7c4723c82b29",
+      "changed_sloc": 70,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "87d26ff32b14b8a6a4d53238c3ce5027781ee13f",
+      "changed_sloc": 85,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "e560560281f96a32ba845077c34bba23cb5cf368",
+      "changed_sloc": 27,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "899511976d7cac081c1f01b2bc8b7fa57ef13c5d",
+      "changed_sloc": 86,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "394aa77b8015a97a4efdc4b96f21b22a73a8acaf",
+      "changed_sloc": 6,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "928e97eda95825eac288afd06ccad337aca8bf92",
+      "changed_sloc": 2,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "31775fe603d3198b1d8f09c2e26bdc9c6757151b",
+      "changed_sloc": 7,
+      "subject": "style: format comparison modules within checkpoint limits"
+    },
+    {
+      "commit": "7da6988a7a652d0586fea245172c9c0027a42522",
+      "changed_sloc": 67,
+      "subject": "test: drive actual egui pointer events through stroke authoring"
+    },
+    {
+      "commit": "91697ce218776e811992d27c99feaa2feb8493bb",
+      "changed_sloc": 80,
+      "subject": "test: enforce completed comparison ticks and cancellation after reset or closure"
+    },
+    {
+      "commit": "1a4a1674fc44bf505afe2772b6575d1dbc617591",
+      "changed_sloc": 21,
+      "subject": "refactor: expose immutable comparison exports for native qualification"
+    },
+    {
+      "commit": "e18b7596ec72815fce0aae78a47e6aa327bf9f06",
+      "changed_sloc": 66,
+      "subject": "test: prepare native edited worlds and independent continuous Lenia owners"
+    },
+    {
+      "commit": "5a3c9de9f5d4cab03e425b4030b47196e00da66b",
+      "changed_sloc": 97,
+      "subject": "test: verify native continuous oracle CSV and exact project checkpoints"
+    },
+    {
+      "commit": "1059b18f0a68e967fe8978e8dff986718ffca945",
+      "changed_sloc": 82,
+      "subject": "test: drive complete native world comparison and GPU continuation workflow"
+    },
+    {
+      "commit": "f24e53d68b07190a05dc89c7a31b231647da2937",
+      "changed_sloc": 41,
+      "subject": "test: register the native worlds and continuous model qualification mode"
+    },
+    {
+      "commit": "0d4a94340591e0ec3207e023bcad77fe6780f9eb",
+      "changed_sloc": 4,
+      "subject": "fix: retain synchronized stepping for noncellular comparison channels"
+    },
+    {
+      "commit": "1732705e46dc30c2c62f6a3dc29e0f91c00fac39",
+      "changed_sloc": 4,
+      "subject": "fix: pass current channel metadata to CSV export"
+    },
+    {
+      "commit": "429b965f570f929dfd5d9ebb2a5a024bfb6581ab",
+      "changed_sloc": 9,
+      "subject": "fix: simplify selected comparison rendering for strict lint checks"
+    },
+    {
+      "commit": "c84c1a257ce1c49ebafcaa33ee72c64aac3c0daa",
+      "changed_sloc": 0,
+      "subject": "docs: define authored world comparison and continuous model contracts"
+    },
+    {
+      "commit": "9631f624b171a3a3bb7fd463695d5ea2f4126d6a",
+      "changed_sloc": 6,
+      "subject": "fix: advance native checkpoint phase after mutable load completes"
+    },
+    {
+      "commit": "1db8f7ae712e0788e066b829a76ae83dcd69335d",
+      "changed_sloc": 18,
+      "subject": "fix: preserve specimen titles and tab numbering in comparison selection"
+    },
+    {
+      "commit": "66c7f1f380305abcdf66e4d84588b256e741468b",
+      "changed_sloc": 4,
+      "subject": "fix: resolve GPU oracle test imports and comparison label closure"
+    },
+    {
+      "commit": "2b6b78fe31fc5589866a66d169cbf70d30a7c107",
+      "changed_sloc": 55,
+      "subject": "test: validate continuous model resets and exact float checkpoint serialization"
+    },
+    {
+      "commit": "f5b817cb19fb47c128a57ef74184f196812aa6c8",
+      "changed_sloc": 9,
+      "subject": "fix: pin CPU rule settings and retain comparison export provenance"
+    },
+    {
+      "commit": "517d58e8f5651660072507be08786b8819e4b772",
+      "changed_sloc": 3,
+      "subject": "fix: write capture metadata only for the exported comparison pair"
+    },
+    {
+      "commit": "8449d2bb6bb14f7bc374c872eadc361c37ca43c0",
+      "changed_sloc": 0,
+      "subject": "Merge branch 'main' into feature/worlds-comparison-lenia"
+    },
+    {
+      "commit": "fe2e049189f46c0f7698643037f4890cc49c18c0",
+      "changed_sloc": 0,
+      "subject": "docs: integrate world authoring and continuous models into the updated overview"
+    },
+    {
+      "commit": "a4952f98dfa892bd917fb415dd3a8afdf4402d3d",
+      "changed_sloc": 10,
+      "subject": "test: sharpen continuous coupling fixture and GPU mismatch diagnostics"
+    },
+    {
+      "commit": "7fb714ba7c7b96ba2ca95d1f3dcb6a503d3a97d3",
+      "changed_sloc": 2,
+      "subject": "fix: wrap continuous GPU boundaries using nonnegative unsigned remainder"
+    },
+    {
+      "commit": "828804e0cb2667c8edbf2f81d3a0edecc68ac403",
+      "changed_sloc": 4,
+      "subject": "fix: dereference paired GPU error diagnostic samples"
+    },
+    {
+      "commit": "8f7a2f74f4b12423044a4bb13754e07ed605f705",
+      "changed_sloc": 0,
+      "subject": "refactor: keep comparison export validation with its writer"
+    },
+    {
+      "commit": "cf15970c8152cdb41ef49be1ea0df6a65681f414",
+      "changed_sloc": 88,
+      "subject": "test: validate CSV values metadata and no-overwrite export behavior"
+    },
+    {
+      "commit": "e1062b2463781b4ad12a189643e3a1cf796c4fc6",
+      "changed_sloc": 43,
+      "subject": "fix: retain heatmap textures and capture settled native comparison views"
+    },
+    {
+      "commit": "200ff183098f005d141232be51f64ff21b4a1e18",
+      "changed_sloc": 14,
+      "subject": "test: include opt-in GPU mass sampling in native comparison qualification"
+    },
+    {
+      "commit": "51ef54f244fc9b7f0cd07ea2ef73709cc8ed4763",
+      "changed_sloc": 21,
+      "subject": "test: verify native GPU mass samples preserve exact continuous density sums"
+    },
+    {
+      "commit": "18421c77f25ede31bc6845263138c9e9798ab0a2",
+      "changed_sloc": 0,
+      "subject": "docs: record completed worlds comparison and continuous Lenia qualification"
+    },
+    {
+      "commit": "16323577f225dc13951526e7302b5dd0899d8a26",
+      "changed_sloc": 18,
+      "subject": "fix: keep GPU comparison selections intact when offering animation exports"
+    }
+  ]
+}

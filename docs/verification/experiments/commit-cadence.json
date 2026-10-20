@@ -1,0 +1,246 @@
+{
+  "base": "44ae1c3",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "adf19dc74bf5d956c2440fcf71f6e74886718a80",
+      "changed_sloc": 10,
+      "subject": "refactor: group workbench evolution modules by state ownership"
+    },
+    {
+      "commit": "bd39d5c4ea13029291c2e6e6dcd32fc0822b5039",
+      "changed_sloc": 0,
+      "subject": "docs: define four experiment workbench acceptance gates"
+    },
+    {
+      "commit": "2fdc3431c69e5b2f859faf34932073a8ceae6181",
+      "changed_sloc": 91,
+      "subject": "feat: define validated per-family experiment settings"
+    },
+    {
+      "commit": "8be3ae90e14c5d46045e2e03e1591fc4ee7271a6",
+      "changed_sloc": 77,
+      "subject": "feat: apply elementary and Life rule parameters at tick boundaries"
+    },
+    {
+      "commit": "c48aef18b3a6736ac7b82721a78d8461fbacab9c",
+      "changed_sloc": 53,
+      "subject": "feat: add reproducible cellular seed patterns and clean reset histories"
+    },
+    {
+      "commit": "ab12c6fcf1453035a91748ceed1f61665a7120fa",
+      "changed_sloc": 47,
+      "subject": "feat: parameterize flocking and foraging with checkpointable randomness"
+    },
+    {
+      "commit": "5cc672db87c126537011d53ef6128e8d62645b81",
+      "changed_sloc": 60,
+      "subject": "feat: initialize sessions from explicit seed and population settings"
+    },
+    {
+      "commit": "ca9bf3ad1722730e18f6aeb928daa62c30d96c10",
+      "changed_sloc": 37,
+      "subject": "feat: validate live edits atomically and preserve individual simulation clocks"
+    },
+    {
+      "commit": "d31aab3e46ab8cb8b9775af5738f9df1fc0c035b",
+      "changed_sloc": 27,
+      "subject": "feat: serialize complete cellular and agent session state"
+    },
+    {
+      "commit": "df83a32047048a3f3ffb6d962fc496d266fd4d98",
+      "changed_sloc": 2,
+      "subject": "feat: preserve symbolic machine tapes stacks programs and active states"
+    },
+    {
+      "commit": "4533dd89e7b5a285d834aa015b8e8b1ae127762f",
+      "changed_sloc": 71,
+      "subject": "feat: define family-specific settings editors"
+    },
+    {
+      "commit": "943335cf0fd0bf6e5506735ac7da8f83e689f67f",
+      "changed_sloc": 55,
+      "subject": "feat: apply validated live edits and explicit reset controls"
+    },
+    {
+      "commit": "f6bbc256d689fe50fec8bf69d1b2b8d0e7a9e871",
+      "changed_sloc": 73,
+      "subject": "fix: evaluate absent sparse neighbors and preserve cell memory"
+    },
+    {
+      "commit": "a5903a9830cde59c82088a2cbcc4959ba7945cea",
+      "changed_sloc": 64,
+      "subject": "fix: advance sparse grids across complete candidate domains"
+    },
+    {
+      "commit": "1c2cf54f3130c6afbcbc9398648d77d687ee098e",
+      "changed_sloc": 60,
+      "subject": "fix: share sparse frontier semantics with parallel stepping"
+    },
+    {
+      "commit": "f90ed371c013f2737bd5af3c55f1e43ac8c9fd57",
+      "changed_sloc": 100,
+      "subject": "test: verify sparse births boundaries memory and four backend parity"
+    },
+    {
+      "commit": "6c39fd36c7b5dfb836844d84f7ad3503c3b20f5e",
+      "changed_sloc": 2,
+      "subject": "fix: expose workbench editor system state"
+    },
+    {
+      "commit": "9f549ed9fbcae51741151bbd0fee4ebfc3e50872",
+      "changed_sloc": 33,
+      "subject": "feat: represent completed Lenia checkpoints and initialize restored GPU state"
+    },
+    {
+      "commit": "20b5276f058b463ab18e172d0111cd57967ca4fd",
+      "changed_sloc": 58,
+      "subject": "feat: restore Lenia owners through registry and atlas allocation"
+    },
+    {
+      "commit": "007df46907fe36de47456a092eb182b1cbbffbdc",
+      "changed_sloc": 62,
+      "subject": "feat: define versioned project capture and validated schema"
+    },
+    {
+      "commit": "ff9f73c837bdfcb94e8db7663f68665fdfb722c6",
+      "changed_sloc": 49,
+      "subject": "feat: read bounded project files and write atomic durable checkpoints"
+    },
+    {
+      "commit": "c1f43f3c27e21c85577f0440b8c114c60d514809",
+      "changed_sloc": 90,
+      "subject": "fix: reject inconsistent project models clocks dimensions and agent coordinates"
+    },
+    {
+      "commit": "18ff4480f8e8e2f4ae5aab8679f015fed4464966",
+      "changed_sloc": 55,
+      "subject": "feat: capture consistent paused GPU checkpoints asynchronously"
+    },
+    {
+      "commit": "84edfa35ece5975a3111a57cce3b76b668d8c4ac",
+      "changed_sloc": 80,
+      "subject": "style: format project capture ownership and readback polling"
+    },
+    {
+      "commit": "c57a2c9b979a5d795975b93242ad853d2192a41d",
+      "changed_sloc": 93,
+      "subject": "feat: add native project save and validated replacement controls"
+    },
+    {
+      "commit": "5ce85d47cf911fbcda7b5cea812e2e98508226a1",
+      "changed_sloc": 6,
+      "subject": "feat: install project controls alongside automata workbenches"
+    },
+    {
+      "commit": "04e5f375bb4790348a75bf6dc4c861bc3cc02c26",
+      "changed_sloc": 77,
+      "subject": "test: verify family checkpoint continuation and atomic parameter edits"
+    },
+    {
+      "commit": "e1539c009cd1fcbd5f72872fc74cd756484e7c48",
+      "changed_sloc": 17,
+      "subject": "test: reject unsupported and inconsistent project payloads"
+    },
+    {
+      "commit": "afd8282f6622f16ee52cd847aa7e019f7b20c664",
+      "changed_sloc": 61,
+      "subject": "feat: measure model state and step comparison sessions together"
+    },
+    {
+      "commit": "fdb3e444c79b9bcd45e01c9ccd59ff4e057dd521",
+      "changed_sloc": 97,
+      "subject": "feat: render cellular agent and Lenia checkpoint panels to image buffers"
+    },
+    {
+      "commit": "1c02ee80a8aa62c7fa9c7baa170d805b743f22f0",
+      "changed_sloc": 81,
+      "subject": "feat: render symbolic tapes and Koch geometry for export"
+    },
+    {
+      "commit": "736fe74696aa15421e12285f485cd22f69f09f89",
+      "changed_sloc": 89,
+      "subject": "feat: export reproducible PNG GIF and project metadata bundles"
+    },
+    {
+      "commit": "8dc64a925ec047a3c7231c0158b187bb2c4a5e4d",
+      "changed_sloc": 35,
+      "subject": "feat: install comparison workspace and asynchronous export state"
+    },
+    {
+      "commit": "d4ccef6eed04be63c1de8a77ca49b23225749d3e",
+      "changed_sloc": 65,
+      "subject": "feat: show paired sessions with shared stepping and per-model measurements"
+    },
+    {
+      "commit": "bc735fd04efd4729be20c19bfce7e52d10e47a8e",
+      "changed_sloc": 63,
+      "subject": "feat: export comparison or saved GPU projects from native controls"
+    },
+    {
+      "commit": "604aecaa2ff1dc880e8d0f399e8e482c49628d70",
+      "changed_sloc": 53,
+      "subject": "test: decode reproducible animation exports and protect live state"
+    },
+    {
+      "commit": "369fd0fc8f3b3a971ca5a4a8138302efb332bfca",
+      "changed_sloc": 91,
+      "subject": "perf: add measured finite-domain backend comparison runner"
+    },
+    {
+      "commit": "ce56a1be3dbe9669cde23d7535ba2c99e535a0d3",
+      "changed_sloc": 20,
+      "subject": "perf: define deterministic Life benchmark transition rule"
+    },
+    {
+      "commit": "ea1e5cb85c65b75eb2a870e2d68be609357c5582",
+      "changed_sloc": 76,
+      "subject": "test: install windowed native experiment qualification scenario"
+    },
+    {
+      "commit": "b859a01ec31c671cafaeb634f96b8ceaad85b35e",
+      "changed_sloc": 38,
+      "subject": "test: qualify production project capture restore and export paths"
+    },
+    {
+      "commit": "1de620faf6a74558bc25c7a85a0396d3ef782561",
+      "changed_sloc": 97,
+      "subject": "test: orchestrate native experiment capture and checkpoint replacement"
+    },
+    {
+      "commit": "47ebb37bbd4bf311a457c2f66f1de1125c55663e",
+      "changed_sloc": 30,
+      "subject": "test: compare restored GPU state against the continuation oracle"
+    },
+    {
+      "commit": "31002a3f418f64cffbf08b2458188f151c0e49cb",
+      "changed_sloc": 55,
+      "subject": "fix: show edited rule identities and validate symbolic checkpoint invariants"
+    },
+    {
+      "commit": "92a4a45a6a4ee059d51621a5f510ef83ca8f74e4",
+      "changed_sloc": 14,
+      "subject": "test: enforce strict project fields and verify atomic file round trips"
+    },
+    {
+      "commit": "8ff20290da5fe4a9e5b96359426132bbabdb05e6",
+      "changed_sloc": 48,
+      "subject": "refactor: isolate GIF encoding from renderer image features"
+    },
+    {
+      "commit": "95ecb66255e1202594cf7a2b65a31a5dbd4ad885",
+      "changed_sloc": 52,
+      "subject": "test: verify seeded patterns live edits and agent population reset rules"
+    },
+    {
+      "commit": "4b7a50f9e275bdc6a4665cab3b2b75dbc5905e20",
+      "changed_sloc": 5,
+      "subject": "fix: distinguish marked and unmarked symbolic tape exports"
+    },
+    {
+      "commit": "1e4d128a94b5746f96e2c63c15f05910a2c7c03a",
+      "changed_sloc": 45,
+      "subject": "fix: make experiment controls and export actions visible in the native layout"
+    }
+  ]
+}

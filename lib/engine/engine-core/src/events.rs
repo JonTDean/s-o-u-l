@@ -30,6 +30,8 @@ pub struct AutomatonId(pub u32);
 /// High‑level requests coming from the UI / scenarios.
 #[derive(Event)]
 pub enum AutomataCommand {
+    /// Restore a validated checkpoint into a fresh GPU allocation.
+    RestoreLenia(Box<crate::automata::lenia::SavedLenia>),
     /// Spawn the default seed pattern that belongs to the rule `id`.
     SeedPattern {
         /// String of ID

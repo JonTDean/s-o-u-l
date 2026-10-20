@@ -1,6 +1,5 @@
+//! egui output layer: Instrument theme, automata lab shell, meta menus and debug overlays.
 pub mod components;
-pub mod presentation;
-pub use presentation::{overlays, panels};
-
+pub mod lab;
 pub mod plugin;
-pub mod styles;
+pub mod theme;

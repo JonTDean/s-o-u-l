@@ -1,0 +1,13 @@
+kind,ticks,status
+wolfram:rule30,32,verified
+wolfram:rule110,32,verified
+life:conway,4,verified
+particle:hpp,12,verified
+regular:nfa,4,verified
+context-free:anbn,6,verified
+context-free:parentheses,6,verified
+context-free:koch,3,verified
+context-sensitive:anbncn,52,verified
+turing:replace-a,5,verified
+swarm:boids,64,verified
+swarm:ants,500,verified

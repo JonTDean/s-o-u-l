@@ -16,7 +16,11 @@ fn run(world: &mut World, v: &mut Verification) {
         "Lenia runtime verification timed out at phase {}",
         v.phase
     );
-    if v.phase >= 10 || !world.resource::<VoxelRenderStatus>().has_recorded_draw() {
+    if v.phase == 10 {
+        actions::channel_pass(world, v);
+        return;
+    }
+    if v.phase >= 11 || !world.resource::<VoxelRenderStatus>().has_recorded_draw() {
         return;
     }
     let probe = world.resource::<LeniaProbe>().clone();

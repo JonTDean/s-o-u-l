@@ -9,6 +9,7 @@ bevy        = { workspace = true }
 bevy_ecs    = { workspace = true }
 
 engine-core = { path = "../engine/engine-core" }
+engine-render = { path = "../engine/engine-render" }
 engine-gpu    = { path = "../engine/engine-gpu", optional = true }
 simulation_kernel = { path = "../simulation_kernel"}
 

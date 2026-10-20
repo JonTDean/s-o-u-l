@@ -18,9 +18,5 @@ pub(super) fn setup(
 ) {
     next.set(AppState::InGame);
     spawn.write(AutomataCommand::SeedPattern { id: "lenia".into() });
-    super::scene::camera(
-        &mut commands,
-        Vec3::new(128.0, 128.0, 16.0),
-        "S.O.U.L. / Lenia workbench\nResume to evolve; pause, step, reset, and adjust growth in the panel.",
-    );
+    super::scene::camera(&mut commands, Vec3::new(128.0, 128.0, 16.0));
 }

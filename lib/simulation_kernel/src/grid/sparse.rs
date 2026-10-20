@@ -23,7 +23,11 @@ impl SparseGrid {
 
     #[inline]
     pub fn set_state(&mut self, p: IVec3, s: CellState) {
-        self.map.entry(p).or_default().state = s;
+        if s == CellState::Dead && self.map.get(&p).is_none_or(|c| c.memory.is_null()) {
+            self.map.remove(&p);
+        } else {
+            self.map.entry(p).or_default().state = s;
+        }
     }
 
     #[inline]

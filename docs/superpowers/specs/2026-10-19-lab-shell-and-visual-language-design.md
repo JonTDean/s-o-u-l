@@ -308,3 +308,45 @@ Guided tours and annotations (3); probes, comparison, snapshots, recording,
 export and multi-metric readouts (4); main menu and scenario redesign (5);
 rule and seed authoring, including new seed choices such as R-pentomino (6);
 history rewinding; split or multiple simultaneous stages.
+
+## 8. Amendment — rebased onto `main` (2026-10-19)
+
+The spec above was written against a branch 49 commits behind `main`. `main`
+already ships an experiment workbench: validated per-family `Settings`
+(rate 1–60 Hz, seed patterns, rule edits, populations), a comparison window
+(pair stepping, side-by-side views, export bundles), project save/load with
+exact GPU checkpoints, and a `verify-experiment` qualification flow. The user
+chose to revise the design onto `main` and keep all of it. Changes:
+
+- **Experiment settings move into the inspector** as a `parameters` margin
+  section (restyled fields, *Apply live*, *Apply and reset*, *Defaults*). The
+  UI sends a models-level `ConfigureSession { id, settings, reset }` event; the
+  CPU router calls `Session::configure` and stores any refusal as a per-session
+  note shown under the section. `experiment::metrics::describe` appears as a
+  `measured` line in the readout section.
+- **Comparison and Project become rail drawers** beside the Library (one
+  drawer open at a time): *Compare* keeps left/right selection (by channel),
+  pair stepping, measurements, side-by-side painters and exports; *Project*
+  keeps path, pause-all, save (with GPU checkpoint capture) and load.
+- **Rate** follows `Settings::rate_hz` (continuous 1–60). The transport offers
+  presets 1 / 10 / 30 / 60, highlighting an exact match. `ChannelAction::SetRate`
+  carries `f32`; Lenia rounds to whole Hz for its integer step clock and keeps
+  its 60 Hz default. The CPU per-session clock already exists (`Session::elapse`),
+  so no new CPU clock type is added.
+- **Seed choices exist on `main`** (`Pattern`), so the inspector exposes them
+  where valid instead of showing seeds read-only.
+- **Persistence compatibility.** `ChannelId` and the reset epoch live on
+  `Session` as `#[serde(skip)]` fields; the specimen colour lives in `Settings`
+  with `#[serde(default)]`, so existing project files still load. Because
+  project load replaces sessions wholesale, the CPU router reconciles ids each
+  frame (adopts unassigned sessions, releases vanished ids); `RestoreLenia`
+  allocates ids like `SeedPattern`.
+- **Shared readback mailbox.** Project save and the opt-in mass metric both use
+  `LeniaProbe`. A `ReadbackBusy` resource set while a save is pending stops the
+  mass sampler from requesting or taking snapshots.
+- **Module placement.** `workbench/` already holds `evolution/`, `experiment/`
+  and `project/`; `experiment` and `project` move under `workbench/operations/`
+  (with re-exports preserving their public paths) beside the new `channels/`,
+  and `catalog.rs` becomes `catalog/` holding the specimen metadata.
+- **Qualification.** `verify-experiment` keeps passing; it imports the project
+  `Files`/`Pending` types from their new `ui::lab` location.

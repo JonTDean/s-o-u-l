@@ -2,46 +2,44 @@
 
 pub mod parallel;
 
-use glam::IVec3;
-use serde_json::Value;
-use std::collections::HashMap;
+mod frontier;
+use crate::{AutomatonRule, core::dim::Dim, grid::SparseGrid};
+use glam::UVec3;
 
-use crate::{
-    AutomatonRule,
-    core::{
-        cell::{Cell, CellCtx, CellOutcome, CellState},
-        dim::{Dim, Dimensionality},
-    },
-    grid::SparseGrid,
-};
+/// Advance an unbounded quiescent-background rule through its occupied frontier.
+/// Rules that create cells with no neighbors require `step_sparse_bounded`.
+pub fn step_sparse<R: AutomatonRule<D = Dim> + ?Sized>(
+    grid: &mut SparseGrid,
+    rule: &R,
+    params: &serde_json::Value,
+) {
+    update(grid, rule, params, None);
+}
 
-pub fn step_sparse<R: AutomatonRule<D = Dim>>(grid: &mut SparseGrid, rule: &R, params: &Value) {
-    let snapshot: HashMap<IVec3, Cell> = grid.map.clone();
-    let mut next: HashMap<IVec3, Cell> = snapshot.clone();
-
-    for (&p, cell) in &snapshot {
-        let mut nbhd = [CellState::Dead; 26];
-        for (i, off) in Dim::NEIGHBOUR_OFFSETS.iter().enumerate() {
-            nbhd[i] = snapshot
-                .get(&(p + *off))
-                .map_or(CellState::Dead, |c| c.state);
-        }
-
-        let ctx = CellCtx::<Dim> {
-            self_coord: p,
-            self_state: cell.state,
-            neighbourhood: &nbhd,
-            memory: &cell.memory,
-            _marker: std::marker::PhantomData,
-        };
-
-        match rule.next_state(ctx, params) {
-            CellOutcome::Next { state, memory } => {
-                next.entry(p).or_default().state = state;
-                next.entry(p).or_default().memory = memory;
-            }
-            CellOutcome::Unchanged => {}
-        }
-    }
+/// Finite dead-boundary update, including spontaneous background births.
+pub fn step_sparse_bounded<R: AutomatonRule<D = Dim> + ?Sized>(
+    grid: &mut SparseGrid,
+    rule: &R,
+    params: &serde_json::Value,
+    size: UVec3,
+) {
+    update(grid, rule, params, Some(size));
+}
+fn update<R: AutomatonRule<D = Dim> + ?Sized>(
+    grid: &mut SparseGrid,
+    rule: &R,
+    params: &serde_json::Value,
+    bounds: Option<UVec3>,
+) {
+    let next = frontier::candidates(grid, bounds)
+        .into_iter()
+        .filter_map(|p| frontier::evaluate(grid, p, rule, params, bounds).map(|cell| (p, cell)))
+        .collect();
     grid.map = next;
 }
+
+#[cfg(test)]
+mod tests;
+
+#[cfg(test)]
+mod benchmark;

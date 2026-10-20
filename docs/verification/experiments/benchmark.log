@@ -1,0 +1,424 @@
+    Finished `release` profile [optimized] target(s) in 0.14s
+     Running unittests src/lib.rs (/tmp/soul-kernel-benchmark/release/deps/simulation_kernel-ff31af471b3918a9)
+
+running 1 test
+{
+  "boundary": "finite dead; complete domain for spontaneous births",
+  "measurements": [
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 3337,
+      "samples_us": [
+        3197,
+        3212,
+        3337,
+        3409,
+        6508
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 1676,
+      "samples_us": [
+        1510,
+        1573,
+        1676,
+        1942,
+        2165
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 4867,
+      "samples_us": [
+        4796,
+        4860,
+        4867,
+        4972,
+        5412
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 2231,
+      "samples_us": [
+        2125,
+        2129,
+        2231,
+        2469,
+        2470
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 90,
+      "initial_percent": 10,
+      "median_us": 3498,
+      "samples_us": [
+        3393,
+        3483,
+        3498,
+        3568,
+        3654
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 5040,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 90,
+      "initial_percent": 10,
+      "median_us": 1892,
+      "samples_us": [
+        1749,
+        1791,
+        1892,
+        1894,
+        1989
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 5040,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 90,
+      "initial_percent": 10,
+      "median_us": 11997,
+      "samples_us": [
+        11717,
+        11822,
+        11997,
+        12017,
+        14046
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 5040,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 90,
+      "initial_percent": 10,
+      "median_us": 4120,
+      "samples_us": [
+        3916,
+        3969,
+        4120,
+        4134,
+        4260
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 5040,
+      "ticks": 10
+    },
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 766,
+      "initial_percent": 50,
+      "median_us": 3705,
+      "samples_us": [
+        3596,
+        3627,
+        3705,
+        3734,
+        4175
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 42896,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 766,
+      "initial_percent": 50,
+      "median_us": 2083,
+      "samples_us": [
+        2032,
+        2057,
+        2083,
+        2094,
+        2313
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 42896,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 766,
+      "initial_percent": 50,
+      "median_us": 13407,
+      "samples_us": [
+        12909,
+        13379,
+        13407,
+        13472,
+        13987
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 42896,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 163840,
+      "final_occupied": 766,
+      "initial_percent": 50,
+      "median_us": 4949,
+      "samples_us": [
+        4868,
+        4922,
+        4949,
+        5126,
+        5611
+      ],
+      "side": 64,
+      "sparse_final_entry_payload_bytes": 42896,
+      "ticks": 10
+    },
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 15648,
+      "samples_us": [
+        14982,
+        15080,
+        15648,
+        17570,
+        17755
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 6650,
+      "samples_us": [
+        6273,
+        6583,
+        6650,
+        6846,
+        6867
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 20365,
+      "samples_us": [
+        19908,
+        20191,
+        20365,
+        20804,
+        22006
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 0,
+      "initial_percent": 1,
+      "median_us": 6823,
+      "samples_us": [
+        6699,
+        6755,
+        6823,
+        7358,
+        7944
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 0,
+      "ticks": 10
+    },
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 609,
+      "initial_percent": 10,
+      "median_us": 13807,
+      "samples_us": [
+        13320,
+        13464,
+        13807,
+        14028,
+        15722
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 34104,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 609,
+      "initial_percent": 10,
+      "median_us": 6612,
+      "samples_us": [
+        6154,
+        6232,
+        6612,
+        7198,
+        8170
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 34104,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 609,
+      "initial_percent": 10,
+      "median_us": 45376,
+      "samples_us": [
+        44262,
+        45226,
+        45376,
+        45977,
+        49585
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 34104,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 609,
+      "initial_percent": 10,
+      "median_us": 13811,
+      "samples_us": [
+        13465,
+        13522,
+        13811,
+        14976,
+        15038
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 34104,
+      "ticks": 10
+    },
+    {
+      "backend": "dense",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 3187,
+      "initial_percent": 50,
+      "median_us": 14366,
+      "samples_us": [
+        14124,
+        14318,
+        14366,
+        14635,
+        14972
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 178472,
+      "ticks": 10
+    },
+    {
+      "backend": "dense_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 3187,
+      "initial_percent": 50,
+      "median_us": 6952,
+      "samples_us": [
+        6785,
+        6842,
+        6952,
+        7062,
+        10078
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 178472,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 3187,
+      "initial_percent": 50,
+      "median_us": 55425,
+      "samples_us": [
+        53819,
+        55236,
+        55425,
+        56256,
+        56585
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 178472,
+      "ticks": 10
+    },
+    {
+      "backend": "sparse_bounded_parallel",
+      "dense_cell_payload_bytes": 655360,
+      "final_occupied": 3187,
+      "initial_percent": 50,
+      "median_us": 17932,
+      "samples_us": [
+        17317,
+        17603,
+        17932,
+        18603,
+        19149
+      ],
+      "side": 128,
+      "sparse_final_entry_payload_bytes": 178472,
+      "ticks": 10
+    }
+  ],
+  "memory_note": "payload estimates exclude HashMap capacity, allocator and temporary frontier buffers",
+  "rayon_threads": 4,
+  "seed": 1397708108
+}
+test stepper::sparse::benchmark::sparse_benchmark ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 1.48s
+

@@ -1,4 +1,4 @@
-use crate::{components::menus::MenuScreen, styles};
+use crate::{components::menus::MenuScreen, theme};
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, CentralPanel};
 use engine_core::{
@@ -39,12 +39,12 @@ impl FromWorld for OptionsMenu {
 impl MenuScreen for OptionsMenu {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
         CentralPanel::default()
-            .frame(styles::fullscreen_bg())
+            .frame(theme::fullscreen_bg())
             .show(ctx, |ui| {
                 egui::Window::new("Options")
                     .anchor(Align2::CENTER_CENTER, [0., 0.])
                     .resizable(false)
-                    .frame(styles::fullscreen_bg())
+                    .frame(theme::fullscreen_bg())
                     .show(ui.ctx(), |ui| {
                         ui.label("UI font size");
                         ui.add(

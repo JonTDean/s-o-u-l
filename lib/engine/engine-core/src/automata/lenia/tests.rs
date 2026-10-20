@@ -66,3 +66,60 @@ fn lenia_controls_pause_step_reset_parameters_and_ignore_stale_entities() {
             .paused
     );
 }
+
+#[test]
+fn continuous_model_reset_validation_and_exact_serialization() {
+    use simulation_kernel::core::lenia::continuous::{Kernel, State};
+    let mut app = App::new();
+    app.add_plugins((MinimalPlugins, LeniaControlPlugin));
+    let owner = app
+        .world_mut()
+        .spawn(LeniaSimulation {
+            paused: true,
+            ..Default::default()
+        })
+        .id();
+    send(
+        &mut app,
+        owner,
+        LeniaAction::Kernel(Some(Kernel::default())),
+    );
+    send(&mut app, owner, LeniaAction::Step);
+    send(
+        &mut app,
+        owner,
+        LeniaAction::Kernel(Some(Kernel {
+            radius: 0,
+            ..Default::default()
+        })),
+    );
+    let sim = app.world().get::<LeniaSimulation>(owner).unwrap();
+    assert_eq!((sim.target_tick, sim.epoch), (1, 1));
+    assert_eq!(sim.kernel, Some(Kernel::default()));
+    send(&mut app, owner, LeniaAction::Kernel(None));
+    let sim = app.world().get::<LeniaSimulation>(owner).unwrap();
+    assert_eq!((sim.target_tick, sim.epoch), (0, 2));
+    assert!(sim.kernel.is_none());
+    let state = State {
+        kernel: Kernel::default(),
+        values: (0..32768).map(|i| i as f32 / 32769.0).collect(),
+    };
+    let mut saved = SavedLenia {
+        size: [64, 64, 8],
+        tick: 9,
+        params: Default::default(),
+        seed: Default::default(),
+        paused: true,
+        densities: state.bytes(),
+        continuous: Some(state),
+    };
+    saved.validate().unwrap();
+    let restored: SavedLenia =
+        serde_json::from_slice(&serde_json::to_vec(&saved).unwrap()).unwrap();
+    assert_eq!(
+        restored.continuous.unwrap().values,
+        saved.continuous.as_ref().unwrap().values
+    );
+    saved.continuous.as_mut().unwrap().values[0] = f32::NAN;
+    assert!(saved.validate().is_err());
+}

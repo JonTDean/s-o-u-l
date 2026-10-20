@@ -3,7 +3,7 @@
 //! Renders four centred buttons and emits `NextState<AppState>`
 //! transitions.  No game logic lives here.
 
-use crate::{components::menus::MenuScreen, styles};
+use crate::{components::menus::MenuScreen, theme};
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, Frame};
 use engine_core::prelude::AppState;
@@ -17,7 +17,7 @@ impl MenuScreen for MainMenuScreen {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
         // fullscreen grey background
         egui::CentralPanel::default()
-            .frame(styles::fullscreen_bg())
+            .frame(theme::fullscreen_bg())
             .show(ctx, |_| {});
 
         // 30 % from bottom

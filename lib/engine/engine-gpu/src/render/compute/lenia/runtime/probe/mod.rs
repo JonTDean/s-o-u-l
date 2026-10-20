@@ -19,6 +19,8 @@ pub struct LeniaSnapshot {
     pub size: [u32; 3],
     /// Parameters used by the latest dispatch.
     pub params: LeniaParams,
+    /// Exact continuous XYZ state, if that model was dispatched.
+    pub continuous: Option<simulation_kernel::core::lenia::continuous::State>,
     /// Quantized density values in X-fastest order.
     pub densities: Vec<u8>,
 }
@@ -27,6 +29,7 @@ pub struct LeniaSnapshot {
 pub(crate) struct ProbeState {
     pub active: usize,
     pub requested: HashSet<Entity>,
+    pub latest: HashMap<Entity, Result<LeniaSnapshot, String>>,
     pub results: HashMap<Entity, Result<LeniaSnapshot, String>>,
 }
 
@@ -47,6 +50,16 @@ impl LeniaProbe {
             .expect("Lenia probe lock")
             .requested
             .insert(owner);
+    }
+
+    /// Observe the latest completed readback without consuming save or metric mailboxes.
+    pub fn latest(&self, owner: Entity) -> Option<Result<LeniaSnapshot, String>> {
+        self.0
+            .lock()
+            .expect("Lenia probe lock")
+            .latest
+            .get(&owner)
+            .cloned()
     }
 
     /// Consume a finished readback, including any GPU mapping failure.

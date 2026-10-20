@@ -90,9 +90,17 @@ and produced identical CSV records.
 
 ## Visible output
 
-All captures are 1280×720 application-window images. Both adapters' captures were
-inspected; [image measurements](image-checks.json) also show nonzero cyan model
-pixels for every populated capture and zero after clear.
+All captures are 1280×720 application-window images of the lab. Both adapters'
+captures were inspected; [image measurements](image-checks.json) record, inside
+the published stage rectangle, nonzero signal/warm (shaded amber) pixels for every
+populated capture and zero after clear, with no panel overlapping the stage
+(`panels_clear`).
+
+After the respawn phase a **channel-command pass** drives the same instance through
+the public `ChannelCommand` contract: Step while paused advances the target tick by
+one, SetRate(10) and SetColour update the published row, and Remove despawns the
+owner and releases its id (`ChannelIds::open() == 0`). The run logs
+`LENIA_CHANNEL_VERIFIED` before success.
 
 | State | RTX 3090 | Mesa |
 | --- | --- | --- |

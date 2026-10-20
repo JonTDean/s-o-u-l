@@ -1,0 +1,24 @@
+
+xwininfo: Window id: 0x7c00002 "S.O.U.L. – Swarm Orchestrator for Autonomous Learners"
+
+  Absolute upper-left X:  81
+  Absolute upper-left Y:  116
+  Relative upper-left X:  0
+  Relative upper-left Y:  0
+  Width: 1760
+  Height: 960
+  Depth: 24
+  Visual: 0x63
+  Visual Class: TrueColor
+  Border width: 0
+  Class: InputOutput
+  Colormap: 0x62 (installed)
+  Bit Gravity State: ForgetGravity
+  Window Gravity State: NorthWestGravity
+  Backing Store State: NotUseful
+  Save Under State: no
+  Map State: IsViewable
+  Override Redirect State: no
+  Corners:  +81+116  -2639+116  -2639-364  +81-364
+  -geometry 1760x960+81+116
+

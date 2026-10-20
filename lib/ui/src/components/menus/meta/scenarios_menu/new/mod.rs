@@ -6,7 +6,7 @@ use bevy::prelude::*;
 use bevy_egui::egui::{self, Align2, CentralPanel, Frame};
 use engine_core::prelude::AppState;
 
-use crate::{components::menus::MenuScreen, styles};
+use crate::{components::menus::MenuScreen, theme};
 
 pub mod plugin;
 
@@ -19,7 +19,7 @@ pub struct NewScenarioMenuScreen {
 impl MenuScreen for NewScenarioMenuScreen {
     fn ui(&mut self, ctx: &egui::Context, next: &mut NextState<AppState>) {
         CentralPanel::default()
-            .frame(styles::fullscreen_bg())
+            .frame(theme::fullscreen_bg())
             .show(ctx, |_| {});
 
         egui::Area::new("new_scenario_win".into())

@@ -1,4 +1,4 @@
-use super::verification::Verification;
+use super::{flow::stage_check, verification::Verification};
 use bevy::{
     prelude::*,
     render::view::screenshot::{Screenshot, ScreenshotCaptured, save_to_disk},
@@ -17,9 +17,23 @@ pub(super) fn request(world: &mut World, verification: &mut Verification, name: 
     }
     let finished = Arc::new(AtomicBool::new(false));
     let signal = finished.clone();
+    let stage = stage_check::stage_pixels(world).expect("the lab publishes a stage");
+    let (output, file) = (
+        verification.output.clone(),
+        path.file_name().unwrap().to_string_lossy().into_owned(),
+    );
     let mut save = save_to_disk(path.clone());
     world.spawn(Screenshot::primary_window()).observe(
         move |trigger: Trigger<ScreenshotCaptured>| {
+            let row = stage_check::record(&output, &file, &trigger.event().0, stage);
+            assert!(
+                row["warm_pixels"].as_u64() > Some(0),
+                "{file}: no specimen pixels in the stage: {row}"
+            );
+            assert_eq!(
+                row["panels_clear"], true,
+                "{file}: a panel overlaps the stage: {row}"
+            );
             save(trigger);
             signal.store(true, Ordering::Release);
         },

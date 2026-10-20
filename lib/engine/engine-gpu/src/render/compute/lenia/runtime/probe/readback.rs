@@ -49,6 +49,12 @@ pub(crate) fn record(
         size: slot.buffers.size,
         params,
         densities: Vec::new(),
+        continuous: slot.buffers.kernel.map(|kernel| {
+            simulation_kernel::core::lenia::continuous::State {
+                kernel,
+                values: Vec::new(),
+            }
+        }),
     };
     world
         .resource::<PendingReadbacks>()
@@ -78,23 +84,30 @@ pub(crate) fn complete(
         buffer.slice(..).map_async(MapMode::Read, move |result| {
             let result = result.map_err(|error| error.to_string()).and_then(|_| {
                 let data = mapped.slice(..).get_mapped_range();
-                let values: Result<Vec<_>, _> = data
+                let words: Vec<u32> = data
                     .chunks_exact(4)
-                    .map(|word| {
-                        u8::try_from(u32::from_le_bytes(word.try_into().expect("density word")))
-                    })
+                    .map(|word| u32::from_le_bytes(word.try_into().expect("density word")))
                     .collect();
                 drop(data);
                 mapped.unmap();
-                snapshot.densities =
-                    values.map_err(|_| "GPU density outside 0..255".to_string())?;
+                if let Some(state) = &mut snapshot.continuous {
+                    state.values = words.into_iter().map(f32::from_bits).collect();
+                    state
+                        .validate(snapshot.size.iter().map(|v| *v as usize).product())
+                        .map_err(str::to_string)?;
+                    snapshot.densities = state.bytes();
+                } else {
+                    snapshot.densities = words
+                        .into_iter()
+                        .map(u8::try_from)
+                        .collect::<Result<Vec<_>, _>>()
+                        .map_err(|_| "GPU density outside 0..255".to_string())?;
+                }
                 Ok(snapshot)
             });
-            destination
-                .lock()
-                .expect("Lenia probe lock")
-                .results
-                .insert(entity, result);
+            let mut mailbox = destination.lock().expect("Lenia probe lock");
+            mailbox.latest.insert(entity, result.clone());
+            mailbox.results.insert(entity, result);
         });
     }
     device.wgpu_device().poll(wgpu::Maintain::Poll);

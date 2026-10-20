@@ -27,12 +27,17 @@ pub(super) fn run(context: &mut RenderContext, world: &World) {
         .lock()
         .expect("Lenia state lock");
     synchronize(&mut slots, live, device, pipelines);
-    world
-        .resource::<crate::LeniaProbe>()
-        .0
-        .lock()
-        .expect("Lenia probe lock")
-        .active = slots.len();
+    {
+        let mut probe = world
+            .resource::<crate::LeniaProbe>()
+            .0
+            .lock()
+            .expect("Lenia probe lock");
+        probe.active = slots.len();
+        probe.latest.retain(|e, _| slots.contains_key(e));
+        probe.results.retain(|e, _| slots.contains_key(e));
+        probe.requested.retain(|e| slots.contains_key(e));
+    }
     for (entity, slice, sim) in &live.0 {
         let Some(slot) = slots.get_mut(entity) else {
             continue;

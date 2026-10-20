@@ -1,23 +1,43 @@
-2026-10-18T20:36:25.857532Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
-2026-10-18T20:36:26.032138Z  INFO gilrs_core::platform::platform::gamepad: Gamepad /dev/input/event3 (Sony Interactive Entertainment Wireless Controller) connected.    
-2026-10-18T20:36:26.278548Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
-2026-10-18T20:36:26.333352Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
-2026-10-18T20:36:26.333406Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
-2026-10-18T20:36:26.337492Z  INFO bevy_input::gamepad: Gamepad 6v1 connected.    
-2026-10-18T20:36:26.650949Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 0 verified: epoch 0, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
-2026-10-18T20:36:26.690977Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-0.png
-2026-10-18T20:36:26.713433Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 1 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
-2026-10-18T20:36:27.013259Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 2 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
-2026-10-18T20:36:27.090575Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 3 verified: epoch 0, tick 2, 2636 live cells, checksum 59b0f5c1511db19d
-2026-10-18T20:36:27.138667Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-3.png
-2026-10-18T20:36:27.166513Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 4 verified: epoch 1, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
-2026-10-18T20:36:27.222961Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 5 verified: epoch 2, tick 0, 1656 live cells, checksum cac2da99ea428585
-2026-10-18T20:36:27.451926Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 6 verified: epoch 2, tick 9, 1856 live cells, checksum 0c14ee94a215d92d
-2026-10-18T20:36:27.481908Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-6.png
-2026-10-18T20:36:27.503455Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 7 verified: epoch 3, tick 0, 1656 live cells, checksum cac2da99ea428585
-2026-10-18T20:36:27.532897Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-7.png
-2026-10-18T20:36:27.545592Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia clear verified: no live ECS owners or GPU slots
-2026-10-18T20:36:27.579280Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-8.png
-2026-10-18T20:36:27.597390Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 9 verified: epoch 0, tick 0, 1656 live cells, checksum cac2da99ea428585
-2026-10-18T20:36:27.641831Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /mnt/home-data/jdean/Documents/programming/s-o-u-l/docs/verification/lenia/rtx3090/lenia-phase-9.png
-2026-10-18T20:36:27.643659Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::actions: LENIA_RUNTIME_VERIFIED: all workbench phases passed
+env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_LENIA_VERIFY="${SOUL_LENIA_VERIFY:-/tmp/soul-lenia-verification}" cargo run -- --lenia-demo
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.32s
+     Running `/mnt/home-data/jdean/Documents/programming/s-o-u-l/target/debug/swarm_orchestrator_for_autonomous_learners --lenia-demo`
+2026-10-20T12:57:23.286475Z  INFO bevy_render::renderer: AdapterInfo { name: "NVIDIA GeForce RTX 3090", vendor: 4318, device: 8708, device_type: DiscreteGpu, driver: "NVIDIA", driver_info: "550.163.01", backend: Vulkan }
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+ALSA lib confmisc.c:165:(snd_config_get_card) Cannot get card index for 0
+snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
+snd_pcm_jack_open: WARNING: JACK client name 'swarm_orchestrator_for_autonomo' truncated to 31 characters, might not be unique
+ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+ALSA lib pcm_oss.c:404:(_snd_pcm_oss_open) Cannot open device /dev/dsp
+2026-10-20T12:57:23.823983Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-20T12:57:23.870844Z  INFO bevy_winit::system: Creating new window S.O.U.L. – Swarm Orchestrator for Autonomous Learners (0v1)
+2026-10-20T12:57:23.870898Z  INFO winit::platform_impl::linux::x11::window: Guessed window scale factor: 1
+2026-10-20T12:57:24.195167Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 0 verified: epoch 0, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-20T12:57:24.238545Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-0.png
+2026-10-20T12:57:24.266274Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 1 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-20T12:57:24.481744Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 2 verified: epoch 0, tick 1, 2548 live cells, checksum 8b11e588c153d531
+2026-10-20T12:57:24.511197Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 3 verified: epoch 0, tick 2, 2636 live cells, checksum 59b0f5c1511db19d
+2026-10-20T12:57:24.557224Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-3.png
+2026-10-20T12:57:24.571841Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 4 verified: epoch 1, tick 0, 2548 live cells, checksum e3ea38aac2c5b735
+2026-10-20T12:57:24.608289Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 5 verified: epoch 2, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-20T12:57:24.802423Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 6 verified: epoch 2, tick 8, 1844 live cells, checksum 0d0306d0b6be0e35
+2026-10-20T12:57:24.838434Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-6.png
+2026-10-20T12:57:24.850268Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 7 verified: epoch 3, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-20T12:57:24.885197Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-7.png
+2026-10-20T12:57:24.900758Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia clear verified: no live ECS owners or GPU slots
+2026-10-20T12:57:24.938789Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-8.png
+2026-10-20T12:57:24.951890Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::oracle: Lenia phase 9 verified: epoch 0, tick 0, 1656 live cells, checksum cac2da99ea428585
+2026-10-20T12:57:24.985760Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /tmp/soul-lenia-verification/lenia-phase-9.png
+2026-10-20T12:57:25.000031Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::actions: LENIA_CHANNEL_VERIFIED: step, rate, colour and removal through ChannelCommand
+2026-10-20T12:57:25.000043Z  INFO swarm_orchestrator_for_autonomous_learners::app::preview::lenia::verification::flow::actions: LENIA_RUNTIME_VERIFIED: all workbench phases passed
