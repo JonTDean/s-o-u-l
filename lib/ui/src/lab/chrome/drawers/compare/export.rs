@@ -13,8 +13,8 @@ pub(super) fn show(ui: &mut Ui, state: &mut Comparison, data: &LabData) {
     {
         return;
     }
-    state.status =
-        write(state, data).map_or_else(|e| e, |()| "CSV bundle exported to a new folder".into());
+    state.status = write(state, &data.channels, &data.metrics)
+        .map_or_else(|e| e, |()| "CSV bundle exported to a new folder".into());
 }
 fn quoted(s: &str) -> String {
     format!("\"{}\"", s.replace('"', "\"\""))
