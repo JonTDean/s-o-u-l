@@ -32,6 +32,7 @@ pub(super) fn restore(
         .spawn((
             id,
             LeniaSimulation {
+                kernel: saved.continuous.as_ref().map(|s| s.kernel),
                 restored: Some(Arc::new(saved.clone())),
                 params: saved.params,
                 seed: saved.seed,

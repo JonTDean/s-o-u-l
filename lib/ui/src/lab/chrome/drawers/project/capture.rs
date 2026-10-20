@@ -23,6 +23,7 @@ pub(super) fn poll(
         if !current.paused
             || current.epoch != expected.epoch
             || current.target_tick != expected.target_tick
+            || current.kernel != expected.kernel
             || current.params != expected.params
         {
             files.status = "Save cancelled: simulation changed during capture".into();
@@ -35,6 +36,7 @@ pub(super) fn poll(
                     && snapshot.params == expected.params =>
             {
                 pending.project.lenia.push(SavedLenia {
+                    continuous: snapshot.continuous,
                     size: snapshot.size,
                     tick: snapshot.tick,
                     params: snapshot.params,

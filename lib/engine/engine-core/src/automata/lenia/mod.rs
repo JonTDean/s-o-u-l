@@ -13,6 +13,8 @@ pub use commands::{LeniaAction, LeniaCommand, LeniaControlPlugin};
 pub struct LeniaSimulation {
     /// Optional completed checkpoint used when allocating GPU buffers.
     pub restored: Option<std::sync::Arc<SavedLenia>>,
+    /// None retains the qualified quantized XY model; Some selects continuous XYZ.
+    pub kernel: Option<simulation_kernel::core::lenia::continuous::Kernel>,
     /// Validated growth controls.
     pub params: LeniaParams,
     /// Deterministic reset fixture.
