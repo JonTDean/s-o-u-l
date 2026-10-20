@@ -141,6 +141,11 @@
       "commit": "1d791abc17a503c0eafa9da5eaaa81aec972918e",
       "changed_sloc": 24,
       "subject": "test: verify native continuation after composed energy project restoration"
+    },
+    {
+      "commit": "2025c2c8a42f42b5c99aa349eff4e9ec94cb6678",
+      "changed_sloc": 0,
+      "subject": "docs: qualify rules composition and energy and close the workbench roadmap"
     }
   ]
 }

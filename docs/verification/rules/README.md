@@ -59,3 +59,13 @@ This source revision was built and exercised locally on Linux. Prior hosted
 Windows/macOS qualifications belong to the previous source and are not claimed
 as qualification of these new changes. Broader custom-GPU and experimental ash
 renderer work remains outside this milestone.
+
+## Main integration
+
+Local main fast-forwarded from `2f87e8e` to `2025c2c`. A fresh build from the main
+worktree passed, followed by `--rules-demo` with the native boot gate. Three live
+channels published, the screenshot completed, and the application exited cleanly.
+[Boot](main-boot/SUCCESS), [capture](main-boot/boot.png), [window bounds](main-boot/window-bounds.json)
+and [build log](main-build.log) record the result. The final evidence commit
+changes documentation only; implementation remains identical to `1d791ab`.
+All 29 pre-integration commits satisfy the checkpoint cadence (maximum 99 SLOC).
