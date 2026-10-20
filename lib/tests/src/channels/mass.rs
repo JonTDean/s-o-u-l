@@ -13,7 +13,7 @@ use engine_render::command_executor::{
 };
 use std::{sync::Mutex, time::Duration};
 
-type Snap = Result<(u64, u64, Vec<u8>), String>;
+type Snap = Result<(u64, u64, f64), String>;
 
 #[derive(Resource, Default)]
 struct Fake {
@@ -100,7 +100,7 @@ fn enabled_requests_are_throttled_and_results_recorded() {
         1,
         "waiting for a result blocks further requests"
     );
-    ready(&app, Ok((0, 3, vec![255; 4])));
+    ready(&app, Ok((0, 3, 4.0)));
     app.update();
     let metric = app.world().resource::<Metrics>().get(id).unwrap().clone();
     assert_eq!(metric.id, MASS);
@@ -142,7 +142,7 @@ fn stale_epoch_snapshots_are_dropped() {
     owners.single_mut(app.world_mut()).unwrap().epoch = 2;
     enable(&mut app, id);
     run(&mut app, 4);
-    ready(&app, Ok((1, 9, vec![255; 4])));
+    ready(&app, Ok((1, 9, 4.0)));
     app.update();
     assert!(
         app.world()
@@ -161,7 +161,7 @@ fn busy_mailbox_suspends_sampling() {
     enable(&mut app, id);
     run(&mut app, 10);
     assert_eq!(requests(&app), 0, "project save owns the mailbox");
-    ready(&app, Ok((0, 1, vec![255; 4])));
+    ready(&app, Ok((0, 1, 4.0)));
     app.update();
     assert!(
         app.world()

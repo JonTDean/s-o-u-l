@@ -23,8 +23,8 @@ pub const PERIOD_SECS: f32 = 0.25;
 /// Seconds after which an unanswered request is reported as unavailable.
 pub const TIMEOUT_SECS: f32 = 2.0;
 
-/// Finished `(epoch, tick, densities)` or the GPU error.
-pub type Snapshot = Result<(u64, u64, Vec<u8>), String>;
+/// Finished `(epoch, tick, value)` or the GPU error.
+pub type Snapshot = Result<(u64, u64, f64), String>;
 
 /// Readback mailbox seam; implemented by `engine_gpu::LeniaProbe` and by test fakes.
 pub trait SnapshotMailbox {
@@ -40,7 +40,18 @@ impl SnapshotMailbox for engine_gpu::LeniaProbe {
         engine_gpu::LeniaProbe::request(self, owner);
     }
     fn take(&self, owner: Entity) -> Option<Snapshot> {
-        engine_gpu::LeniaProbe::take(self, owner).map(|r| r.map(|s| (s.epoch, s.tick, s.densities)))
+        engine_gpu::LeniaProbe::take(self, owner).map(|r| {
+            r.map(|s| {
+                (
+                    s.epoch,
+                    s.tick,
+                    s.continuous.as_ref().map_or_else(
+                        || mass(&s.densities),
+                        |c| c.values.iter().map(|v| *v as f64).sum(),
+                    ),
+                )
+            })
+        })
     }
 }
 
@@ -122,7 +133,7 @@ fn advance(
         return;
     }
     match probe.take(entity) {
-        Some(Ok((epoch, tick, densities))) => {
+        Some(Ok((epoch, tick, value))) => {
             (cycle.waiting, cycle.error) = (false, None);
             // Snapshots from before the latest reset belong to a finished trace.
             if epoch >= sim.epoch {
@@ -130,7 +141,6 @@ fn advance(
                     period_secs: PERIOD_SECS,
                 };
                 metrics.declare(id, MASS, available);
-                let value = mass(&densities);
                 metrics.record(id, MetricSample { tick, epoch, value });
             }
         }

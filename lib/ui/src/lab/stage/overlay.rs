@@ -12,6 +12,13 @@ use bevy_egui::egui::{self, Align2, FontId, Rect};
 /// Arena line shown for GPU Lenia channels.
 pub const GPU_ARENA: &str = "64 × 64 × 8 · zero edges · GPU";
 
+/// Model-specific boundary description for a GPU owner.
+pub fn gpu_arena(sim: &engine_core::automata::lenia::LeniaSimulation) -> String {
+    sim.kernel.map_or_else(
+        || GPU_ARENA.into(),
+        |k| format!("64 × 64 × 8 · {:?} · f32 XYZ GPU", k.boundary),
+    )
+}
 /// Draw the overlay and caption for the selected channel.
 pub fn chrome(
     painter: &egui::Painter,
@@ -28,7 +35,15 @@ pub fn chrome(
         .sessions
         .iter()
         .find(|s| s.channel == row.id)
-        .map_or_else(|| GPU_ARENA.into(), |s| arena_label(&s.model, s.kind));
+        .map_or_else(
+            || {
+                data.lenia
+                    .iter()
+                    .find(|(id, _)| **id == row.id)
+                    .map_or_else(|| GPU_ARENA.into(), |(_, s)| gpu_arena(s))
+            },
+            |s| arena_label(&s.model, s.kind),
+        );
     let cursor = cursor.map_or("—".into(), |(x, y)| format!("({x}, {y})"));
     let lines = format!("{arena}\nzoom {:.0}% · {cursor}", zoom * 100.0);
     let corner = rect.right_top() + egui::vec2(-12.0, 10.0);
@@ -46,6 +61,11 @@ pub fn chrome(
             .sessions
             .iter()
             .any(|s| s.channel == row.id && crate::lab::inspector::sections::customised(s));
+        let modified = modified
+            || data
+                .lenia
+                .iter()
+                .any(|(id, s)| *id == row.id && s.kernel.is_some());
         let caption = if modified {
             format!(
                 "{} (catalog figure; this channel is modified)",

@@ -59,11 +59,21 @@ fn generate(
                 session.step();
             }
             for saved in &mut copy.lenia {
-                saved.densities = simulation_kernel::core::lenia::step(
-                    &saved.densities,
-                    saved.size,
-                    saved.params,
-                )?;
+                if let Some(state) = &mut saved.continuous {
+                    state.values = simulation_kernel::core::lenia::continuous::step(
+                        &state.values,
+                        saved.size,
+                        state.kernel,
+                        saved.params,
+                    )?;
+                    saved.densities = state.bytes();
+                } else {
+                    saved.densities = simulation_kernel::core::lenia::step(
+                        &saved.densities,
+                        saved.size,
+                        saved.params,
+                    )?;
+                }
                 saved.tick += 1;
             }
         }
@@ -72,7 +82,7 @@ fn generate(
         "version":1, "frames":frames, "milliseconds_per_frame":milliseconds,
         "layout":"256px panels: CPU session order followed by Lenia maximum XY projections",
         "sampling":"initial state then one transition per frame; halted symbolic sessions remain fixed",
-        "lenia_evolution":"quantized CPU reference from completed GPU checkpoint",
+        "lenia_evolution":"model-specific CPU reference from completed GPU checkpoint",
         "symbolic_view":"first 256 tape cells, head underline; full state in project.json",
         "initial_cpu_ticks":project.sessions.iter().map(|s|s.ticks).collect::<Vec<_>>(),
         "final_cpu_ticks":copy.sessions.iter().map(|s|s.ticks).collect::<Vec<_>>(),

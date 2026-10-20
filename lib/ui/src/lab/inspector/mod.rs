@@ -70,7 +70,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     {
         lenia::show(ui, id, sim, metric, fx);
         margin_section(ui, "grid", false, |ui| {
-            ui.label(mono("64 × 64 × 8 · zero edges · GPU").color(INFO));
+            ui.label(mono(super::stage::overlay::gpu_arena(sim)).color(INFO));
         });
     }
     colour(ui, row, fx);
@@ -84,6 +84,17 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
                     session.title()
                 );
                 note(ui, &text, true);
+            }
+            if data
+                .lenia
+                .iter()
+                .any(|(id, sim)| *id == row.id && sim.kernel.is_some())
+            {
+                note(
+                    ui,
+                    "Continuous XYZ model: catalog text below describes the original XY specimen.",
+                    true,
+                );
             }
             let (explanation, citation) = (&specimen.explanation, &specimen.citation);
             if let Some(url) = footnote(ui, figure, explanation, citation, &specimen.doi) {
