@@ -16,6 +16,7 @@ use engine_core::{
 use serde_json::Value;
 use std::sync::Arc;
 pub mod channels;
+pub mod metrics;
 mod restore;
 
 /* ───────────────────────────── constants ───────────────────────────── */
@@ -36,7 +37,17 @@ impl Plugin for CommandExecutorPlugin {
             (
                 channels::route.in_set(ChannelSet::Route),
                 channels::publish.in_set(ChannelSet::Publish),
+                metrics::toggle.in_set(ChannelSet::Route),
             ),
+        );
+        app.init_resource::<metrics::MassSampling>()
+            .init_resource::<engine_core::automata::lenia::ReadbackBusy>();
+        #[cfg(feature = "gpu-compute")]
+        app.add_systems(
+            Update,
+            metrics::sample::<engine_gpu::LeniaProbe>
+                .in_set(ChannelSet::Publish)
+                .run_if(resource_exists::<engine_gpu::LeniaProbe>),
         );
 
         app

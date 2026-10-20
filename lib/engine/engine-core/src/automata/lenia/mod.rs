@@ -33,3 +33,7 @@ impl LeniaSimulation {
         self.target_tick = 0;
     }
 }
+
+/// True while project save owns the shared `LeniaProbe` mailbox; metric sampling waits.
+#[derive(Resource, Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct ReadbackBusy(pub bool);
