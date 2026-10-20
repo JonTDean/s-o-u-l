@@ -3,6 +3,7 @@ use super::{Effects, LabData, state::LabState};
 use bevy_egui::egui;
 use engine_common::controls::camera::manager::stage::StageRect;
 pub mod overlay;
+pub mod painters;
 pub mod presenter;
 pub mod view;
 
