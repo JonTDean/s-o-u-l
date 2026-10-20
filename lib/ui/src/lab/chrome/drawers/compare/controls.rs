@@ -63,8 +63,10 @@ pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut
                 super::plots::trace(column, id, data, fx);
             }
         });
-        if let Some(pair)=&state.capture.result {
-            if pair[0].stamp.id==l && pair[1].stamp.id==r {super::plots::difference(ui,pair);}
+        if let Some(pair) = &state.capture.result {
+            if pair[0].stamp.id == l && pair[1].stamp.id == r {
+                super::plots::difference(ui, pair);
+            }
         }
         super::export::show(ui, state, data);
         note(ui, &state.status, false);
