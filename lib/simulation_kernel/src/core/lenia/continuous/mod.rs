@@ -10,6 +10,8 @@ pub enum Shape {
     #[default]
     Gaussian,
     Shell,
+    /// Published two-dimensional polynomial Orbium model.
+    Orbium,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -29,6 +31,13 @@ impl Default for Kernel {
 }
 impl Kernel {
     pub fn validate(self) -> Result<Self, &'static str> {
+        if self.shape == Shape::Orbium {
+            return if self.radius == 13 && self.boundary == Boundary::Periodic {
+                Ok(self)
+            } else {
+                Err("Orbium requires radius 13 and periodic XY boundaries")
+            };
+        }
         if !(1..=4).contains(&self.radius) {
             return Err("Continuous radius must be 1..4");
         }
@@ -40,9 +49,13 @@ impl Kernel {
             return 0.0;
         }
         let r = distance / self.radius as f64;
+        if self.shape == Shape::Orbium {
+            return (4.0 * r * (1.0 - r)).powi(4);
+        }
         let (mean, width) = match self.shape {
             Shape::Gaussian => (0.0, 0.5),
             Shape::Shell => (0.65, 0.2),
+            Shape::Orbium => unreachable!(),
         };
         (-0.5 * ((r - mean) / width).powi(2)).exp()
     }

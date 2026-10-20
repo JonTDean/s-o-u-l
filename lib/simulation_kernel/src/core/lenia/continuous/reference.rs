@@ -1,5 +1,5 @@
 //! Independent f64 CPU oracle, intentionally direct convolution instead of GPU indexing code.
-use super::Kernel;
+use super::{Kernel, Shape};
 use crate::core::{boundary::Boundary, lenia::LeniaParams};
 pub fn step(
     values: &[f32],
@@ -22,7 +22,12 @@ pub fn step(
     }
     let radius = kernel.radius as i32;
     let mut offsets = Vec::new();
-    for z in -radius..=radius {
+    let depth = if kernel.shape == Shape::Orbium {
+        0
+    } else {
+        radius
+    };
+    for z in -depth..=depth {
         for y in -radius..=radius {
             for x in -radius..=radius {
                 let weight = kernel.weight(((x * x + y * y + z * z) as f64).sqrt());
@@ -56,8 +61,12 @@ pub fn step(
                         potential += values[i] as f64 * weight / norm;
                     }
                 }
-                let growth =
-                    2.0 * (-0.5 * ((potential - p.mu as f64) / p.sigma as f64).powi(2)).exp() - 1.0;
+                let d = (potential - p.mu as f64) / p.sigma as f64;
+                let growth = if kernel.shape == Shape::Orbium {
+                    2.0 * (1.0 - d * d / 9.0).max(0.0).powi(4) - 1.0
+                } else {
+                    2.0 * (-0.5 * d * d).exp() - 1.0
+                };
                 let i = next.len();
                 next.push((values[i] as f64 + p.dt as f64 * growth).clamp(0.0, 1.0) as f32);
             }

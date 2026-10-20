@@ -17,7 +17,11 @@ impl LeniaBuffers {
         if let Some(k) = self.kernel {
             gpu.kernel = [
                 k.radius,
-                u32::from(k.shape == simulation_kernel::core::lenia::continuous::Shape::Shell),
+                match k.shape {
+                    simulation_kernel::core::lenia::continuous::Shape::Gaussian => 0,
+                    simulation_kernel::core::lenia::continuous::Shape::Shell => 1,
+                    simulation_kernel::core::lenia::continuous::Shape::Orbium => 2,
+                },
                 u32::from(k.boundary == simulation_kernel::core::boundary::Boundary::Periodic),
                 0,
             ];
