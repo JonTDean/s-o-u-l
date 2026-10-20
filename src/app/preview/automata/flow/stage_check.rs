@@ -86,6 +86,11 @@ pub(in crate::app::preview) fn record(
         "stage": [stage.0, stage.1, stage.2, stage.3],
         "signal_pixels": count_signal(raw, width, stage, [0xff, 0xb5, 0x47], 24),
         "warm_pixels": count_warm(raw, width, stage),
+        "specimen_pixels": count(raw, width, stage, |px| {
+            let max = *px.iter().max().unwrap();
+            let min = *px.iter().min().unwrap();
+            max > 80 && max - min > 48
+        }),
         "panels_clear": panels_clear(raw, width, stage),
     });
     let path = output.join("image-checks.json");
