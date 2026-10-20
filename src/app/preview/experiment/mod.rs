@@ -4,6 +4,7 @@ use engine_core::{events::AutomataCommand, prelude::AppState};
 mod capture;
 mod checkpoint;
 mod flow;
+mod worlds;
 #[derive(Resource)]
 pub(super) struct Verification {
     output: std::path::PathBuf,
@@ -17,6 +18,7 @@ pub(super) fn enabled() -> bool {
     std::env::args().any(|a| a == "--experiment-demo")
 }
 pub(super) fn install(app: &mut App) {
+    worlds::install(app);
     if let Some(output) = std::env::var_os("SOUL_EXPERIMENT_VERIFY") {
         let output = std::path::PathBuf::from(output);
         std::fs::create_dir_all(&output).unwrap();
@@ -42,6 +44,9 @@ pub(super) fn setup(
 ) {
     next.set(AppState::InGame);
     events.write(AutomataCommand::SeedPattern { id: "lenia".into() });
+    if worlds::enabled() {
+        events.write(AutomataCommand::SeedPattern { id: "lenia".into() });
+    }
     for id in ["life:conway", "wolfram:rule30"] {
         events.write(AutomataCommand::SeedPattern { id: id.into() });
     }
