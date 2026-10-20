@@ -19,11 +19,14 @@ pub fn cells(machine: &Symbolic) -> Vec<Cell> {
     let window = tape_window(tape.len(), head, 20);
     let start = window.start;
     let centre = (window.len() - 1) as f32 / 2.0;
-    let mut cells: Vec<_> = window.enumerate().map(|(slot, index)| Cell {
-        symbol: tape.get(index).copied().unwrap_or(' '),
-        position: Vec3::new((slot as f32 - centre) * 3.0, 0.0, 0.0),
-        head: index == head,
-    }).collect();
+    let mut cells: Vec<_> = window
+        .enumerate()
+        .map(|(slot, index)| Cell {
+            symbol: tape.get(index).copied().unwrap_or(' '),
+            position: Vec3::new((slot as f32 - centre) * 3.0, 0.0, 0.0),
+            head: index == head,
+        })
+        .collect();
     if let Symbolic::Pushdown(m) = machine {
         cells.extend(
             m.stack
