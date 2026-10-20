@@ -105,11 +105,9 @@ pub(crate) fn complete(
                 }
                 Ok(snapshot)
             });
-            destination
-                .lock()
-                .expect("Lenia probe lock")
-                .results
-                .insert(entity, result);
+            let mut mailbox = destination.lock().expect("Lenia probe lock");
+            mailbox.latest.insert(entity, result.clone());
+            mailbox.results.insert(entity, result);
         });
     }
     device.wgpu_device().poll(wgpu::Maintain::Poll);
