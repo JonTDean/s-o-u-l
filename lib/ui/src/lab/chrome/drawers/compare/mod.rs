@@ -3,17 +3,22 @@ use crate::{
     lab::{Effects, LabData, stage::painters, stage::view},
     theme::{
         tokens::*,
-        widgets::{margin_section, mono, note, pill, serif, serif_italic},
+        widgets::{mono, serif, serif_italic},
     },
 };
 use bevy::prelude::Resource;
-use bevy_egui::egui::{self, Sense, Ui, vec2};
-use engine_core::automata::channel::{ChannelAction, ChannelCommand, ChannelId, Status};
+use bevy_egui::egui::{Sense, Ui, vec2};
+use engine_core::automata::channel::{ChannelId, Status};
 use models::workbench::{experiment::metrics::describe, session::Session};
+
+pub mod capture;
+mod controls;
 
 /// Selected pair (by channel), export folder, status line and running export.
 #[derive(Resource)]
 pub struct Comparison {
+    /// Completed comparison and any pending capture.
+    pub capture: capture::Capture,
     /// Left channel; `None` once closed until the viewer picks again.
     pub left: Option<ChannelId>,
     /// Right channel.
@@ -29,6 +34,7 @@ pub struct Comparison {
 impl Default for Comparison {
     fn default() -> Self {
         Self {
+            capture: Default::default(),
             left: None,
             right: None,
             folder: "soul-export".into(),
@@ -77,60 +83,7 @@ pub fn body(
     data: &LabData,
     fx: &mut Effects,
 ) {
-    let sessions = &data.bench.sessions;
-    margin_section(ui, "compare", true, |ui| {
-        if sessions.len() < 2 {
-            note(ui, "Open two CPU specimens to compare them.", false);
-            return;
-        }
-        let pair = state.pair(sessions);
-        for (salt, side) in [("left", &mut state.left), ("right", &mut state.right)] {
-            let shown = side
-                .and_then(|id| sessions.iter().position(|s| s.channel == id))
-                .map_or("choose a session".into(), |i| {
-                    format!("{} · {}", i + 1, sessions[i].title())
-                });
-            egui::ComboBox::from_id_salt(("lab.compare", salt))
-                .selected_text(shown)
-                .show_ui(ui, |ui| {
-                    for (i, s) in sessions.iter().enumerate() {
-                        ui.selectable_value(
-                            side,
-                            Some(s.channel),
-                            format!("{} · {}", i + 1, s.title()),
-                        );
-                    }
-                });
-        }
-        let Some((left, right)) = pair else {
-            note(ui, "A compared channel closed; choose a session.", true);
-            return;
-        };
-        if pill(ui, "Pause and step both", true, true).clicked() {
-            state.status = match pair_error(sessions, left, right) {
-                Some(error) => error.into(),
-                None => {
-                    for index in [left, right] {
-                        let id = sessions[index].channel;
-                        fx.commands.push(ChannelCommand {
-                            id,
-                            action: ChannelAction::Pause(true),
-                        });
-                        fx.commands.push(ChannelCommand {
-                            id,
-                            action: ChannelAction::Step,
-                        });
-                    }
-                    "Both sessions advanced one transition".into()
-                }
-            };
-        }
-        ui.columns(2, |columns| {
-            for (column, index) in columns.iter_mut().zip([left, right]) {
-                thumbnail(column, &sessions[index]);
-            }
-        });
-    });
+    controls::body(ui, state, data, fx);
     super::exports::show(ui, state, &data.bench, saved_path);
 }
 
