@@ -62,12 +62,32 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
                 serde_json::to_value(&bench.sessions).unwrap(),
                 *v.expected.as_ref().unwrap()
             );
+            let mut expected = project::Project::capture(bench, vec![]).unwrap();
+            let ids: Vec<_> = bench.sessions.iter().map(|s| s.channel).collect();
+            for session in &mut expected.sessions {
+                session.step();
+            }
+            v.expected = Some(serde_json::to_value(&expected.sessions).unwrap());
+            for id in ids {
+                world.send_event(engine_core::automata::channel::ChannelCommand {
+                    id,
+                    action: engine_core::automata::channel::ChannelAction::Step,
+                });
+            }
+            v.phase = 9;
+            v.wait = v.frames + 30;
+        }
+        9 => {
+            assert_eq!(
+                serde_json::to_value(&world.resource::<Workbench>().sessions).unwrap(),
+                *v.expected.as_ref().unwrap()
+            );
             for name in ["energy.png", "composition.png"] {
                 assert!(std::fs::metadata(v.output.join(name)).unwrap().len() > 1000);
             }
-            std::fs::write(v.output.join("SUCCESS"), "Authored and composed energy channels: configure, four steps, comparison, rule interchange, project restore, specimens, PNG/GIF and native captures passed.\n").unwrap();
+            std::fs::write(v.output.join("SUCCESS"), "Authored and composed energy channels: configure, four steps, comparison, rule interchange, project restore and continuation, specimens, PNG/GIF and native captures passed.\n").unwrap();
             world.send_event(AppExit::Success);
-            v.phase = 9;
+            v.phase = 10;
         }
         _ => {}
     }
