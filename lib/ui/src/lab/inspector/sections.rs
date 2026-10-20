@@ -1,6 +1,10 @@
 //! Pure formatting helpers for inspector sections.
 use engine_core::automata::channel::metrics::MetricId;
-use models::workbench::{catalog::Kind, session::Model};
+use models::workbench::{
+    catalog::Kind,
+    experiment::config::Settings,
+    session::{Model, Session},
+};
 
 /// Order parameters keep two decimals; counts are integers.
 pub fn format_metric(value: f64, id: &MetricId) -> String {
@@ -22,6 +26,17 @@ pub fn arena_label(model: &Model, kind: Kind) -> String {
         Model::Ants(_) => "64 × 64 · clamped · CPU".into(),
         Model::Symbolic(_) => "tape · CPU".into(),
     }
+}
+
+/// Whether a session's rule, seed pattern or population departs from the catalog
+/// specimen, so its authored title, caption and footnote no longer describe it.
+pub fn customised(session: &Session) -> bool {
+    let (s, d) = (&session.settings, Settings::for_kind(session.kind));
+    s.elementary != d.elementary
+        || s.birth != d.birth
+        || s.survival != d.survival
+        || s.agent_count != d.agent_count
+        || s.pattern != d.pattern
 }
 
 /// Input hint and whether it is a warning (over the 256-symbol bound).
@@ -60,6 +75,23 @@ mod tests {
         assert_eq!(label(Kind::Life), "64 × 64 · dead edges · CPU");
         assert_eq!(label(Kind::Rule30), "64 cells · 64-row history · CPU");
         assert_eq!(label(Kind::Boids), "64 × 64 · wraps · CPU");
+    }
+
+    #[test]
+    fn edited_rules_and_populations_are_customised() {
+        let mut session = Session::new(Kind::Rule30);
+        assert!(!customised(&session));
+        session.settings.rate_hz = 60.0;
+        session.settings.colour = engine_core::automata::channel::SWATCHES[1];
+        assert!(
+            !customised(&session),
+            "pace and colour do not change the specimen"
+        );
+        session.settings.elementary = 90;
+        assert!(customised(&session));
+        let mut ants = Session::new(Kind::Ants);
+        ants.settings.agent_count = 8;
+        assert!(customised(&ants), "captions state the population");
     }
 
     #[test]

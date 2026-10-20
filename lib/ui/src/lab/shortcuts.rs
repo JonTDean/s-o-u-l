@@ -113,6 +113,10 @@ pub fn apply(
             lab.toggle_drawer(Drawer::Library);
             true
         }
+        Shortcut::Back if lab.settings_open => {
+            lab.settings_open = false;
+            true
+        }
         Shortcut::Back if lab.drawer.is_some() => {
             lab.drawer = None;
             true

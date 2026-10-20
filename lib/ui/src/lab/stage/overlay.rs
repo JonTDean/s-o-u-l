@@ -41,13 +41,20 @@ pub fn chrome(
         let fig = painter.text(at, Align2::LEFT_BOTTOM, format!("Fig. {n}. "), bold, INK_HI);
         let italic = FontId::new(size::BODY, family(SERIF_ITALIC));
         let after = egui::pos2(fig.right(), at.y);
-        painter.text(
-            after,
-            Align2::LEFT_BOTTOM,
-            &specimen.caption,
-            italic,
-            INK_DIM,
-        );
+        let modified = data
+            .bench
+            .sessions
+            .iter()
+            .any(|s| s.channel == row.id && crate::lab::inspector::sections::customised(s));
+        let caption = if modified {
+            format!(
+                "{} (catalog figure; this channel is modified)",
+                specimen.caption
+            )
+        } else {
+            specimen.caption.clone()
+        };
+        painter.text(after, Align2::LEFT_BOTTOM, caption, italic, INK_DIM);
     }
 }
 

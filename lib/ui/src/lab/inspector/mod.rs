@@ -76,7 +76,15 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     colour(ui, row, fx);
     if let Some(specimen) = data.specimens.get(&row.kind) {
         let figure = data.specimens.figure(&row.kind).unwrap_or(1) as u32;
+        let modified = session.filter(|s| sections::customised(s));
         margin_section(ui, "", false, |ui| {
+            if let Some(session) = modified {
+                let text = format!(
+                    "Catalog specimen described below; this channel runs {}.",
+                    session.title()
+                );
+                note(ui, &text, true);
+            }
             let (explanation, citation) = (&specimen.explanation, &specimen.citation);
             if let Some(url) = footnote(ui, figure, explanation, citation, &specimen.doi) {
                 fx.open_url = Some(url);

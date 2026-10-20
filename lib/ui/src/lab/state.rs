@@ -118,9 +118,9 @@ impl LabState {
         if alpha < 1.0 / 255.0 { 0.0 } else { alpha }
     }
 
-    /// Whether Escape belongs to the lab (closing a drawer or leaving presenter).
+    /// Whether Escape belongs to the lab (closing the settings popover or a drawer, or leaving presenter).
     pub fn consumes_escape(&self) -> bool {
-        self.drawer.is_some() || self.mode == LabMode::Presenter
+        self.drawer.is_some() || self.settings_open || self.mode == LabMode::Presenter
     }
 }
 

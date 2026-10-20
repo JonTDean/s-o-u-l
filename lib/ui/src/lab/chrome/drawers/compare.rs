@@ -8,21 +8,16 @@ use crate::{
 };
 use bevy::prelude::Resource;
 use bevy_egui::egui::{self, Sense, Ui, vec2};
-use engine_core::automata::channel::{ChannelAction, ChannelCommand, Status};
-use models::workbench::{
-    experiment::{export::write_bundle, metrics::describe},
-    plugin::Workbench,
-    project::{self, Project},
-    session::Session,
-};
+use engine_core::automata::channel::{ChannelAction, ChannelCommand, ChannelId, Status};
+use models::workbench::{experiment::metrics::describe, session::Session};
 
-/// Selected pair (session indices), export folder, status line and running export.
+/// Selected pair (by channel), export folder, status line and running export.
 #[derive(Resource)]
 pub struct Comparison {
-    /// Left session index.
-    pub left: usize,
-    /// Right session index.
-    pub right: usize,
+    /// Left channel; `None` once closed until the viewer picks again.
+    pub left: Option<ChannelId>,
+    /// Right channel.
+    pub right: Option<ChannelId>,
     /// Export output folder.
     pub folder: String,
     /// Last result or error.
@@ -34,12 +29,32 @@ pub struct Comparison {
 impl Default for Comparison {
     fn default() -> Self {
         Self {
-            left: 0,
-            right: 1,
+            left: None,
+            right: None,
             folder: "soul-export".into(),
             status: String::new(),
             job: None,
         }
+    }
+}
+
+impl Comparison {
+    /// Session indices of the chosen pair. With nothing chosen the first two sessions are
+    /// taken; a side whose channel has closed is cleared rather than replaced.
+    pub fn pair(&mut self, sessions: &[Session]) -> Option<(usize, usize)> {
+        if self.left.is_none() && self.right.is_none() && sessions.len() >= 2 {
+            (self.left, self.right) = (Some(sessions[0].channel), Some(sessions[1].channel));
+        }
+        let find =
+            |id: Option<ChannelId>| id.and_then(|id| sessions.iter().position(|s| s.channel == id));
+        let (left, right) = (find(self.left), find(self.right));
+        if left.is_none() {
+            self.left = None;
+        }
+        if right.is_none() {
+            self.right = None;
+        }
+        left.zip(right)
     }
 }
 
@@ -68,22 +83,34 @@ pub fn body(
             note(ui, "Open two CPU specimens to compare them.", false);
             return;
         }
-        let last = sessions.len() - 1;
-        (state.left, state.right) = (state.left.min(last), state.right.min(last));
-        for (salt, index) in [("left", &mut state.left), ("right", &mut state.right)] {
+        let pair = state.pair(sessions);
+        for (salt, side) in [("left", &mut state.left), ("right", &mut state.right)] {
+            let shown = side
+                .and_then(|id| sessions.iter().position(|s| s.channel == id))
+                .map_or("choose a session".into(), |i| {
+                    format!("{} · {}", i + 1, sessions[i].title())
+                });
             egui::ComboBox::from_id_salt(("lab.compare", salt))
-                .selected_text(format!("{} · {}", *index + 1, sessions[*index].title()))
+                .selected_text(shown)
                 .show_ui(ui, |ui| {
                     for (i, s) in sessions.iter().enumerate() {
-                        ui.selectable_value(index, i, format!("{} · {}", i + 1, s.title()));
+                        ui.selectable_value(
+                            side,
+                            Some(s.channel),
+                            format!("{} · {}", i + 1, s.title()),
+                        );
                     }
                 });
         }
+        let Some((left, right)) = pair else {
+            note(ui, "A compared channel closed; choose a session.", true);
+            return;
+        };
         if pill(ui, "Pause and step both", true, true).clicked() {
-            state.status = match pair_error(sessions, state.left, state.right) {
+            state.status = match pair_error(sessions, left, right) {
                 Some(error) => error.into(),
                 None => {
-                    for index in [state.left, state.right] {
+                    for index in [left, right] {
                         let id = sessions[index].channel;
                         fx.commands.push(ChannelCommand {
                             id,
@@ -99,12 +126,12 @@ pub fn body(
             };
         }
         ui.columns(2, |columns| {
-            for (column, index) in columns.iter_mut().zip([state.left, state.right]) {
+            for (column, index) in columns.iter_mut().zip([left, right]) {
                 thumbnail(column, &sessions[index]);
             }
         });
     });
-    exports(ui, state, &data.bench, saved_path);
+    super::exports::show(ui, state, &data.bench, saved_path);
 }
 
 fn thumbnail(ui: &mut Ui, session: &Session) {
@@ -126,72 +153,45 @@ fn thumbnail(ui: &mut Ui, session: &Session) {
     ui.label(serif_italic(describe(session)).size(size::LABEL + 1.0));
 }
 
-fn exports(ui: &mut Ui, state: &mut Comparison, bench: &Workbench, saved_path: &str) {
-    if state.job.as_ref().is_some_and(|job| job.is_finished()) {
-        let result = state.job.take().unwrap().join();
-        state.status = result
-            .unwrap_or_else(|_| Err("Export worker failed".into()))
-            .map_or_else(
-                |e| e,
-                |()| "Export complete: PNG, GIF, project and manifest".into(),
-            );
-    }
-    margin_section(ui, "export", false, |ui| {
-        ui.add(
-            egui::TextEdit::singleline(&mut state.folder).hint_text(serif_italic("output folder")),
-        );
-        note(
-            ui,
-            "30 frames, one transition per frame, 100 ms each. Choose a new folder.",
-            false,
-        );
-        let idle = state.job.is_none();
-        if pill(ui, "Export comparison", false, idle).clicked() {
-            let project = pair_project(bench, state.left, state.right);
-            start(state, project);
-        }
-        if pill(ui, "Export saved project (includes Lenia)", false, idle).clicked() {
-            start(state, project::read(std::path::Path::new(saved_path)));
-        }
-        if !state.status.is_empty() {
-            note(ui, &state.status, false);
-        }
-    });
-}
-
-/// A project holding only the chosen pair, left first.
-fn pair_project(bench: &Workbench, left: usize, right: usize) -> Result<Project, String> {
-    let mut project = Project::capture(bench, Vec::new())?;
-    if left == right || left >= project.sessions.len() || right >= project.sessions.len() {
-        return Err("Choose two different sessions".into());
-    }
-    let mut chosen = Vec::new();
-    for index in [left, right] {
-        let value = serde_json::to_value(&project.sessions[index]).map_err(|e| e.to_string())?;
-        chosen.push(serde_json::from_value(value).map_err(|e| e.to_string())?);
-    }
-    project.sessions = chosen;
-    project.selected = 0;
-    Ok(project)
-}
-
-fn start(state: &mut Comparison, project: Result<Project, String>) {
-    match project {
-        Err(e) => state.status = e,
-        Ok(project) => {
-            let folder = std::path::PathBuf::from(&state.folder);
-            state.job = Some(std::thread::spawn(move || {
-                write_bundle(&project, &folder, 30, 100)
-            }));
-            state.status = "Exporting isolated simulation copies…".into();
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use models::workbench::catalog::Kind;
+
+    #[test]
+    fn the_pair_follows_its_channels_when_tabs_close() {
+        use engine_core::automata::channel::ChannelId;
+        let session = |kind, id| {
+            let mut s = Session::new(kind);
+            s.channel = ChannelId(id);
+            s
+        };
+        let mut sessions = vec![
+            session(Kind::Life, 1),
+            session(Kind::Rule30, 2),
+            session(Kind::Rule110, 3),
+        ];
+        let mut state = Comparison::default();
+        assert_eq!(
+            state.pair(&sessions),
+            Some((0, 1)),
+            "defaults to the first two"
+        );
+        state.right = Some(ChannelId(3));
+        sessions.remove(0); // close the Life tab
+        assert_eq!(
+            state.pair(&sessions),
+            None,
+            "a closed channel is not silently replaced"
+        );
+        assert_eq!(state.left, None);
+        state.left = Some(ChannelId(2));
+        assert_eq!(
+            state.pair(&sessions),
+            Some((0, 1)),
+            "Rule 30 and Rule 110 by channel"
+        );
+    }
 
     #[test]
     fn pairs_must_be_distinct_and_able_to_advance() {

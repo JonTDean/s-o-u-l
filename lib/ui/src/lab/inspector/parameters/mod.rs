@@ -29,10 +29,19 @@ pub fn draft<'a>(
         edited: current.clone(),
     });
     if entry.original != *current {
-        *entry = Draft {
-            original: current.clone(),
-            edited: current.clone(),
-        };
+        // The transport and colour swatches change pace and colour directly; keep any
+        // pending rule edits and follow them. Anything else replaces the draft.
+        let mut paced = entry.original.clone();
+        (paced.rate_hz, paced.colour) = (current.rate_hz, current.colour);
+        if paced == *current {
+            (entry.edited.rate_hz, entry.edited.colour) = (current.rate_hz, current.colour);
+            entry.original = current.clone();
+        } else {
+            *entry = Draft {
+                original: current.clone(),
+                edited: current.clone(),
+            };
+        }
     }
     &mut entry.edited
 }
@@ -105,18 +114,25 @@ mod tests {
         let mut drafts = HashMap::new();
         let id = ChannelId(2);
         let mut current = Settings::for_kind(Kind::Life);
-        draft(&mut drafts, id, &current).birth = 0b1000;
+        draft(&mut drafts, id, &current).birth = 0b100_1000; // B36, not the B3 default
         assert_eq!(
             draft(&mut drafts, id, &current).birth,
-            0b1000,
+            0b100_1000,
             "edits persist"
         );
         current.rate_hz = 30.0; // applied elsewhere, e.g. the transport
+        current.colour = engine_core::automata::channel::SWATCHES[2];
+        let merged = draft(&mut drafts, id, &current).clone();
         assert_eq!(
-            *draft(&mut drafts, id, &current),
-            current,
-            "a changed session replaces the draft"
+            merged.birth, 0b100_1000,
+            "transport rate and colour keep pending edits"
         );
+        assert_eq!(
+            (merged.rate_hz, merged.colour),
+            (current.rate_hz, current.colour)
+        );
+        current.elementary = 90; // a rule applied elsewhere replaces the draft
+        assert_eq!(*draft(&mut drafts, id, &current), current);
     }
 
     #[test]

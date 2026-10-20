@@ -9,6 +9,7 @@ use crate::{
 use bevy::{ecs::system::SystemParam, prelude::ResMut};
 use bevy_egui::egui::{self, Frame, Sense};
 pub mod compare;
+pub mod exports;
 pub mod library;
 pub mod project;
 pub use compare::Comparison;

@@ -47,7 +47,9 @@ pub fn show(
                 let n = data.specimens.figure(&row.kind).unwrap_or(0);
                 let heading = format!("Specimen {n} · {}", specimen.group.label());
                 ui.label(serif_italic(heading).size(size::BODY + 1.0));
-                ui.label(serif(&specimen.title).size(24.0).color(INK_HI));
+                let session = data.bench.sessions.iter().find(|s| s.channel == row.id);
+                let title = crate::lab::chrome::tabs::title(row, &data.specimens, session);
+                ui.label(serif(title).size(24.0).color(INK_HI));
                 ui.label(serif_italic(&specimen.caption));
             });
     }

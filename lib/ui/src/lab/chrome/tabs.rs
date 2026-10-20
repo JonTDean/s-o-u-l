@@ -1,4 +1,5 @@
 //! Channel tabs: serif specimen names, status lamps, close and add.
+use crate::lab::inspector::sections::customised;
 use crate::{
     lab::{
         Effects, LabData,
@@ -11,10 +12,14 @@ use crate::{
 };
 use bevy_egui::egui::{self, Frame, Margin, Sense, Stroke};
 use engine_core::automata::channel::{ChannelAction, ChannelCommand, ChannelRow};
-use models::workbench::catalog::specimens::Specimens;
+use models::workbench::{catalog::specimens::Specimens, session::Session};
 
-/// Tab label: the specimen title, falling back to the catalog id.
-pub fn title(row: &ChannelRow, specimens: &Specimens) -> String {
+/// Tab label: the specimen title, or the session's own title once its rule, pattern or
+/// population departs from the catalog specimen; falls back to the catalog id.
+pub fn title(row: &ChannelRow, specimens: &Specimens, session: Option<&Session>) -> String {
+    if let Some(session) = session.filter(|s| customised(s)) {
+        return session.title();
+    }
     specimens
         .get(&row.kind)
         .map_or_else(|| row.kind.clone(), |s| s.title.clone())
@@ -37,7 +42,8 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                     let response = ui.horizontal(|ui| {
                         ui.spacing_mut().item_spacing.x = 6.0;
                         lamp(ui, row.status);
-                        let name = serif(title(row, &data.specimens))
+                        let session = data.bench.sessions.iter().find(|s| s.channel == row.id);
+                        let name = serif(title(row, &data.specimens, session))
                             .size(size::TITLE - 2.0)
                             .color(if selected { INK_HI } else { INK_DIM });
                         if ui

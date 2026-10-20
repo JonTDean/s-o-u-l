@@ -87,6 +87,49 @@ fn run_pause_step_reset_target_the_selected_channel() {
 }
 
 #[test]
+fn tab_titles_stop_claiming_the_catalog_specimen_once_customised() {
+    use models::workbench::{
+        catalog::{Kind, specimens::Specimens},
+        session::Session,
+    };
+    let specimens = Specimens::embedded();
+    let row = &channels(Status::Paused).rows[0];
+    let mut life = Session::new(Kind::Life);
+    assert_eq!(
+        super::chrome::tabs::title(row, &specimens, Some(&life)),
+        "Conway's Game of Life"
+    );
+    life.settings.birth = 0b100_1000;
+    assert_eq!(
+        super::chrome::tabs::title(row, &specimens, Some(&life)),
+        life.title()
+    );
+}
+
+#[test]
+fn escape_closes_the_settings_popover_first() {
+    let mut lab = LabState {
+        drawer: None,
+        settings_open: true,
+        ..default()
+    };
+    let mut fx = Effects::default();
+    assert!(
+        lab.consumes_escape(),
+        "the pause menu must not open behind the popover"
+    );
+    assert!(apply(
+        Shortcut::Back,
+        &mut lab,
+        &channels(Status::Paused),
+        false,
+        &mut fx
+    ));
+    assert!(!lab.settings_open);
+    assert!(!lab.consumes_escape());
+}
+
+#[test]
 fn escape_is_swallowed_only_when_lab_consumes_it() {
     let mut lab = LabState {
         drawer: Some(Drawer::Library),
