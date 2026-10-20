@@ -78,3 +78,5 @@ fn begin(
     state.status = "Waiting for both completed states…".into();
     Ok(())
 }
+#[cfg(test)]
+mod tests;
