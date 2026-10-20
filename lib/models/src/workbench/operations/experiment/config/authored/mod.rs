@@ -82,3 +82,6 @@ impl Rule {
         }
     }
 }
+
+#[cfg(test)]
+mod tests;
