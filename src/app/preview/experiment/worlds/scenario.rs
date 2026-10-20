@@ -1,5 +1,5 @@
 use super::*;
-use engine_core::automata::channel::Channels;
+use engine_core::automata::channel::{ChannelAction, ChannelCommand, Channels};
 use models::workbench::{catalog::Kind, session::Session};
 use simulation_kernel::core::{
     boundary::Boundary,
@@ -26,7 +26,7 @@ pub(super) fn configure(world: &mut World, owners: &[(Entity, ChannelId, LeniaSi
         s.undo_paint(true).unwrap();
     }
     bench.sessions[1].paint(&[[0, 0]], 0, true).unwrap();
-    for (i, (entity, _, _)) in owners.iter().enumerate() {
+    for (i, (entity, id, _)) in owners.iter().enumerate() {
         let mut s = world.get_mut::<LeniaSimulation>(*entity).unwrap();
         s.kernel = Some(Kernel {
             shape: if i == 0 {
@@ -39,12 +39,22 @@ pub(super) fn configure(world: &mut World, owners: &[(Entity, ChannelId, LeniaSi
         s.paused = true;
         s.reset();
         s.target_tick = 3;
+        world.send_event(ChannelCommand {
+            id: *id,
+            action: ChannelAction::SampleMetric(true),
+        });
     }
     let mut lab = world.resource_mut::<LabState>();
     lab.drawer = Some(Drawer::Compare);
 }
 pub(super) fn select(world: &mut World, ids: [ChannelId; 2]) {
     world.resource_mut::<Channels>().selected = Some(ids[0]);
+    for id in ids {
+        world.send_event(ChannelCommand {
+            id,
+            action: ChannelAction::SampleMetric(true),
+        });
+    }
     let mut c = world.resource_mut::<Comparison>();
     c.left = Some(ids[0]);
     c.right = Some(ids[1]);
