@@ -10,9 +10,9 @@ pub(super) fn body(ui:&mut Ui,state:&mut Comparison,data:&LabData,fx:&mut Effect
     }
     margin_section(ui,"compare",true,|ui| {
         for (label,side) in [("left",&mut state.left),("right",&mut state.right)] {
-            let shown=rows.iter().find(|r|Some(r.id)==*side).map_or("choose channel".into(),|r|format!("{} · {}",r.id.0,r.title));
+            let shown=rows.iter().find(|r|Some(r.id)==*side).map_or("choose channel".into(),|r|format!("{} · {}",r.id.0,r.kind));
             egui::ComboBox::from_id_salt(("lab.compare",label)).selected_text(shown).show_ui(ui,|ui| {
-                for row in rows {ui.selectable_value(side,Some(row.id),format!("{} · {}",row.id.0,row.title));}
+                for row in rows {ui.selectable_value(side,Some(row.id),format!("{} · {}",row.id.0,row.kind));}
             });
         }
         let Some((l,r))=state.left.zip(state.right).filter(|(l,r)|l!=r) else {note(ui,"Choose two different channels",true);return};

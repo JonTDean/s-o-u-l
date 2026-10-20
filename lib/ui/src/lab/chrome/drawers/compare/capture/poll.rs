@@ -1,6 +1,6 @@
 use super::*;
 use bevy::prelude::*;
-use engine_core::automata::{channel::{ChannelCommand,ChannelAction},lenia::LeniaSimulation};
+use engine_core::automata::{channel::{ChannelCommand},lenia::LeniaSimulation};
 use models::workbench::plugin::Workbench;
 pub fn poll(
     mut state: ResMut<super::super::Comparison>, bench:Res<Workbench>,

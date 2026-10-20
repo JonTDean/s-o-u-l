@@ -87,6 +87,7 @@ impl Plugin for LabPlugin {
             .init_resource::<engine_core::automata::lenia::ReadbackBusy>()
             .add_systems(PreUpdate, swallow_escape.after(bevy::input::InputSystem))
             .add_systems(Update, project::claim_mailbox)
+            .add_systems(EguiPrimaryContextPass, chrome::drawers::compare::capture::poll.before(draw).run_if(in_state(AppState::InGame)))
             .add_systems(
                 EguiPrimaryContextPass,
                 project::persist.run_if(in_state(AppState::InGame)),

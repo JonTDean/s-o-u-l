@@ -13,6 +13,8 @@ use models::workbench::{experiment::metrics::describe, session::Session};
 
 pub mod capture;
 mod controls;
+mod plots;
+mod export;
 
 /// Selected pair (by channel), export folder, status line and running export.
 #[derive(Resource)]
