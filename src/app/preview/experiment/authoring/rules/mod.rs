@@ -1,5 +1,6 @@
 //! Native configure, compare, save/load and export qualification for authored rules.
 use super::*;
+mod exchange;
 mod fixtures;
 mod flow;
 pub(super) fn install(app: &mut App) {
