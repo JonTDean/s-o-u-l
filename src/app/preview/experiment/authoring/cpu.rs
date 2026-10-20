@@ -36,9 +36,11 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
             };
             assert_eq!(pair[0].stamp.tick, 1);
             assert!(pair[0].field.compare(&pair[1].field).unwrap().maximum > 0.0);
+            world.resource_mut::<Comparison>().folder =
+                v.output.join("comparison").to_string_lossy().into();
             ui::lab::chrome::drawers::compare::export::write(
-                &v.output.join("comparison"),
-                pair,
+                world.resource::<Comparison>(),
+                world.resource::<Channels>(),
                 world.resource::<engine_core::automata::channel::metrics::Metrics>(),
             )
             .unwrap();

@@ -1,6 +1,7 @@
 //! Native experiment workflow qualification through production project controls.
 use bevy::prelude::*;
 use engine_core::{events::AutomataCommand, prelude::AppState};
+mod authoring;
 mod capture;
 mod checkpoint;
 mod flow;
@@ -19,6 +20,7 @@ pub(super) fn enabled() -> bool {
 }
 pub(super) fn install(app: &mut App) {
     worlds::install(app);
+    authoring::install(app);
     if let Some(output) = std::env::var_os("SOUL_EXPERIMENT_VERIFY") {
         let output = std::path::PathBuf::from(output);
         std::fs::create_dir_all(&output).unwrap();
