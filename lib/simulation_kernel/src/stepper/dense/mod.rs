@@ -1,6 +1,7 @@
 //! Single-threaded dense voxel stepper.
 
 pub mod parallel;
+use crate::core::boundary::Boundary;
 
 use glam::IVec3;
 use serde_json::Value;
@@ -19,6 +20,15 @@ pub fn step_dense<R: AutomatonRule<D = Dim> + ?Sized>(
     rule: &R,
     params: &Value,
 ) {
+    step_dense_boundary(grid, rule, params, Boundary::Dead);
+}
+
+pub fn step_dense_boundary<R: AutomatonRule<D = Dim> + ?Sized>(
+    grid: &mut DenseGrid,
+    rule: &R,
+    params: &Value,
+    boundary: Boundary,
+) {
     let snapshot = grid.voxels.clone();
     let mut next = snapshot.clone();
 
@@ -31,11 +41,7 @@ pub fn step_dense<R: AutomatonRule<D = Dim> + ?Sized>(
                 /* gather Moore-26 neighbourhood */
                 let mut nbhd = [CellState::Dead; 26];
                 for (i, off) in Dim::NEIGHBOUR_OFFSETS.iter().enumerate() {
-                    let q = p + *off;
-                    if (0..grid.size.x as i32).contains(&q.x)
-                        && (0..grid.size.y as i32).contains(&q.y)
-                        && (0..grid.size.z as i32).contains(&q.z)
-                    {
+                    if let Some(q) = boundary.coordinate(p + *off, grid.size) {
                         nbhd[i] = snapshot[grid.idx(q)].state;
                     }
                 }
