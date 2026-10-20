@@ -1,9 +1,7 @@
 //! Output-layer root plug-in – bundles menus, HUD overlays and the CPU
 //! active-grid renderer.
 
-use crate::{
-    components::plugin::ComponentsPlugin, overlays::plugin::OverlaysPlugin, theme::ThemePlugin,
-};
+use crate::{components::plugin::ComponentsPlugin, theme::ThemePlugin};
 use bevy::prelude::*;
 
 /// Adds every “output” feature: menus, HUD, file-export, renderers …
@@ -14,7 +12,6 @@ pub struct OutputPlugin;
         ┌────────────────────────────┐
         │   ui::OutputPlugin         │   ← egui menus, HUD, fade, etc.
         │   ├─ ui::components::*     │
-        │   ├─ ui::overlays::*       │
         │   └─ engine_render::ActiveAutomataRenderPlugin (re-export) ─┐
         └────────────────────────────┘                                │
                                                                       │ public API
@@ -26,6 +23,6 @@ pub struct OutputPlugin;
 */
 impl Plugin for OutputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((ThemePlugin, ComponentsPlugin, OverlaysPlugin));
+        app.add_plugins((ThemePlugin, ComponentsPlugin));
     }
 }

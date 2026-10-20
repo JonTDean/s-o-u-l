@@ -4,9 +4,14 @@
 
 use bevy::prelude::*;
 use bevy_egui::{EguiContexts, egui};
-use engine_core::{events::DebugSeedSquare, prelude::AutomataRegistry};
+use engine_core::{
+    events::{AutomatonId, DebugSeedSquare},
+    prelude::AutomataRegistry,
+};
 
-use crate::overlays::minimap::MinimapSelection;
+/// Automaton highlighted in the HUD list.
+#[derive(Resource, Default, Deref, DerefMut)]
+pub struct MinimapSelection(pub Option<AutomatonId>);
 
 /* --------------------------------------------------------------------- */
 

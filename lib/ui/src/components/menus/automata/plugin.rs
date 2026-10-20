@@ -18,6 +18,7 @@ impl Plugin for AutomataMenusPlugin {
             super::active_menu::workbench::persistence::ProjectPlugin,
             super::active_menu::workbench::comparison::ComparisonPlugin,
         ));
+        app.init_resource::<super::active_menu::MinimapSelection>();
         app.add_systems(
             EguiPrimaryContextPass,
             (
