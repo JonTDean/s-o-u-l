@@ -73,19 +73,34 @@ pub fn poll(
                             field::gpu(s)
                         }
                         Some(Err(e)) => return Err(e),
-                        _ => {probe.request(entity); return Ok(None)}
+                        _ => {
+                            probe.request(entity);
+                            return Ok(None);
+                        }
                     }
                 }
-                #[cfg(not(feature="gpu-compute"))]
-                {return Err("GPU comparison requires gpu-compute".into())}
+                #[cfg(not(feature = "gpu-compute"))]
+                {
+                    return Err("GPU comparison requires gpu-compute".into());
+                }
             };
-            frames.push(Frame {stamp:expected.clone(),field});
+            frames.push(Frame {
+                stamp: expected.clone(),
+                field,
+            });
         }
         Ok(Some(frames.try_into().expect("two comparison frames")))
     })();
     match result {
-        Ok(Some(pair)) => {state.capture.result=Some(pair); state.capture.pending=None; state.status="Captured both completed states".into();}
-        Err(e) => {state.capture.pending=None;state.status=e;}
+        Ok(Some(pair)) => {
+            state.capture.result = Some(pair);
+            state.capture.pending = None;
+            state.status = "Captured both completed states".into();
+        }
+        Err(e) => {
+            state.capture.pending = None;
+            state.status = e;
+        }
         Ok(None) => {}
     }
 }
