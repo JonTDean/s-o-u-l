@@ -4,6 +4,7 @@ use models::workbench::experiment::config::{
     Settings,
     authored::{Rule, composition::Program, storage},
 };
+mod layers;
 mod transfer;
 #[derive(Clone, Debug, Default)]
 pub struct Editor {
@@ -46,6 +47,7 @@ pub fn draw(ui: &mut Ui, settings: &mut Settings, editor: &mut Editor) {
                 .desired_width(f32::INFINITY)
                 .char_limit(storage::MAX_BYTES),
         );
+        layers::draw(ui, editor);
         transfer::draw(ui, editor);
         if ui.button("Validate and prepare rule").clicked() {
             match storage::parse(&editor.text) {
