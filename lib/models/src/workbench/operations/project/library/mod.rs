@@ -84,3 +84,6 @@ pub fn default_root() -> PathBuf {
                 .join("specimens")
         })
 }
+
+#[cfg(test)]
+mod tests;
