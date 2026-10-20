@@ -22,3 +22,8 @@ All 14 existing roots remain governed (0..3 child directories, 1..4 source files
 200 noncomment SLOC). Checkpoint at <=100 changed source lines. Completion requires
 workspace checks, native RTX/Mesa verification, decoded exports, project migration,
 comparison/continuation oracles, updated roadmap and a clean merged tree.
+
+Completed at qualified source `51ef54f`: all three implementation items and the
+Claude UI review/integration pass. [Final verification](../verification/worlds/README.md)
+records workspace checks, native RTX/Mesa runs, exports, window placement and
+commit/structural audits. The final delivery merges to local main; no remote publish.

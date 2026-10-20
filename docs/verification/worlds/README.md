@@ -63,4 +63,45 @@ The scenario exercises authored periodic worlds, undo/redo, completed CPU and GP
 comparison, CSV export, exact float checkpoint/load, CPU-oracle continuation,
 PNG/GIF export and screenshots through production systems.
 
-Qualification results and artifact links are recorded after the final runs below.
+## Qualification results (2026-10-20)
+
+Qualified source: `51ef54f`. The later README rewrite on main (`8ba323a`) was
+merged and preserved. Later commits record documentation and evidence only.
+
+- [Workspace checks](checks.log): 163 native tests, 9 doctests and 20 governance
+  tests pass; formatting and strict all-target/all-feature Clippy pass. One
+  pre-existing performance benchmark remains deliberately ignored by normal tests.
+  [Native build](build.log) passes. Runs used two build jobs and a 64 MiB compiler
+  stack after a dependency-only compiler crash in an earlier feature-variant build.
+- [Structural audit](structure.json): all 14 original roots, 379 source files,
+  largest file 185 noncomment SLOC, zero violations and no exceptions. Cohesive
+  modules separate world configuration, editing/history, continuous reference
+  semantics, completed capture, plots and exports. Existing public paths survive.
+  The [commit audit](commit-cadence.json) verifies every source checkpoint at no
+  more than 100 changed noncomment lines; the largest is 97.
+- RTX 3090/Vulkan and Mesa llvmpipe/Vulkan both complete the native workflow:
+  [RTX success](rtx3090/SUCCESS), [RTX log](rtx-runtime.log),
+  [Mesa success](mesa/SUCCESS), [Mesa log](mesa-runtime.log).
+  All 20 production GPU tests also pass on [Mesa](mesa-gpu.log), including both
+  continuous kernels, dead/periodic boundaries, radii 1/2/4 and restored buffers.
+- Reviewed screenshots show actual difference textures, metric traces, the
+  unchanged Instrument layout, edited dimensions and the XYZ model controls:
+  [RTX authored worlds](rtx3090/worlds.png),
+  [RTX continuous comparison](rtx3090/continuous-comparison.png),
+  [Mesa continuous comparison](mesa/continuous-comparison.png).
+- [Artifact validation](artifact-checks.json) decodes PNGs and two-frame GIFs,
+  verifies 100 ms frame timing, checks 512 CPU and 32,768 GPU difference rows per
+  renderer, and checks metric CSVs and capture metadata. Restored float states
+  are exact within each renderer. CPU projects match across renderers; the largest
+  RTX/Mesa float-density difference is `2e-7` (limit `1e-5`). Native mass samples
+  equal the sum of exact captured f32 densities within `1e-9`.
+- [Existing Lenia lifecycle](legacy-lenia/SUCCESS) and
+  [all twelve family examples](families/SUCCESS) pass again on RTX. Their readback,
+  session and stage-image ledgers accompany the captures.
+- [Live X11 window inspection](window-bounds.txt) records `(81,116)`, `1760×960`,
+  entirely inside monitor 1's `1920×1080` extent. Monitor 2 and its settings were
+  untouched. Logs include ALSA default-device warnings from startup; no simulation,
+  rendering, capture or project errors occurred in the successful final runs.
+
+Hosted CI, Windows/macOS runtime qualification and published-organism reproduction
+remain separate roadmap work. No remote push or release publication is part of this delivery.
