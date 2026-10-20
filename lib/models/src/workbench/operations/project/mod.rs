@@ -20,7 +20,7 @@ impl Project {
         )
         .map_err(|e| e.to_string())?;
         let project = Self {
-            version: 1,
+            version: 2,
             selected: bench.selected,
             sessions,
             lenia,
@@ -29,10 +29,10 @@ impl Project {
         Ok(project)
     }
     pub fn validate(&self) -> Result<(), String> {
-        if self.version != 1 {
+        if !matches!(self.version, 1 | 2) {
             return Err("Unsupported project version".into());
         }
-        if self.sessions.len() > 8
+        if self.sessions.len() + self.lenia.len() > 8
             || self.lenia.len() > 8
             || self.selected >= self.sessions.len().max(1)
         {

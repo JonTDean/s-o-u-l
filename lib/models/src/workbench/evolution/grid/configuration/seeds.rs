@@ -10,7 +10,16 @@ use simulation_kernel::core::cell::CellState;
 impl GridSession {
     /// Build a validated initial condition without preserving old history.
     pub fn configured(kind: Kind, settings: &Settings) -> Self {
-        let mut session = Self::new(kind);
+        let mut session = Self::with_size(kind, settings.world.size(kind));
+        session.boundary = settings.world.boundary;
+        if let Some(seed) = &settings.world.seed {
+            for (cell, value) in session.grid.voxels.iter_mut().zip(seed) {
+                cell.state = CellState::from(*value);
+            }
+            session.history.clear();
+            session.record();
+            return session;
+        }
         if matches!(settings.pattern, Pattern::Default | Pattern::Glider) {
             return session;
         }

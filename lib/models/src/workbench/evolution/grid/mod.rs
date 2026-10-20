@@ -20,6 +20,8 @@ use crate::workbench::experiment::config::Settings;
 #[serde(deny_unknown_fields)]
 pub struct GridSession {
     pub grid: DenseGrid,
+    #[serde(default)]
+    pub boundary: simulation_kernel::core::boundary::Boundary,
     pub history: VecDeque<Vec<u8>>,
     pub(crate) kind: Kind,
 }
@@ -27,10 +29,13 @@ impl GridSession {
     /// Initializes a single-cell elementary seed, Life glider, or colliding gas.
     pub fn new(kind: Kind) -> Self {
         let line = matches!(kind, Kind::Rule30 | Kind::Rule110);
-        let mut grid = DenseGrid::blank(UVec3::new(64, if line { 1 } else { 64 }, 1));
+        Self::with_size(kind, UVec3::new(64, if line { 1 } else { 64 }, 1))
+    }
+    pub(super) fn with_size(kind: Kind, size: UVec3) -> Self {
+        let mut grid = DenseGrid::blank(size);
         match kind {
             Kind::Rule30 | Kind::Rule110 => {
-                grid.set_state(IVec3::new(32, 0, 0), CellState::Alive(255))
+                grid.set_state(IVec3::new((size.x / 2) as i32, 0, 0), CellState::Alive(255))
             }
             Kind::Life => {
                 let mut backend = GridBackend::Dense(grid);
@@ -41,9 +46,15 @@ impl GridSession {
                 grid = seeded;
             }
             Kind::Hpp => {
-                for y in 20..44 {
-                    grid.set_state(IVec3::new(24, y, 0), CellState::Alive(E));
-                    grid.set_state(IVec3::new(40, y, 0), CellState::Alive(W));
+                for y in (size.y * 5 / 16) as i32..(size.y * 11 / 16) as i32 {
+                    grid.set_state(
+                        IVec3::new((size.x * 3 / 8) as i32, y, 0),
+                        CellState::Alive(E),
+                    );
+                    grid.set_state(
+                        IVec3::new((size.x * 5 / 8) as i32, y, 0),
+                        CellState::Alive(W),
+                    );
                 }
             }
             _ => unreachable!("grid kind required"),
@@ -51,6 +62,7 @@ impl GridSession {
         let mut session = Self {
             grid,
             history: VecDeque::new(),
+            boundary: Default::default(),
             kind,
         };
         session.record();

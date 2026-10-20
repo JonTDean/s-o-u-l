@@ -15,16 +15,13 @@ pub(super) fn session(s: &Session) -> Result<(), String> {
     }
     let valid = match (&s.model, s.kind) {
         (Model::Grid(g), Kind::Rule30 | Kind::Rule110 | Kind::Life | Kind::Hpp) => {
-            let rows = if matches!(s.kind, Kind::Rule30 | Kind::Rule110) {
-                1
-            } else {
-                64
-            };
+            let size = s.settings.world.size(s.kind);
             g.kind == s.kind
-                && g.grid.size == glam::UVec3::new(64, rows, 1)
-                && g.grid.voxels.len() == 64 * rows as usize
+                && g.grid.size == size
+                && g.boundary == s.settings.world.boundary
+                && g.grid.voxels.len() == (size.x * size.y) as usize
                 && g.history.len() <= 64
-                && g.history.iter().all(|r| r.len() == 64)
+                && g.history.iter().all(|r| r.len() == size.x as usize)
         }
         (Model::Boids(f), Kind::Boids) => {
             f.boids.len() == s.settings.agent_count
