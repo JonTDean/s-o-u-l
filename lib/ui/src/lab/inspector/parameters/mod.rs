@@ -31,7 +31,7 @@ pub fn draft<'a>(
     let entry = drafts.entry(id).or_insert_with(|| Draft {
         original: current.clone(),
         edited: current.clone(),
-        editor: Default::default(),
+        editor: authored::Editor::for_settings(current),
     });
     if entry.original != *current {
         // The transport and colour swatches change pace and colour directly; keep any
@@ -45,7 +45,7 @@ pub fn draft<'a>(
             *entry = Draft {
                 original: current.clone(),
                 edited: current.clone(),
-                editor: Default::default(),
+                editor: authored::Editor::for_settings(current),
             };
         }
     }
@@ -89,11 +89,11 @@ pub fn show(
         draft(drafts, id, &session.settings);
         let entry = drafts.get_mut(&id).unwrap();
         let edited = &mut entry.edited;
-        fields::draw(ui, session.kind, edited);
         if session.kind == models::workbench::catalog::Kind::Life {
-            authored::draw(ui, edited, &mut entry.editor);
             energy::draw(ui, edited);
+            authored::draw(ui, edited, &mut entry.editor);
         }
+        fields::draw(ui, session.kind, edited);
         note(
             ui,
             "Rate and rule apply live; seed, population and energy need a reset.",
