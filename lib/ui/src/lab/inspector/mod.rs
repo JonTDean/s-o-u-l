@@ -78,6 +78,20 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         let figure = data.specimens.figure(&row.kind).unwrap_or(1) as u32;
         let modified = session.filter(|s| sections::customised(s));
         margin_section(ui, "", false, |ui| {
+            if data.lenia.iter().any(|(id, sim)| {
+                *id == row.id
+                    && sim.kernel.is_some_and(|k| {
+                        k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium
+                    })
+            }) {
+                let explanation = "Published Orbium bicaudatus: periodic XY, radius 13, polynomial kernel and growth. The library seed restores the published parameters.";
+                if let Some(url) =
+                    footnote(ui, figure, explanation, &specimen.citation, &specimen.doi)
+                {
+                    fx.open_url = Some(url);
+                }
+                return;
+            }
             if let Some(session) = modified {
                 let text = format!(
                     "Catalog specimen described below; this channel runs {}.",

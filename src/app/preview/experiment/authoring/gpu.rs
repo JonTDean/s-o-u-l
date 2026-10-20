@@ -65,9 +65,50 @@ pub(super) fn run(world: &mut World, v: &mut Verification) {
             v.phase = 9;
         }
         9 if v.captured.load(std::sync::atomic::Ordering::Acquire) => {
+            let (owner, mut sim) = world
+                .query::<(Entity, &mut LeniaSimulation)>()
+                .iter_mut(world)
+                .next()
+                .unwrap();
+            sim.target_tick = 10;
+            world.resource::<engine_gpu::LeniaProbe>().request(owner);
+            v.phase = 10;
+        }
+        10 => {
+            let owner = world
+                .query_filtered::<Entity, With<LeniaSimulation>>()
+                .iter(world)
+                .next()
+                .unwrap();
+            let probe = world.resource::<engine_gpu::LeniaProbe>();
+            let Some(Ok(snapshot)) = probe.latest(owner) else {
+                probe.request(owner);
+                return;
+            };
+            if snapshot.tick != 10 {
+                probe.request(owner);
+                return;
+            }
+            let values = snapshot.continuous.unwrap().values;
+            let fixture: serde_json::Value = serde_json::from_str(include_str!(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/assets/specimens/orbium-reference.json"
+            )))
+            .unwrap();
+            let error = values[4 * 4096..5 * 4096]
+                .iter()
+                .zip(fixture["states"]["10"].as_array().unwrap())
+                .map(|(a, b)| (*a as f64 - b.as_f64().unwrap()).abs())
+                .fold(0.0, f64::max);
+            assert!(error < 0.002, "native Orbium reference error {error}");
+            std::fs::write(
+                v.output.join("orbium-error.txt"),
+                format!("tick 10 max FFT error {error}\n"),
+            )
+            .unwrap();
             std::fs::write(v.output.join("SUCCESS"), "Native scenarios, completed comparison CSV, exact CPU/GPU specimens, duplicates, animations, voxel entities and published Orbium passed.\n").unwrap();
             world.send_event(AppExit::Success);
-            v.phase = 10;
+            v.phase = 11;
         }
         _ => {}
     }
