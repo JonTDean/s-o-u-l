@@ -1,0 +1,1338 @@
+{
+  "version": 2,
+  "selected": 0,
+  "sessions": [
+    {
+      "kind": "Life",
+      "input": "",
+      "model": {
+        "Grid": {
+          "grid": {
+            "voxels": [
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              },
+              {
+                "state": "Dead",
+                "memory": null
+              }
+            ],
+            "size": [
+              16,
+              16,
+              1
+            ]
+          },
+          "boundary": "Dead",
+          "history": [],
+          "kind": "Life"
+        }
+      },
+      "ticks": 1,
+      "paused": true,
+      "settings": {
+        "world": {
+          "width": 16,
+          "height": 16,
+          "boundary": "Dead",
+          "seed": [
+            255,
+            255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "rate_hz": 10.0,
+        "pattern": "Default",
+        "random_seed": 1397708108,
+        "elementary": 30,
+        "birth": 8,
+        "survival": 12,
+        "cohesion": 0.002,
+        "alignment": 0.08,
+        "separation": 0.1,
+        "separation_distance": 4.0,
+        "agent_count": 24,
+        "evaporation": 0.01,
+        "deposit": 1.0,
+        "exploration": 0.0,
+        "colour": [
+          255,
+          181,
+          71
+        ]
+      },
+      "elapsed": 0.0
+    }
+  ],
+  "lenia": []
+}

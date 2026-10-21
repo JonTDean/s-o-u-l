@@ -51,6 +51,7 @@ impl Session {
             grid.grid
                 .set_state(glam::IVec3::new(*x, *y, 0), CellState::from(value));
         }
+        grid.reset_energy(self.settings.energy.as_ref());
         self.settings.world.seed = Some(grid.bytes());
         grid.history.clear();
         grid.record();

@@ -1,0 +1,69 @@
+{
+  "product_source": "c21b634e89779eacafd4c29546648429093be4eb",
+  "platforms": [
+    {
+      "platform": "linux",
+      "job_url": "https://github.com/JonTDean/s-o-u-l/actions/runs/39453442892/job/118734018273",
+      "commit": "d621f89dfcac841275d8f72dc7c4065314955242",
+      "result": "success",
+      "adapter": "Mesa llvmpipe / Vulkan",
+      "image_size": [
+        1280,
+        720
+      ],
+      "image_sha256": "21c958d1c5dfb84dbaa61f95af7667e05c88d05b4651824ffbe33d10eaaab476"
+    },
+    {
+      "platform": "macos",
+      "job_url": "https://github.com/JonTDean/s-o-u-l/actions/runs/39448697285/job/118717398021",
+      "commit": "c21b634e89779eacafd4c29546648429093be4eb",
+      "result": "success",
+      "adapter": "Apple Paravirtual device / Metal",
+      "image_size": [
+        1024,
+        653
+      ],
+      "image_sha256": "7009a81bd16af7984486e49924142ac6c169d04f36f79098313addb685a7625a"
+    },
+    {
+      "platform": "windows",
+      "job_url": "https://github.com/JonTDean/s-o-u-l/actions/runs/39448697285/job/118717398046",
+      "commit": "c21b634e89779eacafd4c29546648429093be4eb",
+      "result": "success",
+      "adapter": "Microsoft Basic Render Driver / DX12",
+      "image_size": [
+        1280,
+        720
+      ],
+      "image_sha256": "b8e5c05886d51ca1fe6504360072fa55d8c0f88308256ebddfcadd1a53c130d9"
+    }
+  ],
+  "source_checks": {
+    "conclusion": "success",
+    "databaseId": 39453416333,
+    "headSha": "d621f89dfcac841275d8f72dc7c4065314955242",
+    "status": "completed",
+    "url": "https://github.com/JonTDean/s-o-u-l/actions/runs/39453416333"
+  },
+  "benchmarks": {
+    "run_id": 39448697285,
+    "job_id": 118717397532,
+    "result": "success",
+    "cases": 27
+  },
+  "scope": "Linux full workspace including Vulkan GPU numerical tests; Windows/macOS CPU contracts plus native build and rendered boot. Product source is identical across these commits; later changes affect CI and documentation only.",
+  "corrected_attempts": [
+    {
+      "run_id": 39444909192,
+      "failure": "CMake 4 rejected the shader dependency old policy minimum; compatible policy set explicitly."
+    },
+    {
+      "run_id": 39446408890,
+      "failure": "Apple compile attempted unsupported Vulkan interop; cfg now matches wgpu native Vulkan platforms. Linux lacked X11 keyboard runtime; dependency installed."
+    },
+    {
+      "run_id": 39448697285,
+      "failure": "Linux window smoke used the earlier missing X11 dependency; successful targeted rerun is 39453442892. Windows and macOS jobs succeeded."
+    }
+  ]
+}

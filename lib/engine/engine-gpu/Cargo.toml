@@ -4,7 +4,7 @@
 # ------------------------------------------------------------
 [package]
 name    = "engine-gpu"
-version = "0.1.0"
+version = "0.0.2"
 edition = "2024"
 
 [dependencies]
@@ -31,3 +31,6 @@ default        = []
 mesh_shaders   = ["ash", "naga_oil"]     # optional deps become features automatically
 fallback_spirv = ["shaderc"]
 gpu-debug      = []
+
+[dev-dependencies]
+serde_json = { workspace = true }

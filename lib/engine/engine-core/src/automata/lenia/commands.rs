@@ -67,6 +67,11 @@ fn apply_commands(
             }
             LeniaAction::Seed(seed) => {
                 sim.seed = seed;
+                if seed == LeniaSeed::Orbium {
+                    sim.kernel = Some(simulation_kernel::core::lenia::continuous::orbium::KERNEL);
+                    sim.params = simulation_kernel::core::lenia::continuous::orbium::PARAMS;
+                    sim.paused = true;
+                }
                 sim.reset();
             }
         }

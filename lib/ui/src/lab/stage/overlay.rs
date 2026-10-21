@@ -16,7 +16,13 @@ pub const GPU_ARENA: &str = "64 × 64 × 8 · zero edges · GPU";
 pub fn gpu_arena(sim: &engine_core::automata::lenia::LeniaSimulation) -> String {
     sim.kernel.map_or_else(
         || GPU_ARENA.into(),
-        |k| format!("64 × 64 × 8 · {:?} · f32 XYZ GPU", k.boundary),
+        |k| {
+            if k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium {
+                "64 × 64 · periodic · f32 Orbium XY GPU".into()
+            } else {
+                format!("64 × 64 × 8 · {:?} · f32 XYZ GPU", k.boundary)
+            }
+        },
     )
 }
 /// Draw the overlay and caption for the selected channel.
@@ -66,7 +72,15 @@ pub fn chrome(
                 .lenia
                 .iter()
                 .any(|(id, s)| *id == row.id && s.kernel.is_some());
-        let caption = if modified {
+        let orbium = data.lenia.iter().any(|(id, s)| {
+            *id == row.id
+                && s.kernel.is_some_and(|k| {
+                    k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium
+                })
+        });
+        let caption = if orbium {
+            "Orbium bicaudatus · polynomial periodic XY model (Chan).".into()
+        } else if modified {
             format!(
                 "{} (catalog figure; this channel is modified)",
                 specimen.caption

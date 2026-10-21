@@ -1,0 +1,92 @@
+[
+  {
+    "height": 720,
+    "image": "lenia-phase-0.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 72756,
+    "stage": [
+      32,
+      28,
+      992,
+      652
+    ],
+    "warm_pixels": 72756,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-3.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 74296,
+    "stage": [
+      32,
+      28,
+      992,
+      652
+    ],
+    "warm_pixels": 74296,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-6.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 75279,
+    "stage": [
+      32,
+      28,
+      992,
+      652
+    ],
+    "warm_pixels": 75279,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-7.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 71890,
+    "stage": [
+      32,
+      28,
+      992,
+      652
+    ],
+    "warm_pixels": 71890,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-8.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 0,
+    "stage": [
+      32,
+      28,
+      1028,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "lenia-phase-9.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 71890,
+    "stage": [
+      32,
+      28,
+      992,
+      652
+    ],
+    "warm_pixels": 71890,
+    "width": 1280
+  }
+]

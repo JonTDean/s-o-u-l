@@ -14,7 +14,8 @@
 //!   into Bevy’s render graph when mesh shaders are supported.
 //!
 //! This module is compiled and included only when the `mesh_shaders` Cargo feature is enabled
-//! **and** the app is running on the Vulkan backend (since other backends do not support mesh shaders).
+//! on targets where wgpu enables native Vulkan (Windows and non-Apple Unix).
+//! Its runtime context also requires the Vulkan backend; Apple uses portable Metal.
 //!
 //! ────────────────────────────────────────────────────────────────────
 //! © 2025 Obaven Inc. — Apache-2.0 OR MIT

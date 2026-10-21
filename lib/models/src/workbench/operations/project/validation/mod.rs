@@ -16,10 +16,19 @@ pub(super) fn session(s: &Session) -> Result<(), String> {
     let valid = match (&s.model, s.kind) {
         (Model::Grid(g), Kind::Rule30 | Kind::Rule110 | Kind::Life | Kind::Hpp) => {
             let size = s.settings.world.size(s.kind);
-            g.kind == s.kind
+            g.valid_energy(s.settings.energy.as_ref())
+                && g.kind == s.kind
                 && g.grid.size == size
                 && g.boundary == s.settings.world.boundary
                 && g.grid.voxels.len() == (size.x * size.y) as usize
+                && g.bytes().iter().all(|v| {
+                    if s.kind == Kind::Hpp {
+                        *v <= 15
+                    } else {
+                        *v == 0 || *v == 255
+                    }
+                })
+                && g.history.iter().flatten().all(|v| *v == 0 || *v == 255)
                 && g.history.len() <= 64
                 && g.history.iter().all(|r| r.len() == size.x as usize)
         }

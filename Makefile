@@ -1,4 +1,4 @@
-.PHONY: check governance format-check lint test preview lenia verify-lenia automata verify-automata
+.PHONY: check governance format-check lint test preview lenia verify-lenia automata verify-automata experiment verify-experiment benchmark-sparse verify-authoring verify-boot benchmark-steppers
 
 check: governance format-check lint test
 
@@ -39,3 +39,19 @@ verify-experiment:
 
 benchmark-sparse:
 	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo test -p simulation_kernel --release sparse_benchmark -- --ignored --nocapture
+
+verify-authoring:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_AUTHORING_VERIFY="$${SOUL_AUTHORING_VERIFY:-/tmp/soul-authoring-verification}" cargo run -- --experiment-demo
+
+verify-boot:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_BOOT_VERIFY="$${SOUL_BOOT_VERIFY:-/tmp/soul-boot-verification}" cargo run -- --automata-demo
+
+benchmark-steppers:
+	RAYON_NUM_THREADS="$${RAYON_NUM_THREADS:-4}" cargo bench -p simulation_kernel --bench steppers -- --noplot
+
+.PHONY: rules verify-rules
+rules:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan cargo run --all-features -- --rules-demo
+
+verify-rules:
+	env -u WAYLAND_DISPLAY -u WAYLAND_SOCKET WGPU_BACKEND=vulkan SOUL_RULES_VERIFY="$${SOUL_RULES_VERIFY:-/tmp/soul-rules-verification}" cargo run --all-features -- --experiment-demo

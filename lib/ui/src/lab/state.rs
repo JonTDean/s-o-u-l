@@ -28,6 +28,10 @@ pub enum Drawer {
 /// UI-only state; nothing here affects simulation.
 #[derive(Resource, Debug)]
 pub struct LabState {
+    /// Guided scenario and current presenter cue.
+    pub guide: super::chrome::drawers::library::guides::Guide,
+    /// Named specimen library drafts.
+    pub authoring: super::chrome::drawers::library::authored::Authoring,
     /// Stage authoring tool and in-progress stroke.
     pub editor: super::stage::editing::Editor,
     /// Workbench or presenter.
@@ -60,6 +64,8 @@ impl Default for LabState {
     fn default() -> Self {
         Self {
             editor: Default::default(),
+            authoring: Default::default(),
+            guide: Default::default(),
             mode: LabMode::Workbench,
             drawer: Some(Drawer::Library), // the library opens on first launch
             settings_open: false,

@@ -1,6 +1,6 @@
 [package]
 name = "simulation_kernel"
-version = "0.1.0"
+version = "0.0.2"
 edition = "2024"
 
 [dependencies]
@@ -8,3 +8,9 @@ glam        = { workspace = true }
 serde       = { workspace = true, features = ["derive"] }
 serde_json  = { workspace = true }
 rayon       = { workspace = true }
+[dev-dependencies]
+criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+
+[[bench]]
+name = "steppers"
+harness = false

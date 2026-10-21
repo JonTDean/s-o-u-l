@@ -27,7 +27,7 @@ pub(super) fn request(world: &mut World, verification: &mut Verification, name: 
         move |trigger: Trigger<ScreenshotCaptured>| {
             let row = stage_check::record(&output, &file, &trigger.event().0, stage);
             assert!(
-                row["warm_pixels"].as_u64() > Some(0),
+                row["specimen_pixels"].as_u64() > Some(0),
                 "{file}: no specimen pixels in the stage: {row}"
             );
             assert_eq!(

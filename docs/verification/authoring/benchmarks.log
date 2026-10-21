@@ -1,0 +1,216 @@
+    Finished `bench` profile [optimized] target(s) in 0.16s
+     Running benches/steppers.rs (/tmp/soul-bench-target/release/deps/steppers-59bad9b79c97eaac)
+Benchmarking life_step/dense/64-1pct
+Benchmarking life_step/dense/64-1pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/64-1pct: Collecting 10 samples in estimated 1.0214 s (1045 iterations)
+Benchmarking life_step/dense/64-1pct: Analyzing
+life_step/dense/64-1pct time:   [860.11 µs 1.1063 ms 1.2820 ms]
+                        change: [+2.8219% +16.175% +32.409%] (p = 0.04 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking life_step/dense_parallel/64-1pct
+Benchmarking life_step/dense_parallel/64-1pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/64-1pct: Collecting 10 samples in estimated 1.0080 s (2090 iterations)
+Benchmarking life_step/dense_parallel/64-1pct: Analyzing
+life_step/dense_parallel/64-1pct
+                        time:   [286.43 µs 305.83 µs 325.07 µs]
+                        change: [+46.653% +58.267% +71.350%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking life_step/sparse/64-1pct
+Benchmarking life_step/sparse/64-1pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/64-1pct: Collecting 10 samples in estimated 1.0026 s (715 iterations)
+Benchmarking life_step/sparse/64-1pct: Analyzing
+life_step/sparse/64-1pct
+                        time:   [1.3549 ms 1.3965 ms 1.4435 ms]
+                        change: [+0.5221% +5.4076% +10.668%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Benchmarking life_step/sparse_parallel/64-1pct
+Benchmarking life_step/sparse_parallel/64-1pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/64-1pct: Collecting 10 samples in estimated 1.0062 s (2090 iterations)
+Benchmarking life_step/sparse_parallel/64-1pct: Analyzing
+life_step/sparse_parallel/64-1pct
+                        time:   [376.32 µs 427.47 µs 475.97 µs]
+                        change: [+2.6747% +10.613% +19.486%] (p = 0.03 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking life_step/dense/64-10pct
+Benchmarking life_step/dense/64-10pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/64-10pct: Collecting 10 samples in estimated 1.0681 s (660 iterations)
+Benchmarking life_step/dense/64-10pct: Analyzing
+life_step/dense/64-10pct
+                        time:   [1.2367 ms 1.3728 ms 1.4933 ms]
+                        change: [+54.947% +72.821% +89.461%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking life_step/dense_parallel/64-10pct
+Benchmarking life_step/dense_parallel/64-10pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/64-10pct: Collecting 10 samples in estimated 1.0118 s (2695 iterations)
+Benchmarking life_step/dense_parallel/64-10pct: Analyzing
+life_step/dense_parallel/64-10pct
+                        time:   [224.61 µs 274.83 µs 336.31 µs]
+                        change: [+33.969% +48.952% +65.194%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high severe
+Benchmarking life_step/sparse/64-10pct
+Benchmarking life_step/sparse/64-10pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/64-10pct: Collecting 10 samples in estimated 1.0851 s (605 iterations)
+Benchmarking life_step/sparse/64-10pct: Analyzing
+life_step/sparse/64-10pct
+                        time:   [1.6863 ms 1.6998 ms 1.7194 ms]
+                        change: [+11.923% +13.333% +14.889%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking life_step/sparse_parallel/64-10pct
+Benchmarking life_step/sparse_parallel/64-10pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/64-10pct: Collecting 10 samples in estimated 1.0017 s (1705 iterations)
+Benchmarking life_step/sparse_parallel/64-10pct: Analyzing
+life_step/sparse_parallel/64-10pct
+                        time:   [458.61 µs 462.81 µs 465.93 µs]
+                        change: [+4.7761% +6.4024% +7.8716%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking life_step/dense/64-50pct
+Benchmarking life_step/dense/64-50pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/64-50pct: Collecting 10 samples in estimated 1.0522 s (935 iterations)
+Benchmarking life_step/dense/64-50pct: Analyzing
+life_step/dense/64-50pct
+                        time:   [792.60 µs 825.13 µs 847.53 µs]
+                        change: [-4.5291% +0.3404% +5.0973%] (p = 0.90 > 0.05)
+                        No change in performance detected.
+Benchmarking life_step/dense_parallel/64-50pct
+Benchmarking life_step/dense_parallel/64-50pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/64-50pct: Collecting 10 samples in estimated 1.0017 s (1980 iterations)
+Benchmarking life_step/dense_parallel/64-50pct: Analyzing
+life_step/dense_parallel/64-50pct
+                        time:   [190.62 µs 195.18 µs 201.15 µs]
+                        change: [-9.3002% -3.3734% +1.9435%] (p = 0.34 > 0.05)
+                        No change in performance detected.
+Benchmarking life_step/sparse/64-50pct
+Benchmarking life_step/sparse/64-50pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/64-50pct: Collecting 10 samples in estimated 1.0937 s (550 iterations)
+Benchmarking life_step/sparse/64-50pct: Analyzing
+life_step/sparse/64-50pct
+                        time:   [1.7612 ms 1.8067 ms 1.8338 ms]
+                        change: [-5.4113% -1.8681% +2.0956%] (p = 0.36 > 0.05)
+                        No change in performance detected.
+Benchmarking life_step/sparse_parallel/64-50pct
+Benchmarking life_step/sparse_parallel/64-50pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/64-50pct: Collecting 10 samples in estimated 1.0328 s (1210 iterations)
+Benchmarking life_step/sparse_parallel/64-50pct: Analyzing
+life_step/sparse_parallel/64-50pct
+                        time:   [541.66 µs 545.70 µs 548.38 µs]
+                        change: [-2.1736% -0.7356% +0.6251%] (p = 0.36 > 0.05)
+                        No change in performance detected.
+Benchmarking life_step/dense/128-1pct
+Benchmarking life_step/dense/128-1pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/128-1pct: Collecting 10 samples in estimated 1.0455 s (275 iterations)
+Benchmarking life_step/dense/128-1pct: Analyzing
+life_step/dense/128-1pct
+                        time:   [3.2856 ms 3.3881 ms 3.5005 ms]
+Benchmarking life_step/dense_parallel/128-1pct
+Benchmarking life_step/dense_parallel/128-1pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/128-1pct: Collecting 10 samples in estimated 1.0119 s (770 iterations)
+Benchmarking life_step/dense_parallel/128-1pct: Analyzing
+life_step/dense_parallel/128-1pct
+                        time:   [653.50 µs 671.34 µs 707.58 µs]
+Benchmarking life_step/sparse/128-1pct
+Benchmarking life_step/sparse/128-1pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/128-1pct: Collecting 10 samples in estimated 1.3166 s (220 iterations)
+Benchmarking life_step/sparse/128-1pct: Analyzing
+life_step/sparse/128-1pct
+                        time:   [5.3528 ms 5.4380 ms 5.5498 ms]
+Benchmarking life_step/sparse_parallel/128-1pct
+Benchmarking life_step/sparse_parallel/128-1pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/128-1pct: Collecting 10 samples in estimated 1.0316 s (550 iterations)
+Benchmarking life_step/sparse_parallel/128-1pct: Analyzing
+life_step/sparse_parallel/128-1pct
+                        time:   [1.3059 ms 1.3181 ms 1.3335 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking life_step/dense/128-10pct
+Benchmarking life_step/dense/128-10pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/128-10pct: Collecting 10 samples in estimated 1.1412 s (275 iterations)
+Benchmarking life_step/dense/128-10pct: Analyzing
+life_step/dense/128-10pct
+                        time:   [3.4486 ms 3.5053 ms 3.6014 ms]
+Benchmarking life_step/dense_parallel/128-10pct
+Benchmarking life_step/dense_parallel/128-10pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/128-10pct: Collecting 10 samples in estimated 1.0193 s (770 iterations)
+Benchmarking life_step/dense_parallel/128-10pct: Analyzing
+life_step/dense_parallel/128-10pct
+                        time:   [664.28 µs 672.17 µs 682.14 µs]
+Benchmarking life_step/sparse/128-10pct
+Benchmarking life_step/sparse/128-10pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/128-10pct: Collecting 10 samples in estimated 1.0872 s (165 iterations)
+Benchmarking life_step/sparse/128-10pct: Analyzing
+life_step/sparse/128-10pct
+                        time:   [6.3105 ms 6.4547 ms 6.6091 ms]
+Benchmarking life_step/sparse_parallel/128-10pct
+Benchmarking life_step/sparse_parallel/128-10pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/128-10pct: Collecting 10 samples in estimated 1.0170 s (440 iterations)
+Benchmarking life_step/sparse_parallel/128-10pct: Analyzing
+life_step/sparse_parallel/128-10pct
+                        time:   [1.6478 ms 1.6548 ms 1.6698 ms]
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low mild
+  2 (20.00%) high severe
+Benchmarking life_step/dense/128-50pct
+Benchmarking life_step/dense/128-50pct: Warming up for 200.00 ms
+Benchmarking life_step/dense/128-50pct: Collecting 10 samples in estimated 1.0334 s (220 iterations)
+Benchmarking life_step/dense/128-50pct: Analyzing
+life_step/dense/128-50pct
+                        time:   [3.4298 ms 3.6237 ms 3.7940 ms]
+Benchmarking life_step/dense_parallel/128-50pct
+Benchmarking life_step/dense_parallel/128-50pct: Warming up for 200.00 ms
+Benchmarking life_step/dense_parallel/128-50pct: Collecting 10 samples in estimated 1.0394 s (495 iterations)
+Benchmarking life_step/dense_parallel/128-50pct: Analyzing
+life_step/dense_parallel/128-50pct
+                        time:   [676.39 µs 687.07 µs 712.80 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking life_step/sparse/128-50pct
+Benchmarking life_step/sparse/128-50pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse/128-50pct: Collecting 10 samples in estimated 1.4269 s (165 iterations)
+Benchmarking life_step/sparse/128-50pct: Analyzing
+life_step/sparse/128-50pct
+                        time:   [7.4402 ms 7.4883 ms 7.5415 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking life_step/sparse_parallel/128-50pct
+Benchmarking life_step/sparse_parallel/128-50pct: Warming up for 200.00 ms
+Benchmarking life_step/sparse_parallel/128-50pct: Collecting 10 samples in estimated 1.0929 s (330 iterations)
+Benchmarking life_step/sparse_parallel/128-50pct: Analyzing
+life_step/sparse_parallel/128-50pct
+                        time:   [2.0811 ms 2.0997 ms 2.1134 ms]
+
+Benchmarking orbium_xy_step
+Benchmarking orbium_xy_step: Warming up for 3.0000 s
+Benchmarking orbium_xy_step: Collecting 100 samples in estimated 5.0570 s (200 iterations)
+Benchmarking orbium_xy_step: Analyzing
+orbium_xy_step          time:   [25.182 ms 25.249 ms 25.323 ms]
+Found 6 outliers among 100 measurements (6.00%)
+  4 (4.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking quantized_xy_step
+Benchmarking quantized_xy_step: Warming up for 3.0000 s
+Benchmarking quantized_xy_step: Collecting 100 samples in estimated 5.2267 s (50k iterations)
+Benchmarking quantized_xy_step: Analyzing
+quantized_xy_step       time:   [102.05 µs 102.87 µs 103.80 µs]
+Found 9 outliers among 100 measurements (9.00%)
+  1 (1.00%) low mild
+  6 (6.00%) high mild
+  2 (2.00%) high severe
+
+Benchmarking continuous_xyz_step
+Benchmarking continuous_xyz_step: Warming up for 3.0000 s
+Benchmarking continuous_xyz_step: Collecting 100 samples in estimated 8.6924 s (10k iterations)
+Benchmarking continuous_xyz_step: Analyzing
+continuous_xyz_step     time:   [864.10 µs 867.78 µs 872.02 µs]
+Found 5 outliers among 100 measurements (5.00%)
+  4 (4.00%) high mild
+  1 (1.00%) high severe
+

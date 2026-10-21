@@ -42,8 +42,8 @@ and present them, and every specimen cites its source.
 ## Quick start
 
 **Requirements:** stable Rust (CI pins 1.94.1), Python 3.11 or newer, a Vulkan
-driver, and Bevy's native build dependencies (on Debian/Ubuntu:
-`libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev cmake ninja-build`).
+driver on Linux (macOS uses Metal), and Bevy's native build dependencies (on Debian/Ubuntu:
+`libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-0 cmake ninja-build`).
 
 ```sh
 cargo run            # main menu → scenarios → lab
@@ -53,7 +53,8 @@ make experiment      # Lenia, Life and Rule 30 with comparison and projects
 make preview         # static 16³ voxel rendering fixture
 ```
 
-Windows open at (80, 80) on the first monitor, at 1280 × 720. The Make targets
+Windows request (80, 80) on the first monitor: 1280 × 720 normally and
+1760 × 960 for `--experiment-demo`. The Make targets
 force X11/Xwayland so the compositor honours that placement. To use software
 Vulkan, prefix a target with
 `VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json`.
@@ -65,7 +66,7 @@ Vulkan, prefix a target with
 | Region | What it does |
 | --- | --- |
 | **Rail** | The library, compare (≡) and project (§) drawers, and settings (⁂): presenter mode and the GPU debug marker. |
-| **Library** | Specimens grouped as cellular, machines, grammars and agents, with a filter. Click one to open a channel. |
+| **Library** | Built-in specimens, named saved CPU/GPU states, validated import/export and duplication, plus three guided paired experiments. Opening a saved specimen or scenario replaces the current channels. |
 | **Tabs** | One per channel, with a status lamp: green running, amber paused, red halted. Close with ×, add with +. |
 | **Stage** | The selected channel with a figure caption and an arena/zoom/cursor readout. On CPU stages, scroll to zoom, drag to pan and double-click to reset; GPU Lenia renders through the 3-D camera. |
 | **Inspector** | Tick and headline metric, experiment parameters (*Apply live*, *Apply and reset*, *Defaults*), machine state and transition table, symbolic input, arena, channel colour, and a cited footnote with a DOI link. Drag it between 220 and 420 px, or collapse it. |
@@ -101,6 +102,14 @@ units. PNG/GIF/project exports evolve isolated copies. The Project drawer saves
 paused channels, including exact completed GPU state. Loading replaces every
 channel. See the [worlds and comparison guide](docs/verification/worlds/README.md).
 
+**Reusable specimens and guides.** In the Library, name and save the selected
+channel to preserve its exact paused state, duplicate it, or import/export a
+validated JSON specimen. Files live in the platform data directory under
+`soul/specimens` (`SOUL_LIBRARY` overrides it). Existing names are never overwritten.
+The scenario launcher offers Rule 30/110, dead/periodic Life and accepted/rejected
+pushdown inputs, with prediction, stepping, comparison and export cues that stay
+available in presenter mode.
+
 ## Specimen catalog
 
 | Specimen | Group | What the lab shows | Source |
@@ -125,8 +134,11 @@ channel. See the [worlds and comparison guide](docs/verification/worlds/README.m
   XY planes, a finite 3 × 3 kernel and zero edges. The inspector also offers
   continuous XYZ: float density, normalized Gaussian/shell kernels, configurable
   radius, dead/periodic boundaries and coupling across all axes. Model changes
-  reset the field. Neither fixture is claimed to reproduce published Orbium.
-- *Machines.* The linear-bounded automaton never grows its tape. The Turing
+  reset the field. The separate **Published Orbium** library entry restores Chan's
+  original 20 × 20 seed and polynomial periodic XY model (radius 13), qualified
+  against an independent FFT reference. See its [provenance](assets/specimens/README.md).
+- *Machines.* Tapes and stacks use 3-D voxel entities with a white head marker
+  and a symbol colour key in the inspector. The linear-bounded automaton never grows its tape. The Turing
   machine is a small transition table, not a universal machine.
 
 Editing a specimen's rule, seed pattern or population retitles its channel
@@ -183,11 +195,15 @@ make check              # governance + rustfmt + strict Clippy + native and GPU 
 make verify-automata    # all 12 CPU families, screenshots and image checks
 make verify-lenia       # GPU Lenia against the CPU reference, lifecycle and channels
 make verify-experiment  # parameters, comparison, project round-trip, export
+make verify-authoring   # saved specimens, guided experiments, voxel machines, Orbium
+make verify-rules       # authored rules, composition, energy and exact continuation
+make verify-boot        # native window, rendered screenshot and clean exit
+make benchmark-steppers # 27 Criterion stepper cases
 ```
 
 Each `verify-*` target writes evidence to `/tmp/soul-*-verification`. Override
 the path with `SOUL_AUTOMATA_VERIFY`, `SOUL_LENIA_VERIFY` or
-`SOUL_EXPERIMENT_VERIFY`. The harness refuses a directory that already holds a
+`SOUL_EXPERIMENT_VERIFY`, `SOUL_AUTHORING_VERIFY`, `SOUL_RULES_VERIFY` or `SOUL_BOOT_VERIFY`. The harness refuses a directory that already holds a
 success marker. The runs drive the production command path, including a
 `ChannelCommand` pass for every family. Every screenshot must show specimen
 pixels inside the published stage rectangle with no panel overlapping it.
@@ -197,6 +213,8 @@ pixels inside the published stage rectangle with no panel overlapping it.
 | Automata families | [Record](docs/verification/automata/README.md) |
 | GPU Lenia | [Record](docs/verification/lenia/README.md) |
 | Experiments | [Record](docs/verification/experiments/README.md) |
+| Authoring, guides, voxel machines and published Orbium | [Record](docs/verification/authoring/README.md) |
+| Authored rules, composition and energy | [Record](docs/verification/rules/README.md) |
 | Static voxel baseline | [Before](docs/verification/voxel-before.png) / [after](docs/verification/voxel-after.png) |
 
 The GPU tests need a Vulkan adapter; CI installs Mesa for software execution.
@@ -248,20 +266,29 @@ Design specs and implementation plans live in [`docs/superpowers`](docs/superpow
 
 ## Roadmap
 
-The lab shell and visual language (sub-projects 1 and 2) are complete. Next:
+The lab shell, editable worlds, comparison/export, named specimen library,
+three guided experiments, voxel machine views, published Orbium and stepper
+benchmarks are implemented. Linux, Windows and macOS build and boot qualification passes; see the [authoring evidence](docs/verification/authoring/README.md).
 
-1. **Guided layer.** Self-guided tours and presenter scripts.
-2. **Experiment tooling, and the menu and scenario flow.**
-3. **Authoring.** User-defined specimens and rules.
+Binary neighborhood rule authoring, deterministic two-rule composition and an
+editable two-pool energy model are now implemented and verified locally on Linux.
+Run `make rules` for three paused examples, or follow the
+[authoring guide](docs/guides/authored-rules.md). Exact scope and validation are in
+[the verification record](docs/verification/rules/README.md).
 
-Authored cellular worlds, quantitative comparison and continuous XYZ Lenia are
-implemented; see their [contract and qualification](docs/verification/worlds/README.md).
-Further goals include published-organism qualification, expanded benchmark tooling,
-and hosted CI on Windows and macOS. See the
-[kanban](docs/kanban/v0-0-2.md).
+The separate sprite renderer is deferred; existing voxel presentation and cellular
+analysis views remain the chosen direction. The v0-0-2 workbench backlog is closed
+with this explicit deferral. New platform qualification is still required before
+claiming this source revision verified on Windows/macOS.
+
+The experimental ash mesh-shader renderer remains a separate, unqualified path.
+See the current [kanban](docs/kanban/v0-0-2.md); the larger
+[GPU-engine reference roadmap](docs/references/gpu-rendering_roadmap.md) describes
+longer-term rendering ambitions beyond this workbench milestone.
 
 ## License
 
 S.O.U.L. is distributed under the [Elastic License 2.0](LICENSE.md). The
 bundled Libertinus fonts are © the Libertinus authors under the
-[SIL Open Font License 1.1](assets/fonts/libertinus/OFL.txt).
+[SIL Open Font License 1.1](assets/fonts/libertinus/OFL.txt). The original
+Orbium seed is © Bert Chan under its bundled [MIT license](assets/specimens/LICENSE-Lenia.txt).

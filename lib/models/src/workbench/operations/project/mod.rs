@@ -55,3 +55,5 @@ impl Project {
 
 #[cfg(test)]
 mod tests;
+
+pub mod library;

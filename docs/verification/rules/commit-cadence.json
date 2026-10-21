@@ -1,0 +1,151 @@
+{
+  "base": "2f87e8e",
+  "method": "Added plus deleted nonblank non-comment code lines using Pygments, with rename detection",
+  "commits": [
+    {
+      "commit": "f66e1f1e8cf9787c8c7e547dd351f325a2239dc2",
+      "changed_sloc": 78,
+      "subject": "feat: define versioned ordered binary neighborhood rules"
+    },
+    {
+      "commit": "13b9915fae934f17fdd401fa3256e21dc6541ba7",
+      "changed_sloc": 0,
+      "subject": "docs: define authored-rule and composition acceptance contracts"
+    },
+    {
+      "commit": "b9dfff4eb86c6a3dacac5bd202a2f784e1562a39",
+      "changed_sloc": 57,
+      "subject": "feat: validate shared-world rule composition settings"
+    },
+    {
+      "commit": "c097d67c8dc533bcb9de423c6f944adb16b7e86d",
+      "changed_sloc": 21,
+      "subject": "feat: execute authored transition tables and identify custom channels"
+    },
+    {
+      "commit": "b452fc30d33e81166e5ef99790560e8cf15b8e15",
+      "changed_sloc": 91,
+      "subject": "test: verify authored neighborhoods composition and exact continuation"
+    },
+    {
+      "commit": "d06437990fef75186d5e3803cfa64b24fe8fdc35",
+      "changed_sloc": 49,
+      "subject": "feat: import and export validated portable rule programs"
+    },
+    {
+      "commit": "f5d02ee685ee4cfce4f575c6bad56e2ff98f3e96",
+      "changed_sloc": 66,
+      "subject": "feat: add inspector rule text editor and safe file exchange"
+    },
+    {
+      "commit": "62fdac5cdb0b4baa843ddb4f62eb2b8d31de94de",
+      "changed_sloc": 45,
+      "subject": "feat: connect per-channel rule drafts to configure and reset"
+    },
+    {
+      "commit": "965096717fc7a458af8cf1435d0cf04df1ad5c69",
+      "changed_sloc": 40,
+      "subject": "feat: expose deterministic layer composition controls"
+    },
+    {
+      "commit": "69084285a4c1d89eba1fd3b75e86065d4d7c50aa",
+      "changed_sloc": 58,
+      "subject": "feat: specify and validate editable two-pool energy controls"
+    },
+    {
+      "commit": "e42d5b4379320ea46184b66def2b527ab0af2eca",
+      "changed_sloc": 70,
+      "subject": "feat: evolve energy pools and gate cellular births and survival"
+    },
+    {
+      "commit": "ad729358e562c6c721e7cae8a62d2b5cc11507c1",
+      "changed_sloc": 26,
+      "subject": "feat: preserve energy state across projects and editing history"
+    },
+    {
+      "commit": "c2cfc7f226e7984f4bccd83531ee006d0740137c",
+      "changed_sloc": 52,
+      "subject": "feat: add editable energy controls to the cellular inspector"
+    },
+    {
+      "commit": "eede4ad50f2a8f159228f1221d19e94dab3a22d0",
+      "changed_sloc": 84,
+      "subject": "test: verify energy diffusion boundaries and two-pool birth gating"
+    },
+    {
+      "commit": "a88fe0294117a83f7a018ac92054e5181aa8cc8d",
+      "changed_sloc": 71,
+      "subject": "test: verify energy exhaustion reset-only edits and exact undo"
+    },
+    {
+      "commit": "986a727471c541f457e62e0380d8786d2842827b",
+      "changed_sloc": 60,
+      "subject": "test: cover rule interchange bounds and composition truth tables"
+    },
+    {
+      "commit": "df4d1812ce6d607f21420b89797034a5881bedc0",
+      "changed_sloc": 71,
+      "subject": "test: verify composed energy checkpoint continuation and legacy projects"
+    },
+    {
+      "commit": "61a4e5b9f76dffe762a5dbb46ab49d2bd57b3e22",
+      "changed_sloc": 61,
+      "subject": "test: establish native rule-composition qualification fixtures"
+    },
+    {
+      "commit": "54b72a14fd314380c81cd1625c5333750dac1075",
+      "changed_sloc": 92,
+      "subject": "test: drive native configure step comparison and project commands"
+    },
+    {
+      "commit": "3db7920c5797e0499bec0150111b6856334d4053",
+      "changed_sloc": 74,
+      "subject": "test: qualify native rule exchange specimens exports and restoration"
+    },
+    {
+      "commit": "b09a9ccccbeabc088933a6840fef97ec97a2c795",
+      "changed_sloc": 99,
+      "subject": "feat: show editable definitions when authored channels open"
+    },
+    {
+      "commit": "dfc0acb4659bf3596e34e9593d1f885dee98895b",
+      "changed_sloc": 17,
+      "subject": "fix: prioritize rule controls and identify inactive Life masks"
+    },
+    {
+      "commit": "97bf21181d9946a59bf7e8ce67d858823ef5fef8",
+      "changed_sloc": 27,
+      "subject": "fix: bound rule-editor scrolling and validate restored binary alphabets"
+    },
+    {
+      "commit": "15e627663f62bad9829ab7143d9945aae73493b9",
+      "changed_sloc": 18,
+      "subject": "feat: add a paused native demo for authored composed and energy rules"
+    },
+    {
+      "commit": "22957b45888c5d102efdad5c2f06b29721401e3e",
+      "changed_sloc": 41,
+      "subject": "test: enforce all energy bounds and size the rule demo for monitor one"
+    },
+    {
+      "commit": "498fdcdc7c583692620ee2e59ae8ea20f0d37266",
+      "changed_sloc": 0,
+      "subject": "docs: explain rule authoring composition energy and sharing"
+    },
+    {
+      "commit": "c57b918411db654fc34e9e6458d76c88ac2c7d58",
+      "changed_sloc": 79,
+      "subject": "fix: reveal energy parameters for enabled two-pool channels"
+    },
+    {
+      "commit": "1d791abc17a503c0eafa9da5eaaa81aec972918e",
+      "changed_sloc": 24,
+      "subject": "test: verify native continuation after composed energy project restoration"
+    },
+    {
+      "commit": "2025c2c8a42f42b5c99aa349eff4e9ec94cb6678",
+      "changed_sloc": 0,
+      "subject": "docs: qualify rules composition and energy and close the workbench roadmap"
+    }
+  ]
+}

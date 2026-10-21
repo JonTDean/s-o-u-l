@@ -83,7 +83,7 @@ fn generate(
         "layout":"256px panels: CPU session order followed by Lenia maximum XY projections",
         "sampling":"initial state then one transition per frame; halted symbolic sessions remain fixed",
         "lenia_evolution":"model-specific CPU reference from completed GPU checkpoint",
-        "symbolic_view":"first 256 tape cells, head underline; full state in project.json",
+        "symbolic_view":"first 256 tape voxels with semantic colors and head underline; full state in project.json",
         "initial_cpu_ticks":project.sessions.iter().map(|s|s.ticks).collect::<Vec<_>>(),
         "final_cpu_ticks":copy.sessions.iter().map(|s|s.ticks).collect::<Vec<_>>(),
         "initial_lenia_ticks":project.lenia.iter().map(|s|s.tick).collect::<Vec<_>>(),

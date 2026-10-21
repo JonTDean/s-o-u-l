@@ -1,0 +1,1 @@
+Metric traces contain up to 200 actual samples per current epoch. Fields are completed captured states; XYZ error projects by maximum absolute value in the viewer. Empty differences means no captured field pair. Channel IDs are run-local.

@@ -1,0 +1,53 @@
+//! Model-owned symbol positions projected as voxel entities, not text tiles.
+use crate::lab::stage::painters::symbolic::tape_window;
+use bevy::prelude::*;
+use models::workbench::symbolic::machine::Symbolic;
+#[derive(Clone, Debug, PartialEq)]
+pub struct Cell {
+    pub symbol: char,
+    pub position: Vec3,
+    pub head: bool,
+}
+pub fn cells(machine: &Symbolic) -> Vec<Cell> {
+    let (tape, head) = match machine {
+        Symbolic::Finite(m) => (&m.input, m.cursor),
+        Symbolic::Pushdown(m) => (&m.input, m.cursor),
+        Symbolic::Bounded(m) => (&m.tape, m.head),
+        Symbolic::Turing(m) => (&m.tape, m.head),
+        Symbolic::Koch { .. } => return Vec::new(),
+    };
+    let window = tape_window(tape.len(), head, 20);
+    let start = window.start;
+    let centre = (window.len() - 1) as f32 / 2.0;
+    let mut cells: Vec<_> = window
+        .enumerate()
+        .map(|(slot, index)| Cell {
+            symbol: tape.get(index).copied().unwrap_or(' '),
+            position: Vec3::new((slot as f32 - centre) * 3.0, 0.0, 0.0),
+            head: index == head,
+        })
+        .collect();
+    if let Symbolic::Pushdown(m) = machine {
+        cells.extend(
+            m.stack
+                .iter()
+                .rev()
+                .take(12)
+                .enumerate()
+                .map(|(depth, symbol)| Cell {
+                    symbol: *symbol,
+                    position: Vec3::new(
+                        (head.saturating_sub(start) as f32 - centre) * 3.0,
+                        -3.0 * (depth + 1) as f32,
+                        0.0,
+                    ),
+                    head: false,
+                }),
+        );
+    }
+    cells
+}
+pub fn palette(symbol: char) -> (Color, &'static str) {
+    let (rgb, name) = models::workbench::symbolic::presentation::colour(symbol);
+    (Color::srgb_u8(rgb[0], rgb[1], rgb[2]), name)
+}

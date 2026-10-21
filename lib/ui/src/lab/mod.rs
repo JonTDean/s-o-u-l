@@ -81,7 +81,12 @@ pub struct LabPlugin;
 impl Plugin for LabPlugin {
     fn build(&self, app: &mut App) {
         use chrome::drawers::{Comparison, Files, project};
-        app.init_resource::<state::LabState>()
+        app.add_systems(Startup, stage::voxels::setup)
+            .add_systems(
+                Update,
+                stage::voxels::sync.after(engine_core::automata::channel::ChannelSet::Publish),
+            )
+            .init_resource::<state::LabState>()
             .init_resource::<Files>()
             .init_resource::<Comparison>()
             .init_resource::<engine_core::automata::lenia::ReadbackBusy>()
@@ -174,6 +179,13 @@ fn draw(
             *stage_rect = stage::presenter::show(ctx, &mut lab, &data, &mut fx, typing)
         }
     }
+    chrome::drawers::library::guides::overlay(
+        ctx,
+        &mut lab,
+        &data,
+        &mut drawers.comparison,
+        &mut fx,
+    );
     stage::overlay::toast(ctx, &mut lab, dt);
     if let Some(url) = fx.open_url.take() {
         ctx.open_url(egui::OpenUrl::new_tab(url));

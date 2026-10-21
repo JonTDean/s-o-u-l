@@ -40,11 +40,12 @@ pub fn build(cfg: RuntimeConfig) -> App {
         app.add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "S.O.U.L. – Swarm Orchestrator for Autonomous Learners".into(),
-                resolution: if std::env::args().any(|a| a == "--experiment-demo") {
-                    (1760., 960.).into()
-                } else {
-                    (1280., 720.).into()
-                },
+                resolution:
+                    if std::env::args().any(|a| a == "--experiment-demo" || a == "--rules-demo") {
+                        (1760., 960.).into()
+                    } else {
+                        (1280., 720.).into()
+                    },
                 resizable: true,
                 mode: WindowMode::Windowed,
                 position: WindowPosition::At(IVec2::new(80, 80)),

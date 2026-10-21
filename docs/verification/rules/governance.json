@@ -1,0 +1,27 @@
+{
+  "command": "python3 tools/structure/audit.py",
+  "roots": [
+    "src",
+    "lib/engine/engine-common/src",
+    "lib/engine/engine-core/src",
+    "lib/engine/engine-gpu/src",
+    "lib/engine/engine-render/src",
+    "lib/models/src",
+    "lib/simulation_kernel/src",
+    "lib/simulation_kernel/benches",
+    "lib/tests/src",
+    "lib/tooling/src",
+    "lib/ui/src",
+    "assets/shaders",
+    "lib/engine/engine-gpu/assets",
+    "scripts",
+    "tools/structure"
+  ],
+  "limits": {
+    "directories": 3,
+    "files_min": 1,
+    "files_max": 4,
+    "sloc": 200
+  },
+  "violations": []
+}

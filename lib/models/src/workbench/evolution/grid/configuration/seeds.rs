@@ -10,6 +10,11 @@ use simulation_kernel::core::cell::CellState;
 impl GridSession {
     /// Build a validated initial condition without preserving old history.
     pub fn configured(kind: Kind, settings: &Settings) -> Self {
+        let mut session = Self::seeded(kind, settings);
+        session.reset_energy(settings.energy.as_ref());
+        session
+    }
+    fn seeded(kind: Kind, settings: &Settings) -> Self {
         let mut session = Self::with_size(kind, settings.world.size(kind));
         session.boundary = settings.world.boundary;
         if let Some(seed) = &settings.world.seed {

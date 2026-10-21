@@ -40,7 +40,11 @@ pub fn write(path: &Path, project: &Project) -> Result<(), String> {
             .parent()
             .filter(|p| !p.as_os_str().is_empty())
             .unwrap_or(Path::new("."));
-        fs::File::open(parent)?.sync_all()
+        #[cfg(unix)]
+        fs::File::open(parent)?.sync_all()?;
+        #[cfg(not(unix))]
+        let _ = parent;
+        Ok(())
     })()
     .map_err(|e: std::io::Error| e.to_string());
     if result.is_err() {

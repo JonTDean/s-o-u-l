@@ -1,0 +1,5 @@
+   Compiling models v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-main/lib/models)
+   Compiling ui v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-main/lib/ui)
+   Compiling tests v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-main/lib/tests)
+   Compiling swarm_orchestrator_for_autonomous_learners v0.1.0 (/mnt/home-data/jdean/Documents/programming/s-o-u-l-main)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 48.11s

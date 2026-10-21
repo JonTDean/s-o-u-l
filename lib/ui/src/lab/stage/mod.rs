@@ -9,6 +9,7 @@ pub mod overlay;
 pub mod painters;
 pub mod presenter;
 pub mod view;
+pub mod voxels;
 
 /// Draw the stage as the central panel and return the rectangle for stage cameras.
 pub fn show(
@@ -41,12 +42,14 @@ pub(crate) fn paint(
     let gpu = row.is_some_and(|r| r.backend == Backend::Gpu);
     let mut cursor = None;
     let mut zoom = 1.0;
-    if !gpu {
+    let session = row.and_then(|r| data.bench.sessions.iter().find(|s| s.channel == r.id));
+    let voxel = session.is_some_and(|s| voxels::is_symbolic(&s.model));
+    if !gpu && !voxel {
         ui.painter().rect_filled(rect, 0.0, BG);
     }
     let session = row.and_then(|r| data.bench.sessions.iter().find(|s| s.channel == r.id));
     match session {
-        Some(session) => {
+        Some(session) if !voxel => {
             let view = lab.views.entry(session.channel).or_default();
             if response.hovered() {
                 let scroll = ui.input(|i| i.smooth_scroll_delta.y);
@@ -77,7 +80,7 @@ pub(crate) fn paint(
             );
         }
         None if row.is_none() => overlay::empty(ui.painter(), rect),
-        None => {}
+        _ => {}
     }
     if chrome {
         overlay::chrome(ui.painter(), rect, data, cursor, zoom);

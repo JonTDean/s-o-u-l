@@ -45,8 +45,13 @@ pub(super) fn draw(ui: &mut Ui, kind: Kind, settings: &mut Settings) {
         });
     }
     if kind == Kind::Life {
-        counts(ui, "born", &mut settings.birth);
-        counts(ui, "survive", &mut settings.survival);
+        ui.add_enabled_ui(settings.program.is_none(), |ui| {
+            counts(ui, "born", &mut settings.birth);
+            counts(ui, "survive", &mut settings.survival);
+        });
+        if settings.program.is_some() {
+            ui.label("Authored rules replace these birth/survival masks.");
+        }
     }
     if matches!(kind, Kind::Boids | Kind::Ants) {
         labelled(ui, "agents", |ui| {

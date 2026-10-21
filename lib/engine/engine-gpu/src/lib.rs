@@ -20,5 +20,11 @@ pub mod plugin;
 mod seed;
 mod types;
 
-#[cfg(feature = "mesh_shaders")]
+#[cfg(all(
+    feature = "mesh_shaders",
+    any(
+        windows,
+        all(unix, not(target_os = "emscripten"), not(target_vendor = "apple"))
+    )
+))]
 pub use render::ash;

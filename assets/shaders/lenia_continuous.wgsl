@@ -7,9 +7,9 @@ struct Params { size: vec4<u32>, growth: vec4<f32>, kernel: vec4<u32> }
 fn density(at: vec3<i32>) -> f32 {
     var p = at;
     let size = vec3<i32>(params.size.xyz);
-    // Radius is bounded to four. Shift by four positive periods before unsigned
+    // Radius is bounded to thirteen. Shift by sixteen positive periods before unsigned
     // remainder: older Vulkan targets do not define negative OpSRem operands.
-    if params.kernel.z == 1u { p = vec3<i32>(vec3<u32>(p + size * 4) % params.size.xyz); }
+    if params.kernel.z == 1u { p = vec3<i32>(vec3<u32>(p + size * 16) % params.size.xyz); }
     if any(p < vec3<i32>(0)) || any(p >= size) { return 0.0; }
     return bitcast<f32>(previous[(u32(p.z) * params.size.y + u32(p.y)) * params.size.x + u32(p.x)]);
 }
@@ -19,7 +19,8 @@ fn evolve(@builtin(global_invocation_id) id: vec3<u32>) {
     let radius = i32(params.kernel.x);
     var sum = 0.0;
     var norm = 0.0;
-    for (var z = -radius; z <= radius; z += 1) {
+    let depth = select(radius, 0, params.kernel.y == 2u);
+    for (var z = -depth; z <= depth; z += 1) {
         for (var y = -radius; y <= radius; y += 1) {
             for (var x = -radius; x <= radius; x += 1) {
                 let delta = vec3<i32>(x,y,z);
@@ -29,7 +30,8 @@ fn evolve(@builtin(global_invocation_id) id: vec3<u32>) {
                     var width = 0.5;
                     if params.kernel.y == 1u { mean = 0.65; width = 0.2; }
                     let d = (r-mean)/width;
-                    let weight = exp(-0.5*d*d);
+                    var weight = exp(-0.5*d*d);
+                    if params.kernel.y == 2u { let a = 4.0*r*(1.0-r); weight = a*a*a*a; }
                     norm += weight;
                     sum += weight * density(vec3<i32>(id)+delta);
                 }
@@ -37,7 +39,8 @@ fn evolve(@builtin(global_invocation_id) id: vec3<u32>) {
         }
     }
     let d = (sum/norm-params.growth.x)/params.growth.y;
-    let growth = 2.0*exp(-0.5*d*d)-1.0;
+    var growth = 2.0*exp(-0.5*d*d)-1.0;
+    if params.kernel.y == 2u { let a = max(0.0, 1.0-d*d/9.0); growth = 2.0*a*a*a*a-1.0; }
     let index = (id.z*params.size.y+id.y)*params.size.x+id.x;
     next[index] = bitcast<u32>(clamp(bitcast<f32>(previous[index])+params.growth.z*growth,0.0,1.0));
 }

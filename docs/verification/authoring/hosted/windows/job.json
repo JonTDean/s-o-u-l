@@ -1,0 +1,165 @@
+{
+  "id": 118717398046,
+  "run_id": 39448697285,
+  "head_sha": "c21b634e89779eacafd4c29546648429093be4eb",
+  "html_url": "https://github.com/JonTDean/s-o-u-l/actions/runs/39448697285/job/118717398046",
+  "name": "native (windows-2022)",
+  "status": "completed",
+  "conclusion": "success",
+  "started_at": "2026-10-20T15:28:19Z",
+  "completed_at": "2026-10-20T16:17:36Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-10-20T15:28:19Z",
+      "completed_at": "2026-10-20T15:28:20Z"
+    },
+    {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-10-20T15:28:20Z",
+      "completed_at": "2026-10-20T15:28:26Z"
+    },
+    {
+      "name": "Run actions/setup-python@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-10-20T15:28:26Z",
+      "completed_at": "2026-10-20T15:28:26Z"
+    },
+    {
+      "name": "Run dtolnay/rust-toolchain@stable",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-10-20T15:28:26Z",
+      "completed_at": "2026-10-20T15:28:37Z"
+    },
+    {
+      "name": "Run actions/cache@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-10-20T15:28:37Z",
+      "completed_at": "2026-10-20T15:28:38Z"
+    },
+    {
+      "name": "Linux native dependencies",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 6,
+      "started_at": "2026-10-20T15:28:38Z",
+      "completed_at": "2026-10-20T15:28:38Z"
+    },
+    {
+      "name": "Governance and formatting",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7,
+      "started_at": "2026-10-20T15:28:38Z",
+      "completed_at": "2026-10-20T15:28:47Z"
+    },
+    {
+      "name": "Strict portable compilation",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8,
+      "started_at": "2026-10-20T15:28:47Z",
+      "completed_at": "2026-10-20T15:40:43Z"
+    },
+    {
+      "name": "CPU contracts and persistence",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 9,
+      "started_at": "2026-10-20T15:40:43Z",
+      "completed_at": "2026-10-20T16:00:50Z"
+    },
+    {
+      "name": "Linux Vulkan numerical qualification",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 10,
+      "started_at": "2026-10-20T16:00:50Z",
+      "completed_at": "2026-10-20T16:00:50Z"
+    },
+    {
+      "name": "Build native application",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11,
+      "started_at": "2026-10-20T16:00:50Z",
+      "completed_at": "2026-10-20T16:15:56Z"
+    },
+    {
+      "name": "Linux window and rendering smoke",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 12,
+      "started_at": "2026-10-20T16:15:56Z",
+      "completed_at": "2026-10-20T16:15:56Z"
+    },
+    {
+      "name": "Windows and macOS window and rendering smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13,
+      "started_at": "2026-10-20T16:15:56Z",
+      "completed_at": "2026-10-20T16:17:14Z"
+    },
+    {
+      "name": "Require completed native capture",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 14,
+      "started_at": "2026-10-20T16:17:14Z",
+      "completed_at": "2026-10-20T16:17:14Z"
+    },
+    {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 15,
+      "started_at": "2026-10-20T16:17:14Z",
+      "completed_at": "2026-10-20T16:17:15Z"
+    },
+    {
+      "name": "Post Run actions/cache@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 28,
+      "started_at": "2026-10-20T16:17:15Z",
+      "completed_at": "2026-10-20T16:17:33Z"
+    },
+    {
+      "name": "Post Run actions/setup-python@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 29,
+      "started_at": "2026-10-20T16:17:33Z",
+      "completed_at": "2026-10-20T16:17:33Z"
+    },
+    {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 30,
+      "started_at": "2026-10-20T16:17:33Z",
+      "completed_at": "2026-10-20T16:17:34Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 31,
+      "started_at": "2026-10-20T16:17:34Z",
+      "completed_at": "2026-10-20T16:17:34Z"
+    }
+  ]
+}

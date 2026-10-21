@@ -1,0 +1,182 @@
+[
+  {
+    "height": 720,
+    "image": "wolfram-rule30.png",
+    "panels_clear": true,
+    "signal_pixels": 34663,
+    "specimen_pixels": 37051,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 37051,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "wolfram-rule110.png",
+    "panels_clear": true,
+    "signal_pixels": 20191,
+    "specimen_pixels": 21591,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 21591,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "life-conway.png",
+    "panels_clear": true,
+    "signal_pixels": 300,
+    "specimen_pixels": 320,
+    "stage": [
+      32,
+      28,
+      949,
+      652
+    ],
+    "warm_pixels": 320,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "particle-hpp.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 3008,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3008,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "regular-nfa.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 18480,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 13706,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "context-free-anbn.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 28155,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 13713,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "context-free-parentheses.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 28155,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "context-free-koch.png",
+    "panels_clear": true,
+    "signal_pixels": 1698,
+    "specimen_pixels": 3891,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 3891,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "context-sensitive-anbncn.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 25644,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 25644,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "turing-replace-a.png",
+    "panels_clear": true,
+    "signal_pixels": 0,
+    "specimen_pixels": 18313,
+    "stage": [
+      32,
+      28,
+      982,
+      652
+    ],
+    "warm_pixels": 0,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "swarm-boids.png",
+    "panels_clear": true,
+    "signal_pixels": 1697,
+    "specimen_pixels": 2447,
+    "stage": [
+      32,
+      28,
+      970,
+      652
+    ],
+    "warm_pixels": 2447,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "image": "swarm-ants.png",
+    "panels_clear": true,
+    "signal_pixels": 176,
+    "specimen_pixels": 756,
+    "stage": [
+      32,
+      28,
+      973,
+      652
+    ],
+    "warm_pixels": 313,
+    "width": 1280
+  }
+]
