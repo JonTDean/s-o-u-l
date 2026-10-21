@@ -45,7 +45,7 @@ pub struct Specimen {
     pub title: String,
     /// Library section.
     pub group: Group,
-    /// Italic library subtitle.
+    /// Short library subtitle, e.g. a language or rule.
     pub subtitle: String,
     /// Stage figure caption.
     pub caption: String,

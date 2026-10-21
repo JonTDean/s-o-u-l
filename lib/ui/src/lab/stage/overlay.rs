@@ -60,7 +60,7 @@ pub fn chrome(
         let at = rect.left_bottom() + egui::vec2(14.0, -12.0);
         let bold = FontId::new(size::BODY, family(SANS_SEMIBOLD));
         let fig = painter.text(at, Align2::LEFT_BOTTOM, format!("Fig. {n}. "), bold, INK_HI);
-        let italic = FontId::new(size::BODY, family(SANS));
+        let caption_font = FontId::new(size::BODY, family(SANS));
         let after = egui::pos2(fig.right(), at.y);
         let modified = data
             .bench
@@ -88,7 +88,7 @@ pub fn chrome(
         } else {
             specimen.caption.clone()
         };
-        painter.text(after, Align2::LEFT_BOTTOM, caption, italic, INK_DIM);
+        painter.text(after, Align2::LEFT_BOTTOM, caption, caption_font, INK_DIM);
     }
 }
 
