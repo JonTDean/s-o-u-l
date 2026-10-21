@@ -1,4 +1,4 @@
-//! Global egui style: borderless surfaces, Instrument colours, Plex type scale.
+//! Global egui style: hairline-bordered controls, Instrument colours, Plex type scale.
 use super::{
     fonts::{SANS_SEMIBOLD, definitions, family},
     tokens::*,
@@ -66,8 +66,13 @@ pub fn apply(style: &mut Style) {
         &mut w.open,
     ] {
         state.bg_stroke = Stroke::NONE;
-        state.corner_radius = CornerRadius::same(4);
+        state.corner_radius = CornerRadius::same(6);
     }
+    w.inactive.bg_stroke = Stroke::new(1.0, LINE);
+    w.hovered.bg_stroke = Stroke::new(1.0, LINE_HI);
+    w.open.bg_stroke = w.hovered.bg_stroke;
+    w.active.bg_stroke = Stroke::new(1.0, SIGNAL);
+    w.hovered.expansion = 1.0;
     w.noninteractive.fg_stroke = Stroke::new(1.0, INK);
     (w.inactive.weak_bg_fill, w.inactive.bg_fill) = (RAISED, TRACK);
     (w.hovered.weak_bg_fill, w.hovered.bg_fill) = (TRACK, TRACK);
@@ -91,22 +96,21 @@ mod tests {
     use bevy_egui::egui::Style;
 
     #[test]
-    fn no_widget_or_window_draws_a_hairline() {
+    fn widgets_draw_hairlines_and_focus_in_signal() {
         let mut style = Style::default();
         apply(&mut style);
-        let w = &style.visuals.widgets;
-        for state in [
-            &w.noninteractive,
-            &w.inactive,
-            &w.hovered,
-            &w.active,
-            &w.open,
-        ] {
-            assert_eq!(state.bg_stroke.width, 0.0);
-        }
-        assert_eq!(style.visuals.window_stroke.width, 0.0);
-        assert_eq!(style.visuals.panel_fill, PANEL);
-        assert_eq!(style.visuals.override_text_color, Some(INK));
+        let vis = &style.visuals;
+        let w = &vis.widgets;
+        assert_eq!(w.inactive.bg_stroke, Stroke::new(1.0, LINE));
+        assert_eq!(w.hovered.bg_stroke, Stroke::new(1.0, LINE_HI));
+        assert_eq!(w.active.bg_stroke.color, SIGNAL);
+        assert_eq!(w.inactive.corner_radius, CornerRadius::same(6));
+        assert_eq!(w.hovered.expansion, 1.0);
+        assert_eq!(vis.selection.stroke.color, SIGNAL);
+        assert_eq!(vis.extreme_bg_color, BG);
+        assert_eq!(vis.window_stroke.width, 0.0);
+        assert_eq!(vis.panel_fill, PANEL);
+        assert_eq!(vis.override_text_color, Some(INK));
     }
 
     #[test]

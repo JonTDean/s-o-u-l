@@ -16,6 +16,10 @@ pub const INK: Color32 = Color32::from_rgb(0xc9, 0xc4, 0xb4);
 pub const INK_HI: Color32 = Color32::from_rgb(0xec, 0xe6, 0xd4);
 /// Margin labels, captions, notes.
 pub const INK_DIM: Color32 = Color32::from_rgb(0x8a, 0x84, 0x76);
+/// Hairline borders at rest.
+pub const LINE: Color32 = Color32::from_rgb(0x2a, 0x2e, 0x30);
+/// Hairline borders on hover.
+pub const LINE_HI: Color32 = Color32::from_rgb(0x4a, 0x4f, 0x52);
 /// Values, selection, active state.
 pub const SIGNAL: Color32 = Color32::from_rgb(0xff, 0xb5, 0x47);
 /// Selected rows.
