@@ -2272,7 +2272,7 @@ dependencies = [
 
 [[package]]
 name = "engine-common"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "dirs-next",
@@ -2281,7 +2281,7 @@ dependencies = [
 
 [[package]]
 name = "engine-core"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bevy_ecs",
@@ -2295,7 +2295,7 @@ dependencies = [
 
 [[package]]
 name = "engine-gpu"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "ash",
  "bevy",
@@ -2314,7 +2314,7 @@ dependencies = [
 
 [[package]]
 name = "engine-render"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bevy_ecs",
@@ -3364,7 +3364,7 @@ dependencies = [
 
 [[package]]
 name = "models"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "dirs-next",
@@ -4672,7 +4672,7 @@ checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
 
 [[package]]
 name = "simulation_kernel"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "criterion",
  "glam",
@@ -4818,7 +4818,7 @@ checksum = "0193cc4331cfd2f3d2011ef287590868599a2f33c3e69bc22c1a3d3acf9e02fb"
 
 [[package]]
 name = "swarm_orchestrator_for_autonomous_learners"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bevy_egui",
@@ -4919,7 +4919,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bevy_ecs",
@@ -5108,7 +5108,7 @@ checksum = "fcc842091f2def52017664b53082ecbbeb5c7731092bad69d2c63050401dfd64"
 
 [[package]]
 name = "tooling"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bitflags 2.9.1",
@@ -5236,7 +5236,7 @@ checksum = "bc7d623258602320d5c55d1bc22793b57daff0ec7efc270ea7d55ce1d5f5471c"
 
 [[package]]
 name = "ui"
-version = "0.1.0"
+version = "0.0.2"
 dependencies = [
  "bevy",
  "bevy_egui",
