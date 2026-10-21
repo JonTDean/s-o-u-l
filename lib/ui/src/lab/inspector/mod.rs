@@ -64,52 +64,50 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         && let Some((_, sim)) = data.lenia.iter().find(|(lid, _)| **lid == id)
     {
         lenia::show(ui, id, sim, metric, fx);
-        section("grid").foldable(true).show(ui, |ui| {
-            ui.label(mono(super::stage::overlay::gpu_arena(sim)).color(INFO));
-        });
+        let arena = super::stage::overlay::gpu_arena(sim);
+        section("grid")
+            .foldable(false)
+            .summary(arena.clone())
+            .show(ui, |ui| {
+                ui.label(mono(arena).color(INFO));
+            });
     }
     colour(ui, row, fx);
     if let Some(specimen) = data.specimens.get(&row.kind) {
         let figure = data.specimens.figure(&row.kind).unwrap_or(1) as u32;
         let modified = session.filter(|s| sections::customised(s));
-        section("").show(ui, |ui| {
-            if data.lenia.iter().any(|(id, sim)| {
-                *id == row.id
-                    && sim.kernel.is_some_and(|k| {
-                        k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium
-                    })
-            }) {
-                let explanation = "Published Orbium bicaudatus: periodic XY, radius 13, polynomial kernel and growth. The library seed restores the published parameters.";
+        let kernel = data.lenia.iter().find(|(lid, _)| **lid == row.id);
+        let kernel = kernel.and_then(|(_, sim)| sim.kernel);
+        let orbium = kernel
+            .is_some_and(|k| k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium);
+        if !orbium && let Some(session) = modified {
+            let text = format!(
+                "Catalog specimen described below; this channel runs {}.",
+                session.title()
+            );
+            note(ui, &text, true);
+        }
+        if !orbium && kernel.is_some() {
+            let text =
+                "Continuous XYZ model: catalog text below describes the original XY specimen.";
+            note(ui, text, true);
+        }
+        let summary = sections::about_summary(figure, &specimen.citation);
+        section("About this specimen")
+            .foldable(false)
+            .summary(summary)
+            .show(ui, |ui| {
+                let explanation = if orbium {
+                    "Published Orbium bicaudatus: periodic XY, radius 13, polynomial kernel and growth. The library seed restores the published parameters."
+                } else {
+                    &specimen.explanation
+                };
                 if let Some(url) =
                     footnote(ui, figure, explanation, &specimen.citation, &specimen.doi)
                 {
                     fx.open_url = Some(url);
                 }
-                return;
-            }
-            if let Some(session) = modified {
-                let text = format!(
-                    "Catalog specimen described below; this channel runs {}.",
-                    session.title()
-                );
-                note(ui, &text, true);
-            }
-            if data
-                .lenia
-                .iter()
-                .any(|(id, sim)| *id == row.id && sim.kernel.is_some())
-            {
-                note(
-                    ui,
-                    "Continuous XYZ model: catalog text below describes the original XY specimen.",
-                    true,
-                );
-            }
-            let (explanation, citation) = (&specimen.explanation, &specimen.citation);
-            if let Some(url) = footnote(ui, figure, explanation, citation, &specimen.doi) {
-                fx.open_url = Some(url);
-            }
-        });
+            });
     }
 }
 
@@ -133,9 +131,13 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
         });
         input(ui, lab, id, session, fx);
     }
-    section("grid").foldable(true).show(ui, |ui| {
-        ui.label(mono(sections::arena_label(&session.model, session.kind)).color(INK_DIM));
-    });
+    let arena = sections::arena_label(&session.model, session.kind);
+    section("grid")
+        .foldable(false)
+        .summary(arena.clone())
+        .show(ui, |ui| {
+            ui.label(mono(arena).color(INK_DIM));
+        });
 }
 
 fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: &mut Effects) {
@@ -163,12 +165,17 @@ fn colour(ui: &mut Ui, row: &ChannelRow, fx: &mut Effects) {
             for swatch in SWATCHES {
                 let (rect, response) =
                     ui.allocate_exact_size(egui::vec2(14.0, 14.0), Sense::click());
+                let grow = ui.ctx().animate_bool_with_time(
+                    response.id.with("hover"),
+                    response.hovered(),
+                    0.15,
+                );
                 if row.settings.colour == swatch {
                     ui.painter().circle_filled(rect.center(), 7.0, INK_HI);
                     ui.painter().circle_filled(rect.center(), 5.5, BG);
                 }
                 ui.painter()
-                    .circle_filled(rect.center(), 5.0, color(swatch));
+                    .circle_filled(rect.center(), 5.0 + grow, color(swatch));
                 if response.clicked() {
                     fx.commands.push(ChannelCommand {
                         id,

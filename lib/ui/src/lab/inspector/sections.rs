@@ -50,6 +50,25 @@ pub fn customised(session: &Session) -> bool {
         || s.world != d.world
 }
 
+/// Folded "About this specimen" summary: figure, first author's surname and year.
+pub fn about_summary(figure: u32, citation: &str) -> String {
+    let fallback = format!("Fig. {figure}");
+    let surname = citation
+        .split_once(',')
+        .and_then(|(authors, _)| authors.split_whitespace().last());
+    let year = citation.rmatch_indices('(').find_map(|(i, _)| {
+        let digits = citation[i + 1..]
+            .strip_suffix(')')
+            .unwrap_or(&citation[i + 1..]);
+        let digits = digits.split(')').next()?;
+        (digits.len() == 4 && digits.bytes().all(|b| b.is_ascii_digit())).then_some(digits)
+    });
+    match (surname, year) {
+        (Some(surname), Some(year)) => format!("{fallback} · {surname} {year}"),
+        _ => fallback,
+    }
+}
+
 /// Input hint and whether it is a warning (over the 256-symbol bound).
 pub fn input_note(len: usize) -> (String, bool) {
     if len > 256 {
@@ -103,6 +122,19 @@ mod tests {
         let mut ants = Session::new(Kind::Ants);
         ants.settings.agent_count = 8;
         assert!(customised(&ants), "captions state the population");
+    }
+
+    #[test]
+    fn about_summary_names_first_author_and_year() {
+        let chan = "B. W.-C. Chan, \"Lenia: Biology of Artificial Life\", Complex Systems 28(3), 251–286 (2019).";
+        assert_eq!(about_summary(5, chan), "Fig. 5 · Chan 2019");
+        let hardy = "J. Hardy, Y. Pomeau, O. de Pazzis, \"Time evolution\", J. Math. Phys. 14(12), 1746–1759 (1973).";
+        assert_eq!(about_summary(4, hardy), "Fig. 4 · Hardy 1973");
+    }
+
+    #[test]
+    fn about_summary_falls_back_to_figure() {
+        assert_eq!(about_summary(3, "Unpublished notes"), "Fig. 3");
     }
 
     #[test]

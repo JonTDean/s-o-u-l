@@ -73,18 +73,22 @@ pub fn show(
             false,
         );
     });
-    section("growth").foldable(true).show(ui, |ui| {
+    let growth = section("growth").foldable(true).action("Restore defaults");
+    let response = growth.show(ui, |ui| {
         let mut params = sim.params;
         slider(ui, "μ", &mut params.mu, 0.0..=1.0, false);
         slider(ui, "σ", &mut params.sigma, 0.001..=1.0, true);
         slider(ui, "Δt", &mut params.dt, 0.0..=1.0, false);
-        if ui.link(dim("restore defaults")).clicked() {
-            params = LeniaParams::default();
-        }
         if params != sim.params {
             send(fx, ChannelAction::Lenia(LeniaAction::Parameters(params)));
         }
     });
+    if response.action_clicked && sim.params != LeniaParams::default() {
+        send(
+            fx,
+            ChannelAction::Lenia(LeniaAction::Parameters(LeniaParams::default())),
+        );
+    }
     section("seed").foldable(true).show(ui, |ui| {
         let mut seed = sim.seed;
         let options = [
