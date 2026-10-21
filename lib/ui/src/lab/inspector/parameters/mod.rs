@@ -1,7 +1,7 @@
 //! `parameters` margin section: experiment settings drafts applied through `ConfigureSession`.
 use crate::{
     lab::Effects,
-    theme::widgets::{margin_section, note, pill},
+    theme::widgets::{note, pill, section},
 };
 use bevy_egui::egui::Ui;
 use engine_core::automata::channel::ChannelId;
@@ -85,7 +85,7 @@ pub fn show(
     fx: &mut Effects,
 ) {
     let id = session.channel;
-    margin_section(ui, "parameters", false, |ui| {
+    section("parameters").foldable(true).show(ui, |ui| {
         draft(drafts, id, &session.settings);
         let entry = drafts.get_mut(&id).unwrap();
         let edited = &mut entry.edited;

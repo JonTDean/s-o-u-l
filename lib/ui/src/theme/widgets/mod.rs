@@ -1,14 +1,12 @@
-//! S4 Marginalia vocabulary: margin sections, readouts, footnotes, pills, lamps, sliders, segmented controls.
+//! S4 Marginalia vocabulary: divided sections, readouts, footnotes, pills, lamps, sliders, segmented controls.
 pub mod controls;
-pub mod margin;
 pub mod readout;
 pub mod section;
 pub use controls::{
     lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented, slider, value_box,
 };
-pub use margin::{MARGIN_WIDTH, margin_section, note};
 pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
-pub use section::{Section, SectionResponse, section};
+pub use section::{Section, SectionResponse, note, section};
 
 #[cfg(test)]
 mod tests {
@@ -41,9 +39,9 @@ mod tests {
         crate::theme::visuals::install(&ctx);
         let output = ctx.run(RawInput::default(), |ctx| {
             CentralPanel::default().show(ctx, |ui| {
-                margin_section(ui, "readout", true, |ui| {
-                    readout(ui, "000184", "tick", true)
-                });
+                section("readout")
+                    .active(true)
+                    .show(ui, |ui| readout(ui, "000184", "tick", true));
                 let mut v = 0.27;
                 slider(ui, "μ", &mut v, 0.0..=1.0, false);
                 let mut seed = 0;

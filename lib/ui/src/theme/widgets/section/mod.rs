@@ -1,7 +1,7 @@
 //! Divided sections: hairline, small-caps title, optional fold, amber hover edge.
 mod header;
 use crate::theme::{tokens::*, widgets::readout::dim};
-use bevy_egui::egui::{Rect, Sense, Stroke, Ui, collapsing_header::CollapsingState, pos2, vec2};
+use bevy_egui::egui::{Rect, Stroke, Ui, collapsing_header::CollapsingState, pos2, vec2};
 
 /// Outcome of showing a [`Section`].
 pub struct SectionResponse {
@@ -75,10 +75,10 @@ impl<'a> Section<'a> {
             let openness = state.as_ref().map(|s| s.openness(ui.ctx()));
             let head = header::draw(ui, &self, id, open, openness);
             action_clicked = head.action_clicked;
-            if head.toggled {
-                if let Some(state) = state.as_mut() {
-                    state.toggle(ui);
-                }
+            if head.toggled
+                && let Some(state) = state.as_mut()
+            {
+                state.toggle(ui);
             }
             ui.add_space(6.0);
         }

@@ -20,12 +20,7 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
     if !lab.inspector_open {
         return;
     }
-    let margin = Margin {
-        left: 2,
-        right: 12,
-        top: 14,
-        bottom: 14,
-    };
+    let margin = Margin::symmetric(14, 14);
     let panel = egui::SidePanel::right("lab.inspector")
         .resizable(true)
         .default_width(lab.inspector_width)
@@ -45,7 +40,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     let id = row.id;
     let metric = data.metrics.get(id);
     let session = data.bench.sessions.iter().find(|s| s.channel == id);
-    margin_section(ui, "readout", true, |ui| {
+    section("readout").active(true).show(ui, |ui| {
         readout(ui, &tick_digits(row.tick), "tick", true);
         if let Some((m, sample)) = metric.and_then(|m| m.latest.map(|s| (m, s))) {
             readout(
@@ -69,7 +64,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         && let Some((_, sim)) = data.lenia.iter().find(|(lid, _)| **lid == id)
     {
         lenia::show(ui, id, sim, metric, fx);
-        margin_section(ui, "grid", false, |ui| {
+        section("grid").foldable(true).show(ui, |ui| {
             ui.label(mono(super::stage::overlay::gpu_arena(sim)).color(INFO));
         });
     }
@@ -77,7 +72,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     if let Some(specimen) = data.specimens.get(&row.kind) {
         let figure = data.specimens.figure(&row.kind).unwrap_or(1) as u32;
         let modified = session.filter(|s| sections::customised(s));
-        margin_section(ui, "", false, |ui| {
+        section("").show(ui, |ui| {
             if data.lenia.iter().any(|(id, sim)| {
                 *id == row.id
                     && sim.kernel.is_some_and(|k| {
@@ -123,7 +118,7 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
     parameters::show(ui, session, &mut lab.params, fx);
     super::stage::editing::show(ui, &mut lab.editor, session, fx);
     if let Model::Symbolic(machine) = &session.model {
-        margin_section(ui, "machine", false, |ui| {
+        section("machine").foldable(true).show(ui, |ui| {
             for (key, value) in machine::summary(machine) {
                 ui.horizontal(|ui| {
                     ui.label(dim(key));
@@ -138,13 +133,13 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
         });
         input(ui, lab, id, session, fx);
     }
-    margin_section(ui, "grid", false, |ui| {
+    section("grid").foldable(true).show(ui, |ui| {
         ui.label(mono(sections::arena_label(&session.model, session.kind)).color(INK_DIM));
     });
 }
 
 fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: &mut Effects) {
-    margin_section(ui, "input", false, |ui| {
+    section("input").foldable(true).show(ui, |ui| {
         let draft = lab
             .inputs
             .entry(id)
@@ -163,7 +158,7 @@ fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: 
 
 fn colour(ui: &mut Ui, row: &ChannelRow, fx: &mut Effects) {
     let id = row.id;
-    margin_section(ui, "colour", false, |ui| {
+    section("colour").foldable(true).show(ui, |ui| {
         ui.horizontal_wrapped(|ui| {
             for swatch in SWATCHES {
                 let (rect, response) =

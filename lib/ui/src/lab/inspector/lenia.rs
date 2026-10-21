@@ -1,7 +1,7 @@
 //! Lenia growth sliders, seed choice and the opt-in GPU mass toggle.
 use crate::{
     lab::Effects,
-    theme::widgets::{dim, margin_section, note, segmented, slider},
+    theme::widgets::{dim, note, section, segmented, slider},
 };
 use bevy_egui::egui::{self, Ui};
 use engine_core::automata::{
@@ -22,7 +22,7 @@ pub fn show(
     fx: &mut Effects,
 ) {
     let send = |fx: &mut Effects, action| fx.commands.push(ChannelCommand { id, action });
-    margin_section(ui, "model", false, |ui| {
+    section("model").foldable(true).show(ui, |ui| {
         use simulation_kernel::core::{
             boundary::Boundary,
             lenia::continuous::{Kernel, Shape},
@@ -73,7 +73,7 @@ pub fn show(
             false,
         );
     });
-    margin_section(ui, "growth", false, |ui| {
+    section("growth").foldable(true).show(ui, |ui| {
         let mut params = sim.params;
         slider(ui, "μ", &mut params.mu, 0.0..=1.0, false);
         slider(ui, "σ", &mut params.sigma, 0.001..=1.0, true);
@@ -85,7 +85,7 @@ pub fn show(
             send(fx, ChannelAction::Lenia(LeniaAction::Parameters(params)));
         }
     });
-    margin_section(ui, "seed", false, |ui| {
+    section("seed").foldable(true).show(ui, |ui| {
         let mut seed = sim.seed;
         let options = [
             (LeniaSeed::Blob, "blob"),
@@ -96,7 +96,7 @@ pub fn show(
             send(fx, ChannelAction::Lenia(LeniaAction::Seed(seed)));
         }
     });
-    margin_section(ui, "sample", false, |ui| {
+    section("sample").foldable(true).show(ui, |ui| {
         let availability = metric.map(|m| &m.availability);
         let mut on = !matches!(availability, None | Some(MetricAvailability::OptIn));
         let label = dim("mass (GPU readback)");
