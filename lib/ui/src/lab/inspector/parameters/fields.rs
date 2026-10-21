@@ -1,7 +1,7 @@
 //! Per-family experiment fields in the Marginalia vocabulary.
 use crate::theme::{
     tokens::*,
-    widgets::{choice, dim, mono, plain, slider},
+    widgets::{dim, mono, plain, segmented, slider},
 };
 use bevy_egui::egui::{self, Sense, Ui};
 use models::workbench::{
@@ -31,7 +31,7 @@ pub(super) fn draw(ui: &mut Ui, kind: Kind, settings: &mut Settings) {
                 candidate.validate(kind).is_ok()
             })
             .collect();
-        ui.horizontal_wrapped(|ui| choice(ui, &mut settings.pattern, &valid));
+        segmented(ui, &mut settings.pattern, &valid);
         if before != settings.pattern {
             settings.world.seed = None;
         }

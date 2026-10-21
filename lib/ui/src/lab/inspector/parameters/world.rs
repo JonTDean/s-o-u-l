@@ -1,5 +1,5 @@
 //! World configuration follows the lab's existing parameter draft/apply contract.
-use crate::theme::widgets::{choice, note};
+use crate::theme::widgets::{note, segmented};
 use bevy_egui::egui::{self, Ui};
 use models::workbench::{catalog::Kind, experiment::config::Settings};
 use simulation_kernel::core::boundary::Boundary;
@@ -18,7 +18,7 @@ pub(super) fn draw(ui: &mut Ui, s: &mut Settings, kind: Kind) {
     if old != (s.world.width, s.world.height) {
         s.world.seed = None;
     }
-    choice(
+    segmented(
         ui,
         &mut s.world.boundary,
         &[

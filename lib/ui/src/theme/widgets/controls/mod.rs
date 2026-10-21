@@ -1,17 +1,17 @@
-//! Pills, status lamps, thin sliders and plain radio choices.
-use super::readout::{dim, mono, plain};
+//! Bordered pills and status lamps; segmented controls and sliders live beside.
 use crate::theme::{
     fonts::{SANS, SANS_SEMIBOLD, family},
     tokens::*,
 };
 use bevy_egui::egui::{
-    self, Color32, FontFamily, FontId, Rect, Response, Sense, Stroke, StrokeKind, Ui, pos2, vec2,
+    Color32, FontFamily, FontId, Rect, Response, Sense, Stroke, StrokeKind, Ui, pos2, vec2,
 };
 use engine_core::automata::channel::Status;
-use std::ops::RangeInclusive;
 
 pub mod segmented;
 pub use segmented::{segment_layout, segmented};
+pub mod slider;
+pub use slider::{slider, value_box};
 
 /// Pill fill: amber only for an enabled primary action.
 pub fn pill_fill(primary: bool, enabled: bool) -> Color32 {
@@ -144,53 +144,4 @@ pub fn lamp(ui: &mut Ui, status: Status) {
             .circle_filled(rect.center(), 5.0, colour.gamma_multiply(0.25));
     }
     ui.painter().circle_filled(rect.center(), 3.5, colour);
-}
-
-/// Labelled thin slider with a mono value; returns whether the value changed.
-pub fn slider(
-    ui: &mut Ui,
-    label: &str,
-    value: &mut f32,
-    range: RangeInclusive<f32>,
-    log: bool,
-) -> bool {
-    ui.horizontal(|ui| {
-        ui.label(dim(label));
-        let changed = ui
-            .add(
-                egui::Slider::new(value, range)
-                    .show_value(false)
-                    .trailing_fill(true)
-                    .logarithmic(log)
-                    .handle_shape(egui::style::HandleShape::Circle),
-            )
-            .changed();
-        ui.label(mono(format!("{value:.3}")));
-        changed
-    })
-    .inner
-}
-
-/// Plain radio row (`●` selected, `○` not); returns whether the choice changed.
-pub fn choice<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(T, &str)]) -> bool {
-    let mut changed = false;
-    ui.horizontal(|ui| {
-        for (value, label) in options {
-            let on = *current == *value;
-            let text = plain(format!("{} {label}", if on { "●" } else { "○" })).color(if on {
-                SIGNAL
-            } else {
-                INK_DIM
-            });
-            if ui
-                .add(egui::Label::new(text).sense(Sense::click()))
-                .clicked()
-                && !on
-            {
-                *current = *value;
-                changed = true;
-            }
-        }
-    });
-    changed
 }

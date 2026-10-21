@@ -1,7 +1,7 @@
 //! Lenia growth sliders, seed choice and the opt-in GPU mass toggle.
 use crate::{
     lab::Effects,
-    theme::widgets::{choice, dim, margin_section, note, slider},
+    theme::widgets::{dim, margin_section, note, segmented, slider},
 };
 use bevy_egui::egui::{self, Ui};
 use engine_core::automata::{
@@ -28,7 +28,7 @@ pub fn show(
             lenia::continuous::{Kernel, Shape},
         };
         let mut continuous = sim.kernel.is_some();
-        choice(
+        segmented(
             ui,
             &mut continuous,
             &[(false, "quantized XY"), (true, "continuous density")],
@@ -43,7 +43,7 @@ pub fn show(
                     ui.add(egui::DragValue::new(&mut kernel.radius).range(1..=4));
                 }
             });
-            choice(
+            segmented(
                 ui,
                 &mut kernel.shape,
                 &[
@@ -57,7 +57,7 @@ pub fn show(
             } else {
                 kernel.radius = kernel.radius.min(4);
             }
-            choice(
+            segmented(
                 ui,
                 &mut kernel.boundary,
                 &[(Boundary::Dead, "dead"), (Boundary::Periodic, "periodic")],
@@ -92,7 +92,7 @@ pub fn show(
             (LeniaSeed::Ring, "ring"),
             (LeniaSeed::Orbium, "published Orbium"),
         ];
-        if choice(ui, &mut seed, &options) {
+        if segmented(ui, &mut seed, &options) {
             send(fx, ChannelAction::Lenia(LeniaAction::Seed(seed)));
         }
     });

@@ -1,8 +1,10 @@
-//! S4 Marginalia vocabulary: margin sections, readouts, footnotes, pills, lamps, sliders, choices.
+//! S4 Marginalia vocabulary: margin sections, readouts, footnotes, pills, lamps, sliders, segmented controls.
 pub mod controls;
 pub mod margin;
 pub mod readout;
-pub use controls::{choice, lamp, lamp_colour, pill, pill_fill, slider};
+pub use controls::{
+    lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented, slider, value_box,
+};
 pub use margin::{MARGIN_WIDTH, margin_section, note};
 pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
 
@@ -41,9 +43,11 @@ mod tests {
                 let mut v = 0.27;
                 slider(ui, "μ", &mut v, 0.0..=1.0, false);
                 let mut seed = 0;
-                choice(ui, &mut seed, &[(0, "blob"), (1, "ring")]);
+                segmented(ui, &mut seed, &[(0, "blob"), (1, "ring")]);
                 lamp(ui, Status::Running);
                 pill(ui, "Pause", true, true);
+                pill_with_key(ui, "Step", "S", false, true);
+                pill(ui, "Off", false, false);
                 assert_eq!(
                     footnote(ui, 1, "Born with three.", "Gardner (1970).", "10.1038/x"),
                     None

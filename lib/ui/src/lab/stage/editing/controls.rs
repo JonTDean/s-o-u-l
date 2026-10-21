@@ -1,12 +1,12 @@
 use super::*;
-use crate::theme::widgets::{choice, margin_section, note, pill};
+use crate::theme::widgets::{margin_section, note, pill, segmented};
 pub fn show(ui: &mut Ui, editor: &mut Editor, session: &Session, fx: &mut Effects) {
     if !matches!(session.model, Model::Grid(_)) {
         return;
     }
     margin_section(ui, "author", false, |ui| {
         ui.add_enabled_ui(session.paused, |ui| {
-            choice(
+            segmented(
                 ui,
                 &mut editor.tool,
                 &[
