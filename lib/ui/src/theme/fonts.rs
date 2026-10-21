@@ -35,7 +35,7 @@ const FACES: [(&str, &[u8]); 6] = [
     ("plex-sans-semibold", font!("IBMPlexSans-SemiBold.otf")),
     ("plex-mono", font!("IBMPlexMono-Regular.otf")),
     ("plex-mono-medium", font!("IBMPlexMono-Medium.otf")),
-    // Plex lacks ⁂ ‖ ▾ ▸ ␣; a five-glyph DejaVu subset fills them.
+    // Plex lacks ⁂ ‖ ▾ ▸ ␣ ≡ ⁿ; a seven-glyph DejaVu subset fills them.
     (
         "soul-symbols",
         font_in!("symbols", "SoulSymbols-Regular.ttf"),
@@ -86,10 +86,9 @@ pub fn definitions() -> FontDefinitions {
     ] {
         fonts.families.insert(family(name), chain(key, &fallback));
     }
-    fonts.families.insert(
-        family(MONO_MEDIUM),
-        chain("plex-mono-medium", &mono_fallback),
-    );
+    let mut mono_medium = chain("plex-mono-medium", &mono_fallback);
+    mono_medium.push("plex-sans".into());
+    fonts.families.insert(family(MONO_MEDIUM), mono_medium);
     fonts
 }
 
@@ -110,6 +109,20 @@ mod tests {
             );
         }
         assert_eq!(defs.families[&FontFamily::Monospace][0], "plex-mono");
+        for name in [MONO_MEDIUM] {
+            let chain = &defs.families[&family(name)];
+            assert_eq!(
+                chain.last().map(String::as_str),
+                Some("plex-sans"),
+                "{name}"
+            );
+        }
+        assert_eq!(
+            defs.families[&FontFamily::Monospace]
+                .last()
+                .map(String::as_str),
+            Some("plex-sans")
+        );
     }
 
     #[test]
@@ -146,6 +159,51 @@ mod tests {
                 // "⏭" renders in Plex's fallback chain, so Task 6 uses it as the Step icon.
                 assert!(fonts.has_glyphs(&sans, "⏭"));
                 assert!(fonts.has_glyphs(&sans, "‖"), "Pause label");
+            });
+        });
+    }
+
+    #[test]
+    fn every_authored_and_chrome_glyph_has_a_font() {
+        let specimens = models::workbench::catalog::specimens::Specimens::embedded();
+        let mut texts: Vec<String> = [
+            "≡",
+            "§",
+            "⁂",
+            "‖ Pause",
+            "▶ Run",
+            "⏭ Step",
+            "↺ Reset",
+            "▾ ▸",
+        ]
+        .map(String::from)
+        .into();
+        for s in &specimens.0 {
+            texts.extend([s.title.clone(), s.subtitle.clone(), s.caption.clone()]);
+            texts.push(s.explanation.clone());
+        }
+        let ctx = Context::default();
+        ctx.set_fonts(definitions());
+        let _ = ctx.run(RawInput::default(), |_| {});
+        let _ = ctx.run(RawInput::default(), |ctx| {
+            ctx.fonts(|fonts| {
+                let families = [
+                    FontFamily::Proportional,
+                    FontFamily::Monospace,
+                    family(SANS),
+                    family(SANS_MEDIUM),
+                    family(SANS_SEMIBOLD),
+                    family(MONO_MEDIUM),
+                ];
+                for fam in families {
+                    let id = FontId::new(12.0, fam.clone());
+                    for text in &texts {
+                        assert!(
+                            fonts.has_glyphs(&id, text),
+                            "{fam:?} lacks glyphs for {text:?}"
+                        );
+                    }
+                }
             });
         });
     }

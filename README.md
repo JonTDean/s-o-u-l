@@ -291,5 +291,5 @@ longer-term rendering ambitions beyond this workbench milestone.
 S.O.U.L. is distributed under the [Elastic License 2.0](LICENSE.md). The
 bundled IBM Plex fonts are © IBM Corp. under the
 [SIL Open Font License 1.1](assets/fonts/plex/LICENSE.txt), and a small symbol
-subset of DejaVu Sans ships under its [Bitstream Vera license](assets/fonts/symbols/LICENSE.txt). The original
+subset of DejaVu Sans ships under its [license](assets/fonts/symbols/LICENSE.txt). The original
 Orbium seed is © Bert Chan under its bundled [MIT license](assets/specimens/LICENSE-Lenia.txt).
