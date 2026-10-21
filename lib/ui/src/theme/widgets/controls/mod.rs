@@ -10,6 +10,9 @@ use bevy_egui::egui::{
 use engine_core::automata::channel::Status;
 use std::ops::RangeInclusive;
 
+pub mod segmented;
+pub use segmented::{segment_layout, segmented};
+
 /// Pill fill: amber only for an enabled primary action.
 pub fn pill_fill(primary: bool, enabled: bool) -> Color32 {
     if primary && enabled { SIGNAL } else { RAISED }
@@ -35,13 +38,16 @@ pub fn pill_with_key(
     draw_pill(ui, label, Some(key), primary, enabled)
 }
 
-fn draw_pill(ui: &mut Ui, label: &str, key: Option<&str>, primary: bool, enabled: bool) -> Response {
+fn draw_pill(
+    ui: &mut Ui,
+    label: &str,
+    key: Option<&str>,
+    primary: bool,
+    enabled: bool,
+) -> Response {
     let live = primary && enabled;
     let text_colour = if live { BG } else { INK };
-    let font = FontId::new(
-        size::BODY,
-        family(if live { SANS_SEMIBOLD } else { SANS }),
-    );
+    let font = FontId::new(size::BODY, family(if live { SANS_SEMIBOLD } else { SANS }));
     let galley = ui.painter().layout_no_wrap(label.into(), font, text_colour);
     let chip = key.map(|key| {
         let font = FontId::new(size::LABEL, FontFamily::Monospace);
@@ -49,7 +55,11 @@ fn draw_pill(ui: &mut Ui, label: &str, key: Option<&str>, primary: bool, enabled
     });
     let chip_width = chip.as_ref().map_or(0.0, |g| g.size().x + 10.0 + 6.0);
     let desired = vec2(galley.size().x + chip_width + 20.0, PILL_HEIGHT);
-    let sense = if enabled { Sense::click() } else { Sense::hover() };
+    let sense = if enabled {
+        Sense::click()
+    } else {
+        Sense::hover()
+    };
     let (rect, response) = ui.allocate_exact_size(desired, sense);
     if !ui.is_rect_visible(rect) {
         return response;
@@ -58,13 +68,32 @@ fn draw_pill(ui: &mut Ui, label: &str, key: Option<&str>, primary: bool, enabled
         .ctx()
         .animate_bool_with_time(response.id, enabled && response.hovered(), 0.15);
     let base = pill_fill(primary, enabled);
-    let lifted = if live { SIGNAL.lerp_to_gamma(INK_HI, 0.25) } else { TRACK };
-    let fade = |colour: Color32| if enabled { colour } else { colour.gamma_multiply(0.4) };
+    let lifted = if live {
+        SIGNAL.lerp_to_gamma(INK_HI, 0.25)
+    } else {
+        TRACK
+    };
+    let fade = |colour: Color32| {
+        if enabled {
+            colour
+        } else {
+            colour.gamma_multiply(0.4)
+        }
+    };
     let fill = fade(base.lerp_to_gamma(lifted, hover));
     let border = fade(LINE.lerp_to_gamma(LINE_HI, hover));
-    ui.painter()
-        .rect(rect, 6.0, fill, Stroke::new(1.0, border), StrokeKind::Inside);
-    let nudge = if enabled && response.is_pointer_button_down_on() { 1.0 } else { 0.0 };
+    ui.painter().rect(
+        rect,
+        6.0,
+        fill,
+        Stroke::new(1.0, border),
+        StrokeKind::Inside,
+    );
+    let nudge = if enabled && response.is_pointer_button_down_on() {
+        1.0
+    } else {
+        0.0
+    };
     let mut x = rect.min.x + 10.0;
     let centre_y = rect.center().y + nudge;
     ui.painter().galley(
@@ -79,10 +108,17 @@ fn draw_pill(ui: &mut Ui, label: &str, key: Option<&str>, primary: bool, enabled
             vec2(chip.size().x + 10.0, chip.size().y + 2.0),
         );
         let outline = if live { CHIP_PRIMARY } else { LINE };
-        ui.painter()
-            .rect_stroke(chip_rect, 3.0, Stroke::new(1.0, fade(outline)), StrokeKind::Inside);
+        ui.painter().rect_stroke(
+            chip_rect,
+            3.0,
+            Stroke::new(1.0, fade(outline)),
+            StrokeKind::Inside,
+        );
         ui.painter().galley(
-            pos2(chip_rect.min.x + 5.0, chip_rect.center().y - chip.size().y / 2.0),
+            pos2(
+                chip_rect.min.x + 5.0,
+                chip_rect.center().y - chip.size().y / 2.0,
+            ),
             chip,
             fade(text_colour),
         );
