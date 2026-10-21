@@ -22,7 +22,7 @@ pub fn show(
     fx: &mut Effects,
 ) {
     let send = |fx: &mut Effects, action| fx.commands.push(ChannelCommand { id, action });
-    section("model").foldable(true).show(ui, |ui| {
+    section("model").folds(true).show(ui, |ui| {
         use simulation_kernel::core::{
             boundary::Boundary,
             lenia::continuous::{Kernel, Shape},
@@ -73,7 +73,7 @@ pub fn show(
             false,
         );
     });
-    let growth = section("growth").foldable(true).action("Restore defaults");
+    let growth = section("growth").folds(true).action("Restore defaults");
     let response = growth.show(ui, |ui| {
         let mut params = sim.params;
         slider(ui, "μ", &mut params.mu, 0.0..=1.0, false);
@@ -89,7 +89,7 @@ pub fn show(
             ChannelAction::Lenia(LeniaAction::Parameters(LeniaParams::default())),
         );
     }
-    section("seed").foldable(true).show(ui, |ui| {
+    section("seed").folds(true).show(ui, |ui| {
         let mut seed = sim.seed;
         let options = [
             (LeniaSeed::Blob, "blob"),
@@ -100,7 +100,7 @@ pub fn show(
             send(fx, ChannelAction::Lenia(LeniaAction::Seed(seed)));
         }
     });
-    section("sample").foldable(true).show(ui, |ui| {
+    section("sample").folds(true).show(ui, |ui| {
         let availability = metric.map(|m| &m.availability);
         let mut on = !matches!(availability, None | Some(MetricAvailability::OptIn));
         let label = dim("mass (GPU readback)");

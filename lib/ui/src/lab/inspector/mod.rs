@@ -66,7 +66,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         lenia::show(ui, id, sim, metric, fx);
         let arena = super::stage::overlay::gpu_arena(sim);
         section("grid")
-            .foldable(false)
+            .folds(false)
             .summary(arena.clone())
             .show(ui, |ui| {
                 ui.label(mono(arena).color(INFO));
@@ -94,7 +94,7 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         }
         let summary = sections::about_summary(figure, &specimen.citation);
         section("About this specimen")
-            .foldable(false)
+            .folds(false)
             .summary(summary)
             .show(ui, |ui| {
                 let explanation = if orbium {
@@ -116,7 +116,7 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
     parameters::show(ui, session, &mut lab.params, fx);
     super::stage::editing::show(ui, &mut lab.editor, session, fx);
     if let Model::Symbolic(machine) = &session.model {
-        section("machine").foldable(true).show(ui, |ui| {
+        section("machine").folds(true).show(ui, |ui| {
             for (key, value) in machine::summary(machine) {
                 ui.horizontal(|ui| {
                     ui.label(dim(key));
@@ -133,7 +133,7 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
     }
     let arena = sections::arena_label(&session.model, session.kind);
     section("grid")
-        .foldable(false)
+        .folds(false)
         .summary(arena.clone())
         .show(ui, |ui| {
             ui.label(mono(arena).color(INK_DIM));
@@ -141,7 +141,7 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
 }
 
 fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: &mut Effects) {
-    section("input").foldable(true).show(ui, |ui| {
+    section("input").folds(true).show(ui, |ui| {
         let draft = lab
             .inputs
             .entry(id)
@@ -160,7 +160,7 @@ fn input(ui: &mut Ui, lab: &mut LabState, id: ChannelId, session: &Session, fx: 
 
 fn colour(ui: &mut Ui, row: &ChannelRow, fx: &mut Effects) {
     let id = row.id;
-    section("colour").foldable(true).show(ui, |ui| {
+    section("colour").folds(true).show(ui, |ui| {
         ui.horizontal_wrapped(|ui| {
             for swatch in SWATCHES {
                 let (rect, response) =

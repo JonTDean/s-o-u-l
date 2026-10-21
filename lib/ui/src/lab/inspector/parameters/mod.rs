@@ -85,7 +85,7 @@ pub fn show(
     fx: &mut Effects,
 ) {
     let id = session.channel;
-    section("parameters").foldable(true).show(ui, |ui| {
+    section("parameters").folds(true).show(ui, |ui| {
         draft(drafts, id, &session.settings);
         let entry = drafts.get_mut(&id).unwrap();
         let edited = &mut entry.edited;

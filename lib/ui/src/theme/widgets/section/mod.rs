@@ -36,9 +36,9 @@ impl<'a> Section<'a> {
         self
     }
 
-    /// Make the section foldable, open on first sight when `open_by_default`.
-    pub fn foldable(mut self, open_by_default: bool) -> Self {
-        self.fold = Some(open_by_default);
+    /// Make the section fold; it starts open when `open` is true.
+    pub fn folds(mut self, open: bool) -> Self {
+        self.fold = Some(open);
         self
     }
 

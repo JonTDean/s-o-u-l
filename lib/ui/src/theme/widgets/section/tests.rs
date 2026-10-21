@@ -58,7 +58,7 @@ fn first_section_draws_no_divider() {
 #[test]
 fn fold_state_survives_frames() {
     let ctx = ctx();
-    let show = |ui: &mut Ui| section("grid").foldable(false).show(ui, |_| {}).open;
+    let show = |ui: &mut Ui| section("grid").folds(false).show(ui, |_| {}).open;
     let (mut a, mut b, mut c, mut d) = (true, true, true, false);
     pass(&ctx, vec![], |ui| a = show(ui));
     pass(&ctx, vec![], |ui| {
@@ -70,7 +70,7 @@ fn fold_state_survives_frames() {
     });
     pass(&ctx, vec![], |ui| c = show(ui));
     pass(&ctx, vec![], |ui| {
-        section("other").foldable(false).show(ui, |_| {});
+        section("other").folds(false).show(ui, |_| {});
     });
     pass(&ctx, vec![], |ui| d = show(ui));
     assert!(!a && c && d, "a={a} b={b} c={c} d={d}");
@@ -81,11 +81,11 @@ fn summary_only_while_folded() {
     let ctx = ctx();
     let text = "64×64×8 · GPU";
     let folded = pass(&ctx, vec![], |ui| {
-        section("g").foldable(false).summary(text).show(ui, |_| {});
+        section("g").folds(false).summary(text).show(ui, |_| {});
     });
     assert!(texts(&folded).iter().any(|t| t == text));
     let open = pass(&ctx, vec![], |ui| {
-        section("h").foldable(true).summary(text).show(ui, |_| {});
+        section("h").folds(true).summary(text).show(ui, |_| {});
     });
     assert!(!texts(&open).iter().any(|t| t == text));
 }
@@ -129,7 +129,7 @@ fn long_summary_elides_instead_of_touching_title() {
     let text = "64 cells · 64-row history · CPU · and a very long tail of detail";
     let draw = |ui: &mut Ui| {
         ui.allocate_ui(bevy_egui::egui::vec2(180.0, 40.0), |ui| {
-            section("g").foldable(false).summary(text).show(ui, |_| {});
+            section("g").folds(false).summary(text).show(ui, |_| {});
         });
     };
     pass(&ctx, vec![], draw);
@@ -184,4 +184,42 @@ fn hovered_action_renders_in_signal() {
         out = run(vec![]);
     }
     assert_eq!(rendered(&out, "reset"), SIGNAL);
+}
+
+#[test]
+fn header_click_toggles_fold_and_persists() {
+    let ctx = ctx();
+    let run = |events: Vec<Event>| {
+        let mut open = false;
+        let out = pass(&ctx, events, |ui| {
+            open = section("grid").folds(false).show(ui, |_| {}).open;
+        });
+        (open, out)
+    };
+    let (open, out) = run(vec![]);
+    assert!(!open);
+    let at = out
+        .shapes
+        .iter()
+        .find_map(|s| match &s.shape {
+            Shape::Text(t) if t.galley.text() == "GRID" => {
+                Some(t.galley.rect.translate(t.pos.to_vec2()).center())
+            }
+            _ => None,
+        })
+        .expect("title painted");
+    let button = |pressed| Event::PointerButton {
+        pos: at,
+        button: PointerButton::Primary,
+        pressed,
+        modifiers: Default::default(),
+    };
+    run(vec![Event::PointerMoved(at)]);
+    run(vec![button(true)]);
+    assert!(run(vec![button(false)]).0, "click opens the folded section");
+    assert!(run(vec![]).0, "open state persists");
+    run(vec![button(true)]);
+    run(vec![button(false)]);
+    assert!(!run(vec![]).0, "second click folds again");
+    assert!(!run(vec![]).0, "folded state persists");
 }
