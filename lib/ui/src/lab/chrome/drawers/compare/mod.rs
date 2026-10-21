@@ -3,7 +3,7 @@ use crate::{
     lab::{Effects, LabData, stage::painters, stage::view},
     theme::{
         tokens::*,
-        widgets::{mono, serif, serif_italic},
+        widgets::{dim, mono, plain},
     },
 };
 use bevy::prelude::Resource;
@@ -93,7 +93,7 @@ pub fn body(
 }
 
 fn thumbnail(ui: &mut Ui, session: &Session) {
-    ui.label(serif(session.title()).color(INK));
+    ui.label(plain(session.title()).color(INK));
     ui.label(mono(format!("tick {}", session.ticks)).size(size::LABEL + 1.0));
     let side = ui.available_width().min(130.0);
     let (rect, _) = ui.allocate_exact_size(vec2(side, side), Sense::hover());
@@ -108,7 +108,7 @@ fn thumbnail(ui: &mut Ui, session: &Session) {
         session.kind,
         session.settings.colour,
     );
-    ui.label(serif_italic(describe(session)).size(size::LABEL + 1.0));
+    ui.label(dim(describe(session)).size(size::LABEL + 1.0));
 }
 
 #[cfg(test)]

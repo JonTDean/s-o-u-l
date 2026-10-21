@@ -1,10 +1,10 @@
-//! Presenter mode: full-window stage, HUD readouts, serif title, fading transport.
+//! Presenter mode: full-window stage, HUD readouts, plain title, fading transport.
 use super::paint;
 use crate::{
     lab::{Effects, LabData, inspector::sections::format_metric, state::LabState},
     theme::{
         tokens::*,
-        widgets::{mono, pill, serif, serif_italic, tick_digits},
+        widgets::{dim, mono, pill, plain, tick_digits},
     },
 };
 use bevy_egui::egui::{self, Align2, Frame};
@@ -31,11 +31,11 @@ pub fn show(
         .show(ctx, |ui| {
             ui.with_layout(egui::Layout::top_down(egui::Align::Max), |ui| {
                 ui.label(mono(tick_digits(row.tick)).size(size::HUD));
-                ui.label(serif_italic("tick"));
+                ui.label(dim("tick"));
                 let metric = data.metrics.get(row.id);
                 if let Some((m, sample)) = metric.and_then(|m| m.latest.map(|s| (m, s))) {
                     ui.label(mono(format_metric(sample.value, &m.id)).size(26.0));
-                    ui.label(serif_italic(m.id.label));
+                    ui.label(dim(m.id.label));
                 }
             });
         });
@@ -46,11 +46,11 @@ pub fn show(
                 ui.set_min_width(360.0);
                 let n = data.specimens.figure(&row.kind).unwrap_or(0);
                 let heading = format!("Specimen {n} · {}", specimen.group.label());
-                ui.label(serif_italic(heading).size(size::BODY + 1.0));
+                ui.label(dim(heading).size(size::BODY + 1.0));
                 let session = data.bench.sessions.iter().find(|s| s.channel == row.id);
                 let title = crate::lab::chrome::tabs::title(row, &data.specimens, session);
-                ui.label(serif(title).size(24.0).color(INK_HI));
-                ui.label(serif_italic(&specimen.caption));
+                ui.label(plain(title).size(24.0).color(INK_HI));
+                ui.label(dim(&specimen.caption));
             });
     }
     let alpha = lab.transport_alpha();

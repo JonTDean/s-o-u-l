@@ -1,7 +1,7 @@
 //! Lenia growth sliders, seed choice and the opt-in GPU mass toggle.
 use crate::{
     lab::Effects,
-    theme::widgets::{choice, margin_section, note, serif_italic, slider},
+    theme::widgets::{choice, dim, margin_section, note, slider},
 };
 use bevy_egui::egui::{self, Ui};
 use engine_core::automata::{
@@ -78,7 +78,7 @@ pub fn show(
         slider(ui, "μ", &mut params.mu, 0.0..=1.0, false);
         slider(ui, "σ", &mut params.sigma, 0.001..=1.0, true);
         slider(ui, "Δt", &mut params.dt, 0.0..=1.0, false);
-        if ui.link(serif_italic("restore defaults")).clicked() {
+        if ui.link(dim("restore defaults")).clicked() {
             params = LeniaParams::default();
         }
         if params != sim.params {
@@ -99,7 +99,7 @@ pub fn show(
     margin_section(ui, "sample", false, |ui| {
         let availability = metric.map(|m| &m.availability);
         let mut on = !matches!(availability, None | Some(MetricAvailability::OptIn));
-        let label = serif_italic("mass (GPU readback)");
+        let label = dim("mass (GPU readback)");
         if ui.add(egui::Checkbox::new(&mut on, label)).changed() {
             send(fx, ChannelAction::SampleMetric(on));
         }

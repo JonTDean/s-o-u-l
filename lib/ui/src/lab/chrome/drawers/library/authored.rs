@@ -32,9 +32,7 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, files: &mut Files) 
                 Err(e) => state.status = e,
             }
         }
-        ui.label(serif_italic(
-            "Open replaces channels with the saved starting state.",
-        ));
+        ui.label(dim("Open replaces channels with the saved starting state."));
         match library::entries(&root) {
             Err(e) => state.status = e,
             Ok(names) => {

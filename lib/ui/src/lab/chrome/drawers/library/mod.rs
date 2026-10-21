@@ -3,7 +3,7 @@ use crate::{
     lab::{Effects, LabData, state::LabState},
     theme::{
         tokens::*,
-        widgets::{margin_section, mono, note, pill, serif, serif_italic},
+        widgets::{dim, margin_section, mono, note, pill, plain},
     },
 };
 use bevy_egui::egui::{self, Sense, Ui};
@@ -45,7 +45,7 @@ pub fn entries<'a>(
 /// Drawer body: filter, grouped specimens and the open-channel count.
 pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     let filter = egui::TextEdit::singleline(&mut lab.filter)
-        .hint_text(serif_italic("filter specimens…"))
+        .hint_text(dim("filter specimens…"))
         .frame(false);
     ui.add(filter);
     ui.add_space(10.0);
@@ -61,8 +61,8 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
             for specimen in items {
                 let clicked = ui
                     .horizontal(|ui| {
-                        let title = egui::Label::new(serif(&specimen.title).color(INK));
-                        let subtitle = egui::Label::new(serif_italic(&specimen.subtitle));
+                        let title = egui::Label::new(plain(&specimen.title).color(INK));
+                        let subtitle = egui::Label::new(dim(&specimen.subtitle));
                         let mut response = ui.add(title.sense(Sense::click()))
                             | ui.add(subtitle.sense(Sense::click()));
                         if specimen.id == "lenia" {
@@ -83,7 +83,7 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     margin_section(ui, "channels", false, |ui| {
         ui.horizontal(|ui| {
             ui.label(mono(format!("{}", data.channels.rows.len())));
-            ui.label(serif_italic(format!("of {} open", ChannelIds::CAPACITY)));
+            ui.label(dim(format!("of {} open", ChannelIds::CAPACITY)));
             if pill(ui, "clear all", false, !data.channels.rows.is_empty()).clicked() {
                 fx.automata.push(AutomataCommand::Clear);
             }

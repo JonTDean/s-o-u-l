@@ -1,6 +1,6 @@
-//! Global egui style: borderless surfaces, Instrument colours, Libertinus type scale.
+//! Global egui style: borderless surfaces, Instrument colours, Plex type scale.
 use super::{
-    fonts::{SERIF, definitions, family},
+    fonts::{SANS_SEMIBOLD, definitions, family},
     tokens::*,
 };
 use bevy_egui::egui::{
@@ -35,7 +35,10 @@ pub fn apply(style: &mut Style) {
             TextStyle::Button,
             FontId::new(size::BODY, FontFamily::Proportional),
         ),
-        (TextStyle::Heading, FontId::new(size::TITLE, family(SERIF))),
+        (
+            TextStyle::Heading,
+            FontId::new(size::TITLE, family(SANS_SEMIBOLD)),
+        ),
         (
             TextStyle::Monospace,
             FontId::new(size::BODY, FontFamily::Monospace),
@@ -111,7 +114,10 @@ mod tests {
         let mut style = Style::default();
         apply(&mut style);
         assert_eq!(style.text_styles[&TextStyle::Body].size, size::BODY);
-        assert_eq!(style.text_styles[&TextStyle::Heading].family, family(SERIF));
+        assert_eq!(
+            style.text_styles[&TextStyle::Heading].family,
+            family(SANS_SEMIBOLD)
+        );
         assert_eq!(style.text_styles[&TextStyle::Small].size, size::LABEL);
     }
 }

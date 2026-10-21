@@ -2,9 +2,9 @@
 use crate::{
     lab::{Effects, LabData},
     theme::{
-        fonts::{SERIF_ITALIC, family},
+        fonts::{SANS, family},
         tokens::*,
-        widgets::{mono, pill, serif_italic},
+        widgets::{dim, mono, pill},
     },
 };
 use bevy_egui::egui::{self, Frame, Margin, Pos2, Rect, Sense, Stroke, pos2, vec2};
@@ -74,7 +74,7 @@ pub fn show(ctx: &egui::Context, data: &LabData, fx: &mut Effects) {
                 let width = (ui.available_width() - 150.0).max(40.0);
                 let (rect, _) = ui.allocate_exact_size(vec2(width, 26.0), Sense::hover());
                 if let Some(metric) = row.and_then(|r| data.metrics.get(r.id)) {
-                    let font = egui::FontId::new(size::LABEL, family(SERIF_ITALIC));
+                    let font = egui::FontId::new(size::LABEL, family(SANS));
                     let painter = ui.painter();
                     painter.text(
                         rect.left_top(),
@@ -86,7 +86,7 @@ pub fn show(ctx: &egui::Context, data: &LabData, fx: &mut Effects) {
                     let points = sparkline(&metric.trace, rect.shrink2(vec2(0.0, 4.0)));
                     painter.add(egui::Shape::line(points, Stroke::new(1.2, SIGNAL)));
                 }
-                ui.label(serif_italic("steps/s"));
+                ui.label(dim("steps/s"));
                 for preset in RATE_PRESETS {
                     let on = row.is_some_and(|r| rate_selected(r.settings.rate_hz, preset));
                     let text =

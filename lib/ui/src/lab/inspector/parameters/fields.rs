@@ -1,7 +1,7 @@
 //! Per-family experiment fields in the Marginalia vocabulary.
 use crate::theme::{
     tokens::*,
-    widgets::{choice, mono, serif, serif_italic, slider},
+    widgets::{choice, dim, mono, plain, slider},
 };
 use bevy_egui::egui::{self, Sense, Ui};
 use models::workbench::{
@@ -74,7 +74,7 @@ pub(super) fn draw(ui: &mut Ui, kind: Kind, settings: &mut Settings) {
 
 fn labelled(ui: &mut Ui, label: &str, add: impl FnOnce(&mut Ui) -> egui::Response) {
     ui.horizontal(|ui| {
-        ui.label(serif_italic(label));
+        ui.label(dim(label));
         add(ui);
     });
 }
@@ -82,7 +82,7 @@ fn labelled(ui: &mut Ui, label: &str, add: impl FnOnce(&mut Ui) -> egui::Respons
 /// Neighbour counts 0–8 as toggleable mono digits (amber when set).
 fn counts(ui: &mut Ui, label: &str, mask: &mut u16) {
     ui.horizontal(|ui| {
-        ui.label(serif(label).color(INK_DIM));
+        ui.label(plain(label).color(INK_DIM));
         for count in 0..=8 {
             let on = *mask & (1 << count) != 0;
             let digit = mono(count.to_string()).color(if on { SIGNAL } else { INK_DIM });

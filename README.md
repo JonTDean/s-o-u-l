@@ -178,7 +178,7 @@ reaches into the other.
 | `lib/engine/engine-gpu` | GPU storage, surface extraction, compute and indirect draw |
 | `lib/engine/engine-render` | Automaton commands, GPU channel routing, readback sampling |
 | `lib/models` | Automaton families, workbench sessions, experiments, projects, specimens |
-| `lib/ui` | Instrument theme (tokens, Libertinus type, widgets), the lab shell, meta menus |
+| `lib/ui` | Instrument theme (tokens, IBM Plex type, widgets), the lab shell, meta menus |
 | `lib/tooling` | Debugging, logging and monitoring |
 | `lib/tests` | Cross-crate native behaviour tests |
 | `tools/structure` | Structural-governance checker and its self-tests |
@@ -289,6 +289,7 @@ longer-term rendering ambitions beyond this workbench milestone.
 ## License
 
 S.O.U.L. is distributed under the [Elastic License 2.0](LICENSE.md). The
-bundled Libertinus fonts are © the Libertinus authors under the
-[SIL Open Font License 1.1](assets/fonts/libertinus/OFL.txt). The original
+bundled IBM Plex fonts are © IBM Corp. under the
+[SIL Open Font License 1.1](assets/fonts/plex/LICENSE.txt), and a small symbol
+subset of DejaVu Sans ships under its [Bitstream Vera license](assets/fonts/symbols/LICENSE.txt). The original
 Orbium seed is © Bert Chan under its bundled [MIT license](assets/specimens/LICENSE-Lenia.txt).

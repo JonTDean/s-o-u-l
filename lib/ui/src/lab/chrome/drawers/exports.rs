@@ -1,6 +1,6 @@
 //! Compare drawer exports: an isolated pair bundle or the saved project, on a worker thread.
 use super::compare::Comparison;
-use crate::theme::widgets::{margin_section, note, pill, serif_italic};
+use crate::theme::widgets::{dim, margin_section, note, pill};
 use bevy_egui::egui::{self, Ui};
 use models::workbench::{
     experiment::export::write_bundle,
@@ -20,9 +20,7 @@ pub fn show(ui: &mut Ui, state: &mut Comparison, bench: &Workbench, saved_path: 
             );
     }
     margin_section(ui, "export", false, |ui| {
-        ui.add(
-            egui::TextEdit::singleline(&mut state.folder).hint_text(serif_italic("output folder")),
-        );
+        ui.add(egui::TextEdit::singleline(&mut state.folder).hint_text(dim("output folder")));
         note(
             ui,
             "30 frames, one transition per frame, 100 ms each. Choose a new folder.",

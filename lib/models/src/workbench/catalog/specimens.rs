@@ -41,7 +41,7 @@ impl Group {
 pub struct Specimen {
     /// Catalog id passed to `AutomataCommand::SeedPattern`.
     pub id: String,
-    /// Serif display title.
+    /// Display title.
     pub title: String,
     /// Library section.
     pub group: Group,

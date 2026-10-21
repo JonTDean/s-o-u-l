@@ -1,4 +1,4 @@
-//! Channel tabs: serif specimen names, status lamps, close and add.
+//! Channel tabs: plain specimen names, status lamps, close and add.
 use crate::lab::inspector::sections::customised;
 use crate::{
     lab::{
@@ -6,8 +6,9 @@ use crate::{
         state::{Drawer, LabState},
     },
     theme::{
+        fonts::{SANS_MEDIUM, family},
         tokens::*,
-        widgets::{lamp, serif},
+        widgets::{lamp, plain},
     },
 };
 use bevy_egui::egui::{self, Frame, Margin, Sense, Stroke};
@@ -43,7 +44,8 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                         ui.spacing_mut().item_spacing.x = 6.0;
                         lamp(ui, row.status);
                         let session = data.bench.sessions.iter().find(|s| s.channel == row.id);
-                        let name = serif(title(row, &data.specimens, session))
+                        let name = plain(title(row, &data.specimens, session))
+                            .family(family(SANS_MEDIUM))
                             .size(size::TITLE - 2.0)
                             .color(if selected { INK_HI } else { INK_DIM });
                         if ui
@@ -72,7 +74,7 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                         );
                     }
                 }
-                let plus = serif("+").color(SIGNAL).size(size::TITLE);
+                let plus = plain("+").color(SIGNAL).size(size::TITLE);
                 let add = ui.add(egui::Label::new(plus).sense(Sense::click()));
                 if add.on_hover_text("Open a specimen (L)").clicked() {
                     lab.drawer = Some(Drawer::Library);

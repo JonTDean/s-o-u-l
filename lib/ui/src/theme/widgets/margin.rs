@@ -1,5 +1,5 @@
-//! Tufte-style margin sections: italic label column, content hanging beside it.
-use super::readout::serif_italic;
+//! Tufte-style margin sections: label column, content hanging beside it.
+use super::readout::dim;
 use crate::theme::tokens::*;
 use bevy_egui::egui::{Align, Layout, Ui, vec2};
 
@@ -13,7 +13,7 @@ pub fn margin_section(ui: &mut Ui, label: &str, active: bool, body: impl FnOnce(
             vec2(MARGIN_WIDTH, 14.0),
             Layout::right_to_left(Align::Min),
             |ui| {
-                ui.label(serif_italic(label).color(if active { SIGNAL } else { INK_DIM }));
+                ui.label(dim(label).color(if active { SIGNAL } else { INK_DIM }));
             },
         );
         ui.vertical(body);
@@ -21,10 +21,10 @@ pub fn margin_section(ui: &mut Ui, label: &str, active: bool, body: impl FnOnce(
     ui.add_space(10.0);
 }
 
-/// Small italic note; `warn` uses the signal colour.
+/// Small dim note; `warn` uses the signal colour.
 pub fn note(ui: &mut Ui, text: &str, warn: bool) {
     ui.label(
-        serif_italic(text)
+        dim(text)
             .size(size::BODY - 1.0)
             .color(if warn { SIGNAL } else { INK_DIM }),
     );

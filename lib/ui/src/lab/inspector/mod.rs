@@ -126,7 +126,7 @@ fn cpu_sections(ui: &mut Ui, lab: &mut LabState, session: &Session, fx: &mut Eff
         margin_section(ui, "machine", false, |ui| {
             for (key, value) in machine::summary(machine) {
                 ui.horizontal(|ui| {
-                    ui.label(serif_italic(key));
+                    ui.label(dim(key));
                     ui.label(mono(value));
                 });
             }

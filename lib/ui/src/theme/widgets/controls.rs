@@ -1,7 +1,7 @@
-//! Pills, status lamps, thin sliders and serif radio choices.
-use super::readout::{mono, serif, serif_italic};
+//! Pills, status lamps, thin sliders and plain radio choices.
+use super::readout::{dim, mono, plain};
 use crate::theme::{
-    fonts::{SANS_BOLD, family},
+    fonts::{SANS_SEMIBOLD, family},
     tokens::*,
 };
 use bevy_egui::egui::{self, Color32, CornerRadius, Response, RichText, Sense, Ui, vec2};
@@ -16,7 +16,7 @@ pub fn pill_fill(primary: bool, enabled: bool) -> Color32 {
 /// Rounded, borderless action button.
 pub fn pill(ui: &mut Ui, label: &str, primary: bool, enabled: bool) -> Response {
     let text = if primary && enabled {
-        RichText::new(label).family(family(SANS_BOLD)).color(BG)
+        RichText::new(label).family(family(SANS_SEMIBOLD)).color(BG)
     } else {
         RichText::new(label).color(if enabled { INK } else { TRACK })
     };
@@ -55,7 +55,7 @@ pub fn slider(
     log: bool,
 ) -> bool {
     ui.horizontal(|ui| {
-        ui.label(serif_italic(label));
+        ui.label(dim(label));
         let changed = ui
             .add(
                 egui::Slider::new(value, range)
@@ -71,13 +71,13 @@ pub fn slider(
     .inner
 }
 
-/// Serif radio row (`●` selected, `○` not); returns whether the choice changed.
+/// Plain radio row (`●` selected, `○` not); returns whether the choice changed.
 pub fn choice<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(T, &str)]) -> bool {
     let mut changed = false;
     ui.horizontal(|ui| {
         for (value, label) in options {
             let on = *current == *value;
-            let text = serif(format!("{} {label}", if on { "●" } else { "○" })).color(if on {
+            let text = plain(format!("{} {label}", if on { "●" } else { "○" })).color(if on {
                 SIGNAL
             } else {
                 INK_DIM

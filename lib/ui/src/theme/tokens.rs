@@ -30,9 +30,9 @@ pub const INFO: Color32 = Color32::from_rgb(0x6f, 0xb7, 0xff);
 /// Logical-pixel type scale.
 pub mod size {
     /// Tracked-caps labels.
-    pub const LABEL: f32 = 9.0;
+    pub const LABEL: f32 = 10.0;
     /// Body text and controls.
-    pub const BODY: f32 = 11.0;
+    pub const BODY: f32 = 13.0;
     /// Titles and tab names.
     pub const TITLE: f32 = 15.0;
     /// Inspector readouts.

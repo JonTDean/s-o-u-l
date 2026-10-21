@@ -1,39 +1,45 @@
-//! Libertinus Serif / Sans / Mono, embedded and registered as named egui families.
+//! IBM Plex Sans / Mono, embedded and registered as named egui families.
 use bevy_egui::egui::{FontData, FontDefinitions, FontFamily};
 use std::sync::Arc;
 
-macro_rules! font {
-    ($file:literal) => {
+macro_rules! font_in {
+    ($dir:literal, $file:literal) => {
         include_bytes!(concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../assets/fonts/libertinus/",
+            "/../../assets/fonts/",
+            $dir,
+            "/",
             $file
         ))
     };
 }
 
-/// Upright serif: titles, tab names.
-pub const SERIF: &str = "serif";
-/// True italic serif: margin labels, captions, notes.
-pub const SERIF_ITALIC: &str = "serif-italic";
-/// Semibold serif: figure numbers.
-pub const SERIF_SEMIBOLD: &str = "serif-semibold";
-/// Bold sans: primary pill labels.
-pub const SANS_BOLD: &str = "sans-bold";
+macro_rules! font {
+    ($file:literal) => {
+        font_in!("plex", $file)
+    };
+}
+
+/// Plex Sans Regular: body text, titles, captions.
+pub const SANS: &str = "sans";
+/// Plex Sans Medium: tab names.
+pub const SANS_MEDIUM: &str = "sans-medium";
+/// Plex Sans SemiBold: pill labels, caps labels, figure numbers.
+pub const SANS_SEMIBOLD: &str = "sans-semibold";
+/// Plex Mono Medium: readout values.
+pub const MONO_MEDIUM: &str = "mono-medium";
 
 const FACES: [(&str, &[u8]); 6] = [
-    ("libertinus-serif", font!("LibertinusSerif-Regular.otf")),
+    ("plex-sans", font!("IBMPlexSans-Regular.otf")),
+    ("plex-sans-medium", font!("IBMPlexSans-Medium.otf")),
+    ("plex-sans-semibold", font!("IBMPlexSans-SemiBold.otf")),
+    ("plex-mono", font!("IBMPlexMono-Regular.otf")),
+    ("plex-mono-medium", font!("IBMPlexMono-Medium.otf")),
+    // Plex lacks ⁂ ‖ ▾ ▸ ␣; a five-glyph DejaVu subset fills them.
     (
-        "libertinus-serif-italic",
-        font!("LibertinusSerif-Italic.otf"),
+        "soul-symbols",
+        font_in!("symbols", "SoulSymbols-Regular.ttf"),
     ),
-    (
-        "libertinus-serif-semibold",
-        font!("LibertinusSerif-Semibold.otf"),
-    ),
-    ("libertinus-sans", font!("LibertinusSans-Regular.otf")),
-    ("libertinus-sans-bold", font!("LibertinusSans-Bold.otf")),
-    ("libertinus-mono", font!("LibertinusMono-Regular.otf")),
 ];
 
 /// Named egui family for `name`.
@@ -41,15 +47,15 @@ pub fn family(name: &str) -> FontFamily {
     FontFamily::Name(name.into())
 }
 
-/// Whether this pass can lay out the named Libertinus families.
+/// Whether this pass can lay out the named Plex families.
 ///
 /// `Context::set_fonts` takes effect at the start of the next pass, so UI that uses the
 /// named families must wait for this rather than for the install system.
 pub fn ready(ctx: &bevy_egui::egui::Context) -> bool {
-    ctx.fonts(|fonts| fonts.families().contains(&family(SERIF)))
+    ctx.fonts(|fonts| fonts.families().contains(&family(SANS)))
 }
 
-/// egui's defaults with Libertinus first in every family; defaults remain as glyph fallbacks.
+/// egui's defaults with Plex first in every family; defaults remain as glyph fallbacks.
 pub fn definitions() -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
     for (key, bytes) in FACES {
@@ -57,29 +63,33 @@ pub fn definitions() -> FontDefinitions {
             .font_data
             .insert(key.into(), Arc::new(FontData::from_static(bytes)));
     }
-    let fallback = fonts.families[&FontFamily::Proportional].clone();
-    let mono_fallback = fonts.families[&FontFamily::Monospace].clone();
+    let mut fallback = fonts.families[&FontFamily::Proportional].clone();
+    let mut mono_fallback = fonts.families[&FontFamily::Monospace].clone();
+    fallback.push("soul-symbols".into());
+    mono_fallback.push("soul-symbols".into());
     let chain = |first: &str, rest: &[String]| {
         std::iter::once(first.to_string())
             .chain(rest.iter().cloned())
             .collect::<Vec<_>>()
     };
-    fonts.families.insert(
-        FontFamily::Proportional,
-        chain("libertinus-sans", &fallback),
-    );
-    // Libertinus Mono lacks symbols such as ␣; Libertinus Sans is the last resort.
-    let mut mono = chain("libertinus-mono", &mono_fallback);
-    mono.push("libertinus-sans".into());
+    fonts
+        .families
+        .insert(FontFamily::Proportional, chain("plex-sans", &fallback));
+    // Plex Mono lacks symbols such as ␣; Plex Sans is the last resort.
+    let mut mono = chain("plex-mono", &mono_fallback);
+    mono.push("plex-sans".into());
     fonts.families.insert(FontFamily::Monospace, mono);
     for (name, key) in [
-        (SERIF, "libertinus-serif"),
-        (SERIF_ITALIC, "libertinus-serif-italic"),
-        (SERIF_SEMIBOLD, "libertinus-serif-semibold"),
-        (SANS_BOLD, "libertinus-sans-bold"),
+        (SANS, "plex-sans"),
+        (SANS_MEDIUM, "plex-sans-medium"),
+        (SANS_SEMIBOLD, "plex-sans-semibold"),
     ] {
         fonts.families.insert(family(name), chain(key, &fallback));
     }
+    fonts.families.insert(
+        family(MONO_MEDIUM),
+        chain("plex-mono-medium", &mono_fallback),
+    );
     fonts
 }
 
@@ -89,17 +99,17 @@ mod tests {
     use bevy_egui::egui::{Context, FontId, RawInput};
 
     #[test]
-    fn every_family_leads_with_libertinus_and_keeps_fallbacks() {
+    fn every_family_leads_with_plex_and_keeps_fallbacks() {
         let defs = definitions();
-        for name in [SERIF, SERIF_ITALIC, SERIF_SEMIBOLD, SANS_BOLD] {
+        for name in [SANS, SANS_MEDIUM, SANS_SEMIBOLD, MONO_MEDIUM] {
             let chain = &defs.families[&family(name)];
-            assert!(chain[0].starts_with("libertinus"), "{name}: {chain:?}");
+            assert!(chain[0].starts_with("plex"), "{name}: {chain:?}");
             assert!(
                 chain.len() > 1,
                 "{name} keeps egui fallbacks for missing symbols"
             );
         }
-        assert!(defs.families[&FontFamily::Monospace][0].starts_with("libertinus"));
+        assert_eq!(defs.families[&FontFamily::Monospace][0], "plex-mono");
     }
 
     #[test]
@@ -124,16 +134,18 @@ mod tests {
         let _ = ctx.run(RawInput::default(), |_| {});
         let _ = ctx.run(RawInput::default(), |ctx| {
             ctx.fonts(|fonts| {
-                assert!(fonts.has_glyphs(&FontId::new(12.0, family(SERIF_ITALIC)), "μσΔ⁂×"));
-                assert!(fonts.has_glyphs(&FontId::new(12.0, FontFamily::Monospace), "0123456789"));
+                let sans = FontId::new(12.0, FontFamily::Proportional);
+                let mono = FontId::new(12.0, FontFamily::Monospace);
+                assert!(fonts.has_glyphs(&sans, "μσΔ⁂×"));
+                assert!(fonts.has_glyphs(&sans, "▶‖↺▾▸"), "↺ only via egui fallback");
+                assert!(fonts.has_glyphs(&mono, "0123456789"));
                 assert!(
-                    fonts.has_glyphs(&FontId::new(12.0, FontFamily::Monospace), "␣→"),
+                    fonts.has_glyphs(&mono, "␣→"),
                     "Turing tables print the blank as ␣"
                 );
-                assert!(
-                    fonts.has_glyphs(&FontId::new(12.0, FontFamily::Proportional), "▶‖↺"),
-                    "↺ only via egui fallback"
-                );
+                // "⏭" renders in Plex's fallback chain, so Task 6 uses it as the Step icon.
+                assert!(fonts.has_glyphs(&sans, "⏭"));
+                assert!(fonts.has_glyphs(&sans, "‖"), "Pause label");
             });
         });
     }

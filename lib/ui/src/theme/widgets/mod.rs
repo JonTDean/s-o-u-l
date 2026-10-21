@@ -4,7 +4,7 @@ pub mod margin;
 pub mod readout;
 pub use controls::{choice, lamp, lamp_colour, pill, pill_fill, slider};
 pub use margin::{MARGIN_WIDTH, margin_section, note};
-pub use readout::{footnote, mono, readout, serif, serif_italic, tick_digits};
+pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
 
 #[cfg(test)]
 mod tests {

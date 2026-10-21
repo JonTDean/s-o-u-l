@@ -1,4 +1,4 @@
-//! Instrument visual language: tokens, Libertinus fonts, borderless egui style, widgets.
+//! Instrument visual language: tokens, Plex fonts, borderless egui style, widgets.
 pub mod fade;
 pub mod fonts;
 pub mod tokens;

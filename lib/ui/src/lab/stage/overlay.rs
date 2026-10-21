@@ -2,9 +2,9 @@
 use crate::{
     lab::{LabData, inspector::sections::arena_label, state::LabState},
     theme::{
-        fonts::{SERIF_ITALIC, SERIF_SEMIBOLD, family},
+        fonts::{SANS, SANS_SEMIBOLD, family},
         tokens::*,
-        widgets::serif_italic,
+        widgets::dim,
     },
 };
 use bevy_egui::egui::{self, Align2, FontId, Rect};
@@ -58,9 +58,9 @@ pub fn chrome(
     if let Some(specimen) = data.specimens.get(&row.kind) {
         let n = data.specimens.figure(&row.kind).unwrap_or(0);
         let at = rect.left_bottom() + egui::vec2(14.0, -12.0);
-        let bold = FontId::new(size::BODY, family(SERIF_SEMIBOLD));
+        let bold = FontId::new(size::BODY, family(SANS_SEMIBOLD));
         let fig = painter.text(at, Align2::LEFT_BOTTOM, format!("Fig. {n}. "), bold, INK_HI);
-        let italic = FontId::new(size::BODY, family(SERIF_ITALIC));
+        let italic = FontId::new(size::BODY, family(SANS));
         let after = egui::pos2(fig.right(), at.y);
         let modified = data
             .bench
@@ -94,12 +94,12 @@ pub fn chrome(
 
 /// Centred prompt when no channels are open.
 pub fn empty(painter: &egui::Painter, rect: Rect) {
-    let font = FontId::new(size::TITLE, family(SERIF_ITALIC));
+    let font = FontId::new(size::TITLE, family(SANS));
     let prompt = "Open a specimen from the library (L)";
     painter.text(rect.center(), Align2::CENTER_CENTER, prompt, font, INK_DIM);
 }
 
-/// Bottom-centre serif toast that expires after its duration.
+/// Bottom-centre plain toast that expires after its duration.
 pub fn toast(ctx: &egui::Context, lab: &mut LabState, dt: f32) {
     let Some((message, remaining)) = lab.toast.as_mut() else {
         return;
@@ -118,6 +118,6 @@ pub fn toast(ctx: &egui::Context, lab: &mut LabState, dt: f32) {
                 .fill(RAISED)
                 .corner_radius(6)
                 .inner_margin(10)
-                .show(ui, |ui| ui.label(serif_italic(message).color(INK)));
+                .show(ui, |ui| ui.label(dim(message).color(INK)));
         });
 }

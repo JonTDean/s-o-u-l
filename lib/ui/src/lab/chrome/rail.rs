@@ -5,9 +5,9 @@ use crate::{
         state::{Drawer, LabMode, LabState},
     },
     theme::{
-        fonts::{SERIF, family},
+        fonts::{SANS, family},
         tokens::*,
-        widgets::{note, serif},
+        widgets::{note, plain},
     },
 };
 use bevy_egui::egui::{self, Frame, Margin, RichText, Sense, Stroke, Ui, vec2};
@@ -30,7 +30,7 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                 glyph(ui, lab, "≡", "Compare sessions", Drawer::Compare);
                 glyph(ui, lab, "§", "Project save and load", Drawer::Project);
                 let gear = RichText::new("⁂")
-                    .family(family(SERIF))
+                    .family(family(SANS))
                     .size(16.0)
                     .color(if lab.settings_open { SIGNAL } else { INK_DIM });
                 let settings = ui.add(egui::Label::new(gear).sense(Sense::click()));
@@ -44,7 +44,7 @@ pub fn show(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
     }
 }
 
-/// Three painted book spines; Libertinus has no `❦`.
+/// Three painted book spines; Plex has no `❦`.
 fn library_icon(ui: &mut Ui, lab: &mut LabState) {
     let (rect, library) = ui.allocate_exact_size(vec2(32.0, 20.0), Sense::click());
     let colour = icon_colour(lab, Drawer::Library);
@@ -63,7 +63,7 @@ fn library_icon(ui: &mut Ui, lab: &mut LabState) {
 
 fn glyph(ui: &mut Ui, lab: &mut LabState, symbol: &str, hint: &str, drawer: Drawer) {
     let text = RichText::new(symbol)
-        .family(family(SERIF))
+        .family(family(SANS))
         .size(16.0)
         .color(icon_colour(lab, drawer));
     let response = ui.add(egui::Label::new(text).sense(Sense::click()));
@@ -90,7 +90,7 @@ fn settings(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                 .inner_margin(12)
                 .corner_radius(6)
                 .show(ui, |ui| {
-                    ui.label(serif("Settings").size(size::TITLE));
+                    ui.label(plain("Settings").size(size::TITLE));
                     if ui.button("Presenter mode (P)").clicked() {
                         lab.mode = LabMode::Presenter;
                         lab.settings_open = false;
