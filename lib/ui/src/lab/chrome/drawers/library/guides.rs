@@ -4,6 +4,7 @@ use crate::lab::{
     Effects, LabData,
     state::{Drawer, LabState},
 };
+use crate::theme::widgets::pill;
 use bevy_egui::egui::{self, Ui};
 use engine_core::{
     automata::channel::{ChannelAction, ChannelCommand, Status},
@@ -26,10 +27,7 @@ pub fn launcher(ui: &mut Ui, lab: &mut LabState, files: &mut Files, fx: &mut Eff
             }
         });
     let idle = files.save.is_none() && files.load.is_none() && files.request.is_none();
-    if ui
-        .add_enabled(idle, egui::Button::new("Start scenario (replace channels)"))
-        .clicked()
-    {
+    if pill(ui, "Start scenario (replace channels)", false, idle).clicked() {
         match lab.guide.selected.project() {
             Ok(project) => {
                 fx.automata.push(AutomataCommand::Clear);
@@ -57,17 +55,17 @@ pub fn overlay(
         ui.label(scenario.title());
         ui.label(format!("{} / 4", lab.guide.step + 1));
         ui.label(scenario.steps()[lab.guide.step]);
-        ui.horizontal(|ui| {
-            if ui.add_enabled(lab.guide.step > 0, egui::Button::new("Back")).clicked() { lab.guide.step -= 1; }
-            if ui.add_enabled(lab.guide.step < 3, egui::Button::new("Next cue")).clicked() { lab.guide.step += 1; }
-            if ui.button("Finish guide").clicked() { lab.guide.active = None; }
+        ui.horizontal_wrapped(|ui| {
+            if pill(ui, "Back", false, lab.guide.step > 0).clicked() { lab.guide.step -= 1; }
+            if pill(ui, "Next cue", false, lab.guide.step < 3).clicked() { lab.guide.step += 1; }
+            if pill(ui, "Finish guide", false, true).clicked() { lab.guide.active = None; }
         });
         let rows = &data.channels.rows;
         let paused = !rows.is_empty() && rows.iter().all(|r| r.status != Status::Running);
-        if ui.add_enabled(paused, egui::Button::new("Step all paused channels")).clicked() {
+        if pill(ui, "Step all paused channels", false, paused).clicked() {
             fx.commands.extend(rows.iter().map(|r| ChannelCommand { id: r.id, action: ChannelAction::Step }));
         }
-        if ui.add_enabled(rows.len() >= 2, egui::Button::new("Compare and export")).clicked() {
+        if pill(ui, "Compare and export", false, rows.len() >= 2).clicked() {
             comparison.left = Some(rows[0].id);
             comparison.right = Some(rows[1].id);
             lab.drawer = Some(Drawer::Compare);

@@ -1,5 +1,5 @@
 //! World configuration follows the lab's existing parameter draft/apply contract.
-use crate::theme::widgets::{note, segmented};
+use crate::theme::widgets::{note, pill, segmented};
 use bevy_egui::egui::{self, Ui};
 use models::workbench::{catalog::Kind, experiment::config::Settings};
 use simulation_kernel::core::boundary::Boundary;
@@ -28,7 +28,7 @@ pub(super) fn draw(ui: &mut Ui, s: &mut Settings, kind: Kind) {
     );
     if s.world.seed.is_some() {
         note(ui, "Authored reset seed", false);
-        if ui.button("Replace with preset").clicked() {
+        if pill(ui, "Replace with preset", false, true).clicked() {
             s.world.seed = None;
         }
     }

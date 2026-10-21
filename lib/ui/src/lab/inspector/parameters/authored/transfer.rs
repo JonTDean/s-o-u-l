@@ -1,10 +1,17 @@
 //! Rule exchange never overwrites an existing destination.
 use super::*;
+use crate::theme::widgets::{dim, pill};
 pub(super) fn draw(ui: &mut Ui, editor: &mut Editor) {
-    ui.text_edit_singleline(&mut editor.path)
-        .on_hover_text("Rule JSON import/export path");
     ui.horizontal(|ui| {
-        if ui.button("Import rule").clicked() {
+        let imported = pill(ui, "Import rule", false, true).clicked();
+        let exported = pill(ui, "Export new file", false, true).clicked();
+        ui.add(
+            egui::TextEdit::singleline(&mut editor.path)
+                .desired_width(ui.available_width())
+                .hint_text(dim("Rule JSON import/export path")),
+        )
+        .on_hover_text("Rule JSON import/export path");
+        if imported {
             match storage::read(std::path::Path::new(&editor.path)) {
                 Ok(program) => {
                     editor.set(&program);
@@ -13,7 +20,7 @@ pub(super) fn draw(ui: &mut Ui, editor: &mut Editor) {
                 Err(e) => editor.status = e,
             }
         }
-        if ui.button("Export new file").clicked() {
+        if exported {
             editor.status = storage::parse(&editor.text)
                 .and_then(|p| storage::write(std::path::Path::new(&editor.path), &p))
                 .map_or_else(|e| e, |_| "Exported".into());

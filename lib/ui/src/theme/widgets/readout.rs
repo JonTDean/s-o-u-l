@@ -3,7 +3,7 @@ use crate::theme::{
     fonts::{MONO_MEDIUM, SANS, SANS_SEMIBOLD, family},
     tokens::*,
 };
-use bevy_egui::egui::{FontFamily, RichText, Ui};
+use bevy_egui::egui::{FontFamily, Frame, RichText, Stroke, Ui};
 
 /// Plex Sans in the default ink.
 pub fn plain(text: impl Into<String>) -> RichText {
@@ -29,6 +29,15 @@ pub fn mono(text: impl Into<String>) -> RichText {
     RichText::new(text)
         .family(FontFamily::Monospace)
         .color(SIGNAL)
+}
+
+/// Frame for code and JSON editors: field fill, hairline border, small radius.
+pub fn code_frame() -> Frame {
+    Frame::new()
+        .fill(BG)
+        .stroke(Stroke::new(1.0, LINE))
+        .corner_radius(6)
+        .inner_margin(6)
 }
 
 /// Tick counters read as fixed-width instrument digits.

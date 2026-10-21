@@ -7,7 +7,7 @@ use crate::{
     theme::{
         fonts::{SANS, family},
         tokens::*,
-        widgets::{note, plain},
+        widgets::{note, pill, plain},
     },
 };
 use bevy_egui::egui::{self, Frame, Margin, RichText, Sense, Stroke, Ui, vec2};
@@ -91,7 +91,7 @@ fn settings(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                 .corner_radius(6)
                 .show(ui, |ui| {
                     ui.label(plain("Settings").size(size::TITLE));
-                    if ui.button("Presenter mode (P)").clicked() {
+                    if pill(ui, "Presenter mode (P)", false, true).clicked() {
                         lab.mode = LabMode::Presenter;
                         lab.settings_open = false;
                     }
@@ -99,8 +99,7 @@ fn settings(ctx: &egui::Context, lab: &mut LabState, data: &LabData, fx: &mut Ef
                         .channels
                         .selected_row()
                         .is_some_and(|r| r.backend == Backend::Gpu);
-                    let mark = egui::Button::new("Mark centre of selected GPU specimen");
-                    if ui.add_enabled(gpu, mark).clicked() {
+                    if pill(ui, "Mark centre of selected GPU specimen", false, gpu).clicked() {
                         fx.mark_centre = true;
                     }
                     note(ui, "Debug overlay: F3", false);

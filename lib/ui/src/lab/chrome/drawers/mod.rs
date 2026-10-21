@@ -56,7 +56,7 @@ pub fn show(
         .order(egui::Order::Foreground)
         .show(ctx, |ui| {
             let margin = egui::Margin {
-                left: 4,
+                left: 12,
                 right: 14,
                 top: 14,
                 bottom: 14,

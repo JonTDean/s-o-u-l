@@ -5,7 +5,7 @@ pub mod section;
 pub use controls::{
     lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented, slider, value_box,
 };
-pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
+pub use readout::{caps, code_frame, dim, footnote, mono, plain, readout, tick_digits};
 pub use section::{Section, SectionResponse, note, section};
 
 #[cfg(test)]
