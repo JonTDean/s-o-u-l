@@ -1,6 +1,6 @@
 # UI readability pass: type, inspector, transport, forms
 
-Date: 2026-10-21 · Status: builder-checked, awaiting user approval
+Date: 2026-10-21 · Status: approved 2026-10-21
 
 ## Intent
 
