@@ -12,7 +12,7 @@ const VALUE_WIDTH: f32 = 56.0;
 /// Boxed, right-aligned mono value.
 pub fn value_box(ui: &mut Ui, text: &str) {
     ui.allocate_ui_with_layout(
-        vec2(VALUE_WIDTH, 0.0),
+        vec2(VALUE_WIDTH, ui.spacing().interact_size.y),
         Layout::right_to_left(Align::Center),
         |ui| {
             ui.set_width(VALUE_WIDTH);
