@@ -131,8 +131,10 @@ mod tests {
             primary: Rule::life(settings.birth, settings.survival),
             secondary: None,
         });
-        let mut editor = Editor::default();
-        editor.text = format!("{{\"long\": \"{}\"}}", "x".repeat(600));
+        let mut editor = Editor {
+            text: format!("{{\"long\": \"{}\"}}", "x".repeat(600)),
+            ..Editor::default()
+        };
         let input = egui::RawInput {
             screen_rect: Some(egui::Rect::from_min_size(
                 egui::pos2(0.0, 0.0),
