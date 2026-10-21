@@ -31,7 +31,7 @@ pub fn show(
         segmented(
             ui,
             &mut continuous,
-            &[(false, "quantized XY"), (true, "continuous density")],
+            &[(false, "Quantized XY"), (true, "Continuous")],
         );
         let mut kernel = sim.kernel.unwrap_or_default();
         if continuous {
@@ -48,7 +48,7 @@ pub fn show(
                 &mut kernel.shape,
                 &[
                     (Shape::Gaussian, "Gaussian XYZ"),
-                    (Shape::Shell, "shell XYZ"),
+                    (Shape::Shell, "Shell XYZ"),
                     (Shape::Orbium, "Orbium XY"),
                 ],
             );
@@ -60,7 +60,7 @@ pub fn show(
             segmented(
                 ui,
                 &mut kernel.boundary,
-                &[(Boundary::Dead, "dead"), (Boundary::Periodic, "periodic")],
+                &[(Boundary::Dead, "Dead"), (Boundary::Periodic, "Periodic")],
             );
         }
         let selected: Option<Kernel> = continuous.then_some(kernel);
@@ -92,9 +92,9 @@ pub fn show(
     section("seed").folds(true).show(ui, |ui| {
         let mut seed = sim.seed;
         let options = [
-            (LeniaSeed::Blob, "blob"),
-            (LeniaSeed::Ring, "ring"),
-            (LeniaSeed::Orbium, "published Orbium"),
+            (LeniaSeed::Blob, "Blob"),
+            (LeniaSeed::Ring, "Ring"),
+            (LeniaSeed::Orbium, "Orbium"),
         ];
         if segmented(ui, &mut seed, &options) {
             send(fx, ChannelAction::Lenia(LeniaAction::Seed(seed)));

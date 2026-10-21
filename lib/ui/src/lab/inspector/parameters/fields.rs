@@ -10,11 +10,11 @@ use models::workbench::{
 };
 
 const PATTERNS: [(Pattern, &str); 5] = [
-    (Pattern::Default, "default"),
-    (Pattern::Single, "single"),
-    (Pattern::Glider, "glider"),
-    (Pattern::Blinker, "blinker"),
-    (Pattern::Noise, "noise"),
+    (Pattern::Default, "Default"),
+    (Pattern::Single, "Single"),
+    (Pattern::Glider, "Glider"),
+    (Pattern::Blinker, "Blinker"),
+    (Pattern::Noise, "Noise"),
 ];
 
 /// Draw the fields that apply to `kind`.

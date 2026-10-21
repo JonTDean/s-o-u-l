@@ -10,9 +10,9 @@ pub fn show(ui: &mut Ui, editor: &mut Editor, session: &Session, fx: &mut Effect
                 ui,
                 &mut editor.tool,
                 &[
-                    (Tool::Navigate, "pan"),
-                    (Tool::Paint, "paint"),
-                    (Tool::Erase, "erase"),
+                    (Tool::Navigate, "Pan"),
+                    (Tool::Paint, "Paint"),
+                    (Tool::Erase, "Erase"),
                 ],
             );
             if session.kind == Kind::Hpp {

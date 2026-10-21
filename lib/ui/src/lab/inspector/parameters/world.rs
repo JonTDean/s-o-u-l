@@ -22,8 +22,8 @@ pub(super) fn draw(ui: &mut Ui, s: &mut Settings, kind: Kind) {
         ui,
         &mut s.world.boundary,
         &[
-            (Boundary::Dead, "dead edges"),
-            (Boundary::Periodic, "periodic"),
+            (Boundary::Dead, "Dead"),
+            (Boundary::Periodic, "Periodic"),
         ],
     );
     if s.world.seed.is_some() {
