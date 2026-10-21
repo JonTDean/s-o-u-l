@@ -80,22 +80,24 @@ fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         let kernel = kernel.and_then(|(_, sim)| sim.kernel);
         let orbium = kernel
             .is_some_and(|k| k.shape == simulation_kernel::core::lenia::continuous::Shape::Orbium);
+        let mut warnings = Vec::new();
         if !orbium && let Some(session) = modified {
-            let text = format!(
+            warnings.push(format!(
                 "Catalog specimen described below; this channel runs {}.",
                 session.title()
-            );
-            note(ui, &text, true);
+            ));
         }
         if !orbium && kernel.is_some() {
-            let text =
-                "Continuous XYZ model: catalog text below describes the original XY specimen.";
-            note(ui, text, true);
+            warnings.push(
+                "Continuous XYZ model: catalog text below describes the original XY specimen."
+                    .into(),
+            );
         }
         let summary = sections::about_summary(figure, &specimen.citation);
         section("About this specimen")
             .folds(false)
             .summary(summary)
+            .warnings(warnings)
             .show(ui, |ui| {
                 let explanation = if orbium {
                     "Published Orbium bicaudatus: periodic XY, radius 13, polynomial kernel and growth. The library seed restores the published parameters."

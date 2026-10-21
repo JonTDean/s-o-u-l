@@ -16,6 +16,7 @@ pub struct Section<'a> {
     fold: Option<bool>,
     summary: Option<String>,
     action: Option<&'a str>,
+    warnings: Vec<String>,
 }
 
 /// Start a section titled `label`; an empty label draws no header row.
@@ -26,6 +27,7 @@ pub fn section(label: &str) -> Section<'_> {
         fold: None,
         summary: None,
         action: None,
+        warnings: Vec::new(),
     }
 }
 
@@ -51,6 +53,12 @@ impl<'a> Section<'a> {
     /// Dim dotted-underline link on the header's right.
     pub fn action(mut self, label: &'a str) -> Self {
         self.action = Some(label);
+        self
+    }
+
+    /// Warnings drawn under the header whether or not the section is folded.
+    pub fn warnings(mut self, texts: impl IntoIterator<Item = String>) -> Self {
+        self.warnings.extend(texts);
         self
     }
 
@@ -81,6 +89,10 @@ impl<'a> Section<'a> {
                 state.toggle(ui);
             }
             ui.add_space(6.0);
+        }
+        for warning in &self.warnings {
+            note(ui, warning, true);
+            ui.add_space(4.0);
         }
         match state.as_mut() {
             Some(state) => {

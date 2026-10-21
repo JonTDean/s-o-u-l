@@ -21,10 +21,7 @@ pub(super) fn draw(ui: &mut Ui, s: &mut Settings, kind: Kind) {
     segmented(
         ui,
         &mut s.world.boundary,
-        &[
-            (Boundary::Dead, "Dead"),
-            (Boundary::Periodic, "Periodic"),
-        ],
+        &[(Boundary::Dead, "Dead"), (Boundary::Periodic, "Periodic")],
     );
     if s.world.seed.is_some() {
         note(ui, "Authored reset seed", false);
