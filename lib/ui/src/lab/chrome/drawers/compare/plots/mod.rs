@@ -1,5 +1,5 @@
 use super::*;
-use crate::theme::widgets::note;
+use crate::theme::widgets::{note, pill};
 use bevy_egui::egui::{self, Stroke};
 use engine_core::automata::channel::{ChannelAction, ChannelCommand, metrics::MetricAvailability};
 pub(super) fn trace(ui: &mut Ui, id: ChannelId, data: &LabData, fx: &mut Effects) {
@@ -7,7 +7,7 @@ pub(super) fn trace(ui: &mut Ui, id: ChannelId, data: &LabData, fx: &mut Effects
         return;
     };
     if matches!(metric.availability, MetricAvailability::OptIn)
-        && ui.button("Sample mass").clicked()
+        && pill(ui, "Sample mass", false, true).clicked()
     {
         fx.commands.push(ChannelCommand {
             id,
