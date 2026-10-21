@@ -1,6 +1,8 @@
 //! Segmented control: one bordered track of equal-width, wrapping segments.
 use crate::theme::{fonts::SANS, fonts::family, tokens::*};
-use bevy_egui::egui::{Color32, FontId, Rect, Sense, Stroke, StrokeKind, Ui, pos2, vec2};
+use bevy_egui::egui::{
+    Color32, CursorIcon, FontId, Rect, Sense, Stroke, StrokeKind, Ui, pos2, vec2,
+};
 
 /// Border of the selected segment: a darkened amber.
 const SELECTED_BORDER: Color32 = Color32::from_rgb(0x6a, 0x4f, 0x22);
@@ -23,11 +25,17 @@ pub fn segmented<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(
         .iter()
         .map(|(_, label)| {
             ui.painter()
-                .layout_no_wrap((*label).into(), font.clone(), INK)
+                .layout_no_wrap((*label).into(), font.clone(), Color32::PLACEHOLDER)
         })
         .collect();
     let widest = galleys.iter().map(|g| g.size().x).fold(0.0, f32::max);
-    let available = ui.available_width();
+    let space = ui.available_width();
+    // An unbounded parent gives no width to wrap against: lay out on a single row.
+    let available = if space.is_finite() && space < 10_000.0 {
+        space
+    } else {
+        options.len() as f32 * (widest + 12.0 + GAP) - GAP + 2.0 * PAD
+    };
     let (per_row, width) = segment_layout(available, widest, options.len());
     let rows = options.len().div_ceil(per_row).max(1);
     let height = rows as f32 * SEGMENT_HEIGHT + (rows - 1) as f32 * GAP + 2.0 * PAD;
@@ -46,6 +54,9 @@ pub fn segmented<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(
         let rect = Rect::from_min_size(min, vec2(width, SEGMENT_HEIGHT));
         let response = ui.interact(rect, base.with(index), Sense::click());
         let on = *current == *value;
+        if response.hovered() {
+            ui.ctx().set_cursor_icon(CursorIcon::PointingHand);
+        }
         let hover = ui
             .ctx()
             .animate_bool_with_time(response.id, response.hovered(), 0.15);
@@ -151,5 +162,26 @@ mod tests {
         assert_eq!(current, 2);
         assert!(!click(&ctx, &mut current, None));
         assert_eq!(current, 2);
+    }
+
+    #[test]
+    fn segment_text_uses_selected_and_dim_colours() {
+        let ctx = Context::default();
+        crate::theme::visuals::install(&ctx);
+        let out = ctx.run(RawInput::default(), |ctx| {
+            CentralPanel::default().show(ctx, |ui| {
+                segmented(ui, &mut 0, &[(0, "a"), (1, "b")]);
+            });
+        });
+        let colour = |text: &str| {
+            out.shapes.iter().find_map(|s| match &s.shape {
+                bevy_egui::egui::Shape::Text(t) if t.galley.text() == text => {
+                    Some(t.fallback_color)
+                }
+                _ => None,
+            })
+        };
+        assert_eq!(colour("a"), Some(SIGNAL));
+        assert_eq!(colour("b"), Some(INK_DIM));
     }
 }

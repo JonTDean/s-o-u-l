@@ -4,7 +4,7 @@ use crate::theme::{
     tokens::*,
 };
 use bevy_egui::egui::{
-    Color32, FontFamily, FontId, Rect, Response, Sense, Stroke, StrokeKind, Ui, pos2, vec2,
+    self, Color32, FontFamily, FontId, Rect, Response, Sense, Stroke, StrokeKind, Ui, pos2, vec2,
 };
 use engine_core::automata::channel::Status;
 
@@ -20,6 +20,8 @@ pub fn pill_fill(primary: bool, enabled: bool) -> Color32 {
 
 /// Border of the key chip on a primary pill: a darker amber.
 const CHIP_PRIMARY: Color32 = Color32::from_rgb(0xc9, 0x8a, 0x2c);
+/// Primary fill on hover.
+const PRIMARY_HOVER: Color32 = Color32::from_rgb(0xff, 0xc6, 0x6e);
 const PILL_HEIGHT: f32 = 24.0;
 
 /// Bordered action button.
@@ -48,10 +50,13 @@ fn draw_pill(
     let live = primary && enabled;
     let text_colour = if live { BG } else { INK };
     let font = FontId::new(size::BODY, family(if live { SANS_SEMIBOLD } else { SANS }));
-    let galley = ui.painter().layout_no_wrap(label.into(), font, text_colour);
+    let galley = ui
+        .painter()
+        .layout_no_wrap(label.into(), font, Color32::PLACEHOLDER);
     let chip = key.map(|key| {
         let font = FontId::new(size::LABEL, FontFamily::Monospace);
-        ui.painter().layout_no_wrap(key.into(), font, text_colour)
+        ui.painter()
+            .layout_no_wrap(key.into(), font, Color32::PLACEHOLDER)
     });
     let chip_width = chip.as_ref().map_or(0.0, |g| g.size().x + 10.0 + 6.0);
     let desired = vec2(galley.size().x + chip_width + 20.0, PILL_HEIGHT);
@@ -68,11 +73,7 @@ fn draw_pill(
         .ctx()
         .animate_bool_with_time(response.id, enabled && response.hovered(), 0.15);
     let base = pill_fill(primary, enabled);
-    let lifted = if live {
-        SIGNAL.lerp_to_gamma(INK_HI, 0.25)
-    } else {
-        TRACK
-    };
+    let lifted = if live { PRIMARY_HOVER } else { TRACK };
     let fade = |colour: Color32| {
         if enabled {
             colour
@@ -81,7 +82,14 @@ fn draw_pill(
         }
     };
     let fill = fade(base.lerp_to_gamma(lifted, hover));
-    let border = fade(LINE.lerp_to_gamma(LINE_HI, hover));
+    let border = fade(if live {
+        SIGNAL.lerp_to_gamma(PRIMARY_HOVER, hover)
+    } else {
+        LINE.lerp_to_gamma(LINE_HI, hover)
+    });
+    if enabled && response.hovered() {
+        ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand);
+    }
     ui.painter().rect(
         rect,
         6.0,

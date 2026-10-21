@@ -12,7 +12,9 @@ pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
 mod tests {
     use super::*;
     use crate::theme::tokens::*;
-    use bevy_egui::egui::{CentralPanel, Context, RawInput};
+    use bevy_egui::egui::{
+        CentralPanel, Color32, Context, Event, PointerButton, Pos2, RawInput, Shape,
+    };
     use engine_core::automata::channel::Status;
 
     #[test]
@@ -55,5 +57,52 @@ mod tests {
             });
         });
         assert!(!output.shapes.is_empty());
+    }
+
+    fn pill_frame(
+        ctx: &Context,
+        enabled: bool,
+        events: Vec<Event>,
+    ) -> (bool, Option<Color32>, Pos2) {
+        let mut out = (false, None, Pos2::ZERO);
+        let input = RawInput {
+            events,
+            ..Default::default()
+        };
+        let shapes = ctx.run(input, |ctx| {
+            CentralPanel::default().show(ctx, |ui| {
+                let r = pill(ui, "Go", false, enabled);
+                out.0 = r.clicked();
+                out.2 = r.rect.center();
+            });
+        });
+        out.1 = shapes.shapes.iter().find_map(|s| match &s.shape {
+            Shape::Text(t) if t.galley.text() == "Go" => Some(t.fallback_color),
+            _ => None,
+        });
+        out
+    }
+
+    #[test]
+    fn disabled_pill_text_is_faded_and_ignores_clicks() {
+        let ctx = Context::default();
+        crate::theme::visuals::install(&ctx);
+        let (_, on, _) = pill_frame(&ctx, true, vec![]);
+        assert_eq!(on, Some(INK));
+        let (_, off, at) = pill_frame(&ctx, false, vec![]);
+        assert_eq!(off, Some(INK.gamma_multiply(0.4)));
+        let press = |pressed| Event::PointerButton {
+            pos: at,
+            button: PointerButton::Primary,
+            pressed,
+            modifiers: Default::default(),
+        };
+        pill_frame(&ctx, false, vec![Event::PointerMoved(at)]);
+        pill_frame(&ctx, false, vec![press(true)]);
+        assert!(!pill_frame(&ctx, false, vec![press(false)]).0);
+        // Control: the same gesture clicks an enabled pill.
+        pill_frame(&ctx, true, vec![Event::PointerMoved(at)]);
+        pill_frame(&ctx, true, vec![press(true)]);
+        assert!(pill_frame(&ctx, true, vec![press(false)]).0);
     }
 }
