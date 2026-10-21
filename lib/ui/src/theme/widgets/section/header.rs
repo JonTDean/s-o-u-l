@@ -28,6 +28,7 @@ pub fn draw(ui: &mut Ui, s: &Section, id: Id, open: bool, openness: Option<f32>)
     let colour = if s.active { SIGNAL } else { INK_DIM };
     let title = galley(ui, caps(s.label).color(colour));
     let height = title.size().y.max(16.0);
+    let title_right = title.size().x;
     let sense = if openness.is_some() {
         Sense::click()
     } else {
@@ -48,7 +49,19 @@ pub fn draw(ui: &mut Ui, s: &Section, id: Id, open: bool, openness: Option<f32>)
         right -= 8.0;
     }
     if !open && let Some(text) = &s.summary {
-        let g = galley(ui, mono(text.clone()).color(INK_DIM).size(size::LABEL));
+        let room = right - row.left() - title_right - 12.0;
+        let mut shown = text.clone();
+        let mut g = galley(ui, mono(shown.clone()).color(INK_DIM).size(size::LABEL));
+        while g.size().x > room && shown.pop().is_some() {
+            let elided = format!("{}…", shown.trim_end());
+            g = galley(ui, mono(elided).color(INK_DIM).size(size::LABEL));
+            if shown.is_empty() {
+                break;
+            }
+        }
+        if g.size().x > room {
+            g = galley(ui, mono(String::new()).size(size::LABEL));
+        }
         right -= g.size().x;
         painter.galley(pos2(right, row.center().y - g.size().y / 2.0), g, INK_DIM);
     }

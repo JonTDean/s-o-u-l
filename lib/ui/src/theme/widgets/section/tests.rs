@@ -122,3 +122,18 @@ fn action_reports_click() {
     run(vec![press(true)]);
     assert!(run(vec![press(false)]).0);
 }
+
+#[test]
+fn long_summary_elides_instead_of_touching_title() {
+    let ctx = ctx();
+    let text = "64 cells · 64-row history · CPU · and a very long tail of detail";
+    let draw = |ui: &mut Ui| {
+        ui.allocate_ui(bevy_egui::egui::vec2(180.0, 40.0), |ui| {
+            section("g").foldable(false).summary(text).show(ui, |_| {});
+        });
+    };
+    pass(&ctx, vec![], draw);
+    let out = pass(&ctx, vec![], draw);
+    assert!(!texts(&out).iter().any(|t| t == text));
+    assert!(texts(&out).iter().any(|t| t.ends_with('…')));
+}
