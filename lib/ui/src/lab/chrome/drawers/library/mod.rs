@@ -3,7 +3,7 @@ use crate::{
     lab::{Effects, LabData, state::LabState},
     theme::{
         tokens::*,
-        widgets::{dim, margin_section, mono, note, pill, plain},
+        widgets::{dim, mono, note, pill, plain, section},
     },
 };
 use bevy_egui::egui::{self, Sense, Ui};
@@ -57,7 +57,7 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
         lab.drawer = None;
     }
     for (group, items) in entries(&data.specimens, &data.available(), &lab.filter) {
-        margin_section(ui, group.label(), false, |ui| {
+        section(group.label()).show(ui, |ui| {
             for specimen in items {
                 let clicked = ui
                     .horizontal(|ui| {
@@ -80,7 +80,7 @@ pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
             }
         });
     }
-    margin_section(ui, "channels", false, |ui| {
+    section("channels").show(ui, |ui| {
         ui.horizontal(|ui| {
             ui.label(mono(format!("{}", data.channels.rows.len())));
             ui.label(dim(format!("of {} open", ChannelIds::CAPACITY)));

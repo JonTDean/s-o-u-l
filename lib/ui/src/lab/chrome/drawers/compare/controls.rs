@@ -1,5 +1,5 @@
 use super::*;
-use crate::theme::widgets::{margin_section, note, pill};
+use crate::theme::widgets::{note, pill, section};
 use bevy_egui::egui;
 use engine_core::automata::channel::{ChannelAction, ChannelCommand};
 pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut Effects) {
@@ -20,7 +20,7 @@ pub(super) fn body(ui: &mut Ui, state: &mut Comparison, data: &LabData, fx: &mut
         state.left = Some(rows[0].id);
         state.right = Some(rows[1].id);
     }
-    margin_section(ui, "compare", true, |ui| {
+    section("compare").active(true).show(ui, |ui| {
         for (label, side) in [("left", &mut state.left), ("right", &mut state.right)] {
             let shown = rows
                 .iter()

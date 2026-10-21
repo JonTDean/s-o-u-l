@@ -4,7 +4,7 @@
 //! checkpoint whether or not the drawer is open, so scripted qualification can drive `Files`.
 use crate::{
     lab::{Effects, LabData},
-    theme::widgets::{dim, margin_section, note, pill},
+    theme::widgets::{dim, note, pill, section},
 };
 use bevy::prelude::*;
 use bevy_egui::egui::{self, Ui};
@@ -76,7 +76,7 @@ pub enum Request {
 
 /// Drawer body.
 pub fn body(ui: &mut Ui, files: &mut Files, data: &LabData, fx: &mut Effects) {
-    margin_section(ui, "project", true, |ui| {
+    section("project").active(true).show(ui, |ui| {
         ui.add(egui::TextEdit::singleline(&mut files.path).hint_text(dim("project.json")));
         let rows = &data.channels.rows;
         if pill(ui, "Pause all", false, !rows.is_empty()).clicked() {

@@ -14,7 +14,7 @@ pub struct Authoring {
 pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, files: &mut Files) {
     let root = models::workbench::project::library::default_root();
     let state = &mut lab.authoring;
-    margin_section(ui, "my specimens", false, |ui| {
+    section("my specimens").show(ui, |ui| {
         ui.text_edit_singleline(&mut state.name)
             .on_hover_text("New specimen name");
         let idle = files.save.is_none() && files.request.is_none() && files.load.is_none();
