@@ -45,8 +45,8 @@ pub fn entries<'a>(
 /// Drawer body: filter, grouped specimens and the open-channel count.
 pub fn body(ui: &mut Ui, lab: &mut LabState, data: &LabData, fx: &mut Effects) {
     let filter = egui::TextEdit::singleline(&mut lab.filter)
-        .hint_text(dim("filter specimens…"))
-        .frame(false);
+        .desired_width(ui.available_width())
+        .hint_text(dim("filter specimens…"));
     ui.add(filter);
     ui.add_space(10.0);
     let full = data.channels.is_full();
