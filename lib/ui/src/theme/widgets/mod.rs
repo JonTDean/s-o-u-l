@@ -2,11 +2,13 @@
 pub mod controls;
 pub mod margin;
 pub mod readout;
+pub mod section;
 pub use controls::{
     lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented, slider, value_box,
 };
 pub use margin::{MARGIN_WIDTH, margin_section, note};
 pub use readout::{caps, dim, footnote, mono, plain, readout, tick_digits};
+pub use section::{Section, SectionResponse, section};
 
 #[cfg(test)]
 mod tests {
