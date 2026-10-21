@@ -9,7 +9,7 @@ use bevy_egui::egui::{
 use engine_core::automata::channel::Status;
 
 pub mod segmented;
-pub use segmented::{segment_layout, segmented};
+pub use segmented::{segment_layout, segmented, segmented_row_width};
 pub mod slider;
 pub use slider::{slider, value_box};
 

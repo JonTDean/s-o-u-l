@@ -3,7 +3,8 @@ pub mod controls;
 pub mod readout;
 pub mod section;
 pub use controls::{
-    lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented, slider, value_box,
+    lamp, lamp_colour, pill, pill_fill, pill_with_key, segment_layout, segmented,
+    segmented_row_width, slider, value_box,
 };
 pub use readout::{caps, code_frame, dim, footnote, mono, plain, readout, tick_digits};
 pub use section::{Section, SectionResponse, note, section};

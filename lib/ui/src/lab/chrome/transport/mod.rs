@@ -8,9 +8,8 @@ pub use trace::{rate_choice, rate_selected, sparkline};
 use crate::{
     lab::{Effects, LabData},
     theme::{
-        fonts::{SANS, family},
         tokens::*,
-        widgets::{caps, pill_with_key, segmented},
+        widgets::{caps, pill_with_key, segmented, segmented_row_width},
     },
 };
 use bevy_egui::egui::{self, Frame, Margin, Sense, Stroke, vec2};
@@ -70,22 +69,6 @@ pub fn show(ctx: &egui::Context, data: &LabData, fx: &mut Effects) {
         });
 }
 
-/// Width of one row of all rate presets in `segmented`.
-fn selector_width(ui: &egui::Ui, labels: &[&str]) -> f32 {
-    let font = egui::FontId::new(size::BODY, family(SANS));
-    let widest = labels
-        .iter()
-        .map(|l| {
-            ui.painter()
-                .layout_no_wrap((*l).into(), font.clone(), INK)
-                .size()
-                .x
-        })
-        .fold(0.0, f32::max);
-    let (_, per) = (labels.len(), widest + 12.0 + 2.0);
-    labels.len() as f32 * per + 2.0
-}
-
 /// Trace and rate selector; returns a newly chosen rate preset. The selector
 /// is laid out first, flush right on one row; the trace takes what remains.
 fn tail(ui: &mut egui::Ui, metric: Option<&ChannelMetric>, rate: Option<f32>) -> Option<f32> {
@@ -96,7 +79,7 @@ fn tail(ui: &mut egui::Ui, metric: Option<&ChannelMetric>, rate: Option<f32>) ->
         .zip(&texts)
         .map(|(p, t)| (*p, t.as_str()))
         .collect();
-    let width = selector_width(ui, &texts.iter().map(String::as_str).collect::<Vec<_>>());
+    let width = segmented_row_width(ui, &texts.iter().map(String::as_str).collect::<Vec<_>>());
     // NaN equals no preset, so nothing is highlighted off-preset.
     let mut value = rate.and_then(rate_choice).unwrap_or(f32::NAN);
     let mut changed = false;

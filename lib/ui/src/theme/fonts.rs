@@ -109,20 +109,14 @@ mod tests {
             );
         }
         assert_eq!(defs.families[&FontFamily::Monospace][0], "plex-mono");
-        for name in [MONO_MEDIUM] {
-            let chain = &defs.families[&family(name)];
+        for mono in [family(MONO_MEDIUM), FontFamily::Monospace] {
+            let chain = &defs.families[&mono];
             assert_eq!(
                 chain.last().map(String::as_str),
                 Some("plex-sans"),
-                "{name}"
+                "{mono:?}"
             );
         }
-        assert_eq!(
-            defs.families[&FontFamily::Monospace]
-                .last()
-                .map(String::as_str),
-            Some("plex-sans")
-        );
     }
 
     #[test]

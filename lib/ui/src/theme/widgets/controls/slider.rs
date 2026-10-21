@@ -7,7 +7,8 @@ use bevy_egui::egui::{self, Align, Frame, Layout, Margin, Stroke, Ui, vec2};
 use std::ops::RangeInclusive;
 
 const LABEL_WIDTH: f32 = 72.0;
-const VALUE_WIDTH: f32 = 56.0;
+/// Wide enough for "10.000" in mono with the box margins.
+const VALUE_WIDTH: f32 = 64.0;
 
 /// Boxed, right-aligned mono value.
 pub fn value_box(ui: &mut Ui, text: &str) {

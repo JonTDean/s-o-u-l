@@ -18,6 +18,31 @@ pub fn segment_layout(available: f32, widest: f32, count: usize) -> (usize, f32)
     (per_row, width)
 }
 
+/// Width of the widest of `labels` in the segment font.
+fn widest_label(ui: &Ui, labels: impl IntoIterator<Item = impl Into<String>>) -> f32 {
+    let font = FontId::new(size::BODY, family(SANS));
+    labels
+        .into_iter()
+        .map(|l| {
+            let galley = ui
+                .painter()
+                .layout_no_wrap(l.into(), font.clone(), Color32::PLACEHOLDER);
+            galley.size().x
+        })
+        .fold(0.0, f32::max)
+}
+
+/// Track width that lays `count` segments of `widest` on one row.
+fn single_row_width(widest: f32, count: usize) -> f32 {
+    count as f32 * (widest + 12.0 + GAP) - GAP + 2.0 * PAD
+}
+
+/// Width at which `segmented` lays all `labels` on one row, plus 1 px of slack
+/// so float rounding never wraps the last segment.
+pub fn segmented_row_width(ui: &Ui, labels: &[&str]) -> f32 {
+    single_row_width(widest_label(ui, labels.iter().copied()), labels.len()) + 1.0
+}
+
 /// Segmented choice; returns true only when a different option was clicked.
 pub fn segmented<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(T, &str)]) -> bool {
     let font = FontId::new(size::BODY, family(SANS));
@@ -34,7 +59,7 @@ pub fn segmented<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(
     let available = if space.is_finite() && space < 10_000.0 {
         space
     } else {
-        options.len() as f32 * (widest + 12.0 + GAP) - GAP + 2.0 * PAD
+        single_row_width(widest, options.len())
     };
     let (per_row, width) = segment_layout(available, widest, options.len());
     let rows = options.len().div_ceil(per_row).max(1);
