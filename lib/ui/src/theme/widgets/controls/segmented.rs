@@ -92,7 +92,7 @@ pub fn segmented<T: PartialEq + Copy>(ui: &mut Ui, current: &mut T, options: &[(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use bevy_egui::egui::{CentralPanel, Context, Event, PointerButton, RawInput, pos2};
+    use bevy_egui::egui::{CentralPanel, Color32, Context, Event, PointerButton, RawInput, pos2};
 
     #[test]
     fn segment_layout_fits_three_at_default_width() {
@@ -175,13 +175,23 @@ mod tests {
         });
         let colour = |text: &str| {
             out.shapes.iter().find_map(|s| match &s.shape {
-                bevy_egui::egui::Shape::Text(t) if t.galley.text() == text => {
-                    Some(t.fallback_color)
-                }
+                bevy_egui::egui::Shape::Text(t) if t.galley.text() == text => Some(rendered(t)),
                 _ => None,
             })
         };
         assert_eq!(colour("a"), Some(SIGNAL));
         assert_eq!(colour("b"), Some(INK_DIM));
+    }
+
+    /// Colour a text shape really renders in: its glyph mesh must be uncoloured
+    /// (PLACEHOLDER) so the fallback colour applies when tessellated.
+    fn rendered(t: &bevy_egui::egui::epaint::TextShape) -> Color32 {
+        let baked = t
+            .galley
+            .rows
+            .iter()
+            .flat_map(|r| r.visuals.mesh.vertices.iter());
+        assert!(baked.map(|v| v.color).all(|c| c == Color32::PLACEHOLDER));
+        t.fallback_color
     }
 }

@@ -77,7 +77,7 @@ mod tests {
             });
         });
         out.1 = shapes.shapes.iter().find_map(|s| match &s.shape {
-            Shape::Text(t) if t.galley.text() == "Go" => Some(t.fallback_color),
+            Shape::Text(t) if t.galley.text() == "Go" => Some(rendered(t)),
             _ => None,
         });
         out
@@ -104,5 +104,17 @@ mod tests {
         pill_frame(&ctx, true, vec![Event::PointerMoved(at)]);
         pill_frame(&ctx, true, vec![press(true)]);
         assert!(pill_frame(&ctx, true, vec![press(false)]).0);
+    }
+
+    /// Colour a text shape really renders in: its glyph mesh must be uncoloured
+    /// (PLACEHOLDER) so the fallback colour applies when tessellated.
+    fn rendered(t: &bevy_egui::egui::epaint::TextShape) -> Color32 {
+        let baked = t
+            .galley
+            .rows
+            .iter()
+            .flat_map(|r| r.visuals.mesh.vertices.iter());
+        assert!(baked.map(|v| v.color).all(|c| c == Color32::PLACEHOLDER));
+        t.fallback_color
     }
 }
