@@ -2,6 +2,7 @@
 use crate::{
     lab::{Effects, LabData, inspector::sections::format_metric},
     theme::{
+        fonts::{MONO_MEDIUM, SANS, family},
         tokens::*,
         widgets::{caps, mono, pill_with_key, segmented},
     },
@@ -11,6 +12,9 @@ use engine_core::automata::channel::{
     ChannelAction, ChannelCommand, RATE_PRESETS, Status,
     metrics::{ChannelMetric, Trace},
 };
+
+/// Horizontal inner margin of the bar.
+const MARGIN: f32 = 12.0;
 
 /// Sparkline vertices: oldest at the left, the trace maximum at the top.
 pub fn sparkline(trace: &Trace, rect: Rect) -> Vec<Pos2> {
@@ -61,12 +65,13 @@ pub fn show(ctx: &egui::Context, data: &LabData, fx: &mut Effects) {
             Frame::new()
                 .fill(PANEL)
                 .stroke(Stroke::NONE)
-                .inner_margin(Margin::symmetric(12, 0)),
+                .inner_margin(Margin::symmetric(MARGIN as i8, 0)),
         )
         .show(ctx, |ui| {
             let top = ui.max_rect().top();
-            let (l, r) = (ui.max_rect().left() - 12.0, ui.max_rect().right() + 12.0);
-            ui.painter().hline(l..=r, top, Stroke::new(1.0, LINE));
+            let edge = ui.max_rect().expand2(vec2(MARGIN, 0.0));
+            ui.painter()
+                .hline(edge.x_range(), top, Stroke::new(1.0, LINE));
             ui.horizontal_centered(|ui| {
                 let row = data.channels.selected_row();
                 let status = row.map(|r| r.status);
@@ -88,41 +93,82 @@ pub fn show(ctx: &egui::Context, data: &LabData, fx: &mut Effects) {
                 if pill_with_key(ui, "↺ Reset", "R", false, row.is_some()).clicked() {
                     send(ChannelAction::Reset);
                 }
-                divider(ui);
-                trace(ui, row.and_then(|r| data.metrics.get(r.id)), 230.0);
-                divider(ui);
-                ui.label(caps("steps/s"));
-                let options: Vec<(f32, String)> = RATE_PRESETS
-                    .iter()
-                    .map(|p| (*p, format!("{p:.0}")))
-                    .collect();
-                let options: Vec<(f32, &str)> =
-                    options.iter().map(|(p, t)| (*p, t.as_str())).collect();
-                // NaN equals no preset, so nothing is highlighted off-preset.
-                let mut value = row
-                    .and_then(|r| rate_choice(r.settings.rate_hz))
-                    .unwrap_or(f32::NAN);
-                if segmented(ui, &mut value, &options) {
-                    send(ChannelAction::SetRate(value));
+                let metric = row.and_then(|r| data.metrics.get(r.id));
+                let rate = row.map(|r| r.settings.rate_hz);
+                if let Some(preset) = tail(ui, metric, rate) {
+                    send(ChannelAction::SetRate(preset));
                 }
             });
         });
 }
 
+/// Width of one row of all rate presets in `segmented`.
+fn selector_width(ui: &egui::Ui, labels: &[&str]) -> f32 {
+    let font = egui::FontId::new(size::BODY, family(SANS));
+    let widest = labels
+        .iter()
+        .map(|l| {
+            ui.painter()
+                .layout_no_wrap((*l).into(), font.clone(), INK)
+                .size()
+                .x
+        })
+        .fold(0.0, f32::max);
+    let (_, per) = (labels.len(), widest + 12.0 + 2.0);
+    labels.len() as f32 * per + 2.0
+}
+
+/// Trace and rate selector; returns a newly chosen rate preset. The selector
+/// is laid out first, flush right on one row; the trace takes what remains.
+fn tail(ui: &mut egui::Ui, metric: Option<&ChannelMetric>, rate: Option<f32>) -> Option<f32> {
+    divider(ui);
+    let texts: Vec<String> = RATE_PRESETS.iter().map(|p| format!("{p:.0}")).collect();
+    let options: Vec<(f32, &str)> = RATE_PRESETS
+        .iter()
+        .zip(&texts)
+        .map(|(p, t)| (*p, t.as_str()))
+        .collect();
+    let width = selector_width(ui, &texts.iter().map(String::as_str).collect::<Vec<_>>());
+    // NaN equals no preset, so nothing is highlighted off-preset.
+    let mut value = rate.and_then(rate_choice).unwrap_or(f32::NAN);
+    let mut changed = false;
+    let centered = egui::Layout::right_to_left(egui::Align::Center);
+    ui.with_layout(centered, |ui| {
+        ui.allocate_ui_with_layout(vec2(width, 28.0), centered, |ui| {
+            changed = segmented(ui, &mut value, &options);
+        });
+        ui.label(caps("steps/s"));
+        divider(ui);
+        let left = egui::Layout::left_to_right(egui::Align::Center);
+        let rest = vec2(ui.available_width().max(0.0), 26.0);
+        ui.allocate_ui_with_layout(rest, left, |ui| trace(ui, metric));
+    });
+    changed.then_some(value)
+}
+
 /// Metric label, sparkline filling the space, and the latest value.
-fn trace(ui: &mut egui::Ui, metric: Option<&ChannelMetric>, reserve: f32) {
+fn trace(ui: &mut egui::Ui, metric: Option<&ChannelMetric>) {
     let Some(metric) = metric else { return };
     ui.label(caps(metric.id.label));
     let value = metric
         .latest
         .map(|s| format_metric(s.value, &metric.id))
         .unwrap_or_default();
-    let width = (ui.available_width() - reserve).max(40.0);
+    let text = mono(value).family(family(MONO_MEDIUM)).size(size::BODY);
+    let galley = ui.fonts(|f| {
+        f.layout_no_wrap(
+            text.text().into(),
+            egui::FontId::new(size::BODY, family(MONO_MEDIUM)),
+            SIGNAL,
+        )
+    });
+    let width =
+        (ui.available_width() - galley.size().x - 2.0 * ui.spacing().item_spacing.x).max(0.0);
     let (rect, _) = ui.allocate_exact_size(vec2(width, 26.0), Sense::hover());
     let points = sparkline(&metric.trace, rect.shrink2(vec2(0.0, 4.0)));
     ui.painter()
         .add(egui::Shape::line(points, Stroke::new(1.4, SIGNAL)));
-    ui.label(mono(value).size(size::BODY));
+    ui.label(text);
 }
 
 #[cfg(test)]
@@ -185,5 +231,61 @@ mod tests {
         assert_eq!(rate_choice(12.5), None);
         assert_eq!(rate_choice(10.2), Some(10.0));
         assert_eq!(rate_choice(60.0), Some(60.0));
+    }
+
+    /// Run the bar row at `width` px; returns the screen-space text shapes.
+    fn laid_out(width: f32) -> (Rect, Vec<(String, Rect)>, Vec<Rect>) {
+        let ctx = egui::Context::default();
+        crate::theme::visuals::install(&ctx);
+        let screen = Rect::from_min_size(pos2(0.0, 0.0), vec2(width, 300.0));
+        let input = egui::RawInput {
+            screen_rect: Some(screen),
+            ..Default::default()
+        };
+        let mut bar = Rect::NOTHING;
+        let out = ctx.run(input, |ctx| {
+            egui::TopBottomPanel::bottom("t")
+                .exact_height(44.0)
+                .frame(Frame::new().inner_margin(Margin::symmetric(MARGIN as i8, 0)))
+                .show(ctx, |ui| {
+                    bar = ui.max_rect();
+                    ui.horizontal_centered(|ui| {
+                        tail(ui, None, Some(10.0));
+                    });
+                });
+        });
+        let mut texts = Vec::new();
+        let mut rects = Vec::new();
+        for s in &out.shapes {
+            match &s.shape {
+                egui::Shape::Text(t) => {
+                    texts.push((t.galley.text().to_string(), t.visual_bounding_rect()))
+                }
+                egui::Shape::Rect(r) => rects.push(r.visual_bounding_rect()),
+                _ => {}
+            }
+        }
+        (bar, texts, rects)
+    }
+
+    #[test]
+    fn rate_selector_stays_on_one_row_inside_the_bar() {
+        for width in [700.0, 1400.0] {
+            let (bar, texts, rects) = laid_out(width);
+            let panel = Rect::from_min_max(pos2(0.0, bar.top()), pos2(width, bar.bottom()));
+            assert_eq!(panel.height(), 44.0);
+            let labels: Vec<_> = RATE_PRESETS.iter().map(|p| format!("{p:.0}")).collect();
+            let rows: Vec<Rect> = labels
+                .iter()
+                .map(|l| texts.iter().find(|(t, _)| t == l).expect("label drawn").1)
+                .collect();
+            assert!(rows.windows(2).all(|w| w[0].min.y == w[1].min.y));
+            for r in rows.iter().chain(rects.iter().filter(|r| r.is_positive())) {
+                assert!(
+                    panel.contains_rect(*r),
+                    "{r:?} outside {panel:?} at {width}"
+                );
+            }
+        }
     }
 }
