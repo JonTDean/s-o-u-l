@@ -21,7 +21,7 @@ impl MenuScreen for MainMenuScreen {
             .show(ctx, |_| {});
 
         // 30 % from bottom
-        let offset_y = -(ctx.screen_rect().height() * 0.30).min(-8.0);
+        let offset_y = -(ctx.screen_rect().height() * 0.30).max(8.0);
 
         egui::Area::new("main_menu_btns".into())
             .anchor(Align2::CENTER_BOTTOM, [0.0, offset_y])
@@ -29,16 +29,21 @@ impl MenuScreen for MainMenuScreen {
                 Frame::new().show(ui, |ui| {
                     ui.spacing_mut().item_spacing.y = 10.0;
                     ui.vertical_centered(|ui| {
-                        if ui.button("New Scenario").clicked() {
+                        let button = |ui: &mut egui::Ui, label: &str| {
+                            let text =
+                                egui::Button::new(label).wrap_mode(egui::TextWrapMode::Extend);
+                            ui.add(text).clicked()
+                        };
+                        if button(ui, "New Scenario") {
                             next.set(AppState::NewScenario);
                         }
-                        if ui.button("Load Scenario").clicked() {
+                        if button(ui, "Load Scenario") {
                             next.set(AppState::LoadScenario);
                         }
-                        if ui.button("Options").clicked() {
+                        if button(ui, "Options") {
                             next.set(AppState::Options);
                         }
-                        if ui.button("Quit").clicked() {
+                        if button(ui, "Quit") {
                             std::process::exit(0);
                         }
                     });
