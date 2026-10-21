@@ -5,8 +5,8 @@ use crate::theme::{
     widgets::readout::{caps, mono},
 };
 use bevy_egui::egui::{
-    FontSelection, Id, Rect, RichText, Sense, Shape, Stroke, TextWrapMode, Ui, WidgetText, pos2,
-    vec2,
+    Color32, CursorIcon, FontSelection, Id, Rect, RichText, Sense, Shape, Stroke, TextWrapMode, Ui,
+    WidgetText, pos2, vec2,
 };
 
 pub struct Head {
@@ -67,15 +67,27 @@ pub fn draw(ui: &mut Ui, s: &Section, id: Id, open: bool, openness: Option<f32>)
     }
     let mut action_clicked = false;
     if let Some(label) = s.action {
-        let g = galley(ui, RichText::new(label).size(size::LABEL).color(INK_DIM));
+        let g = galley(
+            ui,
+            RichText::new(label)
+                .size(size::LABEL)
+                .color(Color32::PLACEHOLDER),
+        );
         let rect = Rect::from_min_size(
             pos2(right - g.size().x, row.center().y - g.size().y / 2.0),
             g.size(),
         );
         let hit = ui.interact(rect, id.with("action"), Sense::click());
+        if hit.hovered() {
+            ui.ctx().set_cursor_icon(CursorIcon::PointingHand);
+        }
+        let blend = ui
+            .ctx()
+            .animate_bool_with_time(id.with("action-hover"), hit.hovered(), 0.15);
+        let colour = INK_DIM.lerp_to_gamma(SIGNAL, blend);
         let line = [rect.left_bottom(), rect.right_bottom()];
-        painter.galley(rect.min, g, INK_DIM);
-        painter.add(Shape::dotted_line(&line, INK_DIM, 3.0, 0.5));
+        painter.galley(rect.min, g, colour);
+        painter.add(Shape::dotted_line(&line, colour, 3.0, 0.5));
         action_clicked = hit.clicked();
     }
     Head {

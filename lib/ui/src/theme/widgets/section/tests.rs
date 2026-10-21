@@ -1,7 +1,7 @@
 use super::*;
-use crate::theme::tokens::LINE;
+use crate::theme::tokens::{INK_DIM, LINE, SIGNAL};
 use bevy_egui::egui::{
-    CentralPanel, Context, Event, PointerButton, Pos2, RawInput, Rect, Shape,
+    CentralPanel, Color32, Context, Event, PointerButton, Pos2, RawInput, Rect, Shape,
     collapsing_header::CollapsingState,
 };
 
@@ -136,4 +136,52 @@ fn long_summary_elides_instead_of_touching_title() {
     let out = pass(&ctx, vec![], draw);
     assert!(!texts(&out).iter().any(|t| t == text));
     assert!(texts(&out).iter().any(|t| t.ends_with('…')));
+}
+
+/// Colour a text shape really renders in: its glyphs must be uncoloured
+/// (PLACEHOLDER), otherwise `fallback_color` is ignored by epaint 0.31.1.
+fn rendered(out: &bevy_egui::egui::FullOutput, text: &str) -> Color32 {
+    out.shapes
+        .iter()
+        .find_map(|s| match &s.shape {
+            Shape::Text(t) if t.galley.text() == text => {
+                let baked = t
+                    .galley
+                    .rows
+                    .iter()
+                    .flat_map(|r| r.visuals.mesh.vertices.iter());
+                assert!(baked.map(|v| v.color).all(|c| c == Color32::PLACEHOLDER));
+                Some(t.fallback_color)
+            }
+            _ => None,
+        })
+        .expect("text painted")
+}
+
+#[test]
+fn hovered_action_renders_in_signal() {
+    let ctx = ctx();
+    let run = |events: Vec<Event>| {
+        pass(&ctx, events, |ui| {
+            section("p").action("reset").show(ui, |_| {});
+        })
+    };
+    let out = run(vec![]);
+    assert_eq!(rendered(&out, "reset"), INK_DIM);
+    let at = out
+        .shapes
+        .iter()
+        .find_map(|s| match &s.shape {
+            Shape::Text(t) if t.galley.text() == "reset" => {
+                Some(t.galley.rect.translate(t.pos.to_vec2()).center())
+            }
+            _ => None,
+        })
+        .expect("action text painted");
+    run(vec![Event::PointerMoved(at)]);
+    let mut out = run(vec![]);
+    for _ in 0..30 {
+        out = run(vec![]);
+    }
+    assert_eq!(rendered(&out, "reset"), SIGNAL);
 }
