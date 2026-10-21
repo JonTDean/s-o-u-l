@@ -20,14 +20,17 @@ pub(super) fn draw(ui: &mut Ui, editor: &mut Editor) {
         match storage::read(std::path::Path::new(&editor.path)) {
             Ok(program) => {
                 editor.set(&program);
-                editor.status = "Imported text; validate to prepare".into();
+                editor.ok("Imported text; validate to prepare");
             }
-            Err(e) => editor.status = e,
+            Err(e) => editor.fail(e),
         }
     }
     if exported {
-        editor.status = storage::parse(&editor.text)
+        match storage::parse(&editor.text)
             .and_then(|p| storage::write(std::path::Path::new(&editor.path), &p))
-            .map_or_else(|e| e, |_| "Exported".into());
+        {
+            Ok(_) => editor.ok("Exported"),
+            Err(e) => editor.fail(e),
+        }
     }
 }
